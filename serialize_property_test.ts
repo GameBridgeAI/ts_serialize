@@ -108,6 +108,22 @@ test({
   },
 });
 
+
+test({
+  name: "Uses a provided replacer strategy",
+  fn() {
+    const change = () => `hello world`;
+    class Test extends Serializable<Test> {
+      @SerializeProperty({
+        reviverStrategy: change,
+      })
+      change!: string;
+    }
+    const test = new Test().fromJson(`{"change":"hi earth"}`);
+    assertEquals(test.change, "hello world");
+  },
+});
+
 test({
   name: "Preserves string type",
   fn() {
@@ -355,7 +371,6 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        replacerStrategy: recursiveReplacer,
       })
       nested: Test1 = new Test1();
     }

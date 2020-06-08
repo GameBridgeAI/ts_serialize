@@ -2,6 +2,7 @@
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { defaultReplacer } from "./replacers/default_replacer.ts";
+import { recursiveReplacer } from "./replacers/recursive_replacer.ts";
 
 /** Functions used when hydrating data */
 export declare type ReviverStrategy = (value: any) => any;
@@ -77,20 +78,28 @@ export function toPojo<T>(context: Record<keyof T, unknown>): Record<string, unk
     );
   }
   const record: Record<string, unknown> = {};
-  for (const {
+  for (let {
     propertyKey,
     serializedKey,
-    replacerStrategy = defaultReplacer,
+    replacerStrategy,
   } of serializablePropertyMap.propertyOptions()) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
+    
+    if(!replacerStrategy){
+      if(SERIALIZABLE_CLASS_MAP.get((value as Serializable<unknown>)?.constructor?.prototype)){
+        replacerStrategy = recursiveReplacer;
+      }
+      else {
+        replacerStrategy = defaultReplacer;
+      }
+    }
+    
     // Array handling
     if (Array.isArray(value)) {
-      record[serializedKey] = value
-        .map((v: unknown) =>
-          replacerStrategy(v)
-        );
+      const arrayReplacerStrategy = replacerStrategy;
+      record[serializedKey] = value.map((v: any) => arrayReplacerStrategy(v));
     } // Object and value handling
     else if (value !== undefined) {
       record[serializedKey] = replacerStrategy(value);
