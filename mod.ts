@@ -6,7 +6,11 @@
 export { SerializeProperty } from "./serialize_property.ts";
 
 /** abstract class and revive */
-export { Serializable, composeReviveStrategy, ReviverStrategy } from "./serializable.ts";
+export {
+  Serializable,
+  composeReviveStrategy,
+  ReviverStrategy,
+} from "./serializable.ts";
 
 /** date revivers */
 export { createDateReviver, ISODateReviver } from "./revivers/date_revivers.ts";

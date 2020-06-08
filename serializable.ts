@@ -13,7 +13,7 @@ export class SerializePropertyOptions {
     public propertyKey: string | symbol,
     public serializedKey: string,
     reviveStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[],
-    public useBuiltinSerializer = false,
+    public useBuiltinSerializer = false
   ) {
     if (Array.isArray(reviveStrategy)) {
       this.reviverStrategy = composeReviveStrategy(...reviveStrategy);
@@ -46,10 +46,7 @@ const MISSING_PROPERTIES_MAP_ERROR_MESSAGE =
   "Unable to load serializer properties for the given context";
 
 /** Recursive convert to `pojo` */
-function serializeValue<T>(
-  value: T,
-  recursiveSerialize: boolean,
-) {
+function serializeValue<T>(value: T, recursiveSerialize: boolean) {
   if (recursiveSerialize) {
     return toPojo(value);
   }
@@ -57,22 +54,22 @@ function serializeValue<T>(
 }
 
 /** Converts to object using mapped keys */
-function toPojo<T>(
-  context: Record<keyof T, unknown>,
-): Record<string, unknown> {
+function toPojo<T>(context: Record<keyof T, unknown>): Record<string, unknown> {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype,
+    context?.constructor?.prototype
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`,
+      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`
     );
   }
   const record: Record<string, unknown> = {};
-  for (
-    const { propertyKey, serializedKey, reviverStrategy, useBuiltinSerializer }
-      of serializablePropertyMap.propertyOptions()
-  ) {
+  for (const {
+    propertyKey,
+    serializedKey,
+    reviverStrategy,
+    useBuiltinSerializer,
+  } of serializablePropertyMap.propertyOptions()) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
@@ -80,10 +77,15 @@ function toPojo<T>(
     if (Array.isArray(value)) {
       record[serializedKey] = value
         .filter((v: unknown) => v !== undefined)
-        .map((v: unknown) => serializeValue(v, !!reviverStrategy && !useBuiltinSerializer));
+        .map((v: unknown) =>
+          serializeValue(v, !!reviverStrategy && !useBuiltinSerializer)
+        );
     } // Object and value handling
     else if (value !== undefined) {
-      record[serializedKey] = serializeValue(value, !!reviverStrategy && !useBuiltinSerializer);
+      record[serializedKey] = serializeValue(
+        value,
+        !!reviverStrategy && !useBuiltinSerializer
+      );
     }
   }
   return record;
@@ -103,12 +105,11 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T;
 
 function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype,
+    context?.constructor?.prototype
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
-        ?.prototype}`,
+      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`
     );
   }
 
@@ -121,31 +122,27 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
       /** Processes the value through the provided or default `reviveStrategy`
        * @default reviveStrategy - no-op reviver strategy
        */
-      function revive<T>(
-        this: unknown,
-        key: string,
-        value: unknown,
-      ): unknown {
+      function revive<T>(this: unknown, key: string, value: unknown): unknown {
         // After last iteration the reviver function will be called one more time with a empty string key
-        if(key === ""){
+        if (key === "") {
           return value;
         }
-  
+
         const {
           propertyKey,
           reviverStrategy = (v: unknown) => v, // Default to no-op reviver strategy
         } = serializablePropertyMap.getBySerializedKey(key) || {};
-  
+
         const processedValue: unknown = Array.isArray(value)
           ? value.map((v) => reviverStrategy(v))
           : reviverStrategy(value);
-  
+
         if (propertyKey) {
           context[propertyKey as keyof Serializable<T>] = processedValue as any;
           return;
         }
         return processedValue;
-      },
+      }
     )
   );
 }
