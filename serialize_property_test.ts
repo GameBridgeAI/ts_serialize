@@ -4,7 +4,7 @@ import {
   test,
   assert,
   assertEquals,
-  assertStrictEquals,
+  assertStrictEq,
   fail,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
@@ -13,7 +13,6 @@ import {
   SYMBOL_PROPERTY_NAME_ERROR_MESSAGE,
 } from "./serialize_property.ts";
 import { DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE } from "./serialize_property_options_map.ts";
-import { recursiveReplacer } from "./replacers/recursive_replacer.ts";
 
 test({
   name: "Serializes properties as propertyName without options",
@@ -175,7 +174,7 @@ test({
       null!: null;
     }
     const test = new Test().fromJson(`{"null":null}`);
-    assertStrictEquals(test.null, null);
+    assertStrictEq(test.null, null);
   },
 });
 

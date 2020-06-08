@@ -5,6 +5,6 @@ export const { test } = Deno;
 export {
   assert,
   assertEquals,
-  assertStrictEquals,
+  assertStrictEq,
   fail,
-} from "https://deno.land/std/testing/asserts.ts";
+} from "https://deno.land/std@0.55.0/testing/asserts.ts";
