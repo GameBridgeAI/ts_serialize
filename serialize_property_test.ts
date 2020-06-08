@@ -12,8 +12,8 @@ import {
   SerializeProperty,
   SYMBOL_PROPERTY_NAME_ERROR_MESSAGE,
 } from "./serialize_property.ts";
-import { composeReviveStrategy } from "./mod.ts";
 import { DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE } from "./serialize_property_options_map.ts";
+import { recursiveReplacer } from "./replacers/recursive_replacer.ts";
 
 test({
   name: "Serializes properties as propertyName without options",
@@ -96,10 +96,10 @@ test({
 test({
   name: "Uses a provided reviverStrategy",
   fn() {
-    const change = (v: string) => `hello world`;
+    const change = () => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviveStrategy: change,
+        reviverStrategy: change,
       })
       change!: string;
     }
@@ -202,7 +202,7 @@ test({
     }
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviveStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        reviverStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
       })
       array!: OtherClass[];
     }
@@ -334,7 +334,7 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        reviveStrategy: (json) => new Test1().fromJson(json),
+        reviverStrategy: (json) => new Test1().fromJson(json),
       })
       nested!: Test1;
     }
@@ -355,7 +355,7 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        reviveStrategy: (json) => new Test1().fromJson(json),
+        replacerStrategy: recursiveReplacer,
       })
       nested: Test1 = new Test1();
     }

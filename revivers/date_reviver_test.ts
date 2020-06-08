@@ -34,8 +34,7 @@ test({
   fn() {
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviveStrategy: ISODateReviver,
-        useBuiltinSerializer: true,
+        reviverStrategy: ISODateReviver
       })
       date!: Date | string;
     }

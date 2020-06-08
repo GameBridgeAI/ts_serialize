@@ -4,6 +4,7 @@ import {
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
   ReviverStrategy,
+  ReplacerStrategy,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -16,16 +17,18 @@ export declare type SerializePropertyArgument =
   | string
   | {
       serializedKey?: string;
-      reviveStrategy?:
+      reviverStrategy?:
         | ReviverStrategy
         | (ReviverStrategy | ReviverStrategy[])[];
-      useBuiltinSerializer?: boolean;
+      replacerStrategy?:
+        | ReplacerStrategy
+        | (ReplacerStrategy | ReplacerStrategy[])[];
     };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  reviveStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[];
-  useBuiltinSerializer?: boolean;
+  reviverStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[];
+  replacerStrategy?: ReplacerStrategy | (ReplacerStrategy | ReplacerStrategy[])[];
 }
 
 /** Property wrapper that adds serializable options to the class map
@@ -91,13 +94,13 @@ export function SerializeProperty(
         target
       ) as SerializePropertyOptionsMap;
     }
-
+    console.log("args", decoratorArgumentOptions)
     serializablePropertiesMap.set(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
-        decoratorArgumentOptions.reviveStrategy,
-        decoratorArgumentOptions.useBuiltinSerializer
+        decoratorArgumentOptions.reviverStrategy,
+        decoratorArgumentOptions.replacerStrategy
       )
     );
   };
