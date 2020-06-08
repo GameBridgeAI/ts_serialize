@@ -2,6 +2,7 @@
 
 import { test, assert, assertEquals } from "../test_deps.ts";
 import { createDateReviver, ISODateReviver } from "./date_revivers.ts";
+import { Serializable, SerializeProperty } from "../mod.ts";
 
 test({
   name: "createDateReviver creates reviver from regex",
@@ -25,5 +26,21 @@ test({
     assertEquals(mockObj.date.getFullYear(), 2020);
     assert(!(mockObj.not_a_date instanceof Date));
     assertEquals(mockObj.not_a_date, "Hello world");
+  },
+});
+
+test({
+  name: "Will not serialize non date strings",
+  fn() {
+    class Test extends Serializable<Test> {
+      @SerializeProperty({
+        reviveStrategy: ISODateReviver,
+        useBuiltinSerializer: true,
+      })
+      date!: Date | string;
+    }
+    const test = new Test().fromJson(`{"date":"I am not a date!"}`);
+    assertEquals(typeof test.date, "string");
+    assertEquals(test.date, "I am not a date!");
   },
 });
