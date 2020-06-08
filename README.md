@@ -2,9 +2,9 @@
 
 A zero dependency library for serializing data. ts_serialize can help you with:
 
-- converting camelCase class members to snake_case JSON properties for use with a REST API;
-- excluding internal fields from REST API payloads;
-- converting data types, for example dates, to an internal format
+- converting camelCase class members to snake_case JSON properties for use with a REST API
+- excluding internal fields from REST API payloads
+- converting data types to an internal format, for expamle: `Date`'s
 
 **Supported Serialize Types**
 
@@ -53,6 +53,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
+- [MindBridge](https://mindbridge.ai) for support
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) for example code
-- [MindBridge](https://mindbridge.ai) for support
