@@ -1,7 +1,8 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { toPojo } from "../serializable.ts";
+import { toPojo, Serializable } from "../serializable.ts";
 
-export function recursiveReplacer<T>(value: any): any {
+/** Recursively serialize a serializable class */
+export function recursiveReplacer<T>(value: Serializable<T>): any {
   return toPojo(value);
 }

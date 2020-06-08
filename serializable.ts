@@ -93,12 +93,14 @@ export function toPojo<T>(
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
+    // If no replacer strategy was provided then default
     if (!replacerStrategy) {
       if (
         SERIALIZABLE_CLASS_MAP.get(
-          (value as Serializable<unknown>)?.constructor?.prototype,
+          (value as Serializable<typeof value>)?.constructor?.prototype,
         )
       ) {
+        // If the value is serializable then use the recursive replacer
         replacerStrategy = recursiveReplacer;
       } else {
         replacerStrategy = defaultReplacer;
