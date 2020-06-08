@@ -1,0 +1,5 @@
+{
+  "https://deno.land/std/fmt/colors.ts": "06444b6ebc3842a4b2340d804bfa81fc5452a03513cbb81bd7f6bf8f4b8f3ac4",
+  "https://deno.land/std/testing/asserts.ts": "a9f22a8e078b943f6b71a66de7f8afd3428cb6fa6fd7171e79b713b47b374ae4",
+  "https://deno.land/std/testing/diff.ts": "77338e2b479626c096278d7b4a95f750753ee39558f314db6b794e8d8a98d515"
+}

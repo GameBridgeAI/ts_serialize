@@ -14,4 +14,5 @@ jobs:
         run: |
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
           export PATH="$HOME/.deno/bin:$PATH"
-          deno test -c tsconfig.json
+          deno cache -r
+          deno test -c tsconfig.json --allow-read . --lock=lock.json
