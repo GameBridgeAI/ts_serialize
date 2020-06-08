@@ -9,8 +9,8 @@ test({
     assert(mod != null);
     assertEquals(typeof mod.SerializeProperty, "function");
     assertEquals(typeof mod.Serializable, "function");
-    assertEquals(typeof mod.composeReviveStrategy, "function");
-    assertEquals(typeof mod.composeReplacerStrategy, "function");
+    assertEquals(typeof mod.fromJsonStrategy, "function");
+    assertEquals(typeof mod.toJsonStrategy, "function");
 
     assertEquals(typeof mod.createDateReviver, "function");
     assertEquals(typeof mod.ISODateReviver, "function");

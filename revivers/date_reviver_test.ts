@@ -35,7 +35,7 @@ test({
   fn() {
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviverStrategy: ISODateReviver,
+        fromJsonStrategy: ISODateReviver,
       })
       date!: Date | string;
     }

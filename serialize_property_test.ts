@@ -93,12 +93,12 @@ test({
 });
 
 test({
-  name: "Uses a provided reviverStrategy",
+  name: "Uses a provided fromJsonStrategy",
   fn() {
     const change = () => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviverStrategy: change,
+        fromJsonStrategy: change,
       })
       change!: string;
     }
@@ -113,7 +113,7 @@ test({
     const change = () => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviverStrategy: change,
+        fromJsonStrategy: change,
       })
       change!: string;
     }
@@ -216,7 +216,7 @@ test({
     }
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviverStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        fromJsonStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
       })
       array!: OtherClass[];
     }
@@ -348,7 +348,7 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        reviverStrategy: (json) => new Test1().fromJson(json),
+        fromJsonStrategy: (json) => new Test1().fromJson(json),
       })
       nested!: Test1;
     }

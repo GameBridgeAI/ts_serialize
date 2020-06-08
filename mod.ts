@@ -8,10 +8,10 @@ export { SerializeProperty } from "./serialize_property.ts";
 /** abstract class and revive */
 export {
   Serializable,
-  ReviverStrategy,
-  ReplacerStrategy,
-  composeReviverStrategy as composeReviveStrategy,
-  composeReplacerStrategy,
+  FromJsonStrategy,
+  ToJsonStrategy,
+  composeFromJsonStrategy as fromJsonStrategy,
+  composeToJsonStrategy as toJsonStrategy,
 } from "./serializable.ts";
 
 /** date revivers */

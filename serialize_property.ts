@@ -3,8 +3,8 @@
 import {
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
-  ReviverStrategy,
-  ReplacerStrategy,
+  FromJsonStrategy,
+  ToJsonStrategy,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -17,20 +17,22 @@ export declare type SerializePropertyArgument =
   | string
   | {
     serializedKey?: string;
-    reviverStrategy?:
-      | ReviverStrategy
-      | (ReviverStrategy | ReviverStrategy[])[];
-    replacerStrategy?:
-      | ReplacerStrategy
-      | (ReplacerStrategy | ReplacerStrategy[])[];
+    fromJsonStrategy?:
+      | FromJsonStrategy
+      | (FromJsonStrategy | FromJsonStrategy[])[];
+    toJsonStrategy?:
+      | ToJsonStrategy
+      | (ToJsonStrategy | ToJsonStrategy[])[];
   };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  reviverStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[];
-  replacerStrategy?:
-    | ReplacerStrategy
-    | (ReplacerStrategy | ReplacerStrategy[])[];
+  fromJsonStrategy?:
+    | FromJsonStrategy
+    | (FromJsonStrategy | FromJsonStrategy[])[];
+  toJsonStrategy?:
+    | ToJsonStrategy
+    | (ToJsonStrategy | ToJsonStrategy[])[];
 }
 
 /** Property wrapper that adds serializable options to the class map
@@ -101,8 +103,8 @@ export function SerializeProperty(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
-        decoratorArgumentOptions.reviverStrategy,
-        decoratorArgumentOptions.replacerStrategy,
+        decoratorArgumentOptions.fromJsonStrategy,
+        decoratorArgumentOptions.toJsonStrategy,
       ),
     );
   };

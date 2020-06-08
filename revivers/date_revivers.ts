@@ -1,9 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { ReviverStrategy } from "../serializable.ts";
+import { FromJsonStrategy } from "../serializable.ts";
 
 /** allows authors to pass a regex to parse as a date */
-export function createDateReviver(regex: RegExp): ReviverStrategy {
+export function createDateReviver(regex: RegExp): FromJsonStrategy {
   return (value: any): any | Date => {
     return typeof value === "string" && regex.exec(value)
       ? new Date(value)
