@@ -1,6 +1,10 @@
 # ts_serialize ![](https://github.com/GameBridgeAI/ts_serialize/workflows/ci/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero dependency library for serializing data
+A zero dependency library for serializing data. ts_serialize can help you with:
+
+- converting camelCase class members to snake_case JSON properties for use with a REST API
+- excluding internal fields from REST API payloads
+- converting data types to an internal format, for expamle: `Date`'s
 
 **Supported Serialize Types**
 
@@ -18,7 +22,7 @@ TBD
 
 ## Usage
 
-@todo(shardymbai) - need to updaet this once RC is ready
+@todo(shardymbai) - need to update this once RC is ready
 
 ## Known Issues
 
@@ -49,6 +53,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
+- [MindBridge](https://mindbridge.ai) for support
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) for example code
-- [MindBridge](https://mindbridge.ai) for support

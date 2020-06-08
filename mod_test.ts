@@ -4,7 +4,7 @@ import { test, assert, assertEquals } from "./test_deps.ts";
 import * as mod from "./mod.ts";
 
 test({
-  name: "public API assertions",
+  name: "Public API assertions",
   fn() {
     assert(mod != null);
     assertEquals(typeof mod.SerializeProperty, "function");
