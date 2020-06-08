@@ -12,11 +12,11 @@ test({
     assertEquals(typeof mod.fromJsonStrategy, "function");
     assertEquals(typeof mod.toJsonStrategy, "function");
 
-    assertEquals(typeof mod.createDateReviver, "function");
-    assertEquals(typeof mod.ISODateReviver, "function");
+    assertEquals(typeof mod.createDateStrategy, "function");
+    assertEquals(typeof mod.ISODateFromJson, "function");
 
-    assertEquals(typeof mod.defaultReplacer, "function");
-    assertEquals(typeof mod.recursiveReplacer, "function");
+    assertEquals(typeof mod.defaultToJson, "function");
+    assertEquals(typeof mod.recursiveToJson, "function");
 
     assertEquals(Object.keys(mod).length, 8);
   },

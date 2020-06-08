@@ -15,6 +15,9 @@ export {
 } from "./serializable.ts";
 
 /** date revivers */
-export { createDateReviver, ISODateReviver } from "./revivers/date_revivers.ts";
-export { defaultReplacer } from "./replacers/default_replacer.ts";
-export { recursiveReplacer } from "./replacers/recursive_replacer.ts";
+export {
+  createDateStrategy,
+  ISODateFromJson,
+} from "./from_json/date_from_json.ts";
+export { defaultToJson } from "./to_json/default_to_json.ts";
+export { recursiveToJson } from "./to_json/recursive_to_json.ts";

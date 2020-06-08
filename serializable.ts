@@ -1,8 +1,8 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { defaultReplacer } from "./replacers/default_replacer.ts";
-import { recursiveReplacer } from "./replacers/recursive_replacer.ts";
+import { defaultToJson } from "./to_json/default_to_json.ts";
+import { recursiveToJson } from "./to_json/recursive_to_json.ts";
 
 /** Functions used when hydrating data */
 export declare type FromJsonStrategy = (value: any) => any;
@@ -103,9 +103,9 @@ export function toPojo<T>(
         )
       ) {
         // If the value is serializable then use the recursive replacer
-        toJsonStrategy = recursiveReplacer;
+        toJsonStrategy = recursiveToJson;
       } else {
-        toJsonStrategy = defaultReplacer;
+        toJsonStrategy = defaultToJson;
       }
     }
 

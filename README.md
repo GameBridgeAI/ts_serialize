@@ -26,7 +26,7 @@ Currently you cannot serialize a `static` member.
 
 ## Built With
 
-- [Deno](http://deno.land)
+- [Deno](http://deno.land) :sauropod:
 
 ## Contributing
 
