@@ -9,7 +9,7 @@ import {
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 
-export const SYMBOL_PROPERTY_NAME_ERROR_MESSAGE =
+export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 
 /** string/symbol property name or options for (de)serializing values */
@@ -71,7 +71,7 @@ export function SerializeProperty(
         !decoratorArguments.serializedKey &&
         typeof propertyName === "symbol"
       ) {
-        throw new Error(SYMBOL_PROPERTY_NAME_ERROR_MESSAGE);
+        throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
       }
 
       decoratorArgumentOptions = {

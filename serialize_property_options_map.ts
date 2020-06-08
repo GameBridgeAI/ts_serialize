@@ -2,10 +2,10 @@
 
 import { SerializePropertyOptions } from "./serializable.ts";
 
-export const DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE =
+export const ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY =
   "This key name is already in use by another property, please use a different name";
 
-export const DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE =
+export const ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY =
   "This serialize key is already in use by another property, please use a different name";
 
 /** Double indexed map of Serialized Property Options
@@ -34,12 +34,12 @@ export class SerializePropertyOptionsMap {
   public set(serializePropertyOptions: SerializePropertyOptions): void {
     if (this.serializedKeyMap.has(serializePropertyOptions.serializedKey)) {
       throw new Error(
-        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: ${serializePropertyOptions.serializedKey}`,
+        `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: ${serializePropertyOptions.serializedKey}`,
       );
     }
     if (this.propertyKeyMap.has(serializePropertyOptions.propertyKey)) {
       throw new Error(
-        `${DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE}: ${serializePropertyOptions.propertyKey.toString()}`,
+        `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: ${serializePropertyOptions.propertyKey.toString()}`,
       );
     }
     this.propertyKeyIgnoreSet.delete(serializePropertyOptions.propertyKey);

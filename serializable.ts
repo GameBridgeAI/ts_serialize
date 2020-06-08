@@ -67,7 +67,7 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
   SerializePropertyOptionsMap
 >();
 
-const MISSING_PROPERTIES_MAP_ERROR_MESSAGE =
+const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
   "Unable to load serializer properties for the given context";
 
 /** Converts to object using mapped keys */
@@ -80,7 +80,7 @@ export function toPojo<T>(
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
+      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
         ?.prototype}`,
     );
   }
@@ -139,7 +139,7 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
+      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
         ?.prototype}`,
     );
   }

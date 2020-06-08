@@ -3,8 +3,8 @@
 import { test, assertEquals, assertStrictEq, fail } from "./test_deps.ts";
 import {
   SerializePropertyOptionsMap,
-  DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE,
-  DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE,
+  ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY,
+  ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
 } from "./serialize_property_options_map.ts";
 import { SerializePropertyOptions } from "./serializable.ts";
 
@@ -88,7 +88,7 @@ test({
       test.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
-      assertEquals(e.message, `${DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE}: a`);
+      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);
     }
   },
 });
@@ -105,7 +105,7 @@ test({
       test.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
-      assertEquals(e.message, `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: a`);
+      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: a`);
     }
   },
 });
@@ -122,7 +122,7 @@ test({
       test.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
-      assertEquals(e.message, `${DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE}: a`);
+      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);
     }
   },
 });
