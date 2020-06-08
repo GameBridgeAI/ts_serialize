@@ -99,15 +99,9 @@ test({
     const change = (v: string) => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
-<<<<<<< Updated upstream
-        reviveStrategy: composeReviveStrategy(hideEmailSender),
-      })
-      email!: string;
-=======
         reviveStrategy: change,
       })
       change!: string;
->>>>>>> Stashed changes
     }
     const test = new Test().fromJson(`{"change":"hi earth"}`);
     assertEquals(test.change, "hello world");
