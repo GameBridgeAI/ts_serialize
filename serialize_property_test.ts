@@ -96,15 +96,21 @@ test({
 test({
   name: "Uses a provided reviverStrategy",
   fn() {
-    const hideEmailSender = (v: string) => `***@${v.split("@")[1]}`;
+    const change = (v: string) => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
+<<<<<<< Updated upstream
         reviveStrategy: composeReviveStrategy(hideEmailSender),
       })
       email!: string;
+=======
+        reviveStrategy: change,
+      })
+      change!: string;
+>>>>>>> Stashed changes
     }
-    const test = new Test().fromJson(`{"email":"test@example.com"}`);
-    assertEquals(test.email, "***@example.com");
+    const test = new Test().fromJson(`{"change":"hi earth"}`);
+    assertEquals(test.change, "hello world");
   },
 });
 
