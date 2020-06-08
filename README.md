@@ -59,7 +59,7 @@ assertEquals(test.notSerialized, "not-serialized");
 
 **Strategies**
 
-`Strartegies` are functions or a composed list of functoins to execute on the values when
+`Strartegies` are functions or a composed list of functions to execute on the values when
 serializing or deserializing. The functions take one argument which is the value to process.
 
 **Dates**
@@ -98,7 +98,7 @@ assertEquals(mockObj.date.getFullYear(), 2099);
 
 Inherited classes override the key when serializing. If you override
 a propery any value used for that key will be overridden by the
-child value. _With collisions the child also overides the parent_
+child value. _With collisions the child always overides the parent_
 
 ```ts
 class Test1 extends Serializable<Test1> {
@@ -144,11 +144,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [MindBridge](https://mindbridge.ai) for support
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
-- [OAK Server](https://github.com/oakserver/oak) for example code
-
-````
-
-```
-
-```
-````
+- [OAK Server](https://github.com/oakserver/oak) as project structure example
