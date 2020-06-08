@@ -62,6 +62,22 @@ assertEquals(test.notSerialized, "not-serialized");
 `Strartegies` are functions or a composed list of functions to execute on the values when
 serializing or deserializing. The functions take one argument which is the value to process.
 
+```ts
+const myCustomFromJsonStrategy = (v: string): string => BigInt(v);
+const myCustomToJsonStrategy = (v: BigInt): string => v.toString();
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    serializedName: "big_int",
+    fromJsonStrategy: myCustomFromJsonStrategy,
+    toJsonStrategy: myCustomToJsonStrategy,
+  })
+  bigInt!: BigInt;
+}
+const mockObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
+assertEquals(mockObj.bigInt.toString(), "9007199254740991");
+assertEquals(mockObj.toJson(), "9007199254740991");
+```
+
 **Dates**
 
 Dates can use the `fromJsonStrategy` to revive a serilaized string into a Date object. `ts_serialize`
@@ -115,6 +131,46 @@ const test = new Test2();
 assertEquals(test.serializeMe, "nice1");
 assertEquals(test.serializeMeInstead, "nice2");
 assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
+```
+
+**Nested Class Serialization**
+
+ToJson:
+
+```ts
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+class Test2 extends Serializable<Test2> {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+  })
+  nested: Test1 = new Test1();
+}
+const test = new Test2();
+
+assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+```
+
+FromJson
+
+```ts
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+class Test2 extends Serializable<Test2> {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+    fromJsonStrategy: (json) => new Test1().fromJson(json),
+  })
+  nested!: Test1;
+}
+const test = new Test2();
+
+test.fromJson(`{"serialize_me_2": { "serialize_me_1":"ignore me"}}`);
+assertEquals(test.nested.serializeMe, "ignore me");
 ```
 
 ## Built With
