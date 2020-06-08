@@ -24,7 +24,26 @@ TBD
 
 ## Usage
 
-@todo(shardymbai) - need to update this once RC is ready
+### Basic
+
+Import `Serializable` and `SerializeProperty`, extend `Serializable` with your `class`
+and use the `SerializeProperty` decorator on any properties you want serialized.
+Passing a string as an argument to `SerializeProperty` causes the property to use
+that name as the key when serialized.
+
+```ts
+class Test extends Serializable<Test> {
+  @SerializeProperty()
+  propertyOne = "Hello";
+  @SerializeProperty("property_two")
+  propertyTwo = "World!";
+}
+
+assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
+const test = new Test().from(`{"propertyOne":"From","property_two":"Json!"}`);
+assert(test.propertyOne, "From");
+assert(test.propertyTwo, "Json!");
+```
 
 ## Known Issues
 
@@ -44,7 +63,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-- **Scott Hardy** - _Initial work_ - [shardyMBAI](https://github.com/shardyMBAI) :frog:
+- **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
 - **Chris Dufour** - _Initial work_ - [@PizzaCatKing](https://github.com/PizzaCatKing) :pizza: :cat: :crown:
 
 See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
@@ -58,3 +77,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [MindBridge](https://mindbridge.ai) for support
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) for example code
+
+```
+
+```
