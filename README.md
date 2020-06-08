@@ -96,6 +96,8 @@ assert(mockObj.date instanceof Date);
 assertEquals(mockObj.date.getFullYear(), 2020);
 ```
 
+Provide your own strategy!
+
 ```ts
 const testDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
 
