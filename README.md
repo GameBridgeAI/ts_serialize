@@ -144,4 +144,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - [MindBridge](https://mindbridge.ai) for support
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
-- [OAK Server](https://github.com/oakserver/oak) as project structure example
+- [OAK Server](https://github.com/oakserver/oak) as a project structure example
