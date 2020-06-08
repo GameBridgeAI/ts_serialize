@@ -16,11 +16,19 @@ A zero dependency library for serializing data.
 
 **Deno**
 
-Add the URL to your `deps.ts` file and export what you need.
+Add the <@todo(shardymbai) update with url)> to your `deps.ts` file and export what you need.
 
 **Node**
 
-TBD
+Add the URL to your `package.json` file as a `dependancy`
+
+```json
+{
+  "dependencies": {
+    "@ts_serialize": "@todo(shardymbai) update with url)"
+  }
+}
+```
 
 ## Usage
 
