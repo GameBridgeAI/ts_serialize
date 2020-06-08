@@ -1,4 +1,4 @@
-import { test, assertEquals, assertStrictEq, fail } from "./test_deps.ts";
+import { test, assertEquals, assertStrictEquals, fail } from "./test_deps.ts";
 import {
   SerializePropertyOptionsMap,
   DUPLICATE_PROPERTY_KEY_ERROR_MESSAGE,
@@ -23,8 +23,8 @@ test({
 
     assertEquals(test.hasPropertyKey("a"), true);
     assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEq(test.getByPropertyKey("a"), spOptions);
-    assertStrictEq(test.getBySerializedKey("b"), spOptions);
+    assertStrictEquals(test.getByPropertyKey("a"), spOptions);
+    assertStrictEquals(test.getBySerializedKey("b"), spOptions);
 
     const allPropertyOptions = Array.from(test.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
@@ -43,8 +43,8 @@ test({
 
     assertEquals(test.hasPropertyKey("a"), true);
     assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEq(test.getByPropertyKey("a"), spOptions);
-    assertStrictEq(test.getBySerializedKey("b"), spOptions);
+    assertStrictEquals(test.getByPropertyKey("a"), spOptions);
+    assertStrictEquals(test.getBySerializedKey("b"), spOptions);
 
     const allPropertyOptions = Array.from(test.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
@@ -65,8 +65,8 @@ test({
 
     assertEquals(test.hasPropertyKey("a"), true);
     assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEq(test.getByPropertyKey("a"), childSPOptions);
-    assertStrictEq(test.getBySerializedKey("b"), childSPOptions);
+    assertStrictEquals(test.getByPropertyKey("a"), childSPOptions);
+    assertStrictEquals(test.getBySerializedKey("b"), childSPOptions);
 
     const allPropertyOptions = Array.from(test.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
@@ -137,11 +137,11 @@ test({
     const childSPOptions = new SerializePropertyOptions("b", "a");
     testChild.set(childSPOptions);
 
-    assertStrictEq(testChild.getByPropertyKey("b"), childSPOptions);
-    assertStrictEq(testChild.getByPropertyKey("a"), undefined);
+    assertStrictEquals(testChild.getByPropertyKey("b"), childSPOptions);
+    assertStrictEquals(testChild.getByPropertyKey("a"), undefined);
 
-    assertStrictEq(testChild.hasPropertyKey("b"), true);
-    assertStrictEq(testChild.hasPropertyKey("a"), false);
+    assertStrictEquals(testChild.hasPropertyKey("b"), true);
+    assertStrictEquals(testChild.hasPropertyKey("a"), false);
 
     const childEntries = Array.from(testChild.propertyOptions());
     assertEquals(childEntries.length, 1);
@@ -161,18 +161,17 @@ test({
     const childSPOptions = new SerializePropertyOptions("a", "b");
     testChild.set(childSPOptions);
 
-    assertStrictEq(testChild.getBySerializedKey("b"), childSPOptions);
-    assertStrictEq(testChild.getBySerializedKey("a"), undefined);
+    assertStrictEquals(testChild.getBySerializedKey("b"), childSPOptions);
+    assertStrictEquals(testChild.getBySerializedKey("a"), undefined);
 
-    assertStrictEq(testChild.hasSerializedKey("b"), true);
-    assertStrictEq(testChild.hasSerializedKey("a"), false);
+    assertStrictEquals(testChild.hasSerializedKey("b"), true);
+    assertStrictEquals(testChild.hasSerializedKey("a"), false);
 
     const childEntries = Array.from(testChild.propertyOptions());
     assertEquals(childEntries.length, 1);
     assertEquals(childEntries[0], childSPOptions);
   },
 });
-
 
 test({
   name:
@@ -188,11 +187,11 @@ test({
     const childSPOptions2 = new SerializePropertyOptions("a", "c");
     testChild.set(childSPOptions2);
 
-    assertStrictEq(testChild.getByPropertyKey("b"), childSPOptions);
-    assertStrictEq(testChild.getByPropertyKey("a"), childSPOptions2);
+    assertStrictEquals(testChild.getByPropertyKey("b"), childSPOptions);
+    assertStrictEquals(testChild.getByPropertyKey("a"), childSPOptions2);
 
-    assertStrictEq(testChild.hasPropertyKey("b"), true);
-    assertStrictEq(testChild.hasPropertyKey("a"), true);
+    assertStrictEquals(testChild.hasPropertyKey("b"), true);
+    assertStrictEquals(testChild.hasPropertyKey("a"), true);
 
     const childEntries = Array.from(testChild.propertyOptions());
     assertEquals(childEntries.length, 2);
@@ -215,11 +214,11 @@ test({
     const childSPOptions2 = new SerializePropertyOptions("c", "a");
     testChild.set(childSPOptions2);
 
-    assertStrictEq(testChild.getBySerializedKey("b"), childSPOptions);
-    assertStrictEq(testChild.getBySerializedKey("a"), childSPOptions2);
+    assertStrictEquals(testChild.getBySerializedKey("b"), childSPOptions);
+    assertStrictEquals(testChild.getBySerializedKey("a"), childSPOptions2);
 
-    assertStrictEq(testChild.hasSerializedKey("b"), true);
-    assertStrictEq(testChild.hasSerializedKey("a"), true);
+    assertStrictEquals(testChild.hasSerializedKey("b"), true);
+    assertStrictEquals(testChild.hasSerializedKey("a"), true);
 
     const childEntries = Array.from(testChild.propertyOptions());
     assertEquals(childEntries.length, 2);

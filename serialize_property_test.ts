@@ -4,7 +4,7 @@ import {
   test,
   assert,
   assertEquals,
-  assertStrictEq,
+  assertStrictEquals,
   fail,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
@@ -36,7 +36,7 @@ test({
       testName = "toJson";
     }
     assertEquals(new Test().toJson(), `{"test_name":"toJson"}`);
-    const test = new Test().fromJson({ "testName": "fromJson" });
+    const test = new Test().fromJson({ testName: "fromJson" });
     assertEquals(test.testName, "fromJson");
   },
 });
@@ -83,10 +83,10 @@ test({
     }
     assertEquals(
       new Test().toJson(),
-      `{"test_name":"toJson","test_name2":"toJson2"}`,
+      `{"test_name":"toJson","test_name2":"toJson2"}`
     );
     const test = new Test().fromJson(
-      `{"test_name":"fromJson","test_name2":"fromJson2"}`,
+      `{"test_name":"fromJson","test_name2":"fromJson2"}`
     );
     assertEquals(test[TEST], "fromJson");
     assertEquals(test[TEST2], "fromJson2");
@@ -98,7 +98,9 @@ test({
   fn() {
     const hideEmailSender = (v: string) => `***@${v.split("@")[1]}`;
     class Test extends Serializable<Test> {
-      @SerializeProperty({ reviveStrategy: composeReviveStrategy(hideEmailSender) })
+      @SerializeProperty({
+        reviveStrategy: composeReviveStrategy(hideEmailSender),
+      })
       email!: string;
     }
     const test = new Test().fromJson(`{"email":"test@example.com"}`);
@@ -115,7 +117,7 @@ test({
     }
     assertEquals(
       typeof new Test().fromJson(`{"test":"string"}`).test,
-      "string",
+      "string"
     );
   },
 });
@@ -158,7 +160,7 @@ test({
       null!: null;
     }
     const test = new Test().fromJson(`{"null":null}`);
-    assertStrictEq(test.null, null);
+    assertStrictEquals(test.null, null);
   },
 });
 
@@ -182,7 +184,7 @@ test({
       array!: unknown[];
     }
     const test = new Test().fromJson(
-      `{"array":["worked",0,{"subObj":["cool"]}]}`,
+      `{"array":["worked",0,{"subObj":["cool"]}]}`
     );
     assert(Array.isArray(test.array));
     assertEquals(test.array.length, 3);
@@ -205,7 +207,7 @@ test({
       array!: OtherClass[];
     }
     const test = new Test().fromJson(
-      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`,
+      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`
     );
     assertEquals(test.array.length, 5);
     assert(test.array[0] instanceof OtherClass);
@@ -240,7 +242,10 @@ test({
       }
       fail("Allowed duplicate propertyName");
     } catch (e) {
-      assertEquals(e.message, `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`);
+      assertEquals(
+        e.message,
+        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`
+      );
     }
   },
 });
@@ -312,11 +317,12 @@ test({
     }
     const test = new Test2();
 
-    test.fromJson(`{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`);
+    test.fromJson(
+      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`
+    );
     assertEquals(test.serializeMe, "override");
   },
 });
-
 
 test({
   name: "deserialize nested",
@@ -326,9 +332,11 @@ test({
       serializeMe = "nice1";
     }
     class Test2 extends Serializable<Test2> {
-      @SerializeProperty({serializedKey: "serialize_me_2", reviveStrategy: (json) => new Test1().fromJson(json) })
+      @SerializeProperty({
+        serializedKey: "serialize_me_2",
+        reviveStrategy: (json) => new Test1().fromJson(json),
+      })
       nested!: Test1;
-
     }
     const test = new Test2();
 
@@ -345,13 +353,17 @@ test({
       serializeMe = "nice1";
     }
     class Test2 extends Serializable<Test2> {
-      @SerializeProperty({serializedKey: "serialize_me_2", reviveStrategy: (json) => new Test1().fromJson(json) })
+      @SerializeProperty({
+        serializedKey: "serialize_me_2",
+        reviveStrategy: (json) => new Test1().fromJson(json),
+      })
       nested: Test1 = new Test1();
-
     }
     const test = new Test2();
 
-    
-    assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+    assertEquals(
+      test.toJson(),
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
+    );
   },
 });
