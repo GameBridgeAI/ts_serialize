@@ -16,16 +16,16 @@ A zero dependency library for serializing data.
 
 **Deno**
 
-Add the <@todo(shardymbai) update with url)> to your `deps.ts` file and export what you need.
+Add the `https://github.com/gamebridgeai/ts_serialize.git#v1.0.0` to your `deps.ts` file and export what you need.
 
 **Node**
 
-Add the URL to your `package.json` file as a `dependancy`
+Add the URL to your `package.json` file as a `dependencies`
 
 ```json
 {
   "dependencies": {
-    "@ts_serialize": "@todo(shardymbai) update with url)"
+    "@ts_serialize": "git+https://github.com/gamebridgeai/ts_serialize.git#v1.0.0"
   }
 }
 ```
