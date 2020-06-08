@@ -44,12 +44,78 @@ assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
 const test = new Test().fromJson(
   `{"propertyOne":"From","property_two":"Json!", "notSerialized": "changed" }`
 );
-assert(test.propertyOne, "From");
-assert(test.propertyTwo, "Json!");
-assert(test.notSerialized, "not-serialized");
+assertEquals(test.propertyOne, "From");
+assertEquals(test.propertyTwo, "Json!");
+assertEquals(test.notSerialized, "not-serialized");
 ```
 
 ### Advanced
+
+`SerializeProperty` also excepts an options object with the properties:
+
+- `serializedName` (Optional) {string} - Used as the key in the serialized object
+- `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
+- `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
+
+**Strategies**
+
+`Strartegies` are functions or a composed list of functoins to execute on the values when
+serializing or deserializing. The functions take one argument which is the value to process.
+
+**Dates**
+
+Dates can use the `fromJsonStrategy` to revive a serilaized string into a Date object. `ts_serialize`
+provides a `ISODateFromJson` function to parse ISO Dates. `createDateStrategy()` can be use to make
+a reviving date strattegy. Pass a regex to make your own.
+
+```ts
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    fromJsonStrategy: ISODateFromJson,
+  })
+  date!: Date;
+}
+const mockObj = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
+assert(mockObj.date instanceof Date);
+assertEquals(mockObj.date.getFullYear(), 2020);
+```
+
+```ts
+const testDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    fromJsonStrategy: testDateStrategy,
+  })
+  date!: Date;
+}
+const mockObj = new Test().fromJson(`{"date":"2099-11-25"}`);
+assert(mockObj.date instanceof Date);
+assertEquals(mockObj.date.getFullYear(), 2099);
+```
+
+**Inheritance**
+
+Inherited classes override the key when serializing. If you override
+a propery any value used for that key will be overridden by the
+child value. _With collisions the child also overides the parent_
+
+```ts
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me")
+  serializeMe = "nice1";
+}
+
+class Test2 extends Test1 {
+  @SerializeProperty("serialize_me")
+  serializeMeInstead = "nice2";
+}
+
+const test = new Test2();
+assertEquals(test.serializeMe, "nice1");
+assertEquals(test.serializeMeInstead, "nice2");
+assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
+```
 
 ## Built With
 
@@ -80,6 +146,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) for example code
 
+````
+
 ```
 
 ```
+````
