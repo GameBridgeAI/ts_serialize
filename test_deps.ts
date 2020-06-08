@@ -1,10 +1,10 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 export const { test } = Deno;
 
 export {
   assert,
   assertEquals,
-  assertStrictEquals,
+  assertStrictEq,
   fail,
-} from "https://deno.land/std/testing/asserts.ts";
+} from "https://deno.land/std@0.55.0/testing/asserts.ts";

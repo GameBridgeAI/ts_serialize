@@ -1,4 +1,4 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 /** This module is browser compatible. */
 
@@ -6,7 +6,20 @@
 export { SerializeProperty } from "./serialize_property.ts";
 
 /** abstract class and revive */
-export { Serializable, composeReviveStrategy, ReviverStrategy } from "./serializable.ts";
+export {
+  Serializable,
+  FromJsonStrategy,
+  ToJsonStrategy,
+  composeFromJsonStrategy as fromJsonStrategy,
+  composeToJsonStrategy as toJsonStrategy,
+} from "./serializable.ts";
 
-/** date revivers */
-export { createDateReviver, ISODateReviver } from "./revivers/date_revivers.ts";
+/** dates from json strategies */
+export {
+  createDateStrategy,
+  ISODateFromJson,
+} from "./from_json/date_from_json.ts";
+
+/** to json strategies */
+export { defaultToJson } from "./to_json/default_to_json.ts";
+export { recursiveToJson } from "./to_json/recursive_to_json.ts";
