@@ -9,9 +9,15 @@ test({
     assert(mod != null);
     assertEquals(typeof mod.SerializeProperty, "function");
     assertEquals(typeof mod.Serializable, "function");
+    assertEquals(typeof mod.composeReviveStrategy, "function");
+    assertEquals(typeof mod.composeReplacerStrategy, "function");
+    
     assertEquals(typeof mod.createDateReviver, "function");
     assertEquals(typeof mod.ISODateReviver, "function");
-    assertEquals(typeof mod.composeReviveStrategy, "function");
-    assertEquals(Object.keys(mod).length, 5);
+
+    assertEquals(typeof mod.defaultReplacer, "function");
+    assertEquals(typeof mod.recursiveReplacer, "function");
+    
+    assertEquals(Object.keys(mod).length, 8);
   },
 });

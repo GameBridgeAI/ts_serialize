@@ -21,33 +21,33 @@ export class SerializePropertyOptions {
     replacerStrategy?: ReplacerStrategy | (ReplacerStrategy | ReplacerStrategy[])[]
   ) {
     if (Array.isArray(reviverStrategy)) {
-      this.reviverStrategy = composeReviveStrategy(...reviverStrategy);
+      this.reviverStrategy = composeReviverStrategy(...reviverStrategy);
     } else if (reviverStrategy) {
       this.reviverStrategy = reviverStrategy;
     }
 
     if (Array.isArray(replacerStrategy)) {
-      this.replacerStrategy = composeReplaceStrategy(...replacerStrategy);
+      this.replacerStrategy = composeReplacerStrategy(...replacerStrategy);
     } else if (replacerStrategy) {
       this.replacerStrategy = replacerStrategy;
     }
   }
 }
 
-/** Function to build a `reviveStrategy`
+/** Function to build a `reviverStrategy`
  * Converts value from functions provided as parameters
  */
-export function composeReviveStrategy(
+export function composeReviverStrategy(
   ...fns: (ReviverStrategy | ReviverStrategy[])[]
 ): ReviverStrategy {
   return (val: unknown): unknown =>
     fns.flat().reduce((acc: unknown, f: ReviverStrategy) => f(acc), val);
 }
 
-/** Function to build a `replaceStrategy`
+/** Function to build a `replacerStrategy`
  * Converts value from functions provided as parameters
  */
-export function composeReplaceStrategy(
+export function composeReplacerStrategy(
   ...fns: (ReplacerStrategy | ReplacerStrategy[])[]
 ): ReplacerStrategy {
   return (val: unknown): unknown =>

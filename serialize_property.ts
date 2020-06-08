@@ -94,7 +94,7 @@ export function SerializeProperty(
         target
       ) as SerializePropertyOptionsMap;
     }
-    console.log("args", decoratorArgumentOptions)
+
     serializablePropertiesMap.set(
       new SerializePropertyOptions(
         propertyName,

@@ -8,9 +8,14 @@ export { SerializeProperty } from "./serialize_property.ts";
 /** abstract class and revive */
 export {
   Serializable,
-  composeReviveStrategy,
   ReviverStrategy,
+  ReplacerStrategy,
+  composeReviverStrategy as composeReviveStrategy,
+  composeReplacerStrategy,
 } from "./serializable.ts";
 
 /** date revivers */
 export { createDateReviver, ISODateReviver } from "./revivers/date_revivers.ts";
+export { defaultReplacer } from "./replacers/default_replacer.ts";
+export { recursiveReplacer } from "./replacers/recursive_replacer.ts";
+

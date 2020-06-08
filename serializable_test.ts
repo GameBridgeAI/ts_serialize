@@ -1,7 +1,7 @@
 // Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
 
 import { test, assert, assertEquals } from "./test_deps.ts";
-import { Serializable, composeReviveStrategy } from "./serializable.ts";
+import { Serializable, composeReviverStrategy } from "./serializable.ts";
 
 test({
   name: "adds methods to extended classes",
@@ -19,7 +19,7 @@ test({
   fn() {
     const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
     const shout = (v: string) => `${v}!!!`;
-    const reviveStrategy = composeReviveStrategy(
+    const reviveStrategy = composeReviverStrategy(
       addLetter(" "),
       addLetter("W"),
       addLetter("o"),
