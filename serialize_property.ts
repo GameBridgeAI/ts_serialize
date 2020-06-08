@@ -1,9 +1,10 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
   ReviverStrategy,
+  ReplacerStrategy,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -15,17 +16,21 @@ export const SYMBOL_PROPERTY_NAME_ERROR_MESSAGE =
 export declare type SerializePropertyArgument =
   | string
   | {
-      serializedKey?: string;
-      reviveStrategy?:
-        | ReviverStrategy
-        | (ReviverStrategy | ReviverStrategy[])[];
-      useBuiltinSerializer?: boolean;
-    };
+    serializedKey?: string;
+    reviverStrategy?:
+      | ReviverStrategy
+      | (ReviverStrategy | ReviverStrategy[])[];
+    replacerStrategy?:
+      | ReplacerStrategy
+      | (ReplacerStrategy | ReplacerStrategy[])[];
+  };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  reviveStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[];
-  useBuiltinSerializer?: boolean;
+  reviverStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[];
+  replacerStrategy?:
+    | ReplacerStrategy
+    | (ReplacerStrategy | ReplacerStrategy[])[];
 }
 
 /** Property wrapper that adds serializable options to the class map
@@ -43,12 +48,12 @@ export function SerializeProperty(arg: string): PropertyDecorator;
  * `serializedName` is not set
  */
 export function SerializeProperty(
-  arg: SerializePropertyArgument
+  arg: SerializePropertyArgument,
 ): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map */
 export function SerializeProperty(
-  decoratorArguments: SerializePropertyArgument = {}
+  decoratorArguments: SerializePropertyArgument = {},
 ): PropertyDecorator {
   return (target: unknown, propertyName: string | symbol) => {
     let decoratorArgumentOptions: SerializePropertyArgumentObject;
@@ -79,16 +84,16 @@ export function SerializeProperty(
     if (!serializablePropertiesMap) {
       // If the parent has a serialization map then inherit it
       const parentMap = SERIALIZABLE_CLASS_MAP.get(
-        Object.getPrototypeOf(target)
+        Object.getPrototypeOf(target),
       );
 
       SERIALIZABLE_CLASS_MAP.set(
         target,
-        new SerializePropertyOptionsMap(parentMap)
+        new SerializePropertyOptionsMap(parentMap),
       );
 
       serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(
-        target
+        target,
       ) as SerializePropertyOptionsMap;
     }
 
@@ -96,9 +101,9 @@ export function SerializeProperty(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
-        decoratorArgumentOptions.reviveStrategy,
-        decoratorArgumentOptions.useBuiltinSerializer
-      )
+        decoratorArgumentOptions.reviverStrategy,
+        decoratorArgumentOptions.replacerStrategy,
+      ),
     );
   };
 }

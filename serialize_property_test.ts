@@ -1,10 +1,10 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   test,
   assert,
   assertEquals,
-  assertStrictEquals,
+  assertStrictEq,
   fail,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
@@ -12,7 +12,6 @@ import {
   SerializeProperty,
   SYMBOL_PROPERTY_NAME_ERROR_MESSAGE,
 } from "./serialize_property.ts";
-import { composeReviveStrategy } from "./mod.ts";
 import { DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE } from "./serialize_property_options_map.ts";
 
 test({
@@ -83,10 +82,10 @@ test({
     }
     assertEquals(
       new Test().toJson(),
-      `{"test_name":"toJson","test_name2":"toJson2"}`
+      `{"test_name":"toJson","test_name2":"toJson2"}`,
     );
     const test = new Test().fromJson(
-      `{"test_name":"fromJson","test_name2":"fromJson2"}`
+      `{"test_name":"fromJson","test_name2":"fromJson2"}`,
     );
     assertEquals(test[TEST], "fromJson");
     assertEquals(test[TEST2], "fromJson2");
@@ -96,10 +95,25 @@ test({
 test({
   name: "Uses a provided reviverStrategy",
   fn() {
-    const change = (v: string) => `hello world`;
+    const change = () => `hello world`;
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviveStrategy: change,
+        reviverStrategy: change,
+      })
+      change!: string;
+    }
+    const test = new Test().fromJson(`{"change":"hi earth"}`);
+    assertEquals(test.change, "hello world");
+  },
+});
+
+test({
+  name: "Uses a provided replacer strategy",
+  fn() {
+    const change = () => `hello world`;
+    class Test extends Serializable<Test> {
+      @SerializeProperty({
+        reviverStrategy: change,
       })
       change!: string;
     }
@@ -117,7 +131,7 @@ test({
     }
     assertEquals(
       typeof new Test().fromJson(`{"test":"string"}`).test,
-      "string"
+      "string",
     );
   },
 });
@@ -160,7 +174,7 @@ test({
       null!: null;
     }
     const test = new Test().fromJson(`{"null":null}`);
-    assertStrictEquals(test.null, null);
+    assertStrictEq(test.null, null);
   },
 });
 
@@ -184,7 +198,7 @@ test({
       array!: unknown[];
     }
     const test = new Test().fromJson(
-      `{"array":["worked",0,{"subObj":["cool"]}]}`
+      `{"array":["worked",0,{"subObj":["cool"]}]}`,
     );
     assert(Array.isArray(test.array));
     assertEquals(test.array.length, 3);
@@ -202,12 +216,12 @@ test({
     }
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviveStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        reviverStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
       })
       array!: OtherClass[];
     }
     const test = new Test().fromJson(
-      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`
+      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`,
     );
     assertEquals(test.array.length, 5);
     assert(test.array[0] instanceof OtherClass);
@@ -244,7 +258,7 @@ test({
     } catch (e) {
       assertEquals(
         e.message,
-        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`
+        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`,
       );
     }
   },
@@ -318,7 +332,7 @@ test({
     const test = new Test2();
 
     test.fromJson(
-      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`
+      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`,
     );
     assertEquals(test.serializeMe, "override");
   },
@@ -334,7 +348,7 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        reviveStrategy: (json) => new Test1().fromJson(json),
+        reviverStrategy: (json) => new Test1().fromJson(json),
       })
       nested!: Test1;
     }
@@ -355,7 +369,6 @@ test({
     class Test2 extends Serializable<Test2> {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        reviveStrategy: (json) => new Test1().fromJson(json),
       })
       nested: Test1 = new Test1();
     }
@@ -363,7 +376,7 @@ test({
 
     assertEquals(
       test.toJson(),
-      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
     );
   },
 });
