@@ -37,17 +37,19 @@ class Test extends Serializable<Test> {
   propertyOne = "Hello";
   @SerializeProperty("property_two")
   propertyTwo = "World!";
+  notSerialized = "not-serialized";
 }
 
 assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
-const test = new Test().from(`{"propertyOne":"From","property_two":"Json!"}`);
+const test = new Test().fromJson(
+  `{"propertyOne":"From","property_two":"Json!", "notSerialized": "changed" }`
+);
 assert(test.propertyOne, "From");
 assert(test.propertyTwo, "Json!");
+assert(test.notSerialized, "not-serialized");
 ```
 
-## Known Issues
-
-Currently you cannot serialize a `static` member.
+### Advanced
 
 ## Built With
 
