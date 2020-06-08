@@ -1,6 +1,9 @@
 # ts_serialize ![](https://github.com/GameBridgeAI/ts_serialize/workflows/ci/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero dependency library for serializing data
+A zero dependency library for serializing data. ts_serialize can help you with:
+- converting camelCase class members to snake_case JSON properties for use with a REST API;
+- excluding internal fields from REST API payloads;
+- converting data types, for example dates, to an internal format
 
 **Supported Serialize Types**
 
@@ -39,7 +42,8 @@ assertEquals(test.testName, "fromJson");
 
 **Inheritance**
 
-Extend `Serializable` from a base class
+You can extend `Serializable` from a base class, and make further extensions to your base class; properties
+from parent classes are included when serializing and deserializing.
 
 ```ts
 class Base extends Serializable<Base> {
@@ -59,26 +63,30 @@ const test = new Test2().fromJson(`{"testName2":"fromJson2"}`);
 assertEquals(test.testName2, "fromJson2");
 ```
 
-**Serialze Property**
+**Serialize Property**
 
-The `@SerializeProperty()` decorator adds the property to serialize map. If used with any
-parameters it uses the property name as the key in the map. `@SerializeProperty()` can take a
-`string` as a argument that will be used as the object key when `toJson` is called. `@SerializeProperty()`
-can also take a `SerializePropertyOptionsObject`, with option `serializedName` and `reviveStrategy` properties
+The `@SerializeProperty()` decorator indicates the property should be included when serializing and deserializing.
+If used with no parameters it uses the property name as-is.
 
-SerializeProperty with a String argument
+`@SerializeProperty()` can take a `string` as a argument that will be used as the object key when `toJson` is called.
 
+`@SerializeProperty()` can also take a `SerializePropertyOptionsObject`, with optional `serializedName` and `reviveStrategy` properties.
+
+SerializeProperty with a String argument:
 ```ts
 class Test extends Serializable<Test> {
+  // Use snake_case when deserializing
   @SerializeProperty("test_name")
   testName = "toJson";
 }
+
 assertEquals(new Test().toJson(), `{"test_name":"toJson"}`);
+
 const test = new Test().fromJson({ testName: "fromJson" });
 assertEquals(test.testName, "fromJson");
 ```
 
-SerializeProperty with an SerializePropertyOptionsObject argument
+SerializeProperty with a SerializePropertyOptionsObject argument:
 
 ```ts
 const options = {
@@ -117,14 +125,19 @@ function customReviver(value: any) {
 ```
 
 Revivers should always return a value. If the `reviveStrategy` is a `ReviverList` of functions then
-they are called in order passing the value to the next reviver. Below is our test berakdown for the `reviveStrategy`.
+they are called in order passing the value to the next reviver. Below is our test breakdown for the `reviveStrategy`.
 
 ```ts
 test({
   name: "revive composes a reviverList into a reviveStrategy",
   fn() {
+    // A reviver that appends a single letter when deserializing
     const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
+
+    // A reviver that appends exclamation marks
     const shout = (v: string) => `${v}!!!`;
+
+    // A list of revivers
     const reviveStrategy = revive(
       addLetter(" "),
       addLetter("W"),
@@ -134,26 +147,32 @@ test({
       addLetter("d"),
       shout
     );
+
     assertEquals(reviveStrategy("Hello"), "Hello World!!!");
   },
 });
 ```
 
-A `reviveStrategy` that is one `reviver` does not require the `revive` function
-
+A `reviveStrategy` that is one `reviver` does not require the `revive` function:
 ```ts
 const options = {
   /*...*/
 };
+
+// Reviver to deserialize from markdown
 const convertFromMarkdown = (mdEngine: MdEngine) => (content: string) =>
   mdEngine.convert(content);
+
 class Article extends Serializable<Article> {
   @SerializeProperty({
     serializedName: "content",
+
+    // A single reviver does not need to be wrapped in revive()
     reviveStrategy: convertFromMarkdown(new MdEngine(options)),
   })
   contentAsHTML = "";
 }
+
 assertEqual(
   new Article().fromJson(`{"content":"# Title\nContent body.\n"}`)
     .contentAsHTML,
