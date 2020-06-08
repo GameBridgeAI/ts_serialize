@@ -1,3 +1,5 @@
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+
 import { test, assertEquals, assertStrictEquals, fail } from "./test_deps.ts";
 import {
   SerializePropertyOptionsMap,

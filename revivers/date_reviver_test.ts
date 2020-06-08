@@ -1,4 +1,4 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test, assert, assertEquals } from "../test_deps.ts";
 import { createDateReviver, ISODateReviver } from "./date_revivers.ts";
@@ -20,7 +20,8 @@ test({
 test({
   name: "ISODateReviver parses ISO dates",
   fn() {
-    const mockJSON = `{"date":"2020-06-04T19:01:47.831Z","not_a_date":"Hello world"}`;
+    const mockJSON =
+      `{"date":"2020-06-04T19:01:47.831Z","not_a_date":"Hello world"}`;
     const mockObj = JSON.parse(mockJSON, (_, v) => ISODateReviver(v));
     assert(mockObj.date instanceof Date);
     assertEquals(mockObj.date.getFullYear(), 2020);
@@ -34,7 +35,7 @@ test({
   fn() {
     class Test extends Serializable<Test> {
       @SerializeProperty({
-        reviverStrategy: ISODateReviver
+        reviverStrategy: ISODateReviver,
       })
       date!: Date | string;
     }

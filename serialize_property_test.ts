@@ -1,4 +1,4 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   test,
@@ -83,10 +83,10 @@ test({
     }
     assertEquals(
       new Test().toJson(),
-      `{"test_name":"toJson","test_name2":"toJson2"}`
+      `{"test_name":"toJson","test_name2":"toJson2"}`,
     );
     const test = new Test().fromJson(
-      `{"test_name":"fromJson","test_name2":"fromJson2"}`
+      `{"test_name":"fromJson","test_name2":"fromJson2"}`,
     );
     assertEquals(test[TEST], "fromJson");
     assertEquals(test[TEST2], "fromJson2");
@@ -107,7 +107,6 @@ test({
     assertEquals(test.change, "hello world");
   },
 });
-
 
 test({
   name: "Uses a provided replacer strategy",
@@ -133,7 +132,7 @@ test({
     }
     assertEquals(
       typeof new Test().fromJson(`{"test":"string"}`).test,
-      "string"
+      "string",
     );
   },
 });
@@ -200,7 +199,7 @@ test({
       array!: unknown[];
     }
     const test = new Test().fromJson(
-      `{"array":["worked",0,{"subObj":["cool"]}]}`
+      `{"array":["worked",0,{"subObj":["cool"]}]}`,
     );
     assert(Array.isArray(test.array));
     assertEquals(test.array.length, 3);
@@ -223,7 +222,7 @@ test({
       array!: OtherClass[];
     }
     const test = new Test().fromJson(
-      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`
+      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`,
     );
     assertEquals(test.array.length, 5);
     assert(test.array[0] instanceof OtherClass);
@@ -260,7 +259,7 @@ test({
     } catch (e) {
       assertEquals(
         e.message,
-        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`
+        `${DUPLICATE_SERIALIZE_KEY_ERROR_MESSAGE}: serialize_me`,
       );
     }
   },
@@ -334,7 +333,7 @@ test({
     const test = new Test2();
 
     test.fromJson(
-      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`
+      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`,
     );
     assertEquals(test.serializeMe, "override");
   },
@@ -378,7 +377,7 @@ test({
 
     assertEquals(
       test.toJson(),
-      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
     );
   },
 });

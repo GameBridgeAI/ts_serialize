@@ -1,4 +1,4 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   SERIALIZABLE_CLASS_MAP,

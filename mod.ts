@@ -1,4 +1,4 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 /** This module is browser compatible. */
 
@@ -18,4 +18,3 @@ export {
 export { createDateReviver, ISODateReviver } from "./revivers/date_revivers.ts";
 export { defaultReplacer } from "./replacers/default_replacer.ts";
 export { recursiveReplacer } from "./replacers/recursive_replacer.ts";
-
