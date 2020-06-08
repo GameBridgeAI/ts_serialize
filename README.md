@@ -66,7 +66,7 @@ parameters it uses the property name as the key in the map. `@SerializeProperty(
 `string` as a argument that will be used as the object key when `toJson` is called. `@SerializeProperty()`
 can also take a `SerializePropertyOptionsObject`, with option `serializedName` and `reviveStrategy` properties
 
-String
+SerializeProperty with a String argument
 
 ```ts
 class Test extends Serializable<Test> {
@@ -78,20 +78,28 @@ const test = new Test().fromJson({ testName: "fromJson" });
 assertEquals(test.testName, "fromJson");
 ```
 
-SerializePropertyOptionsObject
+SerializeProperty with an SerializePropertyOptionsObject argument
 
 ```ts
-const hideEmailSender = (v: string) => `***@${v.split("@")[1]}`;
-class Test extends Serializable<Test> {
-  @SerializeProperty({ reviveStrategy: hideEmailSender })
-  email!: string;
+const options = {
+  /*... markdown options*/
+};
+
+class Article extends Serializable<Article> {
+  @SerializeProperty({
+    serializedName: "user_content",
+  })
+  userContent = "";
 }
-const test = new Test().fromJson(`{"email":"test@example.com"}`);
-assertEquals(test.email, "***@example.com");
+assertEqual(
+  new Article().fromJson(`{"user_content":"# Title\nContent body.\n"}`)
+    .userContent,
+  `# Title\nContent body.\n`
+);
 ```
 
-- SerializedName (optional) {string} - the name used in serialized map
-- reviveStrategy (optional) {ReviverList} - a function or `revive` output
+- `SerializedName` (optional) {`string`} - the name used in serialized map
+- `reviveStrategy` (optional) {`ReviverList`} - a function or `revive` output
 
 ### Advanced
 
@@ -109,32 +117,29 @@ function customReviver(value: any) {
 ```
 
 Revivers should always return a value. If the `reviveStrategy` is a `ReviverList` of functions then
-they are called in order passinig the value to the next reviver.
+they are called in order passing the value to the next reviver. Below is our test berakdown for the `reviveStrategy`.
 
 ```ts
-const hideEmailSender = (v: string) => `***@${v.split("@")[1]}`;
-const hideDomain = (hideThisDomain: string) => (v: string) => {
-  const [sender, domain] = v.split("@");
-  const providedDomain = [...domain.split(".")].shift();
-  if (providedDomain === hideThisDomain) {
-    return `${sender}@***.${domain.split(".").splice(1).join(".")}`;
-  }
-  return v;
-};
-class User extends Serializable<User> {
-  @SerializeProperty({
-    serializedName: "email",
-    reviveStrategy: revive(hideEmailSender, hideDomain("example")),
-  })
-  hiddenEmail = "";
-}
-assertEqual(
-  new User().fromJson(`{"email":"test@example.ca.gov"}`).hiddenEmail,
-  "***@***.uk.gov.com"
-);
+test({
+  name: "revive composes a reviverList into a reviveStrategy",
+  fn() {
+    const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
+    const shout = (v: string) => `${v}!!!`;
+    const reviveStrategy = revive(
+      addLetter(" "),
+      addLetter("W"),
+      addLetter("o"),
+      addLetter("r"),
+      addLetter("l"),
+      addLetter("d"),
+      shout
+    );
+    assertEquals(reviveStrategy("Hello"), "Hello World!!!");
+  },
+});
 ```
 
-A `reviveStrategy` that is one `reviver` does not require `revive`
+A `reviveStrategy` that is one `reviver` does not require the `revive` function
 
 ```ts
 const options = {
@@ -154,23 +159,6 @@ assertEqual(
     .contentAsHTML,
   `<h1 id="title">Title</h1><p>Content body.</p>`
 );
-```
-
-Revive Stragey test berakdown
-
-```ts
-const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
-const shout = (v: string) => `${v}!!!`;
-const reviveStrategy = revive(
-  addLetter(" "),
-  addLetter("W"),
-  addLetter("o"),
-  addLetter("r"),
-  addLetter("l"),
-  addLetter("d"),
-  shout
-);
-assertEquals(reviveStrategy("Hello"), "Hello World!!!");
 ```
 
 ## Known Issues
