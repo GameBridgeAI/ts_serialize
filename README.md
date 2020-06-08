@@ -25,7 +25,7 @@ Add the URL to your `package.json` file as a `dependencies`
 ```json
 {
   "dependencies": {
-    "@ts_serialize": "git+https://github.com/gamebridgeai/ts_serialize.git#v1.0.0"
+    "ts_serialize": "git+https://github.com/gamebridgeai/ts_serialize.git#v1.0.0"
   }
 }
 ```
