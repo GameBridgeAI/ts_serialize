@@ -19,7 +19,9 @@ export class SerializePropertyOptions {
     public propertyKey: string | symbol,
     public serializedKey: string,
     reviverStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[],
-    replacerStrategy?: ReplacerStrategy | (ReplacerStrategy | ReplacerStrategy[])[]
+    replacerStrategy?:
+      | ReplacerStrategy
+      | (ReplacerStrategy | ReplacerStrategy[])[],
   ) {
     if (Array.isArray(reviverStrategy)) {
       this.reviverStrategy = composeReviverStrategy(...reviverStrategy);
@@ -67,35 +69,42 @@ const MISSING_PROPERTIES_MAP_ERROR_MESSAGE =
   "Unable to load serializer properties for the given context";
 
 /** Converts to object using mapped keys */
-export function toPojo<T>(context: Record<keyof T, unknown>): Record<string, unknown> {
+export function toPojo<T>(
+  context: Record<keyof T, unknown>,
+): Record<string, unknown> {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype
+    context?.constructor?.prototype,
   );
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`
+      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
+        ?.prototype}`,
     );
   }
   const record: Record<string, unknown> = {};
-  for (let {
-    propertyKey,
-    serializedKey,
-    replacerStrategy,
-  } of serializablePropertyMap.propertyOptions()) {
+  for (
+    let {
+      propertyKey,
+      serializedKey,
+      replacerStrategy,
+    } of serializablePropertyMap.propertyOptions()
+  ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
-    
-    if(!replacerStrategy){
-      if(SERIALIZABLE_CLASS_MAP.get((value as Serializable<unknown>)?.constructor?.prototype)){
+    if (!replacerStrategy) {
+      if (
+        SERIALIZABLE_CLASS_MAP.get(
+          (value as Serializable<unknown>)?.constructor?.prototype,
+        )
+      ) {
         replacerStrategy = recursiveReplacer;
-      }
-      else {
+      } else {
         replacerStrategy = defaultReplacer;
       }
     }
-    
+
     // Array handling
     if (Array.isArray(value)) {
       const arrayReplacerStrategy = replacerStrategy;
@@ -122,11 +131,12 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T;
 
 function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype
+    context?.constructor?.prototype,
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`
+      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
+        ?.prototype}`,
     );
   }
 
@@ -159,8 +169,8 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
           return;
         }
         return processedValue;
-      }
-    )
+      },
+    ),
   );
 }
 

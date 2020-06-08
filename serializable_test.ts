@@ -26,7 +26,7 @@ test({
       addLetter("r"),
       addLetter("l"),
       addLetter("d"),
-      shout
+      shout,
     );
     assertEquals(reviveStrategy("Hello"), "Hello World!!!");
   },
