@@ -67,7 +67,7 @@ assertEquals(test.notSerialized, "not-serialized");
 
 **Strategies**
 
-`Strartegies` are functions or a composed list of functions to execute on the values when
+`Strategies` are functions or a composed list of functions to execute on the values when
 serializing or deserializing. The functions take one argument which is the value to process.
 
 ```ts
@@ -89,8 +89,7 @@ assertEquals(mockObj.toJson(), "9007199254740991");
 **Dates**
 
 Dates can use the `fromJsonStrategy` to revive a serilaized string into a Date object. `ts_serialize`
-provides a `ISODateFromJson` function to parse ISO Dates. `createDateStrategy()` can be use to make
-a reviving date strattegy. Pass a regex to make your own.
+provides a `ISODateFromJson` function to parse ISO Dates.
 
 ```ts
 class Test extends Serializable<Test> {
@@ -104,7 +103,8 @@ assert(mockObj.date instanceof Date);
 assertEquals(mockObj.date.getFullYear(), 2020);
 ```
 
-Provide your own strategy!
+`createDateStrategy()` can be use to make
+a reviving date strategy. Pass a regex to make your own.
 
 ```ts
 const testDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -163,7 +163,7 @@ const test = new Test2();
 assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
-FromJson
+FromJson:
 
 ```ts
 class Test1 extends Serializable<Test1> {
