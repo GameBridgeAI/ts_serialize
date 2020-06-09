@@ -7,11 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.0.2] - 2020-6-09
+
+### Added
+
+- code of conduct file
+
+### Changed
+
+- various spelling fixes
+- moved code of conduct to new file
+- test example in development.md
+
 ## [v0.0.1] - 2020-6-08
 
 ### Added
 
-- issue templatets for bugs and rfc's
+- issue templates for bugs and RFC's
 - pr template
 - readme updates
 
