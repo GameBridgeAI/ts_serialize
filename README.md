@@ -16,7 +16,8 @@ A zero dependency library for serializing data.
 
 **Deno**
 
-Add the `https://github.com/gamebridgeai/ts_serialize.git#v1.0.0` to your `deps.ts` file and export what you need.
+`import`/`export` what you need from `https://raw.githubusercontent.com/GameBridgeAI/ts_serialize/v0.0.1/mod.ts`
+in your `deps.ts` file.
 
 **Node**
 
