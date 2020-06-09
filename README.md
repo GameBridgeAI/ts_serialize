@@ -211,7 +211,8 @@ assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to us.
+Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and
+[DEVELOPMENT.md](DEVELOPMENT.md) for setting up an environment to submit pull requests to us.
 
 ## Versioning
 
