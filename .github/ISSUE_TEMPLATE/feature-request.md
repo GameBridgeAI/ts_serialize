@@ -2,9 +2,8 @@
 name: Feature request
 about: Request for comments on an idea for this project
 title: "[RFC] - "
-labels: ''
-assignees: ''
-
+labels: ""
+assignees: ""
 ---
 
 # (RFC title goes here)
