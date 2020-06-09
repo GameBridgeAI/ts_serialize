@@ -10,7 +10,7 @@ A zero dependency library for serializing data.
 
 **Supported Serialize Types**
 
-- [`JSON`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON)
+- [`JSON`](https://www.json.org/json-en.html)
 
 ### Installing
 
