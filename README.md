@@ -6,7 +6,7 @@ A zero dependency library for serializing data.
 
 - converting camelCase class members to snake_case JSON properties for use with a REST API
 - excluding internal fields from REST API payloads
-- converting data types to an internal format, for expamle: `Date`'s
+- converting data types to an internal format, for example: `Date`'s
 
 **Supported Serialize Types**
 
