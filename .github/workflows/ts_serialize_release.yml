@@ -1,8 +1,8 @@
 name: release
 on:
-  push:
-    branches:
-      - refs/tags/v*
+  create:
+    tags:
+      - "*"
 
 jobs:
   test:
@@ -17,6 +17,7 @@ jobs:
           export PATH="$HOME/.deno/bin:$PATH"
           deno test -c tsconfig.json
   build:
+    if: github.release_type == 'tag'
     name: Create Release
     runs-on: ubuntu-latest
     needs: test
