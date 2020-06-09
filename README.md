@@ -73,6 +73,7 @@ serializing or deserializing. The functions take one argument which is the value
 ```ts
 const myCustomFromJsonStrategy = (v: string): string => BigInt(v);
 const myCustomToJsonStrategy = (v: BigInt): string => v.toString();
+
 class Test extends Serializable<Test> {
   @SerializeProperty({
     serializedName: "big_int",
@@ -81,6 +82,7 @@ class Test extends Serializable<Test> {
   })
   bigInt!: BigInt;
 }
+
 const mockObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
 assertEquals(mockObj.bigInt.toString(), "9007199254740991");
 assertEquals(mockObj.toJson(), "9007199254740991");
@@ -98,6 +100,7 @@ class Test extends Serializable<Test> {
   })
   date!: Date;
 }
+
 const mockObj = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
 assert(mockObj.date instanceof Date);
 assertEquals(mockObj.date.getFullYear(), 2020);
@@ -107,14 +110,13 @@ assertEquals(mockObj.date.getFullYear(), 2020);
 a reviving date strategy. Pass a regex to make your own.
 
 ```ts
-const testDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+const fromJsonStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
 
 class Test extends Serializable<Test> {
-  @SerializeProperty({
-    fromJsonStrategy: testDateStrategy,
-  })
+  @SerializeProperty({ fromJsonStratege })
   date!: Date;
 }
+
 const mockObj = new Test().fromJson(`{"date":"2099-11-25"}`);
 assert(mockObj.date instanceof Date);
 assertEquals(mockObj.date.getFullYear(), 2099);
@@ -152,14 +154,15 @@ class Test1 extends Serializable<Test1> {
   @SerializeProperty("serialize_me_1")
   serializeMe = "nice1";
 }
+
 class Test2 extends Serializable<Test2> {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
   })
   nested: Test1 = new Test1();
 }
-const test = new Test2();
 
+const test = new Test2();
 assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
@@ -170,6 +173,7 @@ class Test1 extends Serializable<Test1> {
   @SerializeProperty("serialize_me_1")
   serializeMe = "nice1";
 }
+
 class Test2 extends Serializable<Test2> {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
@@ -177,8 +181,8 @@ class Test2 extends Serializable<Test2> {
   })
   nested!: Test1;
 }
-const test = new Test2();
 
+const test = new Test2();
 test.fromJson(`{"serialize_me_2": { "serialize_me_1":"custom value"}}`);
 assertEquals(test.nested.serializeMe, "custom value");
 ```
@@ -192,10 +196,12 @@ to build out strategies with multiple functions.
 const addWord = (word: string) => (v: string) => `${v} ${word}`;
 const shout = (v: string) => `${v}!!!`;
 const fromJsonStrategy = fromJsonStrategy(addWord("World"), shout);
+
 class Test extends Serializable<Test> {
   @SerializeProperty({ fromJsonStrategy })
   property!: string;
 }
+
 assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
 ```
 
