@@ -183,6 +183,22 @@ test.fromJson(`{"serialize_me_2": { "serialize_me_1":"custom value"}}`);
 assertEquals(test.nested.serializeMe, "custom value");
 ```
 
+**Mulitple strategy functions**
+
+`toJsonStrategy` and `fromJsonStrategy` also have provided functions with the same name
+to build out strategies with multiple functions.
+
+```ts
+const addWord = (word: string) => (v: string) => `${v} ${word}`;
+const shout = (v: string) => `${v}!!!`;
+const fromJsonStrategy = fromJsonStrategy(addWord("World"), shout);
+class Test extends Serializable<Test> {
+  @SerializeProperty({ fromJsonStrategy })
+  property!: string;
+}
+assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
+```
+
 ## Built With
 
 - [Deno](http://deno.land) :sauropod:
