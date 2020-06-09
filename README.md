@@ -214,7 +214,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 
 - **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
-- **Chris Dufour** - _Initial work_ - [@PizzaCatKing](https://github.com/PizzaCatKing) :pizza: :cat: :crown:
+- **Chris Dufour** - _Initial work_ - [@ChrisDufourMB](https://github.com/ChrisDufourMB) :pizza: :cat: :crown:
 
 See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
 
