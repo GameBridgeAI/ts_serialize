@@ -1,6 +1,12 @@
 # ts_serialize ![](https://github.com/GameBridgeAI/ts_serialize/workflows/ci/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A zero dependency library for serializing data
+A zero dependency library for serializing data.
+
+`ts_serialize` can help you with:
+
+- converting camelCase class members to snake_case JSON properties for use with a REST API
+- excluding internal fields from REST API payloads
+- converting data types to an internal format, for expamle: `Date`'s
 
 **Supported Serialize Types**
 
@@ -10,164 +16,192 @@ A zero dependency library for serializing data
 
 **Deno**
 
-Add the URL to your `deps.ts` file and export what you need.
+Add the `https://github.com/gamebridgeai/ts_serialize.git#v1.0.0` to your `deps.ts` file and export what you need.
 
 **Node**
 
-TBD
+Add the URL to your `package.json` file as a `dependencies`
+
+```json
+{
+  "dependencies": {
+    "ts_serialize": "git+https://github.com/gamebridgeai/ts_serialize.git#v1.0.0"
+  }
+}
+```
 
 ## Usage
 
 ### Basic
 
-The main two main `exports` provided are:
-
-1. Serializable - an abstract class that adds the `toJson` and `fromJson` methods
-2. SerializeProperty - a [property decorator](https://www.typescriptlang.org/docs/handbook/decorators.html#property-decorators) that defines the properties serialization options
-
-Extend the `Serializable` class and decorate a property with `SerializeProperty` to add it to the serialze map.
+Import `Serializable` and `SerializeProperty`, extend `Serializable` with your `class`
+and use the `SerializeProperty` decorator on any properties you want serialized.
+Passing a string as an argument to `SerializeProperty` causes the property to use
+that name as the key when serialized.
 
 ```ts
 class Test extends Serializable<Test> {
   @SerializeProperty()
-  testName = "toJson";
+  propertyOne = "Hello";
+  @SerializeProperty("property_two")
+  propertyTwo = "World!";
+  notSerialized = "not-serialized";
 }
-assertEquals(new Test().toJson(), `{"testName":"toJson"}`);
-const test = new Test().fromJson(`{"testName":"fromJson"}`);
-assertEquals(test.testName, "fromJson");
+
+assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
+const test = new Test().fromJson(
+  `{"propertyOne":"From","property_two":"Json!", "notSerialized": "changed" }`
+);
+assertEquals(test.propertyOne, "From");
+assertEquals(test.propertyTwo, "Json!");
+assertEquals(test.notSerialized, "not-serialized");
+```
+
+### Advanced
+
+`SerializeProperty` also excepts an options object with the properties:
+
+- `serializedName` (Optional) {string} - Used as the key in the serialized object
+- `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
+- `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
+
+**Strategies**
+
+`Strategies` are functions or a composed list of functions to execute on the values when
+serializing or deserializing. The functions take one argument which is the value to process.
+
+```ts
+const myCustomFromJsonStrategy = (v: string): string => BigInt(v);
+const myCustomToJsonStrategy = (v: BigInt): string => v.toString();
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    serializedName: "big_int",
+    fromJsonStrategy: myCustomFromJsonStrategy,
+    toJsonStrategy: myCustomToJsonStrategy,
+  })
+  bigInt!: BigInt;
+}
+const mockObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
+assertEquals(mockObj.bigInt.toString(), "9007199254740991");
+assertEquals(mockObj.toJson(), "9007199254740991");
+```
+
+**Dates**
+
+Dates can use the `fromJsonStrategy` to revive a serilaized string into a Date object. `ts_serialize`
+provides a `ISODateFromJson` function to parse ISO Dates.
+
+```ts
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    fromJsonStrategy: ISODateFromJson,
+  })
+  date!: Date;
+}
+const mockObj = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
+assert(mockObj.date instanceof Date);
+assertEquals(mockObj.date.getFullYear(), 2020);
+```
+
+`createDateStrategy()` can be use to make
+a reviving date strategy. Pass a regex to make your own.
+
+```ts
+const testDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+
+class Test extends Serializable<Test> {
+  @SerializeProperty({
+    fromJsonStrategy: testDateStrategy,
+  })
+  date!: Date;
+}
+const mockObj = new Test().fromJson(`{"date":"2099-11-25"}`);
+assert(mockObj.date instanceof Date);
+assertEquals(mockObj.date.getFullYear(), 2099);
 ```
 
 **Inheritance**
 
-Extend `Serializable` from a base class
+Inherited classes override the key when serializing. If you override
+a propery any value used for that key will be overridden by the
+child value. _With collisions the child always overides the parent_
 
 ```ts
-class Base extends Serializable<Base> {
-  id!: number;
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me")
+  serializeMe = "nice1";
 }
-class Test extends Base<Test> {
-  @SerializeProperty()
-  testName = "toJson";
+
+class Test2 extends Test1 {
+  @SerializeProperty("serialize_me")
+  serializeMeInstead = "nice2";
 }
-class Test2 extends Test {
-  @SerializeProperty()
-  testName2 = "toJson2";
-}
-assertEquals(typeof new Test2().toJson, "function");
-assertEquals(new Test2().toJson(), `{"testName2":"toJson2"}`);
-const test = new Test2().fromJson(`{"testName2":"fromJson2"}`);
-assertEquals(test.testName2, "fromJson2");
+
+const test = new Test2();
+assertEquals(test.serializeMe, "nice1");
+assertEquals(test.serializeMeInstead, "nice2");
+assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
 ```
 
-**Serialze Property**
+**Nested Class Serialization**
 
-The `@SerializeProperty()` decorator adds the property to serialize map. If used with any
-parameters it uses the property name as the key in the map. `@SerializeProperty()` can take a
-`string` as a argument that will be used as the object key when `toJson` is called. `@SerializeProperty()`
-can also take a `SerializePropertyOptionsObject`, with option `serializedName` and `reviveStrategy` properties
-
-SerializeProperty with a String argument
+ToJson:
 
 ```ts
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+class Test2 extends Serializable<Test2> {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+  })
+  nested: Test1 = new Test1();
+}
+const test = new Test2();
+
+assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+```
+
+FromJson:
+
+```ts
+class Test1 extends Serializable<Test1> {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+class Test2 extends Serializable<Test2> {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+    fromJsonStrategy: (json) => new Test1().fromJson(json),
+  })
+  nested!: Test1;
+}
+const test = new Test2();
+
+test.fromJson(`{"serialize_me_2": { "serialize_me_1":"custom value"}}`);
+assertEquals(test.nested.serializeMe, "custom value");
+```
+
+**Mulitple strategy functions**
+
+`toJsonStrategy` and `fromJsonStrategy` also have provided functions with the same name
+to build out strategies with multiple functions.
+
+```ts
+const addWord = (word: string) => (v: string) => `${v} ${word}`;
+const shout = (v: string) => `${v}!!!`;
+const fromJsonStrategy = fromJsonStrategy(addWord("World"), shout);
 class Test extends Serializable<Test> {
-  @SerializeProperty("test_name")
-  testName = "toJson";
+  @SerializeProperty({ fromJsonStrategy })
+  property!: string;
 }
-assertEquals(new Test().toJson(), `{"test_name":"toJson"}`);
-const test = new Test().fromJson({ testName: "fromJson" });
-assertEquals(test.testName, "fromJson");
+assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
 ```
-
-SerializeProperty with an SerializePropertyOptionsObject argument
-
-```ts
-const options = {
-  /*... markdown options*/
-};
-
-class Article extends Serializable<Article> {
-  @SerializeProperty({
-    serializedName: "user_content",
-  })
-  userContent = "";
-}
-assertEqual(
-  new Article().fromJson(`{"user_content":"# Title\nContent body.\n"}`)
-    .userContent,
-  `# Title\nContent body.\n`
-);
-```
-
-- `SerializedName` (optional) {`string`} - the name used in serialized map
-- `reviveStrategy` (optional) {`ReviverList`} - a function or `revive` output
-
-### Advanced
-
-#### Revivers
-
-Revivers are functions used to hydrate your data. For example deserializing dates from
-JSON to `Date` is done with a DateReviver used as second parameter in `JSON.stringify`.
-Revivers take one parameter which is the current value interated on from `JSON.stringify`.
-
-```ts
-function customReviver(value: any) {
-  // code
-  return value;
-}
-```
-
-Revivers should always return a value. If the `reviveStrategy` is a `ReviverList` of functions then
-they are called in order passing the value to the next reviver. Below is our test berakdown for the `reviveStrategy`.
-
-```ts
-test({
-  name: "revive composes a reviverList into a reviveStrategy",
-  fn() {
-    const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
-    const shout = (v: string) => `${v}!!!`;
-    const reviveStrategy = revive(
-      addLetter(" "),
-      addLetter("W"),
-      addLetter("o"),
-      addLetter("r"),
-      addLetter("l"),
-      addLetter("d"),
-      shout
-    );
-    assertEquals(reviveStrategy("Hello"), "Hello World!!!");
-  },
-});
-```
-
-A `reviveStrategy` that is one `reviver` does not require the `revive` function
-
-```ts
-const options = {
-  /*...*/
-};
-const convertFromMarkdown = (mdEngine: MdEngine) => (content: string) =>
-  mdEngine.convert(content);
-class Article extends Serializable<Article> {
-  @SerializeProperty({
-    serializedName: "content",
-    reviveStrategy: convertFromMarkdown(new MdEngine(options)),
-  })
-  contentAsHTML = "";
-}
-assertEqual(
-  new Article().fromJson(`{"content":"# Title\nContent body.\n"}`)
-    .contentAsHTML,
-  `<h1 id="title">Title</h1><p>Content body.</p>`
-);
-```
-
-## Known Issues
-
-Currently you cannot serialize a `static` member.
 
 ## Built With
 
-- [Deno](http://deno.land)
+- [Deno](http://deno.land) :sauropod:
 
 ## Contributing
 
@@ -179,7 +213,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-- **Scott Hardy** - _Initial work_ - [shardyMBAI](https://github.com/shardyMBAI) :frog:
+- **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
 - **Chris Dufour** - _Initial work_ - [@PizzaCatKing](https://github.com/PizzaCatKing) :pizza: :cat: :crown:
 
 See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
@@ -190,6 +224,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
-- [OAK Server](https://github.com/oakserver/oak) for example code
 - [MindBridge](https://mindbridge.ai) for support
+- [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
+- [OAK Server](https://github.com/oakserver/oak) as a project structure example

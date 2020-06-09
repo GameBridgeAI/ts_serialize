@@ -1,38 +1,63 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
+import { defaultToJson } from "./to_json/default_to_json.ts";
+import { recursiveToJson } from "./to_json/recursive_to_json.ts";
 
 /** Functions used when hydrating data */
-export declare type ReviverStrategy = (value: any) => any;
+export declare type FromJsonStrategy = (value: any) => any;
+
+/** Functions used when dehydrating data */
+export declare type ToJsonStrategy = (value: any) => any;
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
-  public reviverStrategy?: ReviverStrategy;
+  public fromJsonStrategy?: FromJsonStrategy;
+  public toJsonStrategy?: ToJsonStrategy;
 
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    reviveStrategy?: ReviverStrategy | (ReviverStrategy | ReviverStrategy[])[],
-    public useBuiltinSerializer = false,
+    fromJsonStrategy?:
+      | FromJsonStrategy
+      | (FromJsonStrategy | FromJsonStrategy[])[],
+    toJsonStrategy?:
+      | ToJsonStrategy
+      | (ToJsonStrategy | ToJsonStrategy[])[],
   ) {
-    if (Array.isArray(reviveStrategy)) {
-      this.reviverStrategy = composeReviveStrategy(...reviveStrategy);
-    } else if (reviveStrategy) {
-      this.reviverStrategy = reviveStrategy;
+    if (Array.isArray(fromJsonStrategy)) {
+      this.fromJsonStrategy = composeFromJsonStrategy(...fromJsonStrategy);
+    } else if (fromJsonStrategy) {
+      this.fromJsonStrategy = fromJsonStrategy;
+    }
+
+    if (Array.isArray(toJsonStrategy)) {
+      this.toJsonStrategy = composeToJsonStrategy(...toJsonStrategy);
+    } else if (toJsonStrategy) {
+      this.toJsonStrategy = toJsonStrategy;
     }
   }
 }
 
-/** Function to build a `reviveStrategy`
+/** Function to build a `fromJsonStrategy`
  * Converts value from functions provided as parameters
  */
-export function composeReviveStrategy(
-  ...fns: (ReviverStrategy | ReviverStrategy[])[]
-): ReviverStrategy {
+export function composeFromJsonStrategy(
+  ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
+): FromJsonStrategy {
   return (val: unknown): unknown =>
-    fns.flat().reduce((acc: unknown, f: ReviverStrategy) => f(acc), val);
+    fns.flat().reduce((acc: unknown, f: FromJsonStrategy) => f(acc), val);
 }
 
+/** Function to build a `toJsonStrategy`
+ * Converts value from functions provided as parameters
+ */
+export function composeToJsonStrategy(
+  ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
+): ToJsonStrategy {
+  return (val: unknown): unknown =>
+    fns.flat().reduce((acc: unknown, f: ToJsonStrategy) => f(acc), val);
+}
 /** Options for each class */
 export declare type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
 
@@ -42,48 +67,55 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
   SerializePropertyOptionsMap
 >();
 
-const MISSING_PROPERTIES_MAP_ERROR_MESSAGE =
+const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
   "Unable to load serializer properties for the given context";
 
-/** Recursive convert to `pojo` */
-function serializeValue<T>(
-  value: T,
-  recursiveSerialize: boolean,
-) {
-  if (recursiveSerialize) {
-    return toPojo(value);
-  }
-  return value;
-}
-
 /** Converts to object using mapped keys */
-function toPojo<T>(
+export function toPojo<T>(
   context: Record<keyof T, unknown>,
 ): Record<string, unknown> {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
+
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor?.prototype}`,
+      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
+        ?.prototype}`,
     );
   }
   const record: Record<string, unknown> = {};
   for (
-    const { propertyKey, serializedKey, reviverStrategy, useBuiltinSerializer }
-      of serializablePropertyMap.propertyOptions()
+    let {
+      propertyKey,
+      serializedKey,
+      toJsonStrategy,
+    } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
+    // If no replacer strategy was provided then default
+    if (!toJsonStrategy) {
+      if (
+        SERIALIZABLE_CLASS_MAP.get(
+          (value as Serializable<typeof value>)?.constructor?.prototype,
+        )
+      ) {
+        // If the value is serializable then use the recursive replacer
+        toJsonStrategy = recursiveToJson;
+      } else {
+        toJsonStrategy = defaultToJson;
+      }
+    }
+
     // Array handling
     if (Array.isArray(value)) {
-      record[serializedKey] = value
-        .filter((v: unknown) => v !== undefined)
-        .map((v: unknown) => serializeValue(v, !!reviverStrategy && !useBuiltinSerializer));
+      const arrayToJsonStrategy = toJsonStrategy;
+      record[serializedKey] = value.map((v: any) => arrayToJsonStrategy(v));
     } // Object and value handling
     else if (value !== undefined) {
-      record[serializedKey] = serializeValue(value, !!reviverStrategy && !useBuiltinSerializer);
+      record[serializedKey] = toJsonStrategy(value);
     }
   }
   return record;
@@ -107,7 +139,7 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${MISSING_PROPERTIES_MAP_ERROR_MESSAGE}: ${context?.constructor
+      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
         ?.prototype}`,
     );
   }
@@ -121,32 +153,28 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
       /** Processes the value through the provided or default `reviveStrategy`
        * @default reviveStrategy - no-op reviver strategy
        */
-      function revive<T>(
-        this: unknown,
-        key: string,
-        value: unknown,
-      ): unknown {
+      function revive<T>(this: unknown, key: string, value: unknown): unknown {
         // After last iteration the reviver function will be called one more time with a empty string key
-        if(key === ""){
+        if (key === "") {
           return value;
         }
-  
+
         const {
           propertyKey,
-          reviverStrategy = (v: unknown) => v, // Default to no-op reviver strategy
+          fromJsonStrategy = (v: unknown) => v, // Default to no-op reviver strategy
         } = serializablePropertyMap.getBySerializedKey(key) || {};
-  
+
         const processedValue: unknown = Array.isArray(value)
-          ? value.map((v) => reviverStrategy(v))
-          : reviverStrategy(value);
-  
+          ? value.map((v) => fromJsonStrategy(v))
+          : fromJsonStrategy(value);
+
         if (propertyKey) {
           context[propertyKey as keyof Serializable<T>] = processedValue as any;
           return;
         }
         return processedValue;
       },
-    )
+    ),
   );
 }
 

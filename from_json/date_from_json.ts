@@ -1,9 +1,9 @@
-// Copyright 2018-2020 ts_serialize authors. All rights reserved. MIT license.
+// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { ReviverStrategy } from "../serializable.ts";
+import { FromJsonStrategy } from "../serializable.ts";
 
 /** allows authors to pass a regex to parse as a date */
-export function createDateReviver(regex: RegExp): ReviverStrategy {
+export function createDateStrategy(regex: RegExp): FromJsonStrategy {
   return (value: any): any | Date => {
     return typeof value === "string" && regex.exec(value)
       ? new Date(value)
@@ -14,6 +14,6 @@ export function createDateReviver(regex: RegExp): ReviverStrategy {
 /** Changed from
  * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
  */
-export const ISODateReviver = createDateReviver(
+export const ISODateFromJson = createDateStrategy(
   /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*))(?:Z|(\+|-)([\d|:]*))?$/,
 );
