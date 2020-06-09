@@ -1,8 +1,8 @@
 name: release
 on:
-  create:
-    tags:
-      - "*"
+  push:
+    branches:
+      - refs/tags/v*
 
 jobs:
   test:
