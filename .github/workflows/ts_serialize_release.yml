@@ -6,9 +6,21 @@ on:
     - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
 
 jobs:
+  test:
+    name: ts serialize tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone repository
+        uses: actions/checkout@v2
+      - name: run tests
+        run: |
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
+          export PATH="$HOME/.deno/bin:$PATH"
+          deno test -c tsconfig.json
   build:
     name: Create Release
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -39,6 +51,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-          asset_path: .dist/package.tar.gz
+          asset_path: ./dist/package.tar.gz
           asset_name: package.tar.gz
           asset_content_type: application/gzip
