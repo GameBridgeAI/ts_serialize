@@ -16,9 +16,10 @@ A zero dependency library for serializing data.
 
 **Deno**
 
-`import`/`export` what you need from `https://raw.githubusercontent.com/GameBridgeAI/ts_serialize/<version>/mod.ts`
+`import`/`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
 in your `deps.ts` file. `<version>` will be a a tag found on our
-[releases](https://github.com/GameBridgeAI/ts_serialize/releases) page
+[releases](https://github.com/GameBridgeAI/ts_serialize/releases) page. The version can be omitted
+ot get the default branch, however, it is recommended to use a tagged version.
 
 **Node**
 
