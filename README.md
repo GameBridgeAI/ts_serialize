@@ -20,7 +20,7 @@ Add the `https://github.com/gamebridgeai/ts_serialize.git#v1.0.0` to your `deps.
 
 **Node**
 
-Add the URL to your `package.json` file as a `dependencies`
+Add the URL to your `package.json` file in `dependencies`
 
 ```json
 {
