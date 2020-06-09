@@ -125,7 +125,7 @@ export class SerializePropertyOptionsMap {
     string | symbol,
     SerializePropertyOptions
   > {
-    let parentEntries = Array.from(
+    const parentEntries = Array.from(
       this.parentMap?.getMergedWithParentMap() || [],
     );
     return new Map([
