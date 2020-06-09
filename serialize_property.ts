@@ -60,11 +60,9 @@ export function SerializeProperty(
   return (target: unknown, propertyName: string | symbol) => {
     let decoratorArgumentOptions: SerializePropertyArgumentObject;
 
-    // String argument
     if (typeof decoratorArguments === "string") {
       decoratorArgumentOptions = { serializedKey: decoratorArguments };
-    } // Object arguments
-    else {
+    } else {
       // We can't use symbols as keys when serializing
       // a serializedName must be provided if the property isn't a string
       if (
