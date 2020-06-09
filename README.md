@@ -214,8 +214,12 @@ assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and
-[DEVELOPMENT.md](DEVELOPMENT.md) for setting up an environment to submit pull requests to us.
+We have provided resources to help you request a new feature or report and fix
+a bug.
+
+- [CONTRIBUTING.md](./.github/CONTRIBUTING.md) - for guidelines when requesting a feature or reporting a bug or opening a pull request
+- [DEVELOPMENT.md](./.github/DEVELOPMENT.md) - for instructions on setting up the environment and running the test suite
+- [CODE_OF_CONDUCT.md](./.github/CODE_OF_CONDUCT.md) - for community guidelines
 
 ## Versioning
 
@@ -226,7 +230,7 @@ We use [SemVer](http://semver.org/) for versioning.
 - **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
 - **Chris Dufour** - _Initial work_ - [@ChrisDufourMB](https://github.com/ChrisDufourMB) :pizza: :cat: :crown:
 
-See also the list of [contributors](CONTRIBUTORS.md) who participated in this project.
+See also the list of [contributors](./.github/CONTRIBUTORS.md) who participated in this project.
 
 ## License
 
