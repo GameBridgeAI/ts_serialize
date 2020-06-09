@@ -4,7 +4,7 @@ A zero dependency library for serializing data.
 
 `ts_serialize` can help you with:
 
-- converting camelCase class members to snake_case JSON properties for use with a REST API
+- converting `camelCase` class members to `snake_case` JSON properties for use with a REST API
 - excluding internal fields from REST API payloads
 - converting data types to an internal format, for example: `Date`'s
 
