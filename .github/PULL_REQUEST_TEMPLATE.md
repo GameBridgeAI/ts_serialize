@@ -1,11 +1,3 @@
----
-name: Pull request
-about: Basic Pr template
-title: "[ISSUE-<issue-number>] - "
-labels: ""
-assignees: ""
----
-
 ## Fixes
 
 _Please link to the issue this PR addresses_
