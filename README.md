@@ -93,7 +93,7 @@ assertEquals(mockObj.toJson(), "9007199254740991");
 
 **Dates**
 
-Dates can use the `fromJsonStrategy` to revive a serilaized string into a Date object. `ts_serialize`
+Dates can use the `fromJsonStrategy` to revive a serialized string into a Date object. `ts_serialize`
 provides a `ISODateFromJson` function to parse ISO Dates.
 
 ```ts
@@ -116,7 +116,7 @@ a reviving date strategy. Pass a regex to make your own.
 const fromJsonStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
 
 class Test extends Serializable<Test> {
-  @SerializeProperty({ fromJsonStratege })
+  @SerializeProperty({ fromJsonStrategy })
   date!: Date;
 }
 
@@ -128,8 +128,8 @@ assertEquals(mockObj.date.getFullYear(), 2099);
 **Inheritance**
 
 Inherited classes override the key when serializing. If you override
-a propery any value used for that key will be overridden by the
-child value. _With collisions the child always overides the parent_
+a property any value used for that key will be overridden by the
+child value. _With collisions the child always overrides the parent_
 
 ```ts
 class Test1 extends Serializable<Test1> {

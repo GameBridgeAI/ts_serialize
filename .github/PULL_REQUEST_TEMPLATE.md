@@ -1,8 +1,24 @@
+---
+name: Pull request
+about: Basic Pr template
+title: "[ISSUE-<issue-number>] - "
+labels: ""
+assignees: ""
+---
+
+## Fixes
+
+_Please link to the issue this PR addresses_
+
 ## Description
 
 _A few sentences describing the overall problem and goals of the pull request's commits._
 
-_Please link to the issue this PR addresses_
+## Proposed changes in this PR
+
+- foo
+- bar
+- baz
 
 ## Things to look at
 

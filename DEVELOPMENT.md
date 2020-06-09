@@ -36,29 +36,28 @@ $ deno test -c tsconfig.json mod_test.ts
 We follow the [Deno style guide](https://deno.land/manual/contributing/style_guide)
 for code, including tests. Every file should have a `_test.ts` file testing all exported symbols.
 
-If you find a bug a test case is the right place to start. Below we test that we will revive
-and array with the provided `type`
+If you find a bug a test case is the right place to start. Test example:
 
 ```ts
 test({
-  name: "Revives an array of `type`",
+  name: "Serialize nested",
   fn() {
-    class OtherClass extends Serializable<OtherClass> {
-      @SerializeProperty()
-      id!: number;
+    class Test1 extends Serializable<Test1> {
+      @SerializeProperty("serialize_me_1")
+      serializeMe = "nice1";
     }
-    class Test extends Serializable<Test> {
+    class Test2 extends Serializable<Test2> {
       @SerializeProperty({
-        reviveStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        serializedKey: "serialize_me_2",
       })
-      array!: OtherClass[];
+      nested: Test1 = new Test1();
     }
-    const test = new Test().fromJson(
-      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`
+    const test = new Test2();
+
+    assertEquals(
+      test.toJson(),
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
     );
-    assertEquals(test.array.length, 5);
-    assert(test.array[0] instanceof OtherClass);
-    assertEquals(test.array[4].id, 5);
   },
 });
 ```
