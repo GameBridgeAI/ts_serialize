@@ -33,7 +33,8 @@ jobs:
           export PATH="$HOME/.deno/bin:$PATH"
           mkdir dist
           deno bundle -c tsconfig.json mod.ts dist/index.js
-          cp *.md dist
+          cp CHANGELOG.md dist
+          cp README.md dist
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_version.outputs.VERSION }}
