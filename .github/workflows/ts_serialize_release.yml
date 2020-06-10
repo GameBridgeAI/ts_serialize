@@ -33,7 +33,7 @@ jobs:
           cp *.md dist
           cp LICENSE dist
           cd dist
-          ../.github/workflows/scripts/create_npm_package_file.sh "${{ github.ref }}"
+          ../.github/workflows/scripts/create_npm_package_file.sh ${{ github.ref }}
           tar -zcf ts_serialize.tar.gz *
       - name: Create Release
         id: create_release
