@@ -28,10 +28,14 @@ Add the URL to your `package.json` file in `dependencies`
 ```json
 {
   "dependencies": {
-    "ts_serialize": "git+https://github.com/gamebridgeai/ts_serialize.git#v1.0.0"
+    "ts_serialize": "git+https://github.com/GameBridgeAI/ts_serialize.git#<version>"
   }
 }
 ```
+
+`<version>` will be a a tag found on our
+[releases](https://github.com/GameBridgeAI/ts_serialize/releases) page. The version can be omitted
+ot get the default branch, however, it is recommended to use a tagged version.
 
 ## Usage
 
