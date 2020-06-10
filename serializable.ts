@@ -89,32 +89,24 @@ export function toPojo<T>(
     let {
       propertyKey,
       serializedKey,
-      toJsonStrategy,
+      toJsonStrategy = defaultToJson,
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof T];
 
-    // If no replacer strategy was provided then default
-    if (!toJsonStrategy) {
-      if (
-        SERIALIZABLE_CLASS_MAP.get(
-          (value as Serializable<typeof value>)?.constructor?.prototype,
-        )
-      ) {
-        // If the value is serializable then use the recursive replacer
-        toJsonStrategy = recursiveToJson;
-      } else {
-        toJsonStrategy = defaultToJson;
-      }
+    // If the value is serializable then use the recursive replacer
+    if (
+      SERIALIZABLE_CLASS_MAP.get(
+        (value as Serializable<typeof value>)?.constructor?.prototype,
+      )
+    ) {
+      toJsonStrategy = recursiveToJson;
     }
 
-    // Array handling
     if (Array.isArray(value)) {
-      const arrayToJsonStrategy = toJsonStrategy;
-      record[serializedKey] = value.map((v: any) => arrayToJsonStrategy(v));
-    } // Object and value handling
-    else if (value !== undefined) {
+      record[serializedKey] = value.map((v: any) => toJsonStrategy(v));
+    } else if (value !== undefined) {
       record[serializedKey] = toJsonStrategy(value);
     }
   }
