@@ -22,8 +22,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: test
     steps:
-      - name: Get the version
-        id: get_version
+      - name: Get github tag
+        id: get_github_tag
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Checkout code
         uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
           cp README.md dist
           cp LICENSE dist
           cd dist
-          ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_version.outputs.VERSION }}
+          ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
           tar -zcf ts_serialize.tar.gz *
       - name: Create Release
         id: create_release
@@ -57,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: ./dist/ts_serialize.tar.gz
-          asset_name: ts_serialize-${{ steps.get_version.outputs.VERSION }}.tar.gz
+          asset_name: ts_serialize-${{ steps.get_github_tag.outputs.VERSION }}.tar.gz
           asset_content_type: application/gzip
