@@ -23,8 +23,8 @@ jobs:
     needs: test
     steps:
       - name: Get the version
-          id: get_version
-          run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+        id: get_version
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Build project
