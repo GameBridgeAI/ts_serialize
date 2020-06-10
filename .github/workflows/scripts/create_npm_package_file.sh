@@ -1,4 +1,6 @@
-name="$1"
+#!/bin/bash
+
+# @description builds a package.json file from a github tag varialbes
 
 if [ -z "$1" ]; then
     echo "Error: Tag version not provided";
