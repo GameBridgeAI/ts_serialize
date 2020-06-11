@@ -10,7 +10,7 @@ mkdir "$DIR/test_tmp"
 
 pushd "$DIR/test_tmp" > /dev/null
 
-if [ ! "$DIR/create_npm_package_file.sh" ]; then
+if [ "$("$DIR/create_npm_package_file.sh")" != "Error: Tag version not provided" ]; then
   echo "Test Error: create_npm_package_file ran without a tag version"
   exit 1
 fi
