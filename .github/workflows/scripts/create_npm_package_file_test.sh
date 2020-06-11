@@ -10,21 +10,37 @@ mkdir "$DIR/test_tmp"
 
 pushd "$DIR/test_tmp" > /dev/null
 
-if [ "$("$DIR/create_npm_package_file.sh")" != "Error: Tag version not provided" ]; then
+if [ "$( "$DIR/create_npm_package_file.sh" )" != "Error: Tag version not provided" ]; then
+  popd > /dev/null
+
+  rm -rf "$DIR/test_tmp"
+
   echo "Test Error: create_npm_package_file ran without a tag version"
+
   exit 1
 fi
 
-test_version="test_version"
-"$DIR/create_npm_package_file.sh" $test_version
+TEST_VERSION="test_version"
+
+"$DIR/create_npm_package_file.sh" $TEST_VERSION
 
 if [ ! -f "$DIR/test_tmp/package.json" ]; then
+  popd > /dev/null
+
+  rm -rf "$DIR/test_tmp"
+
   echo "Test Error: package.json was not created"
+
   exit 1
 fi
 
-if [ "$(jq -r ".version" "$DIR/test_tmp/package.json")" != "$test_version" ]; then
+if [ "$( jq -r ".version" "$DIR/test_tmp/package.json" )" != "$TEST_VERSION" ]; then
+  popd > /dev/null
+
+  rm -rf "$DIR/test_tmp"
+
   echo "Test Error: {package.json}.version is incorrect"
+
   exit 1
 fi
 
