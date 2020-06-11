@@ -142,18 +142,18 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
     context,
     JSON.parse(
       _json,
-      /** Processes the value through the provided or default `reviveStrategy`
-       * @default reviveStrategy - no-op reviver strategy
-       */
-      function revive<T>(this: unknown, key: string, value: unknown): unknown {
-        // After last iteration the reviver function will be called one more time with a empty string key
+      /** Processes the value through the provided or default `fromJsonStrategy` */
+      function revive<T>(key: string, value: unknown): unknown {
+        // After the last iteration of the fromJsonStrategy a function
+        // will be called one more time with a empty string key
         if (key === "") {
           return value;
         }
 
         const {
           propertyKey,
-          fromJsonStrategy = (v: unknown) => v, // Default to no-op reviver strategy
+          // default no-op
+          fromJsonStrategy = (v: unknown) => v,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
         const processedValue: unknown = Array.isArray(value)

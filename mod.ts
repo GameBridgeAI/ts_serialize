@@ -5,7 +5,7 @@
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";
 
-/** abstract class and revive */
+/** abstract class and and compose strategy functions */
 export {
   Serializable,
   FromJsonStrategy,
@@ -14,7 +14,7 @@ export {
   composeToJsonStrategy as toJsonStrategy,
 } from "./serializable.ts";
 
-/** dates from json strategies */
+/** date strategies */
 export {
   createDateStrategy,
   ISODateFromJson,

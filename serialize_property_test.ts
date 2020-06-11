@@ -354,8 +354,8 @@ test({
     }
     const test = new Test2();
 
-    test.fromJson(`{"serialize_me_2":{ "serialize_me_1":"ignore me"}}`);
-    assertEquals(test.nested.serializeMe, "ignore me");
+    test.fromJson(`{"serialize_me_2":{"serialize_me_1":"pass"}}`);
+    assertEquals(test.nested.serializeMe, "pass");
   },
 });
 

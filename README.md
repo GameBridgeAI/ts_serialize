@@ -1,4 +1,4 @@
-# ts_serialize ![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) ![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# 🥣 ts_serialize ![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) ![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A zero dependency library for serializing data.
 
@@ -57,7 +57,7 @@ class Test extends Serializable<Test> {
 
 assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
 const test = new Test().fromJson(
-  `{"propertyOne":"From","property_two":"Json!", "notSerialized": "changed" }`
+  `{"propertyOne":"From","property_two":"Json!","notSerialized": "changed" }`
 );
 assertEquals(test.propertyOne, "From");
 assertEquals(test.propertyTwo, "Json!");
