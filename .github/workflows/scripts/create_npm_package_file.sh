@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+
 # @description builds a package.json file from a github tag varialbes
 
 if [ -z "$1" ]; then

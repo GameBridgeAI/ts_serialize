@@ -1,3 +1,5 @@
+# Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+
 name: tests
 on: [pull_request, push]
 
@@ -10,6 +12,7 @@ jobs:
         uses: actions/checkout@v2
       - name: run tests
         run: |
+          .github/workflows/scripts/create_npm_package_file_test.sh
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
