@@ -190,7 +190,7 @@ class Test2 extends Serializable<Test2> {
 }
 
 const test = new Test2();
-test.fromJson(`{"serialize_me_2": { "serialize_me_1":"custom value"}}`);
+test.fromJson(`{"serialize_me_2":{ "serialize_me_1":"custom value"}}`);
 assertEquals(test.nested.serializeMe, "custom value");
 ```
 
