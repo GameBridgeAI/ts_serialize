@@ -40,7 +40,7 @@ if [ "$( jq -r ".version" "$DIR/test_tmp/package.json" )" != "$TEST_VERSION" ]; 
   rm -rf "$DIR/test_tmp"
 
   echo "Test Error: {package.json}.version is incorrect"
-  
+
   exit 1
 fi
 
