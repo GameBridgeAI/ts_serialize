@@ -15,11 +15,12 @@ test({
 });
 
 test({
-  name: "revive composes a reviverList into a reviveStrategy",
+  name:
+    "composeFromJsonStrategy composes a List of functions into a FromJsonStrategy",
   fn() {
     const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
     const shout = (v: string) => `${v}!!!`;
-    const reviveStrategy = composeFromJsonStrategy(
+    const FromJsonStrategy = composeFromJsonStrategy(
       addLetter(" "),
       addLetter("W"),
       addLetter("o"),
@@ -28,6 +29,6 @@ test({
       addLetter("d"),
       shout,
     );
-    assertEquals(reviveStrategy("Hello"), "Hello World!!!");
+    assertEquals(FromJsonStrategy("Hello"), "Hello World!!!");
   },
 });

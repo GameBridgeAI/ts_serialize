@@ -5,11 +5,11 @@ import { createDateStrategy, ISODateFromJson } from "./date_from_json.ts";
 import { Serializable, SerializeProperty } from "../mod.ts";
 
 test({
-  name: "createDateReviver creates reviver from regex",
+  name: "createDateStrategy creates strategy from regex",
   fn() {
-    const testReviver = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+    const dateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
     const mockJSON = `{"date":"2099-11-25","not_a_date":"Hello world"}`;
-    const mockObj = JSON.parse(mockJSON, (_, v) => testReviver(v));
+    const mockObj = JSON.parse(mockJSON, (_, v) => dateStrategy(v));
     assert(mockObj.date instanceof Date);
     assertEquals(mockObj.date.getFullYear(), 2099);
     assert(!(mockObj.not_a_date instanceof Date));
