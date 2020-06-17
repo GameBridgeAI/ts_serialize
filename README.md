@@ -12,16 +12,16 @@ A zero dependency library for serializing data.
 
 - [`JSON`](https://www.json.org/json-en.html)
 
-### Installing
+## Installing
 
-**Deno**
+### Deno
 
 `import`/`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
 in your `deps.ts` file. `<version>` will be a a tag found on our
 [releases](https://github.com/GameBridgeAI/ts_serialize/releases) page. The version can be omitted
-ot get the default branch, however, it is recommended to use a tagged version.
+to get the develop branch, however, for stability it is recommended to use a tagged version.
 
-**Node**
+### Node
 
 Add the URL to your `package.json` file in `dependencies`
 
@@ -35,7 +35,7 @@ Add the URL to your `package.json` file in `dependencies`
 
 `<version>` will be a a tag found on our
 [releases](https://github.com/GameBridgeAI/ts_serialize/releases) page. The version can be omitted
-ot get the default branch, however, it is recommended to use a tagged version.
+to get the default branch, however, it is recommended to use a tagged version.
 
 ## Usage
 
@@ -57,11 +57,12 @@ class Test extends Serializable<Test> {
 
 assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
 const test = new Test().fromJson(
-  `{"propertyOne":"From","property_two":"Json!","notSerialized": "changed" }`
+  `{"propertyOne":"From","property_two":"Json!","notSerialized":"changed"}`
 );
 assertEquals(test.propertyOne, "From");
 assertEquals(test.propertyTwo, "Json!");
-assertEquals(test.notSerialized, "not-serialized");
+assertEquals(test.notSerialized, "changed");
+assertEquals(test.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 ```
 
 ### Advanced
@@ -72,18 +73,18 @@ assertEquals(test.notSerialized, "not-serialized");
 - `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
 - `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
 
-**Strategies**
+#### Strategies
 
 `Strategies` are functions or a composed list of functions to execute on the values when
 serializing or deserializing. The functions take one argument which is the value to process.
 
 ```ts
-const myCustomFromJsonStrategy = (v: string): string => BigInt(v);
+const myCustomFromJsonStrategy = (v: string): BigInt => BigInt(v);
 const myCustomToJsonStrategy = (v: BigInt): string => v.toString();
 
 class Test extends Serializable<Test> {
   @SerializeProperty({
-    serializedName: "big_int",
+    serializedKey: "big_int",
     fromJsonStrategy: myCustomFromJsonStrategy,
     toJsonStrategy: myCustomToJsonStrategy,
   })
@@ -92,10 +93,9 @@ class Test extends Serializable<Test> {
 
 const mockObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
 assertEquals(mockObj.bigInt.toString(), "9007199254740991");
-assertEquals(mockObj.toJson(), "9007199254740991");
 ```
 
-**Dates**
+#### Dates
 
 Dates can use the `fromJsonStrategy` to revive a serialized string into a Date object. `ts_serialize`
 provides a `ISODateFromJson` function to parse ISO Dates.
@@ -117,10 +117,10 @@ assertEquals(mockObj.date.getFullYear(), 2020);
 a reviving date strategy. Pass a regex to make your own.
 
 ```ts
-const fromJsonStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-
 class Test extends Serializable<Test> {
-  @SerializeProperty({ fromJsonStrategy })
+  @SerializeProperty({
+    fromJsonStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+  })
   date!: Date;
 }
 
@@ -129,7 +129,7 @@ assert(mockObj.date instanceof Date);
 assertEquals(mockObj.date.getFullYear(), 2099);
 ```
 
-**Inheritance**
+#### Inheritance
 
 Inherited classes override the key when serializing. If you override
 a property any value used for that key will be overridden by the
@@ -152,7 +152,7 @@ assertEquals(test.serializeMeInstead, "nice2");
 assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
 ```
 
-**Nested Class Serialization**
+#### Nested Class Serialization
 
 ToJson:
 
@@ -194,7 +194,7 @@ test.fromJson(`{"serialize_me_2":{ "serialize_me_1":"custom value"}}`);
 assertEquals(test.nested.serializeMe, "custom value");
 ```
 
-**Mulitple strategy functions**
+#### Multiple strategy functions
 
 `toJsonStrategy` and `fromJsonStrategy` also have provided functions with the same name
 to build out strategies with multiple functions.
@@ -202,14 +202,18 @@ to build out strategies with multiple functions.
 ```ts
 const addWord = (word: string) => (v: string) => `${v} ${word}`;
 const shout = (v: string) => `${v}!!!`;
-const fromJsonStrategy = fromJsonStrategy(addWord("World"), shout);
 
 class Test extends Serializable<Test> {
-  @SerializeProperty({ fromJsonStrategy })
+  @SerializeProperty({
+    fromJsonStrategy: fromJsonStrategy(addWord("World"), shout),
+  })
   property!: string;
 }
 
-assertEquals(new Test().fromJson(`{"property":"Hello"}`), "Hello World!!!");
+assertEquals(
+  new Test().fromJson(`{"property":"Hello"}`).property,
+  "Hello World!!!"
+);
 ```
 
 ## Built With
