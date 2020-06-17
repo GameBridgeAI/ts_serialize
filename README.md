@@ -69,7 +69,7 @@ assertEquals(test.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 
 `SerializeProperty` also excepts an options object with the properties:
 
-- `serializedName` (Optional) {string} - Used as the key in the serialized object
+- `serializedKey` (Optional) {string} - Used as the key in the serialized object
 - `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
 - `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
 
