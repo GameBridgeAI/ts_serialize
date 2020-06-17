@@ -57,11 +57,12 @@ class Test extends Serializable<Test> {
 
 assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
 const test = new Test().fromJson(
-  `{"propertyOne":"From","property_two":"Json!","notSerialized": "changed" }`
+  `{"propertyOne":"From","property_two":"Json!","notSerialized":"changed"}`
 );
 assertEquals(test.propertyOne, "From");
 assertEquals(test.propertyTwo, "Json!");
 assertEquals(test.notSerialized, "changed");
+assertEquals(test.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 ```
 
 ### Advanced
