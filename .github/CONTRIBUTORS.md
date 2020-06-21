@@ -4,3 +4,5 @@
 - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
 - [@PizzaCatKing](https://github.com/PizzaCatKing) :pizza: :cat: :crown:
 - [@ChrisDufourMB](https://github.com/ChrisDufourMB) :pizza: :cat: :crown:
+- [@rgrosset](https://github.com/rgrosset) :shipit:
+- [@ms1111](https://github.com/ms1111) :eyes:
