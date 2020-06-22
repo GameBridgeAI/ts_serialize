@@ -26,38 +26,50 @@ export class SerializePropertyOptions {
       | (ToJsonStrategy | ToJsonStrategy[])[],
   ) {
     if (Array.isArray(fromJsonStrategy)) {
-      this.fromJsonStrategy = composeFromJsonStrategy(...fromJsonStrategy);
+      this.fromJsonStrategy = composeStrategy(...fromJsonStrategy);
     } else if (fromJsonStrategy) {
       this.fromJsonStrategy = fromJsonStrategy;
     }
 
     if (Array.isArray(toJsonStrategy)) {
-      this.toJsonStrategy = composeToJsonStrategy(...toJsonStrategy);
+      this.toJsonStrategy = composeStrategy(...toJsonStrategy);
     } else if (toJsonStrategy) {
       this.toJsonStrategy = toJsonStrategy;
     }
   }
 }
 
-/** Function to build a `fromJsonStrategy`
- * Converts value from functions provided as parameters
- */
-export function composeFromJsonStrategy(
-  ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
-): FromJsonStrategy {
+export function composeStrategy(
+  ...fns:
+    | (FromJsonStrategy | FromJsonStrategy[])[]
+    | (ToJsonStrategy | ToJsonStrategy[])[]
+): FromJsonStrategy | ToJsonStrategy {
   return (val: unknown): unknown =>
-    fns.flat().reduce((acc: unknown, f: FromJsonStrategy) => f(acc), val);
+    fns.flat().reduce(
+      (acc: unknown, f: FromJsonStrategy | ToJsonStrategy) => f(acc),
+      val,
+    );
 }
 
-/** Function to build a `toJsonStrategy`
- * Converts value from functions provided as parameters
- */
-export function composeToJsonStrategy(
-  ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
-): ToJsonStrategy {
-  return (val: unknown): unknown =>
-    fns.flat().reduce((acc: unknown, f: ToJsonStrategy) => f(acc), val);
-}
+// /** Function to build a `fromJsonStrategy`
+//  * Converts value from functions provided as parameters
+//  */
+// export function composeFromJsonStrategy(
+//   ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
+// ): FromJsonStrategy {
+//   return (val: unknown): unknown =>
+//     fns.flat().reduce((acc: unknown, f: FromJsonStrategy) => f(acc), val);
+// }
+
+// /** Function to build a `toJsonStrategy`
+//  * Converts value from functions provided as parameters
+//  */
+// export function composeToJsonStrategy(
+//   ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
+// ): ToJsonStrategy {
+//   return (val: unknown): unknown =>
+//     fns.flat().reduce((acc: unknown, f: ToJsonStrategy) => f(acc), val);
+// }
 /** Options for each class */
 export declare type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
 

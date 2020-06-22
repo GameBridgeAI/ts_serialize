@@ -10,8 +10,7 @@ export {
   Serializable,
   FromJsonStrategy,
   ToJsonStrategy,
-  composeFromJsonStrategy as fromJsonStrategy,
-  composeToJsonStrategy as toJsonStrategy,
+  composeStrategy,
 } from "./serializable.ts";
 
 /** date strategies */

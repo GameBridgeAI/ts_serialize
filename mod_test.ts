@@ -9,8 +9,7 @@ test({
     assert(mod != null);
     assertEquals(typeof mod.SerializeProperty, "function");
     assertEquals(typeof mod.Serializable, "function");
-    assertEquals(typeof mod.fromJsonStrategy, "function");
-    assertEquals(typeof mod.toJsonStrategy, "function");
+    assertEquals(typeof mod.composeStrategy, "function");
 
     assertEquals(typeof mod.createDateStrategy, "function");
     assertEquals(typeof mod.ISODateFromJson, "function");
@@ -18,6 +17,6 @@ test({
     assertEquals(typeof mod.defaultToJson, "function");
     assertEquals(typeof mod.recursiveToJson, "function");
 
-    assertEquals(Object.keys(mod).length, 8);
+    assertEquals(Object.keys(mod).length, 7);
   },
 });
