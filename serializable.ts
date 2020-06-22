@@ -39,6 +39,9 @@ export class SerializePropertyOptions {
   }
 }
 
+/** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
+ * Converts value from functions provided as parameters
+ */
 export function composeStrategy(
   ...fns:
     | (FromJsonStrategy | FromJsonStrategy[])[]
@@ -51,25 +54,6 @@ export function composeStrategy(
     );
 }
 
-// /** Function to build a `fromJsonStrategy`
-//  * Converts value from functions provided as parameters
-//  */
-// export function composeFromJsonStrategy(
-//   ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
-// ): FromJsonStrategy {
-//   return (val: unknown): unknown =>
-//     fns.flat().reduce((acc: unknown, f: FromJsonStrategy) => f(acc), val);
-// }
-
-// /** Function to build a `toJsonStrategy`
-//  * Converts value from functions provided as parameters
-//  */
-// export function composeToJsonStrategy(
-//   ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
-// ): ToJsonStrategy {
-//   return (val: unknown): unknown =>
-//     fns.flat().reduce((acc: unknown, f: ToJsonStrategy) => f(acc), val);
-// }
 /** Options for each class */
 export declare type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
 
