@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test, assert, assertEquals } from "./test_deps.ts";
-import { Serializable, composeFromJsonStrategy } from "./serializable.ts";
+import { Serializable, composeStrategy } from "./serializable.ts";
 
 test({
   name: "adds methods to extended classes",
@@ -15,12 +15,11 @@ test({
 });
 
 test({
-  name:
-    "composeFromJsonStrategy composes a List of functions into a FromJsonStrategy",
+  name: "composeStrategy composes a List of functions",
   fn() {
     const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
     const shout = (v: string) => `${v}!!!`;
-    const FromJsonStrategy = composeFromJsonStrategy(
+    const strategy = composeStrategy(
       addLetter(" "),
       addLetter("W"),
       addLetter("o"),
@@ -29,6 +28,6 @@ test({
       addLetter("d"),
       shout,
     );
-    assertEquals(FromJsonStrategy("Hello"), "Hello World!!!");
+    assertEquals(strategy("Hello"), "Hello World!!!");
   },
 });

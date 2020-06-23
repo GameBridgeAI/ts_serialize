@@ -79,14 +79,14 @@ assertEquals(test.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 serializing or deserializing. The functions take one argument which is the value to process.
 
 ```ts
-const myCustomFromJsonStrategy = (v: string): BigInt => BigInt(v);
-const myCustomToJsonStrategy = (v: BigInt): string => v.toString();
+const fromJsonStrategy = (v: string): BigInt => BigInt(v);
+const toJsonStrategy = (v: BigInt): string => v.toString();
 
 class Test extends Serializable<Test> {
   @SerializeProperty({
     serializedKey: "big_int",
-    fromJsonStrategy: myCustomFromJsonStrategy,
-    toJsonStrategy: myCustomToJsonStrategy,
+    fromJsonStrategy,
+    toJsonStrategy,
   })
   bigInt!: BigInt;
 }
@@ -124,9 +124,9 @@ class Test extends Serializable<Test> {
   date!: Date;
 }
 
-const mockObj = new Test().fromJson(`{"date":"2099-11-25"}`);
-assert(mockObj.date instanceof Date);
-assertEquals(mockObj.date.getFullYear(), 2099);
+const test = new Test().fromJson(`{"date":"2099-11-25"}`);
+assert(test.date instanceof Date);
+assertEquals(test.date.getFullYear(), 2099);
 ```
 
 #### Inheritance
@@ -196,8 +196,8 @@ assertEquals(test.nested.serializeMe, "custom value");
 
 #### Multiple strategy functions
 
-`toJsonStrategy` and `fromJsonStrategy` also have provided functions with the same name
-to build out strategies with multiple functions.
+`toJsonStrategy` and `fromJsonStrategy` can use `composeStrategy` to build out
+strategies with multiple functions.
 
 ```ts
 const addWord = (word: string) => (v: string) => `${v} ${word}`;
@@ -205,7 +205,7 @@ const shout = (v: string) => `${v}!!!`;
 
 class Test extends Serializable<Test> {
   @SerializeProperty({
-    fromJsonStrategy: fromJsonStrategy(addWord("World"), shout),
+    fromJsonStrategy: composeStrategy(addWord("World"), shout),
   })
   property!: string;
 }
