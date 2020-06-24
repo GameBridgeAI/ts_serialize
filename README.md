@@ -175,6 +175,10 @@ assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 FromJson:
 
+`reviveFromJsonAs` is a provided function export that takes one parameter,
+the instance type the object will take when revived. `fromJson`is used
+to revive the object.
+
 ```ts
 class Test1 extends Serializable<Test1> {
   @SerializeProperty("serialize_me_1")
@@ -184,7 +188,7 @@ class Test1 extends Serializable<Test1> {
 class Test2 extends Serializable<Test2> {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJsonStrategy: (json) => new Test1().fromJson(json),
+    fromJsonStrategy: reviveFromJsonAs(Test1),
   })
   nested!: Test1;
 }
@@ -246,6 +250,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Our colleagues at [MindBridge](https://mindbridge.ai) for discussion and project planning 
+- Our colleagues at [MindBridge](https://mindbridge.ai) for discussion and project planning
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) as a project structure example

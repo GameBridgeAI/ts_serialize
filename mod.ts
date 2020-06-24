@@ -19,6 +19,11 @@ export {
   ISODateFromJson,
 } from "./from_json/date_from_json.ts";
 
+/** revive strategies */
+export {
+  reviveFromJsonAs,
+} from "./from_json/revive_from_json.ts";
+
 /** to json strategies */
 export { defaultToJson } from "./to_json/default_to_json.ts";
 export { recursiveToJson } from "./to_json/recursive_to_json.ts";

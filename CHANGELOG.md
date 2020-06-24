@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - various ci related things
+- added `reviveFromJsonAs` exported function
 
 ## [v0.0.12] - 2020-6-09
 
