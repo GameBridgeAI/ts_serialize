@@ -2,7 +2,7 @@
 
 import { test, assert, assertEquals, fail } from "../test_deps.ts";
 import {
-  reviveFromJsonAs,
+  fromJsonAs,
   ERROR_MESSAGE_TYPEOF_FROM_JSON,
 } from "./revive_from_json.ts";
 import { Serializable } from "../serializable.ts";
@@ -16,8 +16,8 @@ test({
       test = true;
     }
     const test = new Test();
-    assertEquals(reviveFromJsonAs(Test)(test).test, test.test);
-    assert(reviveFromJsonAs(Test)(test) instanceof Test);
+    assertEquals(fromJsonAs(Test)(test).test, test.test);
+    assert(fromJsonAs(Test)(test) instanceof Test);
   },
 });
 
@@ -30,7 +30,7 @@ test({
     }
     const test = new Test();
     try {
-      assert(reviveFromJsonAs(Test)(test) instanceof Test);
+      assert(fromJsonAs(Test)(test) instanceof Test);
       fail("fromJson called when it is not a function");
     } catch (error) {
       assertEquals(error.message, ERROR_MESSAGE_TYPEOF_FROM_JSON);

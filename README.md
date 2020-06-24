@@ -175,7 +175,7 @@ assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 FromJson:
 
-`reviveFromJsonAs` is a provided function export that takes one parameter,
+`fromJsonAs` is a provided function export that takes one parameter,
 the instance type the object will take when revived. `fromJson` is used
 to revive the object.
 
@@ -188,7 +188,7 @@ class Test1 extends Serializable<Test1> {
 class Test2 extends Serializable<Test2> {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJsonStrategy: reviveFromJsonAs(Test1),
+    fromJsonStrategy: fromJsonAs(Test1),
   })
   nested!: Test1;
 }

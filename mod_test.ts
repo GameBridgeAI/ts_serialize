@@ -13,7 +13,7 @@ test({
 
     assertEquals(typeof mod.createDateStrategy, "function");
     assertEquals(typeof mod.ISODateFromJson, "function");
-    assertEquals(typeof mod.reviveFromJsonAs, "function");
+    assertEquals(typeof mod.fromJsonAs, "function");
 
     assertEquals(typeof mod.defaultToJson, "function");
     assertEquals(typeof mod.recursiveToJson, "function");

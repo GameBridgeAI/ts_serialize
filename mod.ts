@@ -21,7 +21,7 @@ export {
 
 /** revive strategies */
 export {
-  reviveFromJsonAs,
+  fromJsonAs,
 } from "./from_json/revive_from_json.ts";
 
 /** to json strategies */
