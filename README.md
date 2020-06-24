@@ -176,7 +176,7 @@ assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 FromJson:
 
 `reviveFromJsonAs` is a provided function export that takes one parameter,
-the instance type the object will take when revived. `fromJson`is used
+the instance type the object will take when revived. `fromJson` is used
 to revive the object.
 
 ```ts

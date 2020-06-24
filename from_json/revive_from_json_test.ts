@@ -31,7 +31,7 @@ test({
     const test = new Test();
     try {
       assert(reviveFromJsonAs(Test)(test) instanceof Test);
-      fail("fromJson called with it is not a function");
+      fail("fromJson called when it is not a function");
     } catch (error) {
       assertEquals(error.message, ERROR_MESSAGE_TYPEOF_FROM_JSON);
     }
