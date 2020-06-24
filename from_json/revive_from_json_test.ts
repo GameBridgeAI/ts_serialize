@@ -9,7 +9,7 @@ import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
 test({
-  name: "reviveFromJson revives using `fromJson` as type",
+  name: "fromJsonAs revives using `fromJson` as type",
   fn() {
     class Test extends Serializable<Test> {
       @SerializeProperty()
@@ -22,7 +22,7 @@ test({
 });
 
 test({
-  name: "reviveFromJson errors if `fromJson` is not a function",
+  name: "fromJsonAs errors if `fromJson` is not a function",
   fn() {
     class Test {
       @SerializeProperty()
