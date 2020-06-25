@@ -42,11 +42,11 @@ If you find a bug a test case is the right place to start. Test example:
 test({
   name: "Serialize nested",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me_1")
       serializeMe = "nice1";
     }
-    class Test2 extends Serializable<Test2> {
+    class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
       })

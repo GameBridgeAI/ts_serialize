@@ -47,7 +47,7 @@ Passing a string as an argument to `SerializeProperty` causes the property to us
 that name as the key when serialized.
 
 ```ts
-class Test extends Serializable<Test> {
+class Test extends Serializable {
   @SerializeProperty()
   propertyOne = "Hello";
   @SerializeProperty("property_two")
@@ -82,7 +82,7 @@ serializing or deserializing. The functions take one argument which is the value
 const fromJsonStrategy = (v: string): BigInt => BigInt(v);
 const toJsonStrategy = (v: BigInt): string => v.toString();
 
-class Test extends Serializable<Test> {
+class Test extends Serializable {
   @SerializeProperty({
     serializedKey: "big_int",
     fromJsonStrategy,
@@ -101,7 +101,7 @@ Dates can use the `fromJsonStrategy` to revive a serialized string into a Date o
 provides a `ISODateFromJson` function to parse ISO Dates.
 
 ```ts
-class Test extends Serializable<Test> {
+class Test extends Serializable {
   @SerializeProperty({
     fromJsonStrategy: ISODateFromJson,
   })
@@ -117,7 +117,7 @@ assertEquals(mockObj.date.getFullYear(), 2020);
 a reviving date strategy. Pass a regex to make your own.
 
 ```ts
-class Test extends Serializable<Test> {
+class Test extends Serializable {
   @SerializeProperty({
     fromJsonStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
   })
@@ -136,7 +136,7 @@ a property any value used for that key will be overridden by the
 child value. _With collisions the child always overrides the parent_
 
 ```ts
-class Test1 extends Serializable<Test1> {
+class Test1 extends Serializable {
   @SerializeProperty("serialize_me")
   serializeMe = "nice1";
 }
@@ -157,12 +157,12 @@ assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
 ToJson:
 
 ```ts
-class Test1 extends Serializable<Test1> {
+class Test1 extends Serializable {
   @SerializeProperty("serialize_me_1")
   serializeMe = "nice1";
 }
 
-class Test2 extends Serializable<Test2> {
+class Test2 extends Serializable {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
   })
@@ -175,16 +175,20 @@ assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 FromJson:
 
+`fromJsonAs` is a provided function export that takes one parameter,
+the instance type the object will take when revived. `fromJson` is used
+to revive the object.
+
 ```ts
-class Test1 extends Serializable<Test1> {
+class Test1 extends Serializable {
   @SerializeProperty("serialize_me_1")
   serializeMe = "nice1";
 }
 
-class Test2 extends Serializable<Test2> {
+class Test2 extends Serializable {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJsonStrategy: (json) => new Test1().fromJson(json),
+    fromJsonStrategy: fromJsonAs(Test1),
   })
   nested!: Test1;
 }
@@ -203,7 +207,7 @@ strategies with multiple functions.
 const addWord = (word: string) => (v: string) => `${v} ${word}`;
 const shout = (v: string) => `${v}!!!`;
 
-class Test extends Serializable<Test> {
+class Test extends Serializable {
   @SerializeProperty({
     fromJsonStrategy: composeStrategy(addWord("World"), shout),
   })
@@ -246,6 +250,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 
-- Our colleagues at [MindBridge](https://mindbridge.ai) for discussion and project planning 
+- Our colleagues at [MindBridge](https://mindbridge.ai) for discussion and project planning
 - [Parsing Dates with JSON](https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates) for knowledge
 - [OAK Server](https://github.com/oakserver/oak) as a project structure example

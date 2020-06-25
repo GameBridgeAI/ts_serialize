@@ -17,7 +17,7 @@ import { ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY } from "./serialize_property_opti
 test({
   name: "Serializes properties as propertyName without options",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       testName = "toJson";
     }
@@ -30,7 +30,7 @@ test({
 test({
   name: "Serializes properties with a string name",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty("test_name")
       testName = "toJson";
     }
@@ -43,7 +43,7 @@ test({
 test({
   name: "Serializes properties with a string name option",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty({ serializedKey: "test_name" })
       testName = "toJson";
     }
@@ -58,7 +58,7 @@ test({
   fn() {
     try {
       const TEST = Symbol("test");
-      class Test extends Serializable<Test> {
+      class Test extends Serializable {
         @SerializeProperty()
         [TEST] = "toJson";
       }
@@ -74,7 +74,7 @@ test({
   fn() {
     const TEST = Symbol("test");
     const TEST2 = Symbol("test");
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty("test_name")
       [TEST] = "toJson";
       @SerializeProperty({ serializedKey: "test_name2" })
@@ -96,7 +96,7 @@ test({
   name: "Uses a provided fromJsonStrategy",
   fn() {
     const change = () => `hello world`;
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty({
         fromJsonStrategy: change,
       })
@@ -111,7 +111,7 @@ test({
   name: "Uses a provided replacer strategy",
   fn() {
     const change = () => `hello world`;
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty({
         fromJsonStrategy: change,
       })
@@ -125,7 +125,7 @@ test({
 test({
   name: "Preserves string type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       test!: string;
     }
@@ -139,7 +139,7 @@ test({
 test({
   name: "Preserves number type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       zero!: number;
       @SerializeProperty()
@@ -154,7 +154,7 @@ test({
 test({
   name: "Preserves boolean type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       true!: boolean;
       @SerializeProperty()
@@ -169,7 +169,7 @@ test({
 test({
   name: "Preserves null type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       null!: null;
     }
@@ -181,7 +181,7 @@ test({
 test({
   name: "Preserves object type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       object!: Record<string | symbol, unknown>;
     }
@@ -193,7 +193,7 @@ test({
 test({
   name: "Preserves array type",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       array!: unknown[];
     }
@@ -210,11 +210,11 @@ test({
 test({
   name: "Revives an array of `type`",
   fn() {
-    class OtherClass extends Serializable<OtherClass> {
+    class OtherClass extends Serializable {
       @SerializeProperty()
       id!: number;
     }
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty({
         fromJsonStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
       })
@@ -232,7 +232,7 @@ test({
 test({
   name: "Will not serialize properties that are not decorated",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty("serialize_me")
       serializeMe = "nice";
       dontSerializeMe = "great";
@@ -248,7 +248,7 @@ test({
   name: "Errors on duplicate map keys",
   fn() {
     try {
-      class Test extends Serializable<Test> {
+      class Test extends Serializable {
         @SerializeProperty("serialize_me")
         serializeMe = "nice";
         @SerializeProperty("serialize_me")
@@ -267,7 +267,7 @@ test({
 test({
   name: "Inherited class key override serialize",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me")
       serializeMe = "nice1";
     }
@@ -285,7 +285,7 @@ test({
 test({
   name: "Inherited class key override deserialize",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me")
       serializeMe = "nice1";
     }
@@ -304,7 +304,7 @@ test({
 test({
   name: "Inherited serialize key override serialize",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me_1")
       serializeMe = "nice1";
     }
@@ -321,7 +321,7 @@ test({
 test({
   name: "Inherited serialize key override deserialize",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me_1")
       serializeMe = "nice1";
     }
@@ -341,11 +341,11 @@ test({
 test({
   name: "deserialize nested",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me_1")
       serializeMe = "nice1";
     }
-    class Test2 extends Serializable<Test2> {
+    class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
         fromJsonStrategy: (json) => new Test1().fromJson(json),
@@ -362,11 +362,11 @@ test({
 test({
   name: "Serialize nested",
   fn() {
-    class Test1 extends Serializable<Test1> {
+    class Test1 extends Serializable {
       @SerializeProperty("serialize_me_1")
       serializeMe = "nice1";
     }
-    class Test2 extends Serializable<Test2> {
+    class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
       })

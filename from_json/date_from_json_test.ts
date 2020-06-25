@@ -33,7 +33,7 @@ test({
 test({
   name: "Will not serialize non date strings",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty({
         fromJsonStrategy: ISODateFromJson,
       })
