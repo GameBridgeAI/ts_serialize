@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test, assert, assertEquals, fail } from "../test_deps.ts";
-import { fromJsonAs } from "./revive_from_json.ts";
+import { fromJsonAs } from "./from_json_as.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
