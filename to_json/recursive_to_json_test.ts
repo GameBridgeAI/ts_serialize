@@ -8,7 +8,7 @@ import { SerializeProperty } from "../serialize_property.ts";
 test({
   name: "recursiveToJson manages inheritance",
   fn() {
-    class Test extends Serializable<Test> {
+    class Test extends Serializable {
       @SerializeProperty()
       id = 1;
     }

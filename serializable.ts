@@ -94,7 +94,7 @@ export function toPojo<T>(
     // If the value is serializable then use the recursive replacer
     if (
       SERIALIZABLE_CLASS_MAP.get(
-        (value as Serializable<typeof value>)?.constructor?.prototype,
+        (value as Serializable)?.constructor?.prototype,
       )
     ) {
       toJsonStrategy = recursiveToJson;
@@ -115,13 +115,13 @@ function toJson<T>(context: T): string {
 }
 
 /** Convert from object/string to mapped object on the context */
-function fromJson<T>(context: Serializable<T>, json: string): T;
+function fromJson<T>(context: Serializable, json: string): T;
 
-function fromJson<T>(context: Serializable<T>, json: Partial<T>): T;
+function fromJson<T>(context: Serializable, json: Partial<T>): T;
 
-function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T;
+function fromJson<T>(context: Serializable, json: string | Partial<T>): T;
 
-function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
+function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
@@ -157,7 +157,7 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
           : fromJsonStrategy(value);
 
         if (propertyKey) {
-          context[propertyKey as keyof Serializable<T>] = processedValue as any;
+          context[propertyKey as keyof Serializable] = processedValue as any;
           return;
         }
         return processedValue;
@@ -166,15 +166,28 @@ function fromJson<T>(context: Serializable<T>, json: string | Partial<T>): T {
   );
 }
 
+// /** Adds methods for serialization */
+// export abstract class Serializable {
+//   public toJson(): string {
+//     return toJson(this);
+//   }
+//   public fromJson(): T;
+//   public fromJson(json: string): T;
+//   public fromJson(json: Partial<T>): T;
+//   public fromJson(json: string | Partial<T> = {}): T {
+//     return fromJson(this, json);
+//   }
+// }
+
 /** Adds methods for serialization */
-export abstract class Serializable<T> {
+export abstract class Serializable {
   public toJson(): string {
     return toJson(this);
   }
-  public fromJson(): T;
-  public fromJson(json: string): T;
-  public fromJson(json: Partial<T>): T;
-  public fromJson(json: string | Partial<T> = {}): T {
+  public fromJson(): this;
+  public fromJson(json: string): this;
+  public fromJson(json: Partial<this>): this;
+  public fromJson(json: string | Partial<this> = {}): this {
     return fromJson(this, json);
   }
 }

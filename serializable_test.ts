@@ -6,7 +6,7 @@ import { Serializable, composeStrategy } from "./serializable.ts";
 test({
   name: "adds methods to extended classes",
   fn() {
-    class TestClass extends Serializable<TestClass> {}
+    class TestClass extends Serializable {}
     const test = new TestClass();
     assert(test instanceof Serializable);
     assertEquals(typeof test.toJson, "function");
