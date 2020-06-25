@@ -44,7 +44,7 @@ test({
 });
 
 test({
-  name: "1111fromJsonAs works in nested properties",
+  name: "fromJsonAs works in nested properties",
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("test_one")
