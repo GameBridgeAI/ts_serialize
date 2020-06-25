@@ -139,7 +139,7 @@ function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
     JSON.parse(
       _json,
       /** Processes the value through the provided or default `fromJsonStrategy` */
-      function revive<T>(key: string, value: unknown): unknown {
+      function revive(key: string, value: unknown): unknown {
         // After the last iteration of the fromJsonStrategy a function
         // will be called one more time with a empty string key
         if (key === "") {
@@ -165,19 +165,6 @@ function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
     ),
   );
 }
-
-// /** Adds methods for serialization */
-// export abstract class Serializable {
-//   public toJson(): string {
-//     return toJson(this);
-//   }
-//   public fromJson(): T;
-//   public fromJson(json: string): T;
-//   public fromJson(json: Partial<T>): T;
-//   public fromJson(json: string | Partial<T> = {}): T {
-//     return fromJson(this, json);
-//   }
-// }
 
 /** Adds methods for serialization */
 export abstract class Serializable {

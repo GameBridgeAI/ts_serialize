@@ -20,9 +20,7 @@ export {
 } from "./from_json/date_from_json.ts";
 
 /** revive strategies */
-export {
-  fromJsonAs,
-} from "./from_json/revive_from_json.ts";
+export { fromJsonAs } from "./from_json/revive_from_json.ts";
 
 /** to json strategies */
 export { defaultToJson } from "./to_json/default_to_json.ts";

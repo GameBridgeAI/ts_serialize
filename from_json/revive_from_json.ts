@@ -2,13 +2,9 @@
 
 import { FromJsonStrategy, Serializable } from "../serializable.ts";
 
-export const ERROR_MESSAGE_TYPEOF_FROM_JSON = "fromJson is not a function";
-
 /** revive data using `fromJson` on a subclass type */
 export function fromJsonAs<T>(
   type: { new (): Serializable },
 ): FromJsonStrategy {
-  return (value: T) => {
-    return new type().fromJson(value);
-  };
+  return (value: T) => new type().fromJson(value);
 }
