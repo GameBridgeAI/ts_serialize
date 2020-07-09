@@ -23,19 +23,7 @@ to get the develop branch, however, for stability it is recommended to use a tag
 
 ### Node
 
-Add the URL to your `package.json` file in `dependencies`
-
-```json
-{
-  "dependencies": {
-    "ts_serialize": "git+https://github.com/GameBridgeAI/ts_serialize.git#<version>"
-  }
-}
-```
-
-`<version>` will be a a tag found on our
-[releases](https://github.com/GameBridgeAI/ts_serialize/releases) page. The version can be omitted
-to get the default branch, however, it is recommended to use a tagged version.
+In development
 
 ## Usage
 
@@ -55,7 +43,7 @@ class Test extends Serializable {
   notSerialized = "not-serialized";
 }
 
-assert(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
+assertEquals(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
 const test = new Test().fromJson(
   `{"propertyOne":"From","property_two":"Json!","notSerialized":"changed"}`
 );

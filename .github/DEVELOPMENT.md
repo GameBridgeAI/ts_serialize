@@ -14,7 +14,7 @@ Fork the project to your machine and `cd` into that folder. If you are getting e
 `deno` namespace you can run
 
 ```
-$ deno test > deno.d.ts
+$ deno types > deno.d.ts
 ```
 
 This will add the deno types to the project.
