@@ -4,7 +4,7 @@ import {
   test,
   assert,
   assertEquals,
-  assertStrictEq,
+  assertStrictEquals,
   fail,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
@@ -174,7 +174,7 @@ test({
       null!: null;
     }
     const test = new Test().fromJson(`{"null":null}`);
-    assertStrictEq(test.null, null);
+    assertStrictEquals(test.null, null);
   },
 });
 
