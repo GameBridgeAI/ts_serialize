@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- upgrade deno@1.2.0 and std/test@0.61.0
+
+## [v0.1.0] - 2020-6-25
+
+### Changed
+
 - various ci related things
 - added `fromJsonAs` exported function
 
