@@ -1,0 +1,605 @@
+[
+  {
+    "kind": "function",
+    "name": "fromJsonAs",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/from_json/from_json_as.ts",
+      "line": 6,
+      "col": 0
+    },
+    "jsDoc": "revive data using `fromJson` on a subclass type",
+    "functionDef": {
+      "params": [
+        {
+          "kind": "identifier",
+          "name": "type",
+          "optional": false,
+          "tsType": {
+            "repr": "",
+            "kind": "typeLiteral",
+            "typeLiteral": {
+              "methods": [],
+              "properties": [],
+              "callSignatures": [],
+              "indexSignatures": []
+            }
+          }
+        }
+      ],
+      "returnType": {
+        "repr": "FromJsonStrategy",
+        "kind": "typeRef",
+        "typeRef": {
+          "typeParams": null,
+          "typeName": "FromJsonStrategy"
+        }
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": [
+        {
+          "name": "T"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "function",
+    "name": "defaultToJson",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/to_json/default_to_json.ts",
+      "line": 6,
+      "col": 0
+    },
+    "jsDoc": "Use the default replacer logic \n@see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter",
+    "functionDef": {
+      "params": [
+        {
+          "kind": "identifier",
+          "name": "value",
+          "optional": false,
+          "tsType": {
+            "repr": "any",
+            "kind": "keyword",
+            "keyword": "any"
+          }
+        }
+      ],
+      "returnType": {
+        "repr": "any",
+        "kind": "keyword",
+        "keyword": "any"
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "function",
+    "name": "recursiveToJson",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/to_json/recursive_to_json.ts",
+      "line": 6,
+      "col": 0
+    },
+    "jsDoc": "Recursively serialize a serializable class",
+    "functionDef": {
+      "params": [
+        {
+          "kind": "identifier",
+          "name": "value",
+          "optional": false,
+          "tsType": {
+            "repr": "Serializable",
+            "kind": "typeRef",
+            "typeRef": {
+              "typeParams": null,
+              "typeName": "Serializable"
+            }
+          }
+        }
+      ],
+      "returnType": {
+        "repr": "any",
+        "kind": "keyword",
+        "keyword": "any"
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": [
+        {
+          "name": "T"
+        }
+      ]
+    }
+  },
+  {
+    "kind": "function",
+    "name": "SerializeProperty",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/serialize_property.ts",
+      "line": 41,
+      "col": 0
+    },
+    "jsDoc": "Property wrapper that adds serializable options to the class map\nusing the original propertyName as the map key",
+    "functionDef": {
+      "params": [],
+      "returnType": {
+        "repr": "PropertyDecorator",
+        "kind": "typeRef",
+        "typeRef": {
+          "typeParams": null,
+          "typeName": "PropertyDecorator"
+        }
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "class",
+    "name": "Serializable",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+      "line": 170,
+      "col": 0
+    },
+    "jsDoc": "Adds methods for serialization",
+    "classDef": {
+      "isAbstract": true,
+      "constructors": [],
+      "properties": [],
+      "indexSignatures": [],
+      "methods": [
+        {
+          "jsDoc": null,
+          "accessibility": "public",
+          "optional": false,
+          "isAbstract": false,
+          "isStatic": false,
+          "name": "toJson",
+          "kind": "method",
+          "functionDef": {
+            "params": [],
+            "returnType": {
+              "repr": "string",
+              "kind": "keyword",
+              "keyword": "string"
+            },
+            "isAsync": false,
+            "isGenerator": false,
+            "typeParams": []
+          },
+          "location": {
+            "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+            "line": 171,
+            "col": 2
+          }
+        },
+        {
+          "jsDoc": null,
+          "accessibility": "public",
+          "optional": false,
+          "isAbstract": false,
+          "isStatic": false,
+          "name": "fromJson",
+          "kind": "method",
+          "functionDef": {
+            "params": [],
+            "returnType": {
+              "repr": "this",
+              "kind": "this",
+              "this": true
+            },
+            "isAsync": false,
+            "isGenerator": false,
+            "typeParams": []
+          },
+          "location": {
+            "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+            "line": 174,
+            "col": 2
+          }
+        },
+        {
+          "jsDoc": null,
+          "accessibility": "public",
+          "optional": false,
+          "isAbstract": false,
+          "isStatic": false,
+          "name": "fromJson",
+          "kind": "method",
+          "functionDef": {
+            "params": [
+              {
+                "kind": "identifier",
+                "name": "json",
+                "optional": false,
+                "tsType": {
+                  "repr": "string",
+                  "kind": "keyword",
+                  "keyword": "string"
+                }
+              }
+            ],
+            "returnType": {
+              "repr": "this",
+              "kind": "this",
+              "this": true
+            },
+            "isAsync": false,
+            "isGenerator": false,
+            "typeParams": []
+          },
+          "location": {
+            "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+            "line": 175,
+            "col": 2
+          }
+        },
+        {
+          "jsDoc": null,
+          "accessibility": "public",
+          "optional": false,
+          "isAbstract": false,
+          "isStatic": false,
+          "name": "fromJson",
+          "kind": "method",
+          "functionDef": {
+            "params": [
+              {
+                "kind": "identifier",
+                "name": "json",
+                "optional": false,
+                "tsType": {
+                  "repr": "Partial",
+                  "kind": "typeRef",
+                  "typeRef": {
+                    "typeParams": [
+                      {
+                        "repr": "this",
+                        "kind": "this",
+                        "this": true
+                      }
+                    ],
+                    "typeName": "Partial"
+                  }
+                }
+              }
+            ],
+            "returnType": {
+              "repr": "this",
+              "kind": "this",
+              "this": true
+            },
+            "isAsync": false,
+            "isGenerator": false,
+            "typeParams": []
+          },
+          "location": {
+            "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+            "line": 176,
+            "col": 2
+          }
+        },
+        {
+          "jsDoc": null,
+          "accessibility": "public",
+          "optional": false,
+          "isAbstract": false,
+          "isStatic": false,
+          "name": "fromJson",
+          "kind": "method",
+          "functionDef": {
+            "params": [
+              {
+                "kind": "assign",
+                "left": {
+                  "kind": "identifier",
+                  "name": "json",
+                  "optional": false,
+                  "tsType": {
+                    "repr": "",
+                    "kind": "union",
+                    "union": [
+                      {
+                        "repr": "string",
+                        "kind": "keyword",
+                        "keyword": "string"
+                      },
+                      {
+                        "repr": "Partial",
+                        "kind": "typeRef",
+                        "typeRef": {
+                          "typeParams": [
+                            {
+                              "repr": "this",
+                              "kind": "this",
+                              "this": true
+                            }
+                          ],
+                          "typeName": "Partial"
+                        }
+                      }
+                    ]
+                  }
+                },
+                "right": "<UNIMPLEMENTED>",
+                "tsType": null
+              }
+            ],
+            "returnType": {
+              "repr": "this",
+              "kind": "this",
+              "this": true
+            },
+            "isAsync": false,
+            "isGenerator": false,
+            "typeParams": []
+          },
+          "location": {
+            "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+            "line": 177,
+            "col": 2
+          }
+        }
+      ],
+      "extends": null,
+      "implements": [],
+      "typeParams": [],
+      "superTypeParams": []
+    }
+  },
+  {
+    "kind": "typeAlias",
+    "name": "FromJsonStrategy",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+      "line": 8,
+      "col": 0
+    },
+    "jsDoc": "Functions used when hydrating data",
+    "typeAliasDef": {
+      "tsType": {
+        "repr": "",
+        "kind": "fnOrConstructor",
+        "fnOrConstructor": {
+          "constructor": false,
+          "tsType": {
+            "repr": "any",
+            "kind": "keyword",
+            "keyword": "any"
+          },
+          "params": [
+            {
+              "kind": "identifier",
+              "name": "value",
+              "optional": false,
+              "tsType": {
+                "repr": "any",
+                "kind": "keyword",
+                "keyword": "any"
+              }
+            }
+          ],
+          "typeParams": []
+        }
+      },
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "typeAlias",
+    "name": "ToJsonStrategy",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+      "line": 11,
+      "col": 0
+    },
+    "jsDoc": "Functions used when dehydrating data",
+    "typeAliasDef": {
+      "tsType": {
+        "repr": "",
+        "kind": "fnOrConstructor",
+        "fnOrConstructor": {
+          "constructor": false,
+          "tsType": {
+            "repr": "any",
+            "kind": "keyword",
+            "keyword": "any"
+          },
+          "params": [
+            {
+              "kind": "identifier",
+              "name": "value",
+              "optional": false,
+              "tsType": {
+                "repr": "any",
+                "kind": "keyword",
+                "keyword": "any"
+              }
+            }
+          ],
+          "typeParams": []
+        }
+      },
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "function",
+    "name": "composeStrategy",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/serializable.ts",
+      "line": 45,
+      "col": 0
+    },
+    "jsDoc": "Function to build a `fromJsonStrategy` or `toJsonStrategy`.\nConverts value from functions provided as parameters",
+    "functionDef": {
+      "params": [
+        {
+          "kind": "rest",
+          "arg": {
+            "kind": "identifier",
+            "name": "fns",
+            "optional": false,
+            "tsType": null
+          },
+          "tsType": {
+            "repr": "",
+            "kind": "union",
+            "union": [
+              {
+                "repr": "",
+                "kind": "array",
+                "array": {
+                  "repr": "",
+                  "kind": "parenthesized",
+                  "parenthesized": {
+                    "repr": "",
+                    "kind": "union",
+                    "union": [
+                      {
+                        "repr": "FromJsonStrategy",
+                        "kind": "typeRef",
+                        "typeRef": {
+                          "typeParams": null,
+                          "typeName": "FromJsonStrategy"
+                        }
+                      },
+                      {
+                        "repr": "",
+                        "kind": "array",
+                        "array": {
+                          "repr": "FromJsonStrategy",
+                          "kind": "typeRef",
+                          "typeRef": {
+                            "typeParams": null,
+                            "typeName": "FromJsonStrategy"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "repr": "",
+                "kind": "array",
+                "array": {
+                  "repr": "",
+                  "kind": "parenthesized",
+                  "parenthesized": {
+                    "repr": "",
+                    "kind": "union",
+                    "union": [
+                      {
+                        "repr": "ToJsonStrategy",
+                        "kind": "typeRef",
+                        "typeRef": {
+                          "typeParams": null,
+                          "typeName": "ToJsonStrategy"
+                        }
+                      },
+                      {
+                        "repr": "",
+                        "kind": "array",
+                        "array": {
+                          "repr": "ToJsonStrategy",
+                          "kind": "typeRef",
+                          "typeRef": {
+                            "typeParams": null,
+                            "typeName": "ToJsonStrategy"
+                          }
+                        }
+                      }
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "returnType": {
+        "repr": "",
+        "kind": "union",
+        "union": [
+          {
+            "repr": "FromJsonStrategy",
+            "kind": "typeRef",
+            "typeRef": {
+              "typeParams": null,
+              "typeName": "FromJsonStrategy"
+            }
+          },
+          {
+            "repr": "ToJsonStrategy",
+            "kind": "typeRef",
+            "typeRef": {
+              "typeParams": null,
+              "typeName": "ToJsonStrategy"
+            }
+          }
+        ]
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "function",
+    "name": "createDateStrategy",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/from_json/date_from_json.ts",
+      "line": 6,
+      "col": 0
+    },
+    "jsDoc": "allows authors to pass a regex to parse as a date",
+    "functionDef": {
+      "params": [
+        {
+          "kind": "identifier",
+          "name": "regex",
+          "optional": false,
+          "tsType": {
+            "repr": "RegExp",
+            "kind": "typeRef",
+            "typeRef": {
+              "typeParams": null,
+              "typeName": "RegExp"
+            }
+          }
+        }
+      ],
+      "returnType": {
+        "repr": "FromJsonStrategy",
+        "kind": "typeRef",
+        "typeRef": {
+          "typeParams": null,
+          "typeName": "FromJsonStrategy"
+        }
+      },
+      "isAsync": false,
+      "isGenerator": false,
+      "typeParams": []
+    }
+  },
+  {
+    "kind": "variable",
+    "name": "ISODateFromJson",
+    "location": {
+      "filename": "file:///Users/scotthardy/git/ts_serialize/from_json/date_from_json.ts",
+      "line": 17,
+      "col": 0
+    },
+    "jsDoc": "Changed from\n@see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates",
+    "variableDef": {
+      "tsType": null,
+      "kind": "const"
+    }
+  }
+]
