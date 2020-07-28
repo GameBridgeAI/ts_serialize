@@ -4,5 +4,6 @@ class Test extends Serializable {
   @SerializeProperty()
   testName = "toJson";
 }
+
 console.log(new Test().toJson());
 console.log(new Test().fromJson(`{"testName":"fromJson"}`));
