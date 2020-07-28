@@ -2,7 +2,7 @@
 
 # Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-# @description builds a package.json file from a github tag varialbes
+# @description builds a package.json file from github tag varialbes
 
 if [ -z "$1" ]; then
     echo "Error: Tag version not provided";
@@ -15,6 +15,7 @@ cat <<EOF >> "package.json"
   "version": "$1",
   "description": "A zero dependency library for serializing data.",
   "main": "index.js",
+  "types": "types.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GameBridgeAI/ts_serialize.git"

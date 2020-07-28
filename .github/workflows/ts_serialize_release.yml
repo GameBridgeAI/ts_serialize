@@ -35,7 +35,8 @@ jobs:
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
           export PATH="$HOME/.deno/bin:$PATH"
           mkdir dist
-          deno bundle -c tsconfig.json mod.ts dist/index.js
+          deno run --unstable --allow-read ./.github/workflows/scripts/babel_ts_serialize.ts > dist/index.js
+          cp types.d.ts dist
           cp CHANGELOG.md dist
           cp README.md dist
           cp LICENSE dist

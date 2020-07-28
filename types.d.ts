@@ -35,19 +35,19 @@ interface SerializePropertyArgumentObject {
 }
 
 /** Property wrapper that adds serializable options to the class map
- * using the original propertyName as the map key
- */
+   * using the original propertyName as the map key
+   */
 export function SerializeProperty(): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map
- * using the provided string as the map key
- */
+   * using the provided string as the map key
+   */
 export function SerializeProperty(arg: string): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map
- * using options, `serializedName` as the key or `propertyName` if
- * `serializedName` is not set
- */
+   * using options, `serializedName` as the key or `propertyName` if
+   * `serializedName` is not set
+   */
 export function SerializeProperty(
   arg: SerializePropertyArgument,
 ): PropertyDecorator;
