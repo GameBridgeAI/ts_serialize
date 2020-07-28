@@ -1,11 +1,8 @@
-// @ts-ignore
-import { Serializable, SerializeProperty } from "./ts_serialize/index.js";
+import { Serializable, SerializeProperty } from "ts_serialize";
 
 class Test extends Serializable {
   @SerializeProperty()
   testName = "toJson";
 }
-// @ts-ignore
 console.log(new Test().toJson());
-// @ts-ignore
 console.log(new Test().fromJson(`{"testName":"fromJson"}`));
