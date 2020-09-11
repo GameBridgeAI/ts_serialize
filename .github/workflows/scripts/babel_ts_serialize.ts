@@ -10,5 +10,8 @@ const { code } = babelCore.transformSync(source, {
   babelrc: false,
   configFile: false,
 });
-
-console.log(code);
+const encoded = new TextEncoder().encode(code);
+let written = await Deno.stdout.write(encoded);
+while (written !== encoded.length) {
+  written += await Deno.stdout.write(encoded.slice(written));
+}
