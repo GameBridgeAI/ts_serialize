@@ -5,10 +5,10 @@ import { defaultToJson } from "./to_json/default_to_json.ts";
 import { recursiveToJson } from "./to_json/recursive_to_json.ts";
 
 /** Functions used when hydrating data */
-export declare type FromJsonStrategy = (value: any) => any;
+export type FromJsonStrategy = (value: any) => any;
 
 /** Functions used when dehydrating data */
-export declare type ToJsonStrategy = (value: any) => any;
+export type ToJsonStrategy = (value: any) => any;
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -55,7 +55,7 @@ export function composeStrategy(
 }
 
 /** Options for each class */
-export declare type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
+export type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
 
 /** Class options map */
 export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
