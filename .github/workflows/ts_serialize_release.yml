@@ -39,8 +39,8 @@ jobs:
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
           export PATH="$HOME/.deno/bin:$PATH"
           mkdir dist
-          npm install @babel/core @babel/cli @babel/preset-env @babel/plugin-transform-modules-commonjs @babel/plugin-transform-runtime
-          deno bundle -c tsconfig.json mod.ts | node_modules/.bin/babel --presets=@babel/preset-env --plugins=@babel/plugin-transform-modules-commonjs,@babel/plugin-transform-runtime --no-babelrc -- > dist/index.js
+          npm install @babel/core @babel/cli @babel/preset-env @babel/plugin-transform-modules-commonjs
+          deno bundle -c tsconfig.json mod.ts | node_modules/.bin/babel --presets=@babel/preset-env --plugins=@babel/plugin-transform-modules-commonjs --no-babelrc -- > dist/index.js
           cp CHANGELOG.md dist
           cp README.md dist
           cp LICENSE dist
