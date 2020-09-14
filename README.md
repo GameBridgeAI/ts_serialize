@@ -79,8 +79,8 @@ class Test extends Serializable {
   bigInt!: BigInt;
 }
 
-const mockObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
-assertEquals(mockObj.bigInt.toString(), "9007199254740991");
+const test = new Test().fromJson(`{"big_int":"9007199254740991"}`);
+assertEquals(test.bigInt.toString(), "9007199254740991");
 ```
 
 #### Dates
@@ -96,9 +96,9 @@ class Test extends Serializable {
   date!: Date;
 }
 
-const mockObj = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
-assert(mockObj.date instanceof Date);
-assertEquals(mockObj.date.getFullYear(), 2020);
+const test = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
+assert(test.date instanceof Date);
+assertEquals(test.date.getFullYear(), 2020);
 ```
 
 `createDateStrategy()` can be use to make
