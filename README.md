@@ -23,7 +23,7 @@ to get the develop branch, however, for stability it is recommended to use a tag
 
 ### Node
 
-`npm i @ts_serialize/ts_serialize`
+`npm i @gamebridgeai/ts_serialize`
 
 ## Usage
 
