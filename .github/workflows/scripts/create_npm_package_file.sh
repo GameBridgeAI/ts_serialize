@@ -14,8 +14,8 @@ cat <<EOF >> "package.json"
   "name": "@gamebridgeai/ts_serialize",
   "version": "$1",
   "description": "A zero dependency library for serializing data.",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "ts_serialize.js",
+  "types": "ts_serialize.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/GameBridgeAI/ts_serialize.git"
