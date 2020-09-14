@@ -39,8 +39,8 @@ test({
       })
       date!: Date | string;
     }
-    const test = new Test().fromJson(`{"date":"I am not a date!"}`);
-    assertEquals(typeof test.date, "string");
-    assertEquals(test.date, "I am not a date!");
+    const testObj = new Test().fromJson(`{"date":"I am not a date!"}`);
+    assertEquals(typeof testObj.date, "string");
+    assertEquals(testObj.date, "I am not a date!");
   },
 });

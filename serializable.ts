@@ -4,6 +4,19 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { defaultToJson } from "./to_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
+/** Adds methods for serialization */
+export abstract class Serializable {
+  public toJson(): string {
+    return toJson(this);
+  }
+  public fromJson(): this;
+  public fromJson(json: string): this;
+  public fromJson(json: Partial<this>): this;
+  public fromJson(json: string | Partial<this> = {}): this {
+    return fromJson(this, json);
+  }
+}
+
 /** Functions used when hydrating data */
 export type FromJsonStrategy = (value: any) => any;
 
@@ -164,17 +177,4 @@ function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
       },
     ),
   );
-}
-
-/** Adds methods for serialization */
-export abstract class Serializable {
-  public toJson(): string {
-    return toJson(this);
-  }
-  public fromJson(): this;
-  public fromJson(json: string): this;
-  public fromJson(json: Partial<this>): this;
-  public fromJson(json: string | Partial<this> = {}): this {
-    return fromJson(this, json);
-  }
 }

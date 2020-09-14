@@ -13,7 +13,7 @@ test({
       id = 1;
     }
 
-    const test = new Test();
-    assertEquals(recursiveToJson(test).id, 1);
+    const testObj = new Test();
+    assertEquals(recursiveToJson(testObj).id, 1);
   },
 });

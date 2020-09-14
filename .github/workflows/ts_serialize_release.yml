@@ -11,16 +11,16 @@ jobs:
     name: ts serialize tests
     runs-on: ubuntu-latest
     steps:
-      - name: clone repository
+      - name: Clone repository
         uses: actions/checkout@v2
-      - name: run tests
+      - name: Run tests
         run: |
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test -c tsconfig.json
   build:
-    name: Build Release
+    name: Release
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -29,19 +29,25 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project
+      - name: Setup-node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Build
         run: |
           .github/workflows/scripts/create_npm_package_file_test.sh
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           mkdir dist
           deno run --unstable --allow-read ./.github/workflows/scripts/babel_ts_serialize.ts > dist/ts_serialize.js
-          cp ts_serialize.d.ts dist
+          cp .github/workflows/scripts/npm_release_files/ts_serialize.d.ts dist
           cp CHANGELOG.md dist
           cp README.md dist
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
+          npm install
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -52,15 +58,9 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: setup-node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - name: deploy project
+      - name: Deploy
         run: |
           cd dist
-          npm install
           npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

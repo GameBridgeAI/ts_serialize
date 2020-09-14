@@ -25,16 +25,6 @@ declare module "@gamebridgeai/ts_serialize" {
         | (ToJsonStrategy | ToJsonStrategy[])[];
     };
 
-  interface SerializePropertyArgumentObject {
-    serializedKey: string;
-    fromJsonStrategy?:
-      | FromJsonStrategy
-      | (FromJsonStrategy | FromJsonStrategy[])[];
-    toJsonStrategy?:
-      | ToJsonStrategy
-      | (ToJsonStrategy | ToJsonStrategy[])[];
-  }
-
   /** Property wrapper that adds serializable options to the class map
    * using the original propertyName as the map key
    */
@@ -52,4 +42,34 @@ declare module "@gamebridgeai/ts_serialize" {
   export function SerializeProperty(
     arg: SerializePropertyArgument,
   ): PropertyDecorator;
+
+  /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
+   * Converts value from functions provided as parameters
+   */
+  export function composeStrategy(
+    ...fns:
+      | (FromJsonStrategy | FromJsonStrategy[])[]
+      | (ToJsonStrategy | ToJsonStrategy[])[]
+  ): FromJsonStrategy | ToJsonStrategy;
+
+  /** revive data using `fromJson` on a subclass type */
+  export function fromJsonAs<T>(
+    type: T & { new (): Serializable },
+  ): FromJsonStrategy;
+
+  /** Use the default replacer logic 
+   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter
+   */
+  export function defaultToJson(value: any): any;
+
+  /** Recursively serialize a serializable class */
+  export function recursiveToJson(value: Serializable): any;
+
+  /** allows authors to pass a regex to parse as a date */
+  export function createDateStrategy(regex: RegExp): FromJsonStrategy;
+
+  /** Changed from
+   * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
+   */
+  export const ISODateFromJson: FromJsonStrategy;
 }
