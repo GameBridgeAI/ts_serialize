@@ -17,11 +17,11 @@ export {
 export {
   createDateStrategy,
   ISODateFromJson,
-} from "./from_json/date_from_json.ts";
+} from "./from_json/date.ts";
 
 /** revive strategies */
-export { fromJsonAs } from "./from_json/from_json_as.ts";
+export { fromJsonAs } from "./from_json/as.ts";
 
 /** to json strategies */
-export { defaultToJson } from "./to_json/default_to_json.ts";
-export { recursiveToJson } from "./to_json/recursive_to_json.ts";
+export { defaultToJson } from "./to_json/default.ts";
+export { recursiveToJson } from "./to_json/recursive.ts";

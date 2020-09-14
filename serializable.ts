@@ -1,8 +1,8 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { defaultToJson } from "./to_json/default_to_json.ts";
-import { recursiveToJson } from "./to_json/recursive_to_json.ts";
+import { defaultToJson } from "./to_json/default.ts";
+import { recursiveToJson } from "./to_json/recursive.ts";
 
 /** Functions used when hydrating data */
 export type FromJsonStrategy = (value: any) => any;

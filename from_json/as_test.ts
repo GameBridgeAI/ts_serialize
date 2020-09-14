@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { test, assert, assertEquals, fail } from "../test_deps.ts";
-import { fromJsonAs } from "./from_json_as.ts";
+import { test, assert, assertEquals } from "../test_deps.ts";
+import { fromJsonAs } from "./as.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
@@ -12,9 +12,9 @@ test({
       @SerializeProperty()
       test = true;
     }
-    const test = new Test();
-    assertEquals(fromJsonAs(Test)(test).test, test.test);
-    assert(fromJsonAs(Test)(test) instanceof Test);
+    const testObj = new Test();
+    assertEquals(fromJsonAs(Test)(testObj).test, testObj.test);
+    assert(fromJsonAs(Test)(testObj) instanceof Test);
   },
 });
 
@@ -38,12 +38,12 @@ test({
       test3 = false;
     }
 
-    const test = new Test3().fromJson(
+    const testObj = new Test3().fromJson(
       `{"test_three":true,"test_two":{"test_one":false}}`,
     );
 
-    assertEquals(test.test3, true);
-    assert(test.test2 instanceof Test1);
-    assertEquals(test.test2.test1, false);
+    assertEquals(testObj.test3, true);
+    assert(testObj.test2 instanceof Test1);
+    assertEquals(testObj.test2.test1, false);
   },
 });

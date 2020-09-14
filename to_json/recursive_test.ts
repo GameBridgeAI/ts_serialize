@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test, assertEquals } from "../test_deps.ts";
-import { recursiveToJson } from "./recursive_to_json.ts";
+import { recursiveToJson } from "./recursive.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 

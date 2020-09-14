@@ -3,6 +3,6 @@
 import { toPojo, Serializable } from "../serializable.ts";
 
 /** Recursively serialize a serializable class */
-export function recursiveToJson<T>(value: Serializable): any {
+export function recursiveToJson(value: Serializable): any {
   return toPojo(value);
 }
