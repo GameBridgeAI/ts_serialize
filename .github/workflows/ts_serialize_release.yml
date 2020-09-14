@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: run tests
         run: |
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.2.0"
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test -c tsconfig.json
@@ -32,7 +32,7 @@ jobs:
       - name: Build project
         run: |
           .github/workflows/scripts/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           mkdir dist
           deno run --unstable --allow-read ./.github/workflows/scripts/babel_ts_serialize.ts > dist/index.js
@@ -42,24 +42,16 @@ jobs:
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
-          tar -zcf ts_serialize.tar.gz *
       - name: Create Release
         id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./dist/ts_serialize.tar.gz
-          asset_name: ts_serialize.tar.gz
-          asset_content_type: application/gzip
+        - uses: actions/checkout@v1
+        - uses: actions/setup-node@v1
+          with:
+            node-version: 12
+            registry-url: https://registry.npmjs.org/
+        - run: cd dist
+        - run: npm install
+        - run: npm publish --access public
+          env:
+            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      
