@@ -11,7 +11,7 @@ fi
 
 cat <<EOF >> "package.json" 
 {
-  "name": "ts_serialize",
+  "name": "@gamebridgeai/ts_serialize",
   "version": "$1",
   "description": "A zero dependency library for serializing data.",
   "main": "index.js",
