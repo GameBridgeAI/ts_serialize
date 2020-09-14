@@ -42,8 +42,7 @@ jobs:
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}}
-      - name: Deploy Release
-        uses: actions/checkout@v1
+      - name: setup-node
         uses: actions/setup-node@v1
         with:
           node-version: 12
