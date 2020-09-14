@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v0.1.1-v0.1.6] - 2020-09-14
+
 ### Changed
 
-- upgrade deno@1.2.0 and std/test@0.61.0
+- upgrade deno@1.4.0 and std/test@0.61.0
+- added automated npm deploys
 
 ## [v0.1.0] - 2020-6-25
 
