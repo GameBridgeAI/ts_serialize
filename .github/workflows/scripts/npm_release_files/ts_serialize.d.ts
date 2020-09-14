@@ -1,4 +1,5 @@
 declare module "@gamebridgeai/ts_serialize" {
+  /** Adds methods for serialization */
   export abstract class Serializable {
     public toJson(): string;
     public fromJson(): this;
@@ -6,6 +7,7 @@ declare module "@gamebridgeai/ts_serialize" {
     public fromJson(json: Partial<this>): this;
     public fromJson(json: string | Partial<this>): this;
   }
+
   /** Functions used when hydrating data */
   export type FromJsonStrategy = (value: any) => any;
 
