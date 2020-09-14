@@ -13,14 +13,12 @@ export {
   composeStrategy,
 } from "./serializable.ts";
 
-/** date strategies */
+/** from json strategies */
+export { fromJsonAs } from "./from_json/as.ts";
 export {
   createDateStrategy,
   ISODateFromJson,
 } from "./from_json/date.ts";
-
-/** revive strategies */
-export { fromJsonAs } from "./from_json/as.ts";
 
 /** to json strategies */
 export { defaultToJson } from "./to_json/default.ts";
