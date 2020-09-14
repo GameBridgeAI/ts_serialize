@@ -44,13 +44,13 @@ class Test extends Serializable {
 }
 
 assertEquals(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
-const test = new Test().fromJson(
+const testObj = new Test().fromJson(
   `{"propertyOne":"From","property_two":"Json!","notSerialized":"changed"}`
 );
-assertEquals(test.propertyOne, "From");
-assertEquals(test.propertyTwo, "Json!");
-assertEquals(test.notSerialized, "changed");
-assertEquals(test.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
+assertEquals(testObj.propertyOne, "From");
+assertEquals(testObj.propertyTwo, "Json!");
+assertEquals(testObj.notSerialized, "changed");
+assertEquals(testObj.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 ```
 
 ### Advanced
@@ -79,8 +79,8 @@ class Test extends Serializable {
   bigInt!: BigInt;
 }
 
-const test = new Test().fromJson(`{"big_int":"9007199254740991"}`);
-assertEquals(test.bigInt.toString(), "9007199254740991");
+const testObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
+assertEquals(testObj.bigInt.toString(), "9007199254740991");
 ```
 
 #### Dates
@@ -96,9 +96,9 @@ class Test extends Serializable {
   date!: Date;
 }
 
-const test = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
-assert(test.date instanceof Date);
-assertEquals(test.date.getFullYear(), 2020);
+const testObj = new Test().fromJson(`{"date":"2020-06-04T19:01:47.831Z"}`);
+assert(testObj.date instanceof Date);
+assertEquals(testObj.date.getFullYear(), 2020);
 ```
 
 `createDateStrategy()` can be use to make
@@ -112,9 +112,9 @@ class Test extends Serializable {
   date!: Date;
 }
 
-const test = new Test().fromJson(`{"date":"2099-11-25"}`);
-assert(test.date instanceof Date);
-assertEquals(test.date.getFullYear(), 2099);
+const testObj = new Test().fromJson(`{"date":"2099-11-25"}`);
+assert(testObj.date instanceof Date);
+assertEquals(testObj.date.getFullYear(), 2099);
 ```
 
 #### Inheritance
@@ -134,10 +134,10 @@ class Test2 extends Test1 {
   serializeMeInstead = "nice2";
 }
 
-const test = new Test2();
-assertEquals(test.serializeMe, "nice1");
-assertEquals(test.serializeMeInstead, "nice2");
-assertEquals(test.toJson(), `{"serialize_me":"nice2"}`);
+const testObj = new Test2();
+assertEquals(testObj.serializeMe, "nice1");
+assertEquals(testObj.serializeMeInstead, "nice2");
+assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
 ```
 
 #### Nested Class Serialization
@@ -157,8 +157,8 @@ class Test2 extends Serializable {
   nested: Test1 = new Test1();
 }
 
-const test = new Test2();
-assertEquals(test.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+const testObj = new Test2();
+assertEquals(testObj.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
 FromJson:
@@ -181,9 +181,9 @@ class Test2 extends Serializable {
   nested!: Test1;
 }
 
-const test = new Test2();
-test.fromJson(`{"serialize_me_2":{ "serialize_me_1":"custom value"}}`);
-assertEquals(test.nested.serializeMe, "custom value");
+const testObj = new Test2();
+testObj.fromJson(`{"serialize_me_2":{ "serialize_me_1":"custom value"}}`);
+assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 
 #### Multiple strategy functions
