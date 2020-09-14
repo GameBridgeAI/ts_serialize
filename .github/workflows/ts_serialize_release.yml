@@ -42,18 +42,16 @@ jobs:
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}}
-
-  deploy:
-    name: Deploy Release
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Deploy Release
+        uses: actions/checkout@v1
+        uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
-      - run: cd dist
-      - run: npm install
-      - run: npm publish --access public
+      - name: Build project
+        run: |
+          cd dist
+          npm install
+          npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
