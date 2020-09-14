@@ -42,6 +42,16 @@ jobs:
           cp LICENSE dist
           cd dist
           ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
       - name: setup-node
         uses: actions/setup-node@v1
         with:
