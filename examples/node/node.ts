@@ -78,4 +78,4 @@ console.assert(test.fromJsonAsTest.subProperty === "fromJson");
 console.assert(test.isoDate instanceof Date);
 console.assert(test.isoDate.getFullYear() === 2020);
 console.assert(test.createDate instanceof Date);
-console.assert(test.createDate.getFullYear() === 209);
+console.assert(test.createDate.getFullYear() === 2099);
