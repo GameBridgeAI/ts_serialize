@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/bin/bas
 
 # Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+
+set -ex
+
 if [ -z "$1" ]; then
     echo "Error: Tag version not provided";
     exit 1
@@ -40,6 +43,6 @@ npm i typescript
 
 npm test
 
-RESULT="$(npm test)"
+# RESULT="$(npm test)"
 
-echo "Test: $RESULT"
+# echo "Test: $RESULT"
