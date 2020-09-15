@@ -182,7 +182,7 @@ class Test2 extends Serializable {
 }
 
 const testObj = new Test2();
-testObj.fromJson(`{"serialize_me_2":{ "serialize_me_1":"custom value"}}`);
+testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 

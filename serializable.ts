@@ -11,8 +11,8 @@ export abstract class Serializable {
   }
   public fromJson(): this;
   public fromJson(json: string): this;
-  public fromJson(json: Partial<this>): this;
-  public fromJson(json: string | Partial<this> = {}): this {
+  public fromJson(json: Record<string, any>): this;
+  public fromJson(json: string | Record<string, any> = {}): this {
     return fromJson(this, json);
   }
 }
@@ -130,11 +130,17 @@ function toJson<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJson<T>(context: Serializable, json: string): T;
 
-function fromJson<T>(context: Serializable, json: Partial<T>): T;
+function fromJson<T>(context: Serializable, json: Record<string, any>): T;
 
-function fromJson<T>(context: Serializable, json: string | Partial<T>): T;
+function fromJson<T>(
+  context: Serializable,
+  json: string | Record<string, any>,
+): T;
 
-function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
+function fromJson<T>(
+  context: Serializable,
+  json: string | Record<string, any>,
+): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );

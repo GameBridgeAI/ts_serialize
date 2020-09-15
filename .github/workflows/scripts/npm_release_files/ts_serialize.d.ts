@@ -4,8 +4,8 @@ declare module "@gamebridgeai/ts_serialize" {
     public toJson(): string;
     public fromJson(): this;
     public fromJson(json: string): this;
-    public fromJson(json: Partial<this>): this;
-    public fromJson(json: string | Partial<this>): this;
+    public fromJson(json: Record<string, any>): this;
+    public fromJson(json: string | Record<string, any>): this;
   }
 
   /** Functions used when hydrating data */
