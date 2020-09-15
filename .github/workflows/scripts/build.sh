@@ -39,12 +39,9 @@ npm link @gamebridgeai/ts_serialize
 
 npm i typescript
 
-echo "here!!"
-pwd
+./node_modules/.bin/tsc -p tsconfig.json
 
 echo "here!!2222"
-echo "$(pwd)"
-
-./node_modules/.bin/tsc -p tsconfig.json
+ls -lah
 
 node node.js
