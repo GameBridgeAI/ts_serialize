@@ -72,7 +72,7 @@ class Test extends Serializable {
   createDate = new Date("2099-11-25");
 }
 assert(new Test().toJson() === JSON.stringify(toJsonFixture), "toJson()");
-const test = new Test().fromJson(fromJsonFixture as Test);
+const test = new Test().fromJson(fromJsonFixture);
 assert(test.notSerialized === "not serialized", "notSerialized");
 assert(test.serializedPropertyNoArg === "fromJson", "serializedPropertyNoArg");
 assert(test.renameTest === "fromJson", "renameTest");
