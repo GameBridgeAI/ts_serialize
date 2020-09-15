@@ -35,7 +35,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: Build
-        run: .github/workflows/scripts/build.sh
+        run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+if [ -z "$1" ]; then
+    echo "Error: Tag version not provided";
+    exit 1
+fi
 
 .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
@@ -22,7 +26,7 @@ cp LICENSE dist
 
 cd dist
 
-../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
+../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh "$1"
 
 npm install
 
