@@ -21,8 +21,14 @@ const customStrategy = (v: string) => `${v} strategy changed`;
 const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
 const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-const toJsonFixture = await readJson("../fixtures/to.json");
-const fromJsonFixture = await readJson("../fixtures/from.json");
+const toJsonFixture = await readJson("../fixtures/to.json") as Record<
+  string,
+  any
+>;
+const fromJsonFixture = await readJson("../fixtures/from.json") as Record<
+  string,
+  any
+>;
 
 class Nested extends Serializable {
   @SerializeProperty("sub_property")
@@ -71,7 +77,7 @@ class Test extends Serializable {
   createDate = new Date("2099-11-25");
 }
 assert(new Test().toJson() === JSON.stringify(toJsonFixture), "toJson()");
-const test = new Test().fromJson(fromJsonFixture as Test);
+const test = new Test().fromJson(fromJsonFixture);
 assert(test.notSerialized === "not serialized", "notSerialized");
 assert(test.serializedPropertyNoArg === "fromJson", "serializedPropertyNoArg");
 assert(test.renameTest === "fromJson", "renameTest");

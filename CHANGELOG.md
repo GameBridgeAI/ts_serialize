@@ -8,7 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- 
+
+## [v0.2.3-v0.2.4] - 2020-09-15
+
+### Changed
+- set up new deno deploy webhook
 
 ## [v0.1.1-v0.2.2] - 2020-09-14
 
