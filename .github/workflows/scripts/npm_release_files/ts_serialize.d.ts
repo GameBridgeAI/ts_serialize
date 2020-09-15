@@ -59,14 +59,6 @@ declare module "@gamebridgeai/ts_serialize" {
     type: T & { new (): Serializable },
   ): FromJsonStrategy;
 
-  /** Use the default replacer logic 
-   * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter
-   */
-  export function defaultToJson(value: any): any;
-
-  /** Recursively serialize a serializable class */
-  export function recursiveToJson(value: Serializable): any;
-
   /** allows authors to pass a regex to parse as a date */
   export function createDateStrategy(regex: RegExp): FromJsonStrategy;
 
