@@ -1,7 +1,7 @@
 #!/bin/bas
 
 # Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
-
+set -x
 if [ -z "$1" ]; then
     echo "Error: Tag version not provided";
     exit 1
