@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### NPM RELEASE!!
 
+### Added
+
+- `/examples` for Node and Deno environments 
+
 ### Changed
 
 - upgrade deno@1.4.0 and std/test@0.61.0
