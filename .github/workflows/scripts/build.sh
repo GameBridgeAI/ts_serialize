@@ -35,8 +35,8 @@ npm link
 
 cd ../examples/node
 
-npm link @gamebridgeai/ts_serialize
+npm i @gamebridgeai/ts_serialize typescript
 
-npm i typescript
+npm link @gamebridgeai/ts_serialize
 
 npm test
