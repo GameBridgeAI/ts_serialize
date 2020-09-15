@@ -30,12 +30,16 @@ cd dist
 
 npm install
 
-# npm link
+npm link
 
-# cd examples/node
+cd examples/node
 
-# npm link @gamebridgeai/ts_serialize
+npm link @gamebridgeai/ts_serialize
 
-# npm i typescript
+npm i typescript
 
-# result="$(npm test)"
+npm test
+
+RESULT="$(npm test)"
+
+echo "Test: $RESULT"
