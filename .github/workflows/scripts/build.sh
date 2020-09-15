@@ -39,4 +39,7 @@ npm i @gamebridgeai/ts_serialize typescript
 
 npm link @gamebridgeai/ts_serialize
 
-npm test
+if [ -n "$(npm test)" ]; then
+    echo "NPM imported test failed"
+    exit 1
+fi
