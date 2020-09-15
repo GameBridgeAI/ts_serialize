@@ -35,19 +35,7 @@ jobs:
           node-version: 12
           registry-url: https://registry.npmjs.org/
       - name: Build
-        run: |
-          .github/workflows/scripts/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
-          export PATH="$HOME/.deno/bin:$PATH"
-          mkdir dist
-          deno run --unstable --allow-read ./.github/workflows/scripts/babel_ts_serialize.ts > dist/ts_serialize.js
-          cp .github/workflows/scripts/npm_release_files/ts_serialize.d.ts dist
-          cp CHANGELOG.md dist
-          cp README.md dist
-          cp LICENSE dist
-          cd dist
-          ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
-          npm install
+        run: .github/workflows/scripts/build.sh
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1

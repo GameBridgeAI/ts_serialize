@@ -1,0 +1,11 @@
+{
+  "name": "test_ts_serialize",
+  "version": "0.1.11",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc -p tsconfig.json && node test.js"
+  },
+  "author": "@gamebridgeai",
+  "license": "ISC"
+}

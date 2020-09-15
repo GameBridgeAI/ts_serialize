@@ -1,3 +1,8 @@
 deno.d.ts
 dist/*
+examples/node/*
+!examples/node/test.ts
+!examples/node/tsconfig.json
+!examples/node/package.json
+!examples/node/README.md
 .DS_Store
