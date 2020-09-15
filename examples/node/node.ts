@@ -10,19 +10,21 @@ import {
   ISODateFromJson,
   createDateStrategy,
 } from "@gamebridgeai/ts_serialize";
-
 import toJsonFixture from "../fixtures/to.json";
 import fromJsonFixture from "../fixtures/from.json";
-const customStrategy = (v: string) => `${v} strategy changed`;
-const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
-const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
-const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+
 function assert(boolean: boolean): void {
   if (!boolean) {
     console.error("NPM imported test failed");
     process.exit(1);
   }
 }
+
+const customStrategy = (v: string) => `${v} strategy changed`;
+const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
+const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
+const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
+
 class Nested extends Serializable {
   @SerializeProperty("sub_property")
   subProperty = "toJson";
@@ -85,4 +87,4 @@ assert(test.fromJsonAsTest.subProperty === "fromJson");
 assert(test.isoDate instanceof Date);
 assert(test.isoDate.getFullYear() === 2020);
 assert(test.createDate instanceof Date);
-assert(test.createDate.getFullYear() === 209);
+assert(test.createDate.getFullYear() === 2099);
