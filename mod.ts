@@ -15,11 +15,4 @@ export {
 
 /** from json strategies */
 export { fromJsonAs } from "./from_json/as.ts";
-export {
-  createDateStrategy,
-  ISODateFromJson,
-} from "./from_json/date.ts";
-
-/** to json strategies */
-export { defaultToJson } from "./to_json/default.ts";
-export { recursiveToJson } from "./to_json/recursive.ts";
+export { createDateStrategy, ISODateFromJson } from "./from_json/date.ts";
