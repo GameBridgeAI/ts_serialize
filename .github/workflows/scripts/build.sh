@@ -45,8 +45,6 @@ pwd
 echo "here!!2222"
 echo "$(pwd)"
 
-npm test
+./node_modules/.bin/tsc -p tsconfig.json
 
-# RESULT="$(npm test)"
-
-# echo "Test: $RESULT"
+node node.js
