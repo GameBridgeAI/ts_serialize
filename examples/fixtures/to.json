@@ -1,0 +1,13 @@
+{
+    "serializedPropertyNoArg": "toJson",
+    "rename_test": "toJson",
+    "rename_test_by_property": "toJson",
+    "fromJsonStrategyTest": "toJson",
+    "toJsonStrategyTest": "toJson strategy changed",
+    "composeStrategyTest": "toJson strategy changed",
+    "fromJsonAsTest":{
+        "sub_property": "toJson"
+    },
+    "isoDate": "2020-06-04T19:01:47.831Z",
+    "createDate": "2099-11-25T00:00:00.000Z"
+}

@@ -13,7 +13,7 @@ export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 
 /** string/symbol property name or options for (de)serializing values */
-export declare type SerializePropertyArgument =
+export type SerializePropertyArgument =
   | string
   | {
     serializedKey?: string;

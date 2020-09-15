@@ -7,10 +7,10 @@ test({
   name: "adds methods to extended classes",
   fn() {
     class TestClass extends Serializable {}
-    const test = new TestClass();
-    assert(test instanceof Serializable);
-    assertEquals(typeof test.toJson, "function");
-    assertEquals(typeof test.fromJson, "function");
+    const testObj = new TestClass();
+    assert(testObj instanceof Serializable);
+    assertEquals(typeof testObj.toJson, "function");
+    assertEquals(typeof testObj.fromJson, "function");
   },
 });
 

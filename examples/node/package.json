@@ -1,0 +1,11 @@
+{
+  "name": "node_example",
+  "version": "0.2.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "tsc -p tsconfig.json && node node.js"
+  },
+  "author": "@gamebridgeai",
+  "license": "ISC"
+}

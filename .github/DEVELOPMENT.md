@@ -52,10 +52,10 @@ test({
       })
       nested: Test1 = new Test1();
     }
-    const test = new Test2();
+    const testObj = new Test2();
 
     assertEquals(
-      test.toJson(),
+      testObj.toJson(),
       `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
     );
   },

@@ -1,14 +1,27 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { defaultToJson } from "./to_json/default_to_json.ts";
-import { recursiveToJson } from "./to_json/recursive_to_json.ts";
+import { defaultToJson } from "./to_json/default.ts";
+import { recursiveToJson } from "./to_json/recursive.ts";
+
+/** Adds methods for serialization */
+export abstract class Serializable {
+  public toJson(): string {
+    return toJson(this);
+  }
+  public fromJson(): this;
+  public fromJson(json: string): this;
+  public fromJson(json: Record<string, any>): this;
+  public fromJson(json: string | Record<string, any> = {}): this {
+    return fromJson(this, json);
+  }
+}
 
 /** Functions used when hydrating data */
-export declare type FromJsonStrategy = (value: any) => any;
+export type FromJsonStrategy = (value: any) => any;
 
 /** Functions used when dehydrating data */
-export declare type ToJsonStrategy = (value: any) => any;
+export type ToJsonStrategy = (value: any) => any;
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -55,7 +68,7 @@ export function composeStrategy(
 }
 
 /** Options for each class */
-export declare type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
+export type SerializableMap = Map<unknown, SerializePropertyOptionsMap>;
 
 /** Class options map */
 export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
@@ -117,11 +130,17 @@ function toJson<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJson<T>(context: Serializable, json: string): T;
 
-function fromJson<T>(context: Serializable, json: Partial<T>): T;
+function fromJson<T>(context: Serializable, json: Record<string, any>): T;
 
-function fromJson<T>(context: Serializable, json: string | Partial<T>): T;
+function fromJson<T>(
+  context: Serializable,
+  json: string | Record<string, any>,
+): T;
 
-function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
+function fromJson<T>(
+  context: Serializable,
+  json: string | Record<string, any>,
+): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
@@ -164,17 +183,4 @@ function fromJson<T>(context: Serializable, json: string | Partial<T>): T {
       },
     ),
   );
-}
-
-/** Adds methods for serialization */
-export abstract class Serializable {
-  public toJson(): string {
-    return toJson(this);
-  }
-  public fromJson(): this;
-  public fromJson(json: string): this;
-  public fromJson(json: Partial<this>): this;
-  public fromJson(json: string | Partial<this> = {}): this {
-    return fromJson(this, json);
-  }
 }

@@ -19,16 +19,16 @@ test({
   name:
     "SerializePropertyOptionsMap setting a property correctly sets both keys",
   fn() {
-    const test = new SerializePropertyOptionsMap();
+    const testObj = new SerializePropertyOptionsMap();
     const spOptions = new SerializePropertyOptions("a", "b");
-    test.set(spOptions);
+    testObj.set(spOptions);
 
-    assertEquals(test.hasPropertyKey("a"), true);
-    assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEquals(test.getByPropertyKey("a"), spOptions);
-    assertStrictEquals(test.getBySerializedKey("b"), spOptions);
+    assertEquals(testObj.hasPropertyKey("a"), true);
+    assertEquals(testObj.hasSerializedKey("b"), true);
+    assertStrictEquals(testObj.getByPropertyKey("a"), spOptions);
+    assertStrictEquals(testObj.getBySerializedKey("b"), spOptions);
 
-    const allPropertyOptions = Array.from(test.propertyOptions());
+    const allPropertyOptions = Array.from(testObj.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
     assertEquals(allPropertyOptions[0], spOptions);
   },
@@ -41,14 +41,14 @@ test({
     const spOptions = new SerializePropertyOptions("a", "b");
     testParent.set(spOptions);
 
-    const test = new SerializePropertyOptionsMap(testParent);
+    const testObj = new SerializePropertyOptionsMap(testParent);
 
-    assertEquals(test.hasPropertyKey("a"), true);
-    assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEquals(test.getByPropertyKey("a"), spOptions);
-    assertStrictEquals(test.getBySerializedKey("b"), spOptions);
+    assertEquals(testObj.hasPropertyKey("a"), true);
+    assertEquals(testObj.hasSerializedKey("b"), true);
+    assertStrictEquals(testObj.getByPropertyKey("a"), spOptions);
+    assertStrictEquals(testObj.getBySerializedKey("b"), spOptions);
 
-    const allPropertyOptions = Array.from(test.propertyOptions());
+    const allPropertyOptions = Array.from(testObj.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
     assertEquals(allPropertyOptions[0], spOptions);
   },
@@ -61,16 +61,16 @@ test({
     const parentSPOptions = new SerializePropertyOptions("a", "b");
     testParent.set(parentSPOptions);
 
-    const test = new SerializePropertyOptionsMap(testParent);
+    const testObj = new SerializePropertyOptionsMap(testParent);
     const childSPOptions = new SerializePropertyOptions("a", "b");
-    test.set(childSPOptions);
+    testObj.set(childSPOptions);
 
-    assertEquals(test.hasPropertyKey("a"), true);
-    assertEquals(test.hasSerializedKey("b"), true);
-    assertStrictEquals(test.getByPropertyKey("a"), childSPOptions);
-    assertStrictEquals(test.getBySerializedKey("b"), childSPOptions);
+    assertEquals(testObj.hasPropertyKey("a"), true);
+    assertEquals(testObj.hasSerializedKey("b"), true);
+    assertStrictEquals(testObj.getByPropertyKey("a"), childSPOptions);
+    assertStrictEquals(testObj.getBySerializedKey("b"), childSPOptions);
 
-    const allPropertyOptions = Array.from(test.propertyOptions());
+    const allPropertyOptions = Array.from(testObj.propertyOptions());
     assertEquals(allPropertyOptions.length, 1);
     assertEquals(allPropertyOptions[0], childSPOptions);
   },
@@ -80,12 +80,12 @@ test({
   name:
     "SerializePropertyOptionsMap error when trying to add a duplicate property key",
   fn() {
-    const test = new SerializePropertyOptionsMap();
+    const testObj = new SerializePropertyOptionsMap();
     const childSPOptions = new SerializePropertyOptions("a", "b");
     const childSPOptions2 = new SerializePropertyOptions("a", "c");
-    test.set(childSPOptions);
+    testObj.set(childSPOptions);
     try {
-      test.set(childSPOptions2);
+      testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
       assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);
@@ -97,12 +97,12 @@ test({
   name:
     "SerializePropertyOptionsMap error when trying to add a duplicate serialize key",
   fn() {
-    const test = new SerializePropertyOptionsMap();
+    const testObj = new SerializePropertyOptionsMap();
     const childSPOptions = new SerializePropertyOptions("a", "a");
     const childSPOptions2 = new SerializePropertyOptions("b", "a");
-    test.set(childSPOptions);
+    testObj.set(childSPOptions);
     try {
-      test.set(childSPOptions2);
+      testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
       assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: a`);
@@ -114,12 +114,12 @@ test({
   name:
     "SerializePropertyOptionsMap error when trying to add a duplicate property key",
   fn() {
-    const test = new SerializePropertyOptionsMap();
+    const testObj = new SerializePropertyOptionsMap();
     const childSPOptions = new SerializePropertyOptions("a", "b");
     const childSPOptions2 = new SerializePropertyOptions("a", "c");
-    test.set(childSPOptions);
+    testObj.set(childSPOptions);
     try {
-      test.set(childSPOptions2);
+      testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
       assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);

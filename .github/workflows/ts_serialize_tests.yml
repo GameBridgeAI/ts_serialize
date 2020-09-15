@@ -12,8 +12,8 @@ jobs:
         uses: actions/checkout@v2
       - name: run tests
         run: |
-          .github/workflows/scripts/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.2.0"
+          .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test -c tsconfig.json

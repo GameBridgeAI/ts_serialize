@@ -11,16 +11,16 @@ jobs:
     name: ts serialize tests
     runs-on: ubuntu-latest
     steps:
-      - name: clone repository
+      - name: Clone repository
         uses: actions/checkout@v2
-      - name: run tests
+      - name: Run tests
         run: |
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.2.0"
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.4.0"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test -c tsconfig.json
   build:
-    name: Create Release
+    name: Release
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -29,19 +29,13 @@ jobs:
         run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Build project
-        run: |
-          .github/workflows/scripts/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.0.5"
-          export PATH="$HOME/.deno/bin:$PATH"
-          mkdir dist
-          deno bundle -c tsconfig.json mod.ts dist/index.js
-          cp CHANGELOG.md dist
-          cp README.md dist
-          cp LICENSE dist
-          cd dist
-          ../.github/workflows/scripts/create_npm_package_file.sh ${{ steps.get_github_tag.outputs.VERSION }}
-          tar -zcf ts_serialize.tar.gz *
+      - name: Setup-node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Build
+        run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -52,13 +46,9 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
-      - name: Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
+      - name: Deploy
+        run: |
+          cd dist
+          npm publish --access public
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
-          asset_path: ./dist/ts_serialize.tar.gz
-          asset_name: ts_serialize.tar.gz
-          asset_content_type: application/gzip
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
