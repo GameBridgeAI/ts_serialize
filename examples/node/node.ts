@@ -15,7 +15,12 @@ const customStrategy = (v: string) => `${v} strategy changed`;
 const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
 const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-
+function assert(boolean: boolean): void {
+  if (!boolean) {
+    console.error("NPM imported test failed");
+    process.exit(1);
+  }
+}
 class Nested extends Serializable {
   @SerializeProperty("sub_property")
   subProperty = "toJson";
@@ -62,20 +67,20 @@ class Test extends Serializable {
   @SerializeProperty({ fromJsonStrategy: customDateStrategy })
   createDate = new Date("2099-11-25");
 }
-console.assert(
+assert(
   new Test().toJson() === JSON.stringify(toJsonFixture),
 );
 const test = new Test().fromJson(fromJsonFixture);
-console.assert(test.notSerialized === "not serialized");
-console.assert(test.serializedPropertyNoArg === "fromJson");
-console.assert(test.renameTest === "fromJson");
-console.assert(test.renameTestByProperty === "fromJson");
-console.assert(test.fromJsonStrategyTest === "fromJson strategy changed");
-console.assert(test.toJsonStrategyTest === "fromJson");
-console.assert(test.composeStrategyTest === "fromJson strategy changed");
-console.assert(test.fromJsonAsTest instanceof Nested);
-console.assert(test.fromJsonAsTest.subProperty === "fromJson");
-console.assert(test.isoDate instanceof Date);
-console.assert(test.isoDate.getFullYear() === 2020);
-console.assert(test.createDate instanceof Date);
-console.assert(test.createDate.getFullYear() === 2099);
+assert(test.notSerialized === "not serialized");
+assert(test.serializedPropertyNoArg === "fromJson");
+assert(test.renameTest === "fromJson");
+assert(test.renameTestByProperty === "fromJson");
+assert(test.fromJsonStrategyTest === "fromJson strategy changed");
+assert(test.toJsonStrategyTest === "fromJson");
+assert(test.composeStrategyTest === "fromJson strategy changed");
+assert(test.fromJsonAsTest instanceof Nested);
+assert(test.fromJsonAsTest.subProperty === "fromJson");
+assert(test.isoDate instanceof Date);
+assert(test.isoDate.getFullYear() === 2020);
+assert(test.createDate instanceof Date);
+assert(test.createDate.getFullYear() === 209);

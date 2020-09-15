@@ -3,7 +3,7 @@
 From this directory run
 
 ```
-$ npm i @gamebridgeai/ts_serialize typescript
+$ npm i @gamebridgeai/ts_serialize typescript @types/node
 ```
 
 Then run 
