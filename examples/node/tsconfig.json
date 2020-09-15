@@ -3,5 +3,6 @@
         "experimentalDecorators": true,
         "resolveJsonModule": true,
         "esModuleInterop": true
-    }
+    },
+    "include": ["../../dist"]
 }
