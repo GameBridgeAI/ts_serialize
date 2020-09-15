@@ -33,7 +33,7 @@ npm install
 
 npm link
 
-cd examples/node
+cd ../examples/node
 
 npm link @gamebridgeai/ts_serialize
 
