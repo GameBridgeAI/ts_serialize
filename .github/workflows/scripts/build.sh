@@ -39,9 +39,4 @@ npm link @gamebridgeai/ts_serialize
 
 npm i typescript
 
-./node_modules/.bin/tsc -p tsconfig.json
-
-echo "here!!2222"
-ls -lah
-
-node node.js
+npm test
