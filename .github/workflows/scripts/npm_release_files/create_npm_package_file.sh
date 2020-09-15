@@ -18,14 +18,24 @@ cat <<EOF >> "package.json"
   "types": "ts_serialize.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/GameBridgeAI/ts_serialize.git"
+    "url": "https://github.com/GameBridgeAI/ts_serialize.git"
   },
   "author": "GameBridgeAI",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/GameBridgeAI/ts_serialize/issues"
   },
-  "homepage": "https://github.com/GameBridgeAI/ts_serialize#readme"
+  "homepage": "https://github.com/GameBridgeAI/ts_serialize#readme",
+  "keywords": [
+        "typescript",
+        "serialize",
+        "serialization",
+        "JSON",
+        "node",
+        "deno",
+        "ts_serialize",
+        "ts-serialize"
+    ]
 }
 EOF
     
