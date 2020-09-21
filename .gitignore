@@ -4,5 +4,6 @@ examples/node/*
 !examples/node/node.ts
 !examples/node/tsconfig.json
 !examples/node/package.json
+!examples/node/package-lock.json
 !examples/node/README.md
 .DS_Store

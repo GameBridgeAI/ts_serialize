@@ -29,16 +29,10 @@ cd dist
 
 ../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh "$1"
 
-# TODO: No dependancies, so no need to install?
-# npm install
-
-npm link
-
+# Test currently built deployment on node example
 cd ../examples/node
 
-# Slight concern here: We aren't using a lockfile for these test dependencies,
-# so it's possible we may get an error here if the types or ts release a breaking change of some kind
-npm i typescript @types/node
-npm link @gamebridgeai/ts_serialize
+npm ci
+npm ln ../../dist
 
 npm test
