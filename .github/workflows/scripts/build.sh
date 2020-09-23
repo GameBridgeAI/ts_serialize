@@ -29,14 +29,10 @@ cd dist
 
 ../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh "$1"
 
-npm install
-
-npm link
-
+# Test currently built deployment on node example
 cd ../examples/node
 
-npm i @gamebridgeai/ts_serialize typescript @types/node
-
-npm link @gamebridgeai/ts_serialize
+npm ci
+npm ln ../../dist
 
 npm test

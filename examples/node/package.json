@@ -7,5 +7,10 @@
     "test": "tsc -p tsconfig.json && node node.js"
   },
   "author": "@gamebridgeai",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@gamebridgeai/ts_serialize": "*",
+    "@types/node": "14.11.1",
+    "typescript": "4.0.3"
+  }
 }
