@@ -12,12 +12,19 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 
+/**
+ * Function to transform a property name into a serialized key programmatically
+ */
+export type ToSerializedKeyStrategy = ((
+  propertyName: string | symbol,
+) => string);
+
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
   | string
-  | ((propertyName: string | symbol) => string)
+  | ToSerializedKeyStrategy
   | {
-    serializedKey?: string | ((propertyName: string | symbol) => string);
+    serializedKey?: string | ToSerializedKeyStrategy;
     fromJsonStrategy?:
       | FromJsonStrategy
       | (FromJsonStrategy | FromJsonStrategy[])[];
