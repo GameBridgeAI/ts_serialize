@@ -15,8 +15,9 @@ export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
   | string
+  | ((propertyName: string | symbol) => string)
   | {
-    serializedKey?: string;
+    serializedKey?: string | ((propertyName: string | symbol) => string);
     fromJsonStrategy?:
       | FromJsonStrategy
       | (FromJsonStrategy | FromJsonStrategy[])[];
@@ -59,9 +60,12 @@ export function SerializeProperty(
 ): PropertyDecorator {
   return (target: unknown, propertyName: string | symbol) => {
     let decoratorArgumentOptions: SerializePropertyArgumentObject;
-
     if (typeof decoratorArguments === "string") {
       decoratorArgumentOptions = { serializedKey: decoratorArguments };
+    } else if (typeof decoratorArguments == "function") {
+      decoratorArgumentOptions = {
+        serializedKey: decoratorArguments(propertyName),
+      };
     } else {
       // We can't use symbols as keys when serializing
       // a serializedName must be provided if the property isn't a string
@@ -71,11 +75,20 @@ export function SerializeProperty(
       ) {
         throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
       }
-
-      decoratorArgumentOptions = {
-        serializedKey: propertyName as string,
-        ...decoratorArguments,
-      };
+      if (typeof decoratorArguments.serializedKey === "function") {
+        decoratorArgumentOptions = {
+          serializedKey: decoratorArguments.serializedKey(propertyName),
+          fromJsonStrategy: decoratorArguments.fromJsonStrategy,
+          toJsonStrategy: decoratorArguments.toJsonStrategy,
+        };
+      } else {
+        decoratorArgumentOptions = {
+          serializedKey: decoratorArguments.serializedKey ||
+            propertyName as string,
+          fromJsonStrategy: decoratorArguments.fromJsonStrategy,
+          toJsonStrategy: decoratorArguments.toJsonStrategy,
+        };
+      }
     }
 
     let serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(target);
