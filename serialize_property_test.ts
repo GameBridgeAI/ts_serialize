@@ -380,3 +380,39 @@ test({
     );
   },
 });
+
+test({
+  name: "Serialize key function",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        (
+          (propertyName) => "_" + (propertyName as string)
+        ),
+      )
+      serializeMe = "nice1";
+    }
+    const testObj = new Test1();
+    assertEquals(
+      testObj.toJson(),
+      `{"_serializeMe":"nice1"}`,
+    );
+  },
+});
+
+test({
+  name: "Serialize key function object",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        ({ serializedKey: (propertyName) => "_" + (propertyName as string) }),
+      )
+      serializeMe = "nice1";
+    }
+    const testObj = new Test1();
+    assertEquals(
+      testObj.toJson(),
+      `{"_serializeMe":"nice1"}`,
+    );
+  },
+});
