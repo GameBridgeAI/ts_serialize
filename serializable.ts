@@ -4,6 +4,18 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { defaultToJson } from "./to_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
+/** A JSON object where each property value is a simple JSON value. */
+export type JsonObject = { [key: string]: JsonValue };
+
+/** A property value in a JSON object. */
+export type JsonValue =
+  | null
+  | boolean
+  | number
+  | string
+  | JsonValue[]
+  | JsonObject;
+
 /** Adds methods for serialization */
 export abstract class Serializable {
   public toJson(): string {
@@ -11,17 +23,17 @@ export abstract class Serializable {
   }
   public fromJson(): this;
   public fromJson(json: string): this;
-  public fromJson(json: Record<string, any>): this;
-  public fromJson(json: string | Record<string, any> = {}): this {
+  public fromJson(json: JsonObject): this;
+  public fromJson(json: string | JsonObject = {}): this {
     return fromJson(this, json);
   }
 }
 
 /** Functions used when hydrating data */
-export type FromJsonStrategy = (value: any) => any;
+export type FromJsonStrategy = (value: JsonValue) => any;
 
 /** Functions used when dehydrating data */
-export type ToJsonStrategy = (value: any) => any;
+export type ToJsonStrategy = (value: any) => JsonValue;
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -56,13 +68,15 @@ export class SerializePropertyOptions {
  * Converts value from functions provided as parameters
  */
 export function composeStrategy(
-  ...fns:
-    | (FromJsonStrategy | FromJsonStrategy[])[]
-    | (ToJsonStrategy | ToJsonStrategy[])[]
-): FromJsonStrategy | ToJsonStrategy {
-  return (val: unknown): unknown =>
+  ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
+): FromJsonStrategy;
+export function composeStrategy(
+  ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
+): ToJsonStrategy;
+export function composeStrategy(...fns: any): any {
+  return (val: any): any =>
     fns.flat().reduce(
-      (acc: unknown, f: FromJsonStrategy | ToJsonStrategy) => f(acc),
+      (acc: any, f: FromJsonStrategy | ToJsonStrategy) => f(acc),
       val,
     );
 }
@@ -82,7 +96,7 @@ const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
 /** Converts to object using mapped keys */
 export function toPojo<T>(
   context: Record<keyof T, unknown>,
-): Record<string, unknown> {
+): JsonObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
@@ -93,7 +107,7 @@ export function toPojo<T>(
         ?.prototype}`,
     );
   }
-  const record: Record<string, unknown> = {};
+  const record: JsonObject = {};
   for (
     let {
       propertyKey,
@@ -130,16 +144,16 @@ function toJson<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJson<T>(context: Serializable, json: string): T;
 
-function fromJson<T>(context: Serializable, json: Record<string, any>): T;
+function fromJson<T>(context: Serializable, json: JsonObject): T;
 
 function fromJson<T>(
   context: Serializable,
-  json: string | Record<string, any>,
+  json: string | JsonObject,
 ): T;
 
 function fromJson<T>(
   context: Serializable,
-  json: string | Record<string, any>,
+  json: string | JsonObject,
 ): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -158,7 +172,7 @@ function fromJson<T>(
     JSON.parse(
       _json,
       /** Processes the value through the provided or default `fromJsonStrategy` */
-      function revive(key: string, value: unknown): unknown {
+      function revive(key: string, value: JsonValue): unknown {
         // After the last iteration of the fromJsonStrategy a function
         // will be called one more time with a empty string key
         if (key === "") {

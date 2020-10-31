@@ -7,7 +7,7 @@ import {
   assertStrictEquals,
   fail,
 } from "./test_deps.ts";
-import { Serializable } from "./serializable.ts";
+import { JsonObject, JsonValue, Serializable } from "./serializable.ts";
 import {
   SerializeProperty,
   ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
@@ -216,7 +216,8 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        fromJsonStrategy: (v: JsonValue) =>
+          new OtherClass().fromJson(v as JsonObject),
       })
       array!: OtherClass[];
     }
@@ -348,7 +349,8 @@ test({
     class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        fromJsonStrategy: (json) => new Test1().fromJson(json),
+        fromJsonStrategy: (json: JsonValue) =>
+          new Test1().fromJson(json as JsonObject),
       })
       nested!: Test1;
     }
