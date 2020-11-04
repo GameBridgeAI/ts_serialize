@@ -78,7 +78,7 @@ export function SerializeProperty(
           : Object.getPrototypeOf(target).tsTransformKey;
 
       decoratorArgumentOptions = {
-        serializedKey: transformKeyFunction(String(propertyName)),
+        serializedKey: transformKeyFunction(propertyName),
         ...decoratorArguments,
       };
     }

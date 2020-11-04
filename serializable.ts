@@ -109,7 +109,7 @@ export function toPojo(
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[String(propertyKey)];
+    const value = context[propertyKey as string];
 
     // If the value is serializable then use the recursive replacer
     if (
