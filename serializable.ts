@@ -4,12 +4,18 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { defaultToJson } from "./to_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
+/** to be implemented by external authors on their models  */
 export declare interface TransformKey {
+  /** a function that will be called against
+   * every property key transforming the key
+   * with the provided function
+   */
   tsTransformKey(key: string): string;
 }
 
 /** Adds methods for serialization */
 export abstract class Serializable {
+  /** the default transform functionality */
   public tsTransformKey?(key: string): string {
     return key;
   }

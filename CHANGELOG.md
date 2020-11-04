@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - interface `tsTransformKey`
 - global transformKey processing and inheritance and overrides
-- TransformKey tests    
+- TransformKey tests
+- new examples for node and deno
 
 ## [v0.2.3-v0.2.5] - 2020-09-15
 
