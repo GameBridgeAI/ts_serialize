@@ -4,8 +4,15 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { defaultToJson } from "./to_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
+export declare interface TransformKey {
+  tsTransformKey(key: string): string;
+}
+
 /** Adds methods for serialization */
 export abstract class Serializable {
+  public tsTransformKey?(key: string): string {
+    return key;
+  }
   public toJson(): string {
     return toJson(this);
   }
@@ -80,8 +87,8 @@ const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
   "Unable to load serializer properties for the given context";
 
 /** Converts to object using mapped keys */
-export function toPojo<T>(
-  context: Record<keyof T, unknown>,
+export function toPojo(
+  context: any,
 ): Record<string, unknown> {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -102,7 +109,7 @@ export function toPojo<T>(
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[propertyKey as keyof T];
+    const value = context[String(propertyKey)];
 
     // If the value is serializable then use the recursive replacer
     if (

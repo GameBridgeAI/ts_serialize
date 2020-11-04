@@ -13,7 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - std@0.76.0
 - fmt changes with deno upgrade
 
-## [v0.2.3-v0.2.4] - 2020-09-15
+### Added
+- interface `tsTransformKey`
+- global transformKey processing and inheritance and overrides
+- TransformKey tests
+
+## [v0.2.3-v0.2.5] - 2020-09-15
 
 ### Changed
 - set up new deno deploy webhook
@@ -42,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- released privately as a part of a demo
+- released as a part of a deno
 
 ### Changed
 

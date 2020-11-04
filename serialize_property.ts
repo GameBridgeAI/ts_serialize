@@ -57,7 +57,7 @@ export function SerializeProperty(
 export function SerializeProperty(
   decoratorArguments: SerializePropertyArgument = {},
 ): PropertyDecorator {
-  return (target: unknown, propertyName: string | symbol) => {
+  return (target: any, propertyName: string | symbol) => {
     let decoratorArgumentOptions: SerializePropertyArgumentObject;
 
     if (typeof decoratorArguments === "string") {
@@ -72,8 +72,13 @@ export function SerializeProperty(
         throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
       }
 
+      const transformKeyFunction =
+        Object.prototype.hasOwnProperty.call(target, "tsTransformKey")
+          ? target.tsTransformKey
+          : Object.getPrototypeOf(target).tsTransformKey;
+
       decoratorArgumentOptions = {
-        serializedKey: propertyName as string,
+        serializedKey: transformKeyFunction(String(propertyName)),
         ...decoratorArguments,
       };
     }
@@ -94,10 +99,10 @@ export function SerializeProperty(
 
       serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(
         target,
-      ) as SerializePropertyOptionsMap;
+      );
     }
 
-    serializablePropertiesMap.set(
+    serializablePropertiesMap?.set(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
