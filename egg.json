@@ -1,0 +1,10 @@
+{
+    "name": "ts_serialize",
+    "description": "A zero dependency library for serializing data",
+    "homepage": "https://github.com/GameBridgeAI/ts_serialize",
+    "files": [
+    "./**/*.ts",
+    "README.md"
+    ],
+    "entry": "./mod.ts"
+}
