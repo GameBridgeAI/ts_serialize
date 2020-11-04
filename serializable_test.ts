@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { test, assert, assertEquals } from "./test_deps.ts";
-import { Serializable, composeStrategy } from "./serializable.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
+import { composeStrategy, Serializable } from "./serializable.ts";
 
 test({
   name: "adds methods to extended classes",

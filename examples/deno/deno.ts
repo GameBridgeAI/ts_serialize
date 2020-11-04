@@ -1,13 +1,13 @@
 import {
-  Serializable,
-  SerializeProperty,
   composeStrategy,
+  createDateStrategy,
   fromJsonAs,
   FromJsonStrategy,
-  ToJsonStrategy,
   ISODateFromJson,
-  createDateStrategy,
   readJson,
+  Serializable,
+  SerializeProperty,
+  ToJsonStrategy,
 } from "./deps.ts";
 
 function assert(boolean: boolean, msg?: string): void {
