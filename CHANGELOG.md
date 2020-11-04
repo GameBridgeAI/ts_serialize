@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- released as a part of a deno
+- released privately as a part of a demo
 
 ### Changed
 
