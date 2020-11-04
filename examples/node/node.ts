@@ -1,14 +1,14 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  Serializable,
-  SerializeProperty,
   composeStrategy,
+  createDateStrategy,
   fromJsonAs,
   FromJsonStrategy,
-  ToJsonStrategy,
   ISODateFromJson,
-  createDateStrategy,
+  Serializable,
+  SerializeProperty,
+  ToJsonStrategy,
 } from "@gamebridgeai/ts_serialize";
 import toJsonFixture from "../fixtures/to.json";
 import fromJsonFixture from "../fixtures/from.json";

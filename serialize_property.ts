@@ -1,9 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
+  FromJsonStrategy,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
-  FromJsonStrategy,
   ToJsonStrategy,
 } from "./serializable.ts";
 

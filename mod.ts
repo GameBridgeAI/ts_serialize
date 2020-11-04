@@ -5,13 +5,11 @@
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";
 
+/** types, isolatedModules requires this to be `export type ...` */
+export type { FromJsonStrategy, ToJsonStrategy } from "./serializable.ts";
+
 /** abstract class and and compose strategy functions */
-export {
-  Serializable,
-  FromJsonStrategy,
-  ToJsonStrategy,
-  composeStrategy,
-} from "./serializable.ts";
+export { composeStrategy, Serializable } from "./serializable.ts";
 
 /** from json strategies */
 export { fromJsonAs } from "./from_json/as.ts";
