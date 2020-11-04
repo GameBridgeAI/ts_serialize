@@ -73,10 +73,7 @@ export function SerializeProperty(
       }
 
       // get current class or parent class function
-      const transformKeyFunction =
-        Object.prototype.hasOwnProperty.call(target, "tsTransformKey")
-          ? (target as any).tsTransformKey
-          : Object.getPrototypeOf(target).tsTransformKey;
+      const transformKeyFunction = (target as any).tsTransformKey;
 
       decoratorArgumentOptions = {
         serializedKey: transformKeyFunction(propertyName),
