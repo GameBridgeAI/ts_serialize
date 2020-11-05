@@ -104,11 +104,6 @@ class TestTransformKey3 extends TestTransformKey2 {
   public test3 = "test3";
 }
 
-assertEquals(new TestTransformKey2().toJson(), `{"__test2__":"test2"}`);
-assertEquals(
-  new TestTransformKey2().fromJson({ __test2__: "changed" }).test2,
-  `changed`,
-);
 assertEquals(
   new TestTransformKey3().toJson(),
   `{"__test2__":"test2","__test3__":"test3"}`,
@@ -145,20 +140,6 @@ class TestTransformKey4 extends TestTransformKey3 {
   @SerializeProperty()
   public test4 = "test4";
 }
-
-assertEquals(new TestTransformKey2().toJson(), `{"__test2__":"test2"}`);
-assertEquals(
-  new TestTransformKey2().fromJson({ __test2__: "changed" }).test2,
-  `changed`,
-);
-assertEquals(
-  new TestTransformKey3().toJson(),
-  `{"__test2__":"test2","--test3--":"test3"}`,
-);
-assertEquals(
-  new TestTransformKey3().fromJson({ "--test3--": "changed" }).test3,
-  `changed`,
-);
 assertEquals(
   new TestTransformKey4().toJson(),
   `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
@@ -229,6 +210,28 @@ class Test extends Serializable {
 
 const testObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
 assertEquals(testObj.bigInt.toString(), "9007199254740991");
+```
+
+#### Multiple strategy functions
+
+`toJsonStrategy` and `fromJsonStrategy` can use `composeStrategy` to build out
+strategies with multiple functions.
+
+```ts
+const addWord = (word: string) => (v: string) => `${v} ${word}`;
+const shout = (v: string) => `${v}!!!`;
+
+class Test extends Serializable {
+  @SerializeProperty({
+    fromJsonStrategy: composeStrategy(addWord("World"), shout),
+  })
+  property!: string;
+}
+
+assertEquals(
+  new Test().fromJson(`{"property":"Hello"}`).property,
+  "Hello World!!!"
+);
 ```
 
 #### Dates
@@ -332,28 +335,6 @@ class Test2 extends Serializable {
 const testObj = new Test2();
 testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
-```
-
-#### Multiple strategy functions
-
-`toJsonStrategy` and `fromJsonStrategy` can use `composeStrategy` to build out
-strategies with multiple functions.
-
-```ts
-const addWord = (word: string) => (v: string) => `${v} ${word}`;
-const shout = (v: string) => `${v}!!!`;
-
-class Test extends Serializable {
-  @SerializeProperty({
-    fromJsonStrategy: composeStrategy(addWord("World"), shout),
-  })
-  property!: string;
-}
-
-assertEquals(
-  new Test().fromJson(`{"property":"Hello"}`).property,
-  "Hello World!!!"
-);
 ```
 
 ## Built With
