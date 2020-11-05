@@ -186,7 +186,7 @@ assertEquals(
 ```
 
 `tsTransformKey` is an efficient way to deal with 
-snake_case -> camelCase conversions.
+camelCase to snake_case conversions.
 
 ### Advanced
 
