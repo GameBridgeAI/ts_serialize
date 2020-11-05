@@ -157,3 +157,59 @@ test({
     );
   },
 });
+
+test({
+  name: "implements TransformKey but respects override as string",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
+
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+
+      @SerializeProperty("changed")
+      public changeMe = "change me";
+    }
+
+    assertEquals(
+      new TestTransformKey2().toJson(),
+      `{"__test2__":"test2","changed":"change me"}`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
+      `changed`,
+    );
+  },
+});
+
+test({
+  name: "implements TransformKey but respects override as property",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
+
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+
+      @SerializeProperty({ serializedKey: "changed" })
+      public changeMe = "change me";
+    }
+
+    assertEquals(
+      new TestTransformKey2().toJson(),
+      `{"__test2__":"test2","changed":"change me"}`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
+      `changed`,
+    );
+  },
+});

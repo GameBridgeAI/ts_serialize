@@ -72,11 +72,9 @@ export function SerializeProperty(
         throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
       }
 
-      // get current class or parent class function
-      const transformKeyFunction = (target as any).tsTransformKey;
-
       decoratorArgumentOptions = {
-        serializedKey: transformKeyFunction(propertyName),
+        // we can always define serializedKey as decoratorArguments.serializedKey will override this
+        serializedKey: (target as any).tsTransformKey(propertyName),
         ...decoratorArguments,
       };
     }
