@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - deno@1.5.1
 - std@0.76.0
 - fmt changes with deno upgrade
+- fixed #64
 
 ### Added
 - interface `tsTransformKey`
