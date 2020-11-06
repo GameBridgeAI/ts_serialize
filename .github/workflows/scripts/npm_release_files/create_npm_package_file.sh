@@ -9,8 +9,6 @@ if [ -z "$1" ]; then
     exit 1
 fi
 
-rm "package.json"
-
 cat <<EOF >> "package.json" 
 {
   "name": "@gamebridgeai/ts_serialize",

@@ -13,11 +13,9 @@ curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.1"
 
 export PATH="$HOME/.deno/bin:$PATH"
 
-mkdir "dist"
+mkdir dist
 
-deno types > deno.d.ts
-
-deno run --unstable --allow-read ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
+deno run --allow-read --allow-run ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
 
 cp .github/workflows/scripts/npm_release_files/ts_serialize.d.ts dist
 
