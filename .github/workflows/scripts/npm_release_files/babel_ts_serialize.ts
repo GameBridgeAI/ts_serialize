@@ -3,8 +3,8 @@
 import babelCore from "https://dev.jspm.io/@babel/core";
 import presetEnv from "https://dev.jspm.io/@babel/preset-env";
 
-const [, source] = await Deno.bundle("./mod.ts");
-const { code } = babelCore.transformSync(source, {
+const [, emit] = await Deno.bundle("./mod.ts");
+const { code } = (babelCore as any).transformSync(emit, {
   filename: "dist/ts_serialize.js",
   presets: [presetEnv],
   babelrc: false,
