@@ -387,7 +387,7 @@ test({
     class Test1 extends Serializable {
       @SerializeProperty(
         (
-          (propertyName) => "_" + (propertyName as string)
+          (propertyName) => `_${String(propertyName)}`
         ),
       )
       serializeMe = "nice1";
@@ -406,7 +406,7 @@ test({
     class Test1 extends Serializable {
       @SerializeProperty(
         (
-          (propertyName) => "_" + (propertyName as string)
+          (propertyName) => `_${String(propertyName)}`
         ),
       )
       serializeMe = "nice1";
@@ -423,7 +423,7 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty(
-        ({ serializedKey: (propertyName) => "_" + (propertyName as string) }),
+        ({ serializedKey: (propertyName) => `_${String(propertyName)}` }),
       )
       serializeMe = "nice1";
     }
@@ -439,7 +439,7 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty(
-        ({ serializedKey: (propertyName) => "_" + (propertyName as string) }),
+        ({ serializedKey: (propertyName) => `_${String(propertyName)}` }),
       )
       serializeMe = "nice1";
     }
