@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
+### Added
+
+## [v0.3.0] - 2020-11-6
+
+### Changed
 - updated node example to be a properly formatted node module
 - deno@1.5.1
 - std@0.76.0
