@@ -13,7 +13,7 @@ curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.1"
 
 export PATH="$HOME/.deno/bin:$PATH"
 
-mkdir dist
+mkdir "dist"
 
 deno types > deno.d.ts
 
