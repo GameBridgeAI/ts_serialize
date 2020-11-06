@@ -9,6 +9,7 @@ import {
   Serializable,
   SerializeProperty,
   ToJsonStrategy,
+  TransformKey,
 } from "@gamebridgeai/ts_serialize";
 import toJsonFixture from "../fixtures/to.json";
 import fromJsonFixture from "../fixtures/from.json";
@@ -95,3 +96,51 @@ assert(test.isoDate instanceof Date, "isoDate instanceof");
 assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear90");
 assert(test.createDate instanceof Date, "createDate instanceof");
 assert(test.createDate.getFullYear() === 2099, "createDate.getFullYear()");
+
+class TestTransformKey extends Serializable implements TransformKey {
+  public tsTransformKey(key: string): string {
+    return `__${key}__`;
+  }
+}
+
+class TestTransformKey2 extends TestTransformKey {
+  @SerializeProperty()
+  public test2 = "test2";
+}
+
+class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
+  public tsTransformKey(key: string): string {
+    return `--${key}--`;
+  }
+  @SerializeProperty()
+  public test3 = "test3";
+}
+
+class TestTransformKey4 extends TestTransformKey3 {
+  @SerializeProperty()
+  public test4 = "test4";
+}
+
+assert(new TestTransformKey2().toJson() === `{"__test2__":"test2"}`);
+assert(
+  new TestTransformKey2().fromJson({ __test2__: "changed" }).test2 ===
+    `changed`,
+);
+
+assert(
+  new TestTransformKey3().toJson() ===
+    `{"__test2__":"test2","--test3--":"test3"}`,
+);
+assert(
+  new TestTransformKey3().fromJson({ "--test3--": "changed" }).test3 ===
+    `changed`,
+);
+
+assert(
+  new TestTransformKey4().toJson() ===
+    `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+);
+assert(
+  new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4 ===
+    `changed`,
+);

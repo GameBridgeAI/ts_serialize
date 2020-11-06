@@ -6,7 +6,11 @@
 export { SerializeProperty } from "./serialize_property.ts";
 
 /** types, isolatedModules requires this to be `export type ...` */
-export type { FromJsonStrategy, ToJsonStrategy } from "./serializable.ts";
+export type {
+  FromJsonStrategy,
+  ToJsonStrategy,
+  TransformKey,
+} from "./serializable.ts";
 
 /** abstract class and and compose strategy functions */
 export { composeStrategy, Serializable } from "./serializable.ts";
