@@ -127,7 +127,12 @@ export function toPojo(
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey] = value.map((v: any) => toJsonStrategy(v));
+      record[serializedKey] = value.map((item: any) => {
+        if (item instanceof Serializable) {
+          return toPojo(item);
+        }
+        return toJsonStrategy(item);
+      });
     } else if (value !== undefined) {
       record[serializedKey] = toJsonStrategy(value);
     }
