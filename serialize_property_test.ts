@@ -1,16 +1,16 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  test,
   assert,
   assertEquals,
   assertStrictEquals,
   fail,
+  test,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
 import {
-  SerializeProperty,
   ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
+  SerializeProperty,
 } from "./serialize_property.ts";
 import { ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY } from "./serialize_property_options_map.ts";
 

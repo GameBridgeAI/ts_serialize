@@ -1,6 +1,16 @@
 declare module "@gamebridgeai/ts_serialize" {
+  /** to be implemented by external authors on their models  */
+  export interface TransformKey {
+    /** a function that will be called against
+   * every property key transforming the key
+   * with the provided function
+   */
+    tsTransformKey(key: string): string;
+  }
+
   /** Adds methods for serialization */
   export abstract class Serializable {
+    public tsTransformKey?(key: string): string;
     public toJson(): string;
     public fromJson(): this;
     public fromJson(json: string): this;
