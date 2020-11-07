@@ -15,7 +15,7 @@ export PATH="$HOME/.deno/bin:$PATH"
 
 mkdir dist
 
-deno run --unstable --allow-read ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
+deno run -r --allow-read --allow-run ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
 
 cp .github/workflows/scripts/npm_release_files/ts_serialize.d.ts dist
 
@@ -29,7 +29,7 @@ cd dist
 
 ../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh "$1"
 
-# Test currently built deployment on node example
+# Test current built deployment on node example
 cd ../examples/node
 
 npm ci

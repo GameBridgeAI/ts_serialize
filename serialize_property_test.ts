@@ -382,6 +382,35 @@ test({
 });
 
 test({
+  name: "Serialize arrays of nested objects",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "outer_property",
+      })
+      nested: Test1[] = [new Test1()];
+    }
+
+    class Test3 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "outer_outer_property",
+      })
+      nested2: Test2[] = [new Test2()];
+    }
+    const testObj = new Test3();
+
+    assertEquals(
+      testObj.toJson(),
+      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
+    );
+  },
+});
+
+test({
   name: "Serialize key function",
   fn() {
     class Test1 extends Serializable {
@@ -434,6 +463,7 @@ test({
     );
   },
 });
+
 test({
   name: "Deserialize key function object",
   fn() {
