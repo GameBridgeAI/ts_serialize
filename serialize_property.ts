@@ -1,9 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
+  FromJsonStrategy,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
-  FromJsonStrategy,
   ToJsonStrategy,
 } from "./serializable.ts";
 
@@ -73,7 +73,8 @@ export function SerializeProperty(
       }
 
       decoratorArgumentOptions = {
-        serializedKey: propertyName as string,
+        // we can always define serializedKey as decoratorArguments.serializedKey will override this
+        serializedKey: (target as any).tsTransformKey(propertyName),
         ...decoratorArguments,
       };
     }
@@ -94,10 +95,10 @@ export function SerializeProperty(
 
       serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(
         target,
-      ) as SerializePropertyOptionsMap;
+      );
     }
 
-    serializablePropertiesMap.set(
+    serializablePropertiesMap?.set(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,

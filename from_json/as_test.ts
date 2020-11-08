@@ -1,6 +1,6 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { test, assert, assertEquals } from "../test_deps.ts";
+import { assert, assertEquals, test } from "../test_deps.ts";
 import { fromJsonAs } from "./as.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
@@ -45,5 +45,21 @@ test({
     assertEquals(testObj.test3, true);
     assert(testObj.test2 instanceof Test1);
     assertEquals(testObj.test2.test1, false);
+  },
+});
+
+test({
+  name: "fromJsonAs works with arrays of objects",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty("a_property")
+      test = true;
+    }
+    const array: Test[] = fromJsonAs(Test)(
+      [{ a_property: "v1" }, { a_property: "v2" }],
+    );
+    assertEquals(array.length, 2);
+    assert(array[0] instanceof Test);
+    assertEquals(array[0].test, "v1");
   },
 });

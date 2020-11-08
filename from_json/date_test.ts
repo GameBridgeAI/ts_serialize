@@ -1,6 +1,6 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { test, assert, assertEquals } from "../test_deps.ts";
+import { assert, assertEquals, test } from "../test_deps.ts";
 import { createDateStrategy, ISODateFromJson } from "./date.ts";
 import { Serializable, SerializeProperty } from "../mod.ts";
 

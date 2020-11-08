@@ -1,16 +1,16 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  test,
   assert,
   assertEquals,
   assertStrictEquals,
   fail,
+  test,
 } from "./test_deps.ts";
 import { JsonObject, JsonValue, Serializable } from "./serializable.ts";
 import {
-  SerializeProperty,
   ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
+  SerializeProperty,
 } from "./serialize_property.ts";
 import { ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY } from "./serialize_property_options_map.ts";
 
@@ -379,6 +379,35 @@ test({
     assertEquals(
       testObj.toJson(),
       `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
+    );
+  },
+});
+
+test({
+  name: "Serialize arrays of nested objects",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "outer_property",
+      })
+      nested: Test1[] = [new Test1()];
+    }
+
+    class Test3 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "outer_outer_property",
+      })
+      nested2: Test2[] = [new Test2()];
+    }
+    const testObj = new Test3();
+
+    assertEquals(
+      testObj.toJson(),
+      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
     );
   },
 });

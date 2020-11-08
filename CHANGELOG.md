@@ -8,9 +8,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
-- updated node example to be a properly formatted node module
 
-## [v0.2.3-v0.2.4] - 2020-09-15
+### Added
+
+## [v0.3.0] - 2020-11-6
+
+### Changed
+- updated node example to be a properly formatted node module
+- deno@1.5.1
+- std@0.76.0
+- fmt changes with deno upgrade
+- fixed #64
+- fixed #62
+
+### Added
+- interface `tsTransformKey`
+- global transformKey processing and inheritance and overrides
+- TransformKey tests
+- new examples for node and deno
+
+## [v0.2.3-v0.2.5] - 2020-09-15
 
 ### Changed
 - set up new deno deploy webhook

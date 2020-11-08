@@ -16,8 +16,21 @@ export type JsonValue =
   | JsonValue[]
   | JsonObject;
 
+/** to be implemented by external authors on their models  */
+export declare interface TransformKey {
+  /** a function that will be called against
+   * every property key transforming the key
+   * with the provided function
+   */
+  tsTransformKey(key: string): string;
+}
+
 /** Adds methods for serialization */
 export abstract class Serializable {
+  /** the default transform functionality */
+  public tsTransformKey?(key: string): string {
+    return key;
+  }
   public toJson(): string {
     return toJson(this);
   }
@@ -94,8 +107,8 @@ const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
   "Unable to load serializer properties for the given context";
 
 /** Converts to object using mapped keys */
-export function toPojo<T>(
-  context: Record<keyof T, unknown>,
+export function toPojo(
+  context: any,
 ): JsonObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -116,7 +129,7 @@ export function toPojo<T>(
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[propertyKey as keyof T];
+    const value = context[propertyKey as string];
 
     // If the value is serializable then use the recursive replacer
     if (
@@ -128,7 +141,12 @@ export function toPojo<T>(
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey] = value.map((v: any) => toJsonStrategy(v));
+      record[serializedKey] = value.map((item: any) => {
+        if (item instanceof Serializable) {
+          return toPojo(item);
+        }
+        return toJsonStrategy(item);
+      });
     } else if (value !== undefined) {
       record[serializedKey] = toJsonStrategy(value);
     }
