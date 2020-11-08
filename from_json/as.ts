@@ -6,7 +6,7 @@ import { FromJsonStrategy, Serializable } from "../serializable.ts";
 export function fromJsonAs<T>(
   type: T & { new (): Serializable },
 ): FromJsonStrategy {
-  return value => {
+  return (value) => {
     if (Array.isArray(value)) {
       return value.map((item) => new type().fromJson(item));
     }
