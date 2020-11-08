@@ -34,10 +34,9 @@ export abstract class Serializable {
   public toJson(): string {
     return toJson(this);
   }
-  public fromJson(): this;
   public fromJson(json: string): this;
   public fromJson(json: JsonObject): this;
-  public fromJson(json: string | JsonObject = {}): this {
+  public fromJson(json: string | JsonObject): this {
     return fromJson(this, json);
   }
 }
