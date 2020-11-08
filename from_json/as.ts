@@ -2,8 +2,6 @@
 
 import {
   FromJsonStrategy,
-  JsonObject,
-  JsonValue,
   Serializable,
 } from "../serializable.ts";
 
@@ -11,10 +9,10 @@ import {
 export function fromJsonAs<T>(
   type: T & { new (): Serializable },
 ): FromJsonStrategy {
-  return (value: JsonValue) => {
+  return value => {
     if (Array.isArray(value)) {
-      return value.map((item) => new type().fromJson(item as JsonObject));
+      return value.map((item) => new type().fromJson(item));
     }
-    return new type().fromJson(value as JsonObject);
+    return new type().fromJson(value);
   };
 }

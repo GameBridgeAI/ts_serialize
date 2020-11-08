@@ -7,7 +7,7 @@ import {
   fail,
   test,
 } from "./test_deps.ts";
-import { JsonObject, JsonValue, Serializable } from "./serializable.ts";
+import { Serializable } from "./serializable.ts";
 import {
   ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
   SerializeProperty,
@@ -216,8 +216,8 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: (v: JsonValue) =>
-          new OtherClass().fromJson(v as JsonObject),
+        fromJsonStrategy: v =>
+          new OtherClass().fromJson(v),
       })
       array!: OtherClass[];
     }
@@ -350,7 +350,7 @@ test({
       @SerializeProperty({
         serializedKey: "serialize_me_2",
         fromJsonStrategy: json =>
-          new Test1().fromJson(json as JsonObject),
+          new Test1().fromJson(json),
       })
       nested!: Test1;
     }
