@@ -8,10 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+The input to fromJson() is now a JsonValue, enforcing basic JSON requirements:
+property values must be legal JSON values. This is meant to allow the
+compiler to flag accidental deserializations of already-deserialized objects.
 
 ### Added
 
-## [v0.3.0] - 2020-11-6
+## [v0.3.0] - 2020-11-06
 
 ### Changed
 - updated node example to be a properly formatted node module
