@@ -349,7 +349,7 @@ test({
     class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        fromJsonStrategy: (json: JsonValue) =>
+        fromJsonStrategy: json =>
           new Test1().fromJson(json as JsonObject),
       })
       nested!: Test1;
