@@ -12,11 +12,19 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 
+/**
+ * Function to transform a property name into a serialized key programmatically
+ */
+export type ToSerializedKeyStrategy = ((
+  propertyName: string | symbol,
+) => string);
+
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
   | string
+  | ToSerializedKeyStrategy
   | {
-    serializedKey?: string;
+    serializedKey?: string | ToSerializedKeyStrategy;
     fromJsonStrategy?:
       | FromJsonStrategy
       | (FromJsonStrategy | FromJsonStrategy[])[];
@@ -58,26 +66,11 @@ export function SerializeProperty(
   decoratorArguments: SerializePropertyArgument = {},
 ): PropertyDecorator {
   return (target: unknown, propertyName: string | symbol) => {
-    let decoratorArgumentOptions: SerializePropertyArgumentObject;
-
-    if (typeof decoratorArguments === "string") {
-      decoratorArgumentOptions = { serializedKey: decoratorArguments };
-    } else {
-      // We can't use symbols as keys when serializing
-      // a serializedName must be provided if the property isn't a string
-      if (
-        !decoratorArguments.serializedKey &&
-        typeof propertyName === "symbol"
-      ) {
-        throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
-      }
-
-      decoratorArgumentOptions = {
-        // we can always define serializedKey as decoratorArguments.serializedKey will override this
-        serializedKey: (target as any).tsTransformKey(propertyName),
-        ...decoratorArguments,
-      };
-    }
+    const decoratorArgumentOptions = getDecoratorArgumentOptions(
+      decoratorArguments,
+      target,
+      propertyName,
+    );
 
     let serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(target);
 
@@ -107,4 +100,48 @@ export function SerializeProperty(
       ),
     );
   };
+}
+
+/** Parses the arguments provided to SerializeProperty and 
+ * returns an object used to create a key mapping
+ */
+function getDecoratorArgumentOptions(
+  decoratorArguments: SerializePropertyArgument,
+  target: unknown,
+  propertyName: string | symbol,
+): SerializePropertyArgumentObject {
+  if (typeof decoratorArguments === "string") {
+    // Direct mapping to string
+    return { serializedKey: decoratorArguments };
+  } else if (typeof decoratorArguments === "function") {
+    // Property key transform function
+    return {
+      serializedKey: decoratorArguments(propertyName),
+    };
+  } else {
+    // We can't use symbols as keys when serializing
+    // a serializedName must be provided if the property isn't a string
+    if (
+      !decoratorArguments.serializedKey &&
+      typeof propertyName === "symbol"
+    ) {
+      throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
+    }
+    if (typeof decoratorArguments.serializedKey === "function") {
+      // Property key transform function with additional options
+      return {
+        serializedKey: decoratorArguments.serializedKey(propertyName),
+        fromJsonStrategy: decoratorArguments.fromJsonStrategy,
+        toJsonStrategy: decoratorArguments.toJsonStrategy,
+      };
+    } else {
+      // Use inherited tsTransformKey strategy (or default no change transform)
+      // to transform property key
+      return {
+        // we can always define serializedKey as decoratorArguments.serializedKey will override this
+        serializedKey: (target as any).tsTransformKey(propertyName),
+        ...decoratorArguments,
+      };
+    }
+  }
 }
