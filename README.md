@@ -36,11 +36,12 @@ to get the develop branch, however, for stability it is recommended to use a tag
 Import `Serializable` and `SerializeProperty`, extend `Serializable` with your `class`
 and use the `SerializeProperty` decorator on any properties you want serialized.
 Passing a string as an argument to `SerializeProperty` causes the property to use
-that name as the key when serialized.
+that name as the key when serialized. A function can be passed instead to generate a
+serialized key programmatically by transforming the property name.
 
 `SerializeProperty` also excepts an options object with the properties:
 
-- `serializedKey` (Optional) {string} - Used as the key in the serialized object
+- `serializedKey` (Optional) {string | ToSerializedKeyStrategy} - Used as the key in the serialized object
 - `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
 - `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
 
@@ -53,7 +54,10 @@ class Test extends Serializable {
   notSerialized = "not-serialized";
 }
 
-assertEquals(new Test().toJson(), `{"propertyOne":"Hello","property_two":"World!"}`);
+assertEquals(
+  new Test().toJson(),
+  `{"propertyOne":"Hello","property_two":"World!"}`
+);
 const testObj = new Test().fromJson(
   `{"propertyOne":"From","property_two":"Json!","notSerialized":"changed"}`
 );
@@ -63,9 +67,23 @@ assertEquals(testObj.notSerialized, "changed");
 assertEquals(testObj.toJson(), `{"propertyOne":"From","property_two":"Json!"}`);
 ```
 
+Transforming the property key via a function:
+
+```ts
+class Test extends Serializable {
+  @SerializeProperty((propertyName) => `__${String(propertyName)}__`)
+  propertyOne = "Hello, world!";
+}
+
+assertEquals(new Test().toJson(), `{"__propertyOne__":"Hello, world!"}`);
+const testObj = new Test().fromJson(`{"__propertyOne__":"From JSON!"}`);
+assertEquals(testObj.propertyOne, "From JSON!");
+assertEquals(testObj.toJson(), `{"__propertyOne__":"From JSON!"}`);
+```
+
 #### Transforming Keys
 
-`Serializable` has a optional function `tsTransformKey(key: string): string`. This function 
+`Serializable` has a optional function `tsTransformKey(key: string): string`. This function
 can be provided to change all the keys without having to specify the change for each property.
 
 ```ts
@@ -81,7 +99,7 @@ class TestTransformKey extends Serializable implements TransformKey {
 assertEquals(new TestTransformKey().toJson(), `{"__test__":"test"}`);
 assertEquals(
   new TestTransformKey().fromJson({ __test__: "changed" }).test,
-  `changed`,
+  `changed`
 );
 ```
 
@@ -106,11 +124,11 @@ class TestTransformKey3 extends TestTransformKey2 {
 
 assertEquals(
   new TestTransformKey3().toJson(),
-  `{"__test2__":"test2","__test3__":"test3"}`,
+  `{"__test2__":"test2","__test3__":"test3"}`
 );
 assertEquals(
   new TestTransformKey3().fromJson({ __test3__: "changed" }).test3,
-  `changed`,
+  `changed`
 );
 ```
 
@@ -142,15 +160,15 @@ class TestTransformKey4 extends TestTransformKey3 {
 }
 assertEquals(
   new TestTransformKey4().toJson(),
-  `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+  `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
 );
 assertEquals(
   new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4,
-  `changed`,
+  `changed`
 );
 ```
 
-If `tsTransformKey` is implemented and `SerializeProperty` is provided a 
+If `tsTransformKey` is implemented and `SerializeProperty` is provided a
 `serializedKey` option, it will override the `tsTransformKey` function
 
 ```ts
@@ -173,19 +191,19 @@ class TestTransformKey2 extends TestTransformKey {
 
 assertEquals(
   new TestTransformKey2().toJson(),
-  `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
+  `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`
 );
 assertEquals(
   new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
-  `changed`,
+  `changed`
 );
 assertEquals(
   new TestTransformKey2().fromJson({ changed2: "changed" }).changeMe2,
-  `changed`,
+  `changed`
 );
 ```
 
-`tsTransformKey` is an efficient way to deal with 
+`tsTransformKey` is an efficient way to deal with
 camelCase to snake_case conversions.
 
 ### Advanced

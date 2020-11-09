@@ -409,3 +409,73 @@ test({
     );
   },
 });
+
+test({
+  name: "Serialize key function",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        (
+          (propertyName) => `_${String(propertyName)}`
+        ),
+      )
+      serializeMe = "nice1";
+    }
+    const testObj = new Test1();
+    assertEquals(
+      testObj.toJson(),
+      `{"_serializeMe":"nice1"}`,
+    );
+  },
+});
+
+test({
+  name: "Deserialize key function",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        (
+          (propertyName) => `_${String(propertyName)}`
+        ),
+      )
+      serializeMe = "nice1";
+    }
+    assertEquals(
+      new Test1().fromJson(JSON.parse(`{"_serializeMe":"nice2"}`)).serializeMe,
+      `nice2`,
+    );
+  },
+});
+
+test({
+  name: "Serialize key function object",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        ({ serializedKey: (propertyName) => `_${String(propertyName)}` }),
+      )
+      serializeMe = "nice1";
+    }
+    const testObj = new Test1();
+    assertEquals(
+      testObj.toJson(),
+      `{"_serializeMe":"nice1"}`,
+    );
+  },
+});
+
+test({
+  name: "Deserialize key function object",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty(
+        ({ serializedKey: (propertyName) => `_${String(propertyName)}` }),
+      )
+      serializeMe = "nice1";
+    }
+    assertEquals(
+      new Test1().fromJson(JSON.parse(`{"_serializeMe":"nice2"}`)).serializeMe,
+      `nice2`,
+    );
+  },
+});

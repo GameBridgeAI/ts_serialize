@@ -11,9 +11,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added ability to use function as serialized key to transform property name
+
 ## [v0.3.0] - 2020-11-6
 
 ### Changed
+
 - updated node example to be a properly formatted node module
 - deno@1.5.1
 - std@0.76.0
@@ -22,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed #62
 
 ### Added
+
 - interface `tsTransformKey`
 - global transformKey processing and inheritance and overrides
 - TransformKey tests
@@ -30,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v0.2.3-v0.2.5] - 2020-09-15
 
 ### Changed
+
 - set up new deno deploy webhook
 
 ## [v0.1.1-v0.2.2] - 2020-09-14
@@ -38,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- `/examples` for Node and Deno environments 
+- `/examples` for Node and Deno environments
 
 ### Changed
 
