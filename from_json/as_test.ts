@@ -13,8 +13,8 @@ test({
       test = true;
     }
     const testObj = new Test();
-    assertEquals(fromJsonAs(Test)(testObj).test, testObj.test);
-    assert(fromJsonAs(Test)(testObj) instanceof Test);
+    assertEquals(fromJsonAs(Test)({ test: true }).test, testObj.test);
+    assert(fromJsonAs(Test)({ test: true }) instanceof Test);
   },
 });
 

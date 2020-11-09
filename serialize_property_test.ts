@@ -216,7 +216,7 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: (v: OtherClass) => new OtherClass().fromJson(v),
+        fromJsonStrategy: (v) => new OtherClass().fromJson(v),
       })
       array!: OtherClass[];
     }

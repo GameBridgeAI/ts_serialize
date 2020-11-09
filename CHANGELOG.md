@@ -11,11 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added ability to use function as serialized key to transform property name
-
-## [v0.3.0] - 2020-11-6
+## [v0.3.0] - 2020-11-09
 
 ### Changed
+
+_The input to fromJson() is now a JsonValue, enforcing basic JSON requirements:
+Property values must be legal JSON values. This is meant to allow the compiler 
+to flag accidental deserializations of already-deserialized objects._
 
 - updated node example to be a properly formatted node module
 - deno@1.5.1
@@ -23,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fmt changes with deno upgrade
 - fixed #64
 - fixed #62
+- fixed #59
 
 ### Added
 
@@ -30,6 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - global transformKey processing and inheritance and overrides
 - TransformKey tests
 - new examples for node and deno
+- Added ability to use function as serialized key to transform property name
+
 
 ## [v0.2.3-v0.2.5] - 2020-09-15
 
