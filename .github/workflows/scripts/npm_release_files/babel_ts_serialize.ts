@@ -17,13 +17,7 @@ if (code === 0) {
     {
       filename: "dist/ts_serialize.js",
       presets: [
-        ["env", {
-          targets: {
-            browsers: [
-              "> 0.25%, not dead",
-            ],
-          },
-        }],
+        ["env"],
       ],
       plugins: [babelPluginProposalClassProperties],
       babelrc: false,
