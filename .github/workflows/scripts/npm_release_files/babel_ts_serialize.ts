@@ -1,8 +1,13 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import babelCore from "https://dev.jspm.io/npm:@babel/standalone";
-import babelPluginProposalClassProperties from "https://dev.jspm.io/npm:@babel/plugin-proposal-class-properties";
-import babelPluginProposalOptionalChaining from "https://dev.jspm.io/npm:@babel/plugin-proposal-optional-chaining";
+// import babelCore from "https://dev.jspm.io/npm:@babel/standalone";
+// import babelPluginProposalClassProperties from "https://dev.jspm.io/npm:@babel/plugin-proposal-class-properties";
+// import babelPluginProposalOptionalChaining from "https://dev.jspm.io/npm:@babel/plugin-proposal-optional-chaining";
+
+import babelCore from "https://esm.sh/@babel/standalone@7.12.1";
+import babelPresetEnv from "https://esm.sh/@babel/preset-env";
+import babelPluginProposalClassProperties from "https://esm.sh/@babel/plugin-proposal-class-properties";
+import babelPluginProposalOptionalChaining from "https://esm.sh/@babel/plugin-proposal-optional-chaining";
 
 const p = Deno.run({
   cmd: ["deno", "bundle", "./mod.ts"],
@@ -18,7 +23,7 @@ if (code === 0) {
     new TextDecoder().decode(source),
     {
       filename: "dist/ts_serialize.js",
-      presets: ["env"],
+      presets: [babelPresetEnv],
       plugins: [
         babelPluginProposalClassProperties,
         babelPluginProposalOptionalChaining,
