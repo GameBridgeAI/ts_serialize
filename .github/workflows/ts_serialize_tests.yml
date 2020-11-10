@@ -13,7 +13,7 @@ jobs:
       - name: run tests
         run: |
           .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.1"
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.2"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test -c tsconfig.json
