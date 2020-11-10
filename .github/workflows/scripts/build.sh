@@ -15,7 +15,7 @@ export PATH="$HOME/.deno/bin:$PATH"
 
 mkdir dist
 
-deno run -r --unstable --allow-read --allow-run ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
+deno run -r --unstable --allow-read --allow-run --no-check ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
 
 cp .github/workflows/scripts/npm_release_files/ts_serialize.d.ts dist
 
