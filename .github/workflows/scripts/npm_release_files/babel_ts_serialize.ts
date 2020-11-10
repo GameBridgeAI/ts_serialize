@@ -3,6 +3,7 @@
 import babelCore from "https://dev.jspm.io/npm:@babel/standalone";
 import babelPluginProposalClassProperties from "https://dev.jspm.io/npm:@babel/plugin-proposal-class-properties";
 import babelPluginProposalOptionalChaining from "https://dev.jspm.io/npm:@babel/plugin-proposal-optional-chaining";
+
 const p = Deno.run({
   cmd: ["deno", "bundle", "./mod.ts"],
   stdout: "piped",
@@ -22,8 +23,6 @@ if (code === 0) {
         babelPluginProposalClassProperties,
         babelPluginProposalOptionalChaining,
       ],
-      babelrc: false,
-      configFile: false,
     },
   );
   const encoded = new TextEncoder().encode(code);
