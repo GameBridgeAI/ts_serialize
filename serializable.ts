@@ -47,9 +47,12 @@ export abstract class Serializable {
 
 /** Functions used when hydrating data */
 export type FromJsonStrategy = (value: JsonValue) => any;
+export type FromJsonStrategyArgument =
+  (FromJsonStrategy | FromJsonStrategy[])[];
 
 /** Functions used when dehydrating data */
 export type ToJsonStrategy = (value: any) => JsonValue;
+export type ToJsonStrategyArgument = (ToJsonStrategy | ToJsonStrategy[])[];
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -59,12 +62,8 @@ export class SerializePropertyOptions {
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJsonStrategy?:
-      | FromJsonStrategy
-      | (FromJsonStrategy | FromJsonStrategy[])[],
-    toJsonStrategy?:
-      | ToJsonStrategy
-      | (ToJsonStrategy | ToJsonStrategy[])[],
+    fromJsonStrategy?: FromJsonStrategy | FromJsonStrategyArgument,
+    toJsonStrategy?: ToJsonStrategy | ToJsonStrategyArgument,
   ) {
     if (Array.isArray(fromJsonStrategy)) {
       this.fromJsonStrategy = composeStrategy(...fromJsonStrategy);
@@ -82,12 +81,12 @@ export class SerializePropertyOptions {
 
 /** list of FromJsonStrategy to one FromJsonStrategy composition */
 export function composeStrategy(
-  ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
+  ...fns: FromJsonStrategyArgument
 ): FromJsonStrategy;
 
 /** list of ToJsonStrategy to one ToJsonStrategy composition */
 export function composeStrategy(
-  ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
+  ...fns: ToJsonStrategyArgument
 ): ToJsonStrategy;
 
 /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
@@ -95,8 +94,8 @@ export function composeStrategy(
  */
 export function composeStrategy(
   ...fns:
-    | (FromJsonStrategy | FromJsonStrategy[])[]
-    | (ToJsonStrategy | ToJsonStrategy[])[]
+    | FromJsonStrategyArgument
+    | ToJsonStrategyArgument
 ): FromJsonStrategy | ToJsonStrategy {
   return function _composeStrategy(val: any): any {
     return fns.flat().reduce(

@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - removed duplicate test
 - std@0.77.0
 - deno@1.5.2
+- updated types
 
 ### Added
 

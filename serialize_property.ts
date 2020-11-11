@@ -2,9 +2,11 @@
 
 import {
   FromJsonStrategy,
+  FromJsonStrategyArgument,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
   ToJsonStrategy,
+  ToJsonStrategyArgument,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -25,20 +27,20 @@ export type SerializePropertyArgument =
     serializedKey?: string | ToSerializedKeyStrategy;
     fromJsonStrategy?:
       | FromJsonStrategy
-      | (FromJsonStrategy | FromJsonStrategy[])[];
+      | FromJsonStrategyArgument;
     toJsonStrategy?:
       | ToJsonStrategy
-      | (ToJsonStrategy | ToJsonStrategy[])[];
+      | ToJsonStrategyArgument;
   };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
   fromJsonStrategy?:
     | FromJsonStrategy
-    | (FromJsonStrategy | FromJsonStrategy[])[];
+    | FromJsonStrategyArgument;
   toJsonStrategy?:
     | ToJsonStrategy
-    | (ToJsonStrategy | ToJsonStrategy[])[];
+    | ToJsonStrategyArgument;
 }
 
 /** Property wrapper that adds serializable options to the class map
