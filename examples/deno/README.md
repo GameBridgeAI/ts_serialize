@@ -3,7 +3,7 @@
 From this directory run
 
 ```
-deno run --unstable --allow-read -c tsconfig.json deno.ts
+deno run --unstable --allow-read deno.ts
 ```
 
 *note:* `--unstable` and `--allow-read` are needed for the `readJson` usage.

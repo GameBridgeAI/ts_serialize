@@ -18,7 +18,7 @@ jobs:
           curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.2"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
-          deno test -c tsconfig.json
+          deno test
   build:
     name: Release
     runs-on: ubuntu-latest
