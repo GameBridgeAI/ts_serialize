@@ -1,4 +1,19 @@
 declare module "@gamebridgeai/ts_serialize" {
+  /** A JSON object where each property value is a simple JSON value. */
+  export type JsonObject = { [Key in string]?: JsonValue };
+
+  /** A JSON array where each value is a simple JSON value. */
+  export interface JsonArray extends Array<JsonValue> {}
+
+  /** A property value in a JSON object. */
+  export type JsonValue =
+    | string
+    | number
+    | boolean
+    | null
+    | JsonObject
+    | JsonArray;
+
   /** to be implemented by external authors on their models  */
   export interface TransformKey {
     /** a function that will be called against
@@ -12,17 +27,14 @@ declare module "@gamebridgeai/ts_serialize" {
   export abstract class Serializable {
     public tsTransformKey?(key: string): string;
     public toJson(): string;
-    public fromJson(): this;
-    public fromJson(json: string): this;
-    public fromJson(json: Record<string, any>): this;
-    public fromJson(json: string | Record<string, any>): this;
+    public fromJson(json: string | JsonValue): this;
   }
 
   /** Functions used when hydrating data */
-  export type FromJsonStrategy = (value: any) => any;
+  export type FromJsonStrategy = (value: JsonValue) => any;
 
   /** Functions used when dehydrating data */
-  export type ToJsonStrategy = (value: any) => any;
+  export type ToJsonStrategy = (value: any) => JsonValue;
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
