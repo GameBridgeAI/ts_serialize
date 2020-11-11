@@ -4,7 +4,7 @@ import { FromJsonStrategy, JsonValue } from "../serializable.ts";
 
 /** allows authors to pass a regex to parse as a date */
 export function createDateStrategy(regex: RegExp): FromJsonStrategy {
-  return (value: JsonValue): any | Date => {
+  return function _createDateStrategy(value: JsonValue): any | Date {
     return typeof value === "string" && regex.exec(value)
       ? new Date(value)
       : value;

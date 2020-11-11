@@ -15,9 +15,7 @@ export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
 /**
  * Function to transform a property name into a serialized key programmatically
  */
-export type ToSerializedKeyStrategy = ((
-  propertyName: string | symbol,
-) => string);
+export type ToSerializedKeyStrategy = (propertyName: string | symbol) => string;
 
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
@@ -51,21 +49,26 @@ export function SerializeProperty(): PropertyDecorator;
 /** Property wrapper that adds serializable options to the class map
  * using the provided string as the map key
  */
-export function SerializeProperty(arg: string): PropertyDecorator;
+export function SerializeProperty(
+  decoratorArguments: string,
+): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map
  * using options, `serializedName` as the key or `propertyName` if
  * `serializedName` is not set
  */
 export function SerializeProperty(
-  arg: SerializePropertyArgument,
+  decoratorArguments: SerializePropertyArgument,
 ): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map */
 export function SerializeProperty(
   decoratorArguments: SerializePropertyArgument = {},
 ): PropertyDecorator {
-  return (target: unknown, propertyName: string | symbol) => {
+  return function _SerializeProperty(
+    target: unknown,
+    propertyName: string | symbol,
+  ) {
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
       target,
@@ -110,38 +113,40 @@ function getDecoratorArgumentOptions(
   target: unknown,
   propertyName: string | symbol,
 ): SerializePropertyArgumentObject {
+  // Direct mapping to string
   if (typeof decoratorArguments === "string") {
-    // Direct mapping to string
     return { serializedKey: decoratorArguments };
-  } else if (typeof decoratorArguments === "function") {
-    // Property key transform function
+  }
+
+  // Property key transform function
+  if (typeof decoratorArguments === "function") {
     return {
       serializedKey: decoratorArguments(propertyName),
     };
-  } else {
-    // We can't use symbols as keys when serializing
-    // a serializedName must be provided if the property isn't a string
-    if (
-      !decoratorArguments.serializedKey &&
-      typeof propertyName === "symbol"
-    ) {
-      throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
-    }
-    if (typeof decoratorArguments.serializedKey === "function") {
-      // Property key transform function with additional options
-      return {
-        serializedKey: decoratorArguments.serializedKey(propertyName),
-        fromJsonStrategy: decoratorArguments.fromJsonStrategy,
-        toJsonStrategy: decoratorArguments.toJsonStrategy,
-      };
-    } else {
-      // Use inherited tsTransformKey strategy (or default no change transform)
-      // to transform property key
-      return {
-        // we can always define serializedKey as decoratorArguments.serializedKey will override this
-        serializedKey: (target as any).tsTransformKey(propertyName),
-        ...decoratorArguments,
-      };
-    }
   }
+
+  // We can't use symbols as keys when serializing
+  // a serializedName must be provided if the property isn't a string
+  if (
+    !decoratorArguments.serializedKey &&
+    typeof propertyName === "symbol"
+  ) {
+    throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
+  }
+
+  // Property key transform function with additional options
+  if (typeof decoratorArguments.serializedKey === "function") {
+    return {
+      serializedKey: decoratorArguments.serializedKey(propertyName),
+      fromJsonStrategy: decoratorArguments.fromJsonStrategy,
+      toJsonStrategy: decoratorArguments.toJsonStrategy,
+    };
+  }
+
+  // Use inherited tsTransformKey strategy or default no change transform
+  // to transform property key decoratorArguments.serializedKey will override
+  return {
+    serializedKey: (target as any).tsTransformKey(propertyName),
+    ...decoratorArguments,
+  };
 }

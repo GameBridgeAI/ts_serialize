@@ -11,7 +11,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-## [v0.3.0] - 2020-11-09
+## [v0.3.3] - 2020-11-11
+
+### Changed
+- house cleaning types and clean up releases :/
+
+
+## [v0.3.0 - v0.3.3] - 2020-11-09
 
 ### Changed
 

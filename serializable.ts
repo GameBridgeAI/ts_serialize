@@ -5,16 +5,19 @@ import { defaultToJson } from "./to_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
-export type JsonObject = { [key: string]: JsonValue };
+export type JsonObject = { [Key in string]?: JsonValue };
+
+/** A JSON array where each value is a simple JSON value. */
+export interface JsonArray extends Array<JsonValue> {}
 
 /** A property value in a JSON object. */
 export type JsonValue =
-  | null
-  | boolean
-  | number
   | string
-  | JsonValue[]
-  | JsonObject;
+  | number
+  | boolean
+  | null
+  | JsonObject
+  | JsonArray;
 
 /** to be implemented by external authors on their models  */
 export declare interface TransformKey {
@@ -27,15 +30,15 @@ export declare interface TransformKey {
 
 /** Adds methods for serialization */
 export abstract class Serializable {
-  /** the default transform functionality */
+  /** Default transform functionality */
   public tsTransformKey?(key: string): string {
     return key;
   }
+  /** Serializable to Json String */
   public toJson(): string {
     return toJson(this);
   }
-  public fromJson(json: string): this;
-  public fromJson(json: JsonValue): this;
+  /** Deserialize to Serializable */
   public fromJson(json: string | JsonValue): this {
     return fromJson(this, json);
   }
@@ -82,15 +85,18 @@ export class SerializePropertyOptions {
 export function composeStrategy(
   ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
 ): FromJsonStrategy;
+
 export function composeStrategy(
   ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
 ): ToJsonStrategy;
+
 export function composeStrategy(...fns: any): any {
-  return (val: any): any =>
-    fns.flat().reduce(
-      (acc: any, f: FromJsonStrategy | ToJsonStrategy) => f(acc),
+  return function _composeStrategy(val: any): any {
+    return fns.flat().reduce(
+      (acc: any, fn: FromJsonStrategy | ToJsonStrategy) => fn(acc),
       val,
     );
+  };
 }
 
 /** Options for each class */
