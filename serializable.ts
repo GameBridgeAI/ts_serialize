@@ -79,18 +79,24 @@ export class SerializePropertyOptions {
   }
 }
 
-/** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
- * Converts value from functions provided as parameters
- */
+/** list of FromJsonStrategy to one FromJsonStrategy composition */
 export function composeStrategy(
   ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
 ): FromJsonStrategy;
 
+/** list of ToJsonStrategy to one ToJsonStrategy composition */
 export function composeStrategy(
   ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
 ): ToJsonStrategy;
 
-export function composeStrategy(...fns: any): any {
+/** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
+ * Converts value from functions provided as parameters
+ */
+export function composeStrategy(
+  ...fns:
+    | (FromJsonStrategy | FromJsonStrategy[])[]
+    | (ToJsonStrategy | ToJsonStrategy[])[]
+): FromJsonStrategy | ToJsonStrategy {
   return function _composeStrategy(val: any): any {
     return fns.flat().reduce(
       (acc: any, fn: FromJsonStrategy | ToJsonStrategy) => fn(acc),
