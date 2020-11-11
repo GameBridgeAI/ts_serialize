@@ -2,6 +2,7 @@
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { defaultToJson } from "./to_json/default.ts";
+import { defaultFromJson } from "./from_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
@@ -171,15 +172,6 @@ function toJson<T>(context: T): string {
 }
 
 /** Convert from object/string to mapped object on the context */
-function fromJson<T>(context: Serializable, json: string): T;
-
-function fromJson<T>(context: Serializable, json: JsonValue): T;
-
-function fromJson<T>(
-  context: Serializable,
-  json: string | JsonValue,
-): T;
-
 function fromJson<T>(
   context: Serializable,
   json: string | JsonValue,
@@ -210,8 +202,7 @@ function fromJson<T>(
 
         const {
           propertyKey,
-          // default no-op
-          fromJsonStrategy = (v: unknown) => v,
+          fromJsonStrategy = defaultFromJson,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
         const processedValue: unknown = Array.isArray(value)
