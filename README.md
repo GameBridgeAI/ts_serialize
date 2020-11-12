@@ -14,7 +14,7 @@ A zero dependency library for serializing data.
 ## Usage
 - [Installing](https://gamebridgeai.github.io/ts_serialize/installing)
 - [Serializable and SerializeProperty](https://gamebridgeai.github.io/ts_serialize/serializable)
-- [Strategies](./strategies)[Strategies](https://gamebridgeai.github.io/ts_serialize/strategies)
+- [Strategies](https://gamebridgeai.github.io/ts_serialize/strategies)
 - [Transforming Keys](https://gamebridgeai.github.io/ts_serialize/transforming_keys)
 
 ## Built With
