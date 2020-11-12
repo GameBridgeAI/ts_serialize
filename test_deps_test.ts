@@ -4,7 +4,7 @@ import { assert, assertEquals, test } from "./test_deps.ts";
 import * as mod from "./test_deps.ts";
 
 test({
-  name: "Test the testers",
+  name: "Test deps API",
   fn() {
     assert(mod != null);
     assertEquals(typeof mod.test, "function");

@@ -112,23 +112,6 @@ test({
 
 test({
   name:
-    "SerializePropertyOptionsMap error when trying to add a duplicate property key",
-  fn() {
-    const testObj = new SerializePropertyOptionsMap();
-    const childSPOptions = new SerializePropertyOptions("a", "b");
-    const childSPOptions2 = new SerializePropertyOptions("a", "c");
-    testObj.set(childSPOptions);
-    try {
-      testObj.set(childSPOptions2);
-      fail("Shouldn't be able to set duplicate property keys");
-    } catch (e) {
-      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);
-    }
-  },
-});
-
-test({
-  name:
     "SerializePropertyOptionsMap parent property key is ignored if overridden by a new child property",
   fn() {
     const testParent = new SerializePropertyOptionsMap();

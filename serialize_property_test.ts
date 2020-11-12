@@ -195,7 +195,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      array!: unknown[];
+      array!: any[];
     }
     const testObj = new Test().fromJson(
       `{"array":["worked",0,{"subObj":["cool"]}]}`,

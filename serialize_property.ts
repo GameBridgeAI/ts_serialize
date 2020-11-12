@@ -2,9 +2,11 @@
 
 import {
   FromJsonStrategy,
+  FromJsonStrategyArgument,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
   ToJsonStrategy,
+  ToJsonStrategyArgument,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -15,7 +17,7 @@ export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
 /**
  * Function to transform a property name into a serialized key programmatically
  */
-export type ToSerializedKeyStrategy = (propertyName: string | symbol) => string;
+export type ToSerializedKeyStrategy = (propertyName: string) => string;
 
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
@@ -25,20 +27,20 @@ export type SerializePropertyArgument =
     serializedKey?: string | ToSerializedKeyStrategy;
     fromJsonStrategy?:
       | FromJsonStrategy
-      | (FromJsonStrategy | FromJsonStrategy[])[];
+      | FromJsonStrategyArgument;
     toJsonStrategy?:
       | ToJsonStrategy
-      | (ToJsonStrategy | ToJsonStrategy[])[];
+      | ToJsonStrategyArgument;
   };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
   fromJsonStrategy?:
     | FromJsonStrategy
-    | (FromJsonStrategy | FromJsonStrategy[])[];
+    | FromJsonStrategyArgument;
   toJsonStrategy?:
     | ToJsonStrategy
-    | (ToJsonStrategy | ToJsonStrategy[])[];
+    | ToJsonStrategyArgument;
 }
 
 /** Property wrapper that adds serializable options to the class map
@@ -121,7 +123,7 @@ function getDecoratorArgumentOptions(
   // Property key transform function
   if (typeof decoratorArguments === "function") {
     return {
-      serializedKey: decoratorArguments(propertyName),
+      serializedKey: decoratorArguments(String(propertyName)),
     };
   }
 
@@ -137,7 +139,7 @@ function getDecoratorArgumentOptions(
   // Property key transform function with additional options
   if (typeof decoratorArguments.serializedKey === "function") {
     return {
-      serializedKey: decoratorArguments.serializedKey(propertyName),
+      serializedKey: decoratorArguments.serializedKey(String(propertyName)),
       fromJsonStrategy: decoratorArguments.fromJsonStrategy,
       toJsonStrategy: decoratorArguments.toJsonStrategy,
     };
@@ -146,7 +148,7 @@ function getDecoratorArgumentOptions(
   // Use inherited tsTransformKey strategy or default no change transform
   // to transform property key decoratorArguments.serializedKey will override
   return {
-    serializedKey: (target as any).tsTransformKey(propertyName),
+    serializedKey: (target as any).tsTransformKey(String(propertyName)),
     ...decoratorArguments,
   };
 }

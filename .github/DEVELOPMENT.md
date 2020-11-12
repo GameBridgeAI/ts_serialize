@@ -22,13 +22,13 @@ This will add the deno types to the project.
 ## Running the tests
 
 ```
-$ deno test -c tsconfig.json
+$ deno test
 ```
 
 You can add a file to test only that one file.
 
 ```
-$ deno test -c tsconfig.json mod_test.ts
+$ deno test mod_test.ts
 ```
 
 ### Coding style and tests

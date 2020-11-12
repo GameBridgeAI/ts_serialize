@@ -2,6 +2,7 @@
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { defaultToJson } from "./to_json/default.ts";
+import { defaultFromJson } from "./from_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
@@ -46,9 +47,12 @@ export abstract class Serializable {
 
 /** Functions used when hydrating data */
 export type FromJsonStrategy = (value: JsonValue) => any;
+export type FromJsonStrategyArgument =
+  (FromJsonStrategy | FromJsonStrategy[])[];
 
 /** Functions used when dehydrating data */
 export type ToJsonStrategy = (value: any) => JsonValue;
+export type ToJsonStrategyArgument = (ToJsonStrategy | ToJsonStrategy[])[];
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -58,12 +62,8 @@ export class SerializePropertyOptions {
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJsonStrategy?:
-      | FromJsonStrategy
-      | (FromJsonStrategy | FromJsonStrategy[])[],
-    toJsonStrategy?:
-      | ToJsonStrategy
-      | (ToJsonStrategy | ToJsonStrategy[])[],
+    fromJsonStrategy?: FromJsonStrategy | FromJsonStrategyArgument,
+    toJsonStrategy?: ToJsonStrategy | ToJsonStrategyArgument,
   ) {
     if (Array.isArray(fromJsonStrategy)) {
       this.fromJsonStrategy = composeStrategy(...fromJsonStrategy);
@@ -81,12 +81,12 @@ export class SerializePropertyOptions {
 
 /** list of FromJsonStrategy to one FromJsonStrategy composition */
 export function composeStrategy(
-  ...fns: (FromJsonStrategy | FromJsonStrategy[])[]
+  ...fns: FromJsonStrategyArgument
 ): FromJsonStrategy;
 
 /** list of ToJsonStrategy to one ToJsonStrategy composition */
 export function composeStrategy(
-  ...fns: (ToJsonStrategy | ToJsonStrategy[])[]
+  ...fns: ToJsonStrategyArgument
 ): ToJsonStrategy;
 
 /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
@@ -94,8 +94,8 @@ export function composeStrategy(
  */
 export function composeStrategy(
   ...fns:
-    | (FromJsonStrategy | FromJsonStrategy[])[]
-    | (ToJsonStrategy | ToJsonStrategy[])[]
+    | FromJsonStrategyArgument
+    | ToJsonStrategyArgument
 ): FromJsonStrategy | ToJsonStrategy {
   return function _composeStrategy(val: any): any {
     return fns.flat().reduce(
@@ -171,15 +171,6 @@ function toJson<T>(context: T): string {
 }
 
 /** Convert from object/string to mapped object on the context */
-function fromJson<T>(context: Serializable, json: string): T;
-
-function fromJson<T>(context: Serializable, json: JsonValue): T;
-
-function fromJson<T>(
-  context: Serializable,
-  json: string | JsonValue,
-): T;
-
 function fromJson<T>(
   context: Serializable,
   json: string | JsonValue,
@@ -210,8 +201,7 @@ function fromJson<T>(
 
         const {
           propertyKey,
-          // default no-op
-          fromJsonStrategy = (v: unknown) => v,
+          fromJsonStrategy = defaultFromJson,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
         const processedValue: unknown = Array.isArray(value)

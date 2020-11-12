@@ -32,9 +32,12 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Functions used when hydrating data */
   export type FromJsonStrategy = (value: JsonValue) => any;
+  export type FromJsonStrategyArgument =
+    (FromJsonStrategy | FromJsonStrategy[])[];
 
   /** Functions used when dehydrating data */
   export type ToJsonStrategy = (value: any) => JsonValue;
+  export type ToJsonStrategyArgument = (ToJsonStrategy | ToJsonStrategy[])[];
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
@@ -43,10 +46,10 @@ declare module "@gamebridgeai/ts_serialize" {
       serializedKey?: string;
       fromJsonStrategy?:
         | FromJsonStrategy
-        | (FromJsonStrategy | FromJsonStrategy[])[];
+        | FromJsonStrategyArgument;
       toJsonStrategy?:
         | ToJsonStrategy
-        | (ToJsonStrategy | ToJsonStrategy[])[];
+        | ToJsonStrategyArgument;
     };
 
   /** Property wrapper that adds serializable options to the class map
@@ -72,8 +75,8 @@ declare module "@gamebridgeai/ts_serialize" {
    */
   export function composeStrategy(
     ...fns:
-      | (FromJsonStrategy | FromJsonStrategy[])[]
-      | (ToJsonStrategy | ToJsonStrategy[])[]
+      | FromJsonStrategyArgument
+      | ToJsonStrategyArgument
   ): FromJsonStrategy | ToJsonStrategy;
 
   /** revive data using `fromJson` on a subclass type */
