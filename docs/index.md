@@ -1,4 +1,4 @@
-# 🥣 ts_serialize ![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) ![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+## 🥣 ts_serialize ![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) ![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 A zero dependency library for serializing data.
 
@@ -8,16 +8,16 @@ A zero dependency library for serializing data.
 2. Excluding internal fields from REST API payloads
 3. Converting data types to an internal format, for example: `Date`'s
 
-## Supported Serialize Types
+### Supported Serialize Types
 - [`JSON`](https://www.json.org/json-en.html)
 
-## Usage
+### Usage
 - [Installing](./installing)
 - [Serializable and SerializeProperty](./serializable)
 - [Strategies](./strategies)
 - [Global transformKey](./transforming)
 
-## Contributing
+### Contributing
 
 We have provided resources to help you request a new feature or report and fix
 a bug.
