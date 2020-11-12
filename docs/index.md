@@ -12,24 +12,9 @@ A zero dependency library for serializing data.
 
 - [`JSON`](https://www.json.org/json-en.html)
 
-## Installing
 
-### Deno
 
-`import`/`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
-in your `deps.ts` file. `<version>` will be a a tag found on the
-[deno releases](https://deno.land/x/ts_serialize) page. The version can be omitted
-to get the develop branch, however, for stability it is recommended to use a tagged version.
-
-[Example](./examples/deno)
-
-### Node
-
-`npm i @gamebridgeai/ts_serialize`
-
-[Example](./examples/node)
-
-## Usage
+ - [Installing](./installing.md)
 
 ### Basic
 
@@ -41,9 +26,9 @@ serialized key programmatically by transforming the property name.
 
 `SerializeProperty` also excepts an options object with the properties:
 
-- `serializedKey` (Optional) {string | ToSerializedKeyStrategy} - Used as the key in the serialized object
-- `toJsonStrategy` (Optional) {ToJsonStrategy} - Function or `ToJsonStrategy` used when serializing
-- `fromJsonStrategy` (Optional) {FromJsonStrategy} - Function or `FromJsonStrategy` used when deserializing
+- `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the key in the serialized object
+- `toJsonStrategy` (Optional) `{ToJsonStrategy}` - Used when serializing
+- `fromJsonStrategy` (Optional) `{FromJsonStrategy}` - Used when deserializing
 
 ```ts
 class Test extends Serializable {
