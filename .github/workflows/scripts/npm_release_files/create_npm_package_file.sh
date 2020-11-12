@@ -25,7 +25,7 @@ cat <<EOF >> "package.json"
   "bugs": {
     "url": "https://github.com/GameBridgeAI/ts_serialize/issues"
   },
-  "homepage": "https://github.com/GameBridgeAI/ts_serialize#readme",
+  "homepage": "https://gamebridgeai.github.io/ts_serialize",
   "keywords": [
         "typescript",
         "serialize",
