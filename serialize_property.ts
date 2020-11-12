@@ -17,7 +17,7 @@ export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
 /**
  * Function to transform a property name into a serialized key programmatically
  */
-export type ToSerializedKeyStrategy = (propertyName: string | symbol) => string;
+export type ToSerializedKeyStrategy = (propertyName: string) => string;
 
 /** string/symbol property name or options for (de)serializing values */
 export type SerializePropertyArgument =
@@ -123,7 +123,7 @@ function getDecoratorArgumentOptions(
   // Property key transform function
   if (typeof decoratorArguments === "function") {
     return {
-      serializedKey: decoratorArguments(propertyName),
+      serializedKey: decoratorArguments(String(propertyName)),
     };
   }
 
@@ -139,7 +139,7 @@ function getDecoratorArgumentOptions(
   // Property key transform function with additional options
   if (typeof decoratorArguments.serializedKey === "function") {
     return {
-      serializedKey: decoratorArguments.serializedKey(propertyName),
+      serializedKey: decoratorArguments.serializedKey(String(propertyName)),
       fromJsonStrategy: decoratorArguments.fromJsonStrategy,
       toJsonStrategy: decoratorArguments.toJsonStrategy,
     };
@@ -148,7 +148,7 @@ function getDecoratorArgumentOptions(
   // Use inherited tsTransformKey strategy or default no change transform
   // to transform property key decoratorArguments.serializedKey will override
   return {
-    serializedKey: (target as any).tsTransformKey(propertyName),
+    serializedKey: (target as any).tsTransformKey(String(propertyName)),
     ...decoratorArguments,
   };
 }
