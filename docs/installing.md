@@ -27,7 +27,12 @@ export {
 
 ## Node
 
-`npm i @gamebridgeai/ts_serialize`
+Install with `NPM`
+```
+npm i @gamebridgeai/ts_serialize
+```
+
+Then import from the package.
 
 ```ts
 import {
@@ -45,3 +50,5 @@ import {
 
 [Node Example](../examples/node)
 
+
+Once installed see our docs on how to use [Serializable and SerializeProperty](./serializable)

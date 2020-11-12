@@ -1,6 +1,7 @@
-# Transforming Keys
+# Global transformKey
 
-`Serializable` has a optional function `tsTransformKey(key: string): string`. This function
+`Serializable` has an optional function `tsTransformKey(key: string): string`, we also
+provide an interface `TransformKey` to implement for type safety. This function
 can be provided to change all the keys without having to specify the change for each property.
 
 ```ts

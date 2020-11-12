@@ -75,3 +75,5 @@ const testObj = new Test().fromJson(`{"date":"2099-11-25"}`);
 assert(testObj.date instanceof Date);
 assertEquals(testObj.date.getFullYear(), 2099);
 ```
+
+Now that you know about strategies, there is one more trick: [Global transformKey](./transforming)

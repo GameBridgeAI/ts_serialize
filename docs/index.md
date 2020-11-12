@@ -15,7 +15,7 @@ A zero dependency library for serializing data.
 - [Installing](./installing)
 - [Serializable and SerializeProperty](./serializable)
 - [Strategies](./strategies)
-- [Transforming Keys](./transforming_keys)
+- [Global transformKey](./transforming)
 
 ## Contributing
 
