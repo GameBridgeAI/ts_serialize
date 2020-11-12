@@ -22,7 +22,7 @@ A zero dependency library for serializing data.
 We have provided resources to help you request a new feature or report and fix
 a bug.
 
-- [CONTRIBUTING.md](../.github/CONTRIBUTING.md) - for guidelines when requesting a feature or reporting a bug or opening a pull request
-- [DEVELOPMENT.md](../.github/DEVELOPMENT.md) - for instructions on setting up the environment and running the test suite
-- [CODE_OF_CONDUCT.md](../.github/CODE_OF_CONDUCT.md) - for community guidelines
+- [CONTRIBUTING.md](https://github.com/GameBridgeAI/ts_serialize/tree/develop/.github/CONTRIBUTING.md) - for guidelines when requesting a feature or reporting a bug or opening a pull request
+- [DEVELOPMENT.md](https://github.com/GameBridgeAI/ts_serialize/tree/develop/.github/DEVELOPMENT.md) - for instructions on setting up the environment and running the test suite
+- [CODE_OF_CONDUCT.md](https://github.com/GameBridgeAI/ts_serialize/tree/develop/.github/CODE_OF_CONDUCT.md) - for community guidelines
 
