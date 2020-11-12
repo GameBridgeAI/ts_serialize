@@ -11,7 +11,7 @@ A zero dependency library for serializing data.
 ## Supported Serialize Types
 - [`JSON`](https://www.json.org/json-en.html)
 
-## Usage
+## [Usage](https://gamebridgeai.github.io/ts_serialize/)
 - [Installing](https://gamebridgeai.github.io/ts_serialize/installing)
 - [Serializable and SerializeProperty](https://gamebridgeai.github.io/ts_serialize/serializable)
 - [Strategies](https://gamebridgeai.github.io/ts_serialize/strategies)
