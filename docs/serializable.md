@@ -49,7 +49,8 @@ assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
 
 ### Nested Class Serialization
 
-ToJson:
+**ToJson**: 
+Serializing a nested class will follow the serialization rules set from the class:
 
 ```ts
 class Test1 extends Serializable {
@@ -66,6 +67,31 @@ class Test2 extends Serializable {
 
 const testObj = new Test2();
 assertEquals(testObj.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+```
+
+**FromJson**:
+
+Use a [strategy](./strategies) to revive the property into a class. `fromJsonAs` is 
+a provided function export that takes one parameter, the instance type the object 
+will take when revived.
+
+```ts
+class Test1 extends Serializable {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+
+class Test2 extends Serializable {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+    fromJsonStrategy: fromJsonAs(Test1),
+  })
+  nested!: Test1;
+}
+
+const testObj = new Test2();
+testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
+assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 
 ### SerializeProperty options
