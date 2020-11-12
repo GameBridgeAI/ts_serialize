@@ -5,7 +5,7 @@ ts_serialize supports both `deno` and `node`.
 ## Deno
 
 `import`/`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
-in your `deps.ts` file. `<version>` will be a a tag found on the
+in your `deps.ts` file. `<version>` will be a tag found on the
 [deno releases](https://deno.land/x/ts_serialize) page. The version can be omitted
 to get the latest release, however, for stability it is recommended to use a tagged version.
 
