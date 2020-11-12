@@ -49,7 +49,8 @@ assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
 
 ### Nested Class Serialization
 
-**ToJson**: 
+**ToJson**
+
 Serializing a nested class will follow the serialization rules set from the class:
 
 ```ts
@@ -69,7 +70,7 @@ const testObj = new Test2();
 assertEquals(testObj.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
-**FromJson**:
+**FromJson**
 
 Use a [strategy](./strategies) to revive the property into a class. `fromJsonAs` is 
 a provided function export that takes one parameter, the instance type the object 
