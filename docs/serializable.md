@@ -68,31 +68,6 @@ const testObj = new Test2();
 assertEquals(testObj.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
-FromJson:
-
-`fromJsonAs` is a provided function export that takes one parameter,
-the instance type the object will take when revived. `fromJson` is used
-to revive the object.
-
-```ts
-class Test1 extends Serializable {
-  @SerializeProperty("serialize_me_1")
-  serializeMe = "nice1";
-}
-
-class Test2 extends Serializable {
-  @SerializeProperty({
-    serializedKey: "serialize_me_2",
-    fromJsonStrategy: fromJsonAs(Test1),
-  })
-  nested!: Test1;
-}
-
-const testObj = new Test2();
-testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
-assertEquals(testObj.nested.serializeMe, "custom value");
-```
-
 ### SerializeProperty options
 
 Passing a string or a function as an argument to `SerializeProperty` causes the property to use

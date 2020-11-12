@@ -20,6 +20,31 @@ const testObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
 assertEquals(testObj.bigInt.toString(), "9007199254740991");
 ```
 
+FromJson:
+
+`fromJsonAs` is a provided function export that takes one parameter,
+the instance type the object will take when revived. `fromJson` is used
+to revive the object.
+
+```ts
+class Test1 extends Serializable {
+  @SerializeProperty("serialize_me_1")
+  serializeMe = "nice1";
+}
+
+class Test2 extends Serializable {
+  @SerializeProperty({
+    serializedKey: "serialize_me_2",
+    fromJsonStrategy: fromJsonAs(Test1),
+  })
+  nested!: Test1;
+}
+
+const testObj = new Test2();
+testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
+assertEquals(testObj.nested.serializeMe, "custom value");
+```
+
 ### Multiple strategy functions
 
 `toJsonStrategy` and `fromJsonStrategy` can use `composeStrategy` to build out
