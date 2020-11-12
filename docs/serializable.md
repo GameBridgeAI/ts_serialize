@@ -1,4 +1,4 @@
-# Serializable and SerializeProperty
+## Serializable and SerializeProperty
 
 Import `Serializable` and `SerializeProperty`, extend `Serializable` from your `class`
 and use the `SerializeProperty` decorator on any properties you want serialized.
@@ -24,7 +24,7 @@ assertEquals(testObj.propertyTwo, "Json!");
 assertEquals(testObj.notSerialized, "changed");
 assertEquals(testObj.toJson(), `{"propertyOne":"From","propertyTwo":"Json!"}`);
 ```
-## Inheritance
+### Inheritance
 
 Inherited classes override the key when serializing. If you override
 a property any value used for that key will be overridden by the
@@ -47,7 +47,7 @@ assertEquals(testObj.serializeMeInstead, "nice2");
 assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
 ```
 
-## Nested Class Serialization
+### Nested Class Serialization
 
 ToJson:
 
@@ -93,8 +93,7 @@ testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 
-## SerializeProperty options
-
+### SerializeProperty options
 
 Passing a string or a function as an argument to `SerializeProperty` causes the property to use
 that name as the key when serialized. The function has one parameter, the `key` as string and 

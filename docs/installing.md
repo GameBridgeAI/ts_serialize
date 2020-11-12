@@ -1,8 +1,8 @@
-# Installing
+## Installing
 
 ts_serialize supports both `deno` and `node`.
 
-## Deno
+### Deno
 
 `import`/`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
 in your `deps.ts` file. `<version>` will be a tag found on the
@@ -25,7 +25,7 @@ export {
 
 [Deno Example](../examples/deno)
 
-## Node
+### Node
 
 Install with `NPM`
 ```

@@ -1,4 +1,4 @@
-# Strategies
+## Strategies
 
 `Strategies` are functions or a composed list of functions to execute on the values when
 serializing or deserializing. The functions take one argument which is the value to process.
@@ -20,7 +20,7 @@ const testObj = new Test().fromJson(`{"big_int":"9007199254740991"}`);
 assertEquals(testObj.bigInt.toString(), "9007199254740991");
 ```
 
-## Multiple strategy functions
+### Multiple strategy functions
 
 `toJsonStrategy` and `fromJsonStrategy` can use `composeStrategy` to build out
 strategies with multiple functions.
@@ -42,7 +42,7 @@ assertEquals(
 );
 ```
 
-## Dates
+### Dates
 
 Dates can use the `fromJsonStrategy` to revive a serialized string into a Date object. `ts_serialize`
 provides a `ISODateFromJson` function to parse ISO Dates.

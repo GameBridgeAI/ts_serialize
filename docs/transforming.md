@@ -1,4 +1,4 @@
-# Global transformKey
+## Global transformKey
 
 `Serializable` has an optional function `tsTransformKey(key: string): string`, we also
 provide an interface `TransformKey` to implement for type safety. This function
