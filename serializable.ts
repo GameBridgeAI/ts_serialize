@@ -6,7 +6,9 @@ import { defaultFromJson } from "./from_json/default.ts";
 import { recursiveToJson } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
-export type JsonObject = { [Key in string]?: JsonValue };
+export type JsonObject = {
+  [key: string]: JsonValue;
+};
 
 /** A JSON array where each value is a simple JSON value. */
 export interface JsonArray extends Array<JsonValue> {}
@@ -40,7 +42,7 @@ export abstract class Serializable {
     return toJson(this);
   }
   /** Deserialize to Serializable */
-  public fromJson(json: string | JsonValue): this {
+  public fromJson(json: JsonValue | Object): this {
     return fromJson(this, json);
   }
 }
@@ -152,7 +154,7 @@ export function toPojo(
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: any) => {
+      record[serializedKey as keyof JsonObject] = value.map((item: any) => {
         if (item instanceof Serializable) {
           return toPojo(item);
         }
@@ -173,7 +175,7 @@ function toJson<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJson<T>(
   context: Serializable,
-  json: string | JsonValue,
+  json: JsonValue | Object,
 ): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,

@@ -18,10 +18,36 @@ test({
 });
 
 test({
-  name: "ISODateFromJson parses ISO dates",
+  name: "ISODateFromJson parses ISO dates - 2020-05-24T15:54:14.876Z",
   fn() {
     const testJson =
-      `{"date":"2020-06-04T19:01:47.831Z","not_a_date":"Hello world"}`;
+      `{"date":"2020-05-24T15:54:14.876Z","not_a_date":"Hello world"}`;
+    const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.getFullYear(), 2020);
+    assert(!(testObj.not_a_date instanceof Date));
+    assertEquals(testObj.not_a_date, "Hello world");
+  },
+});
+
+test({
+  name: "ISODateFromJson parses ISO dates - 2020-12-31T23:00:00+01:00",
+  fn() {
+    const testJson =
+      `{"date":"2020-12-31T23:00:00+01:00","not_a_date":"Hello world"}`;
+    const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.getFullYear(), 2020);
+    assert(!(testObj.not_a_date instanceof Date));
+    assertEquals(testObj.not_a_date, "Hello world");
+  },
+});
+
+test({
+  name: "ISODateFromJson parses ISO dates - 2020-12-31T23:00:00",
+  fn() {
+    const testJson =
+      `{"date":"2020-12-31T23:00:00","not_a_date":"Hello world"}`;
     const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.getFullYear(), 2020);
