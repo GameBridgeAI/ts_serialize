@@ -52,8 +52,6 @@ export function iso8601Date(input: JsonValue): any {
     ] = input.match(iso)?.map(Number) || [],
     timezone = parseTimezone(0);
 
-  console.log(year, day);
-
   if (Number.isNaN(year)) {
     return input;
   }

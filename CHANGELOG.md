@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+## [v0.3.7] - 2020-11-18
+
+### Changed
+- *breaking* `ISODateFromJson` renamed to `iso8601Date`
+
+### Added
+- better iso 8601  parsing support
+
 ## [v0.3.6] - 2020-11-11
 
 ### Changed
