@@ -5,7 +5,7 @@ import {
   createDateStrategy,
   fromJsonAs,
   FromJsonStrategy,
-  ISODateFromJson,
+  iso8601Date,
   Serializable,
   SerializeProperty,
   ToJsonStrategy,
@@ -66,7 +66,7 @@ class Test extends Serializable {
   @SerializeProperty({ fromJsonStrategy: fromJsonAs(Nested) })
   fromJsonAsTest = new Nested();
 
-  @SerializeProperty({ fromJsonStrategy: ISODateFromJson })
+  @SerializeProperty({ fromJsonStrategy: iso8601Date })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
   @SerializeProperty({ fromJsonStrategy: customDateStrategy })

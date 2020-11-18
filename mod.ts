@@ -17,4 +17,4 @@ export { composeStrategy, Serializable } from "./serializable.ts";
 
 /** from json strategies */
 export { fromJsonAs } from "./from_json/as.ts";
-export { createDateStrategy, ISODateFromJson } from "./from_json/date.ts";
+export { createDateStrategy, iso8601Date } from "./from_json/date.ts";
