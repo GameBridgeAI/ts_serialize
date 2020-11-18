@@ -23,11 +23,6 @@ interface IsoWeekDate {
   timezone: number;
 }
 
-function isoWeekDate({ year, week, weekday, timezone }: IsoWeekDate): Date {
-  const date = new Date(year, 0, 4, 0, 0 - timezone, 0, 0);
-  return date;
-}
-
 /** Test a string for a full ISO 8601 Date */
 export function iso8601Date(input: JsonValue): any {
   var iso =
@@ -37,11 +32,12 @@ export function iso8601Date(input: JsonValue): any {
     return input;
   }
   // first match is the whole pattern which we do not need `,` skips it
+  // we're also skipping week and weekday
   let [
       ,
       year,
-      week,
-      weekday,
+      ,
+      ,
       month,
       day,
       hour,
@@ -54,16 +50,6 @@ export function iso8601Date(input: JsonValue): any {
 
   if (Number.isNaN(year)) {
     return input;
-  }
-
-  if (!Number.isNaN(zone)) {
-    timezone = parseTimezone(zone);
-  }
-
-  /** @todo (shardyMBAI) weekday calendar formats */
-  if (!Number.isNaN(week) && !Number.isNaN(weekday)) {
-    return input;
-    // return isoWeekDate({ year, week, weekday, timezone });
   }
 
   if (Number.isNaN(month)) {
@@ -84,6 +70,10 @@ export function iso8601Date(input: JsonValue): any {
 
   if (Number.isNaN(millisecond)) {
     millisecond = 0;
+  }
+
+  if (!Number.isNaN(zone)) {
+    timezone = parseTimezone(zone);
   }
 
   return new Date(

@@ -79,38 +79,3 @@ test({
     assertEquals(testObj.date.toISOString(), "2020-12-31T00:00:00.000Z");
   },
 });
-
-for (
-  const { testDate, value } of [
-    { value: "2005-01-01T00:00:00.000Z", testDate: "2004-W53-6" },
-    { value: "2005-01-02T00:00:00.000Z", testDate: "2004-W53-7" },
-    { value: "2005-12-31T00:00:00.000Z", testDate: "2005-W52-6" },
-    { value: "2006-01-01T00:00:00.000Z", testDate: "2005-W52-7" },
-    { value: "2006-01-02T00:00:00.000Z", testDate: "2006-W01-1" },
-    { value: "2006-12-31T00:00:00.000Z", testDate: "2006-W52-7" },
-    { value: "2007-01-01T00:00:00.000Z", testDate: "2007-W01-1" },
-    { value: "2007-12-30T00:00:00.000Z", testDate: "2007-W52-7" },
-    { value: "2007-12-31T00:00:00.000Z", testDate: "2008-W01-1" },
-    { value: "2008-01-01T00:00:00.000Z", testDate: "2008-W01-2" },
-    { value: "2008-12-28T00:00:00.000Z", testDate: "2008-W52-7" },
-    { value: "2008-12-29T00:00:00.000Z", testDate: "2009-W01-1" },
-    { value: "2008-12-30T00:00:00.000Z", testDate: "2009-W01-2" },
-    { value: "2008-12-31T00:00:00.000Z", testDate: "2009-W01-3" },
-    { value: "2009-01-01T00:00:00.000Z", testDate: "2009-W01-4" },
-    { value: "2009-12-31T00:00:00.000Z", testDate: "2009-W53-4" },
-    { value: "2010-01-01T00:00:00.000Z", testDate: "2009-W53-5" },
-    { value: "2010-01-02T00:00:00.000Z", testDate: "2009-W53-6" },
-    { value: "2010-01-03T00:00:00.000Z", testDate: "2009-W53-7" },
-  ]
-) {
-  test({
-    name: `iso8601Date parses "${testDate}" as "${value}"`,
-    ignore: true,
-    fn() {
-      const testJson = `{"date":"${testDate}"}`;
-      const testObj = JSON.parse(testJson, (_, v) => iso8601Date(v));
-      assert(testObj.date instanceof Date);
-      assertEquals(testObj.date.toISOString(), value);
-    },
-  });
-}
