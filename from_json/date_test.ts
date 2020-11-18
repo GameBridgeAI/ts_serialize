@@ -72,7 +72,6 @@ test({
 
 test({
   name: "iso8601Date parses `2020-366` - leap year",
-  only: true,
   fn() {
     const testJson = `{"date":"2020-366"}`;
     const testObj = JSON.parse(testJson, (_, v) => iso8601Date(v));
