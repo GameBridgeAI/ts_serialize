@@ -98,7 +98,7 @@ assert(
   "fromJsonAsTest.subProperty",
 );
 assert(test.isoDate instanceof Date, "isoDate instanceof");
-assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear90");
+assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear()");
 assert(test.createDate instanceof Date, "createDate instanceof");
 assert(test.createDate.getFullYear() === 2099, "createDate.getFullYear()");
 
