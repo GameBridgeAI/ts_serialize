@@ -84,7 +84,7 @@ test({
 });
 
 test({
-  name: "iso8601Date parses with added timezone - 2020-12-31T00:00:00-05:00",
+  name: "iso8601Date parses with added timezone - 2020-12-31T00:00:00-07:00",
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
@@ -93,9 +93,9 @@ test({
       public date!: Date;
     }
     const testObj = new Test().fromJson(
-      { "date": "2020-12-31T00:00:00-05:00" },
+      { "date": "2020-12-31T00:00:00-07:00" },
     );
     assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.toISOString(), "2020-12-31T00:00:00.000Z");
+    assertEquals(testObj.date.toISOString(), "2020-12-31T07:00:00.000Z");
   },
 });
