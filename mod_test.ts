@@ -11,7 +11,7 @@ test({
     assertEquals(typeof mod.Serializable, "function");
     assertEquals(typeof mod.composeStrategy, "function");
     assertEquals(typeof mod.createDateStrategy, "function");
-    assertEquals(typeof mod.ISODateFromJson, "function");
+    assertEquals(typeof mod.iso8601Date, "function");
     assertEquals(typeof mod.fromJsonAs, "function");
 
     assertEquals(Object.keys(mod).length, 6);

@@ -45,12 +45,12 @@ assertEquals(
 ### Dates
 
 Dates can use the `fromJsonStrategy` to revive a serialized string into a Date object. `ts_serialize`
-provides a `ISODateFromJson` function to parse ISO Dates.
+provides a `iso8601Date` function to parse ISO Dates.
 
 ```ts
 class Test extends Serializable {
   @SerializeProperty({
-    fromJsonStrategy: ISODateFromJson,
+    fromJsonStrategy: iso8601Date,
   })
   date!: Date;
 }

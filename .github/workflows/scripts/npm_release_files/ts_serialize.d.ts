@@ -1,6 +1,6 @@
 declare module "@gamebridgeai/ts_serialize" {
   /** A JSON object where each property value is a simple JSON value. */
-  export type JsonObject = { [Key: string]: JsonValue };
+  export type JsonObject = { [key: string]: JsonValue };
 
   /** A JSON array where each value is a simple JSON value. */
   export interface JsonArray extends Array<JsonValue> {}
@@ -93,5 +93,5 @@ declare module "@gamebridgeai/ts_serialize" {
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export const ISODateFromJson: FromJsonStrategy;
+  export function iso8601Date(input: JsonValue): any;
 }

@@ -5,7 +5,7 @@ import {
   createDateStrategy,
   fromJsonAs,
   FromJsonStrategy,
-  ISODateFromJson,
+  iso8601Date,
   Serializable,
   SerializeProperty,
   ToJsonStrategy,
@@ -66,7 +66,7 @@ class Test extends Serializable {
   @SerializeProperty({ fromJsonStrategy: fromJsonAs(Nested) })
   fromJsonAsTest = new Nested();
 
-  @SerializeProperty({ fromJsonStrategy: ISODateFromJson })
+  @SerializeProperty({ fromJsonStrategy: iso8601Date })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
   @SerializeProperty({ fromJsonStrategy: customDateStrategy })
@@ -93,7 +93,7 @@ assert(
   "fromJsonAsTest.subProperty",
 );
 assert(test.isoDate instanceof Date, "isoDate instanceof");
-assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear90");
+assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear()");
 assert(test.createDate instanceof Date, "createDate instanceof");
 assert(test.createDate.getFullYear() === 2099, "createDate.getFullYear()");
 

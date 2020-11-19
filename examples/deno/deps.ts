@@ -3,7 +3,7 @@ export {
   createDateStrategy,
   fromJsonAs,
   FromJsonStrategy,
-  ISODateFromJson,
+  iso8601Date,
   Serializable,
   SerializeProperty,
   ToJsonStrategy,

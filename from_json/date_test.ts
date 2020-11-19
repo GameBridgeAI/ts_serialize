@@ -1,58 +1,21 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "../test_deps.ts";
-import { createDateStrategy, ISODateFromJson } from "./date.ts";
+import { assert, assertEquals, fail, test } from "../test_deps.ts";
+import { createDateStrategy, iso8601Date } from "./date.ts";
 import { Serializable, SerializeProperty } from "../mod.ts";
 
 test({
-  name: "createDateStrategy creates strategy from regex",
+  name: "createDateStrategy - creates strategy from regex",
   fn() {
-    const dateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-    const testJson = `{"date":"2099-11-25","not_a_date":"Hello world"}`;
-    const testObj = JSON.parse(testJson, (_, v) => dateStrategy(v));
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJsonStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+      })
+      date!: Date;
+    }
+    const testObj = new Test().fromJson({ "date": "1990-11-11" });
     assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2099);
-    assert(!(testObj.not_a_date instanceof Date));
-    assertEquals(testObj.not_a_date, "Hello world");
-  },
-});
-
-test({
-  name: "ISODateFromJson parses ISO dates - 2020-05-24T15:54:14.876Z",
-  fn() {
-    const testJson =
-      `{"date":"2020-05-24T15:54:14.876Z","not_a_date":"Hello world"}`;
-    const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2020);
-    assert(!(testObj.not_a_date instanceof Date));
-    assertEquals(testObj.not_a_date, "Hello world");
-  },
-});
-
-test({
-  name: "ISODateFromJson parses ISO dates - 2020-12-31T23:00:00+01:00",
-  fn() {
-    const testJson =
-      `{"date":"2020-12-31T23:00:00+01:00","not_a_date":"Hello world"}`;
-    const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2020);
-    assert(!(testObj.not_a_date instanceof Date));
-    assertEquals(testObj.not_a_date, "Hello world");
-  },
-});
-
-test({
-  name: "ISODateFromJson parses ISO dates - 2020-12-31T23:00:00",
-  fn() {
-    const testJson =
-      `{"date":"2020-12-31T23:00:00","not_a_date":"Hello world"}`;
-    const testObj = JSON.parse(testJson, (_, v) => ISODateFromJson(v));
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2020);
-    assert(!(testObj.not_a_date instanceof Date));
-    assertEquals(testObj.not_a_date, "Hello world");
+    assertEquals(testObj.date.toISOString(), "1990-11-11T00:00:00.000Z");
   },
 });
 
@@ -61,12 +24,62 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: ISODateFromJson,
+        fromJsonStrategy: iso8601Date,
       })
-      date!: Date | string;
+      date!: Date;
     }
-    const testObj = new Test().fromJson(`{"date":"I am not a date!"}`);
-    assertEquals(typeof testObj.date, "string");
-    assertEquals(testObj.date, "I am not a date!");
+    try {
+      new Test().fromJson(`{"date":"I am not a date!"}`);
+      fail("Non date string did not error");
+    } catch (error) {
+      assertEquals(error.message, "Invalid date");
+    }
+  },
+});
+
+test({
+  name: "iso8601Date parses with milliseconds - 2020-12-31T12:00:00.300Z",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJsonStrategy: iso8601Date,
+      })
+      public date!: Date;
+    }
+    const testObj = new Test().fromJson({ "date": "2020-12-31T12:00:00.300Z" });
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.300Z");
+  },
+});
+
+test({
+  name: "iso8601Date parses without milliseconds - 2020-12-31T12:00:00Z",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJsonStrategy: iso8601Date,
+      })
+      public date!: Date;
+    }
+    const testObj = new Test().fromJson({ "date": "2020-12-31T12:00:00Z" });
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.000Z");
+  },
+});
+
+test({
+  name: "iso8601Date parses with added timezone - 2020-12-31T00:00:00-07:00",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJsonStrategy: iso8601Date,
+      })
+      public date!: Date;
+    }
+    const testObj = new Test().fromJson(
+      { "date": "2020-12-31T00:00:00-07:00" },
+    );
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.toISOString(), "2020-12-31T07:00:00.000Z");
   },
 });

@@ -154,7 +154,7 @@ export function toPojo(
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey as keyof JsonObject] = value.map((item: any) => {
+      record[serializedKey] = value.map((item: any) => {
         if (item instanceof Serializable) {
           return toPojo(item);
         }
