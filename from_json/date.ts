@@ -18,8 +18,6 @@ export function iso8601Date(input: JsonValue): any {
    * @example 2008-08-30T01:45:36
    * @example 2008-08-30T01:45:36.123Z
    * @see https://www.oreilly.com/library/view/regular-expressions-cookbook/9781449327453/ch04s07.html
-   * 
-   * We are accepting timezones but will depend on `Date.UTC`
    */
   const iso =
     //        <year>              -    <month>    -         <day>   <T non optional> <hour>:    <minute>:    <second>    <.milli> <Z  or `-+timezone`>
