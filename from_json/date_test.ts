@@ -20,22 +20,6 @@ test({
 });
 
 test({
-  name: "createDateStrategy - Timezones applied by string types",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty({
-        fromJsonStrategy: createDateStrategy(/^(\d{4})\/(\d{2})\/(\d{2})$/),
-      })
-      date!: Date;
-    }
-    const testObj = new Test().fromJson({ "date": "1990/11/11" });
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.toISOString(), "1990-11-11T05:00:00.000Z");
-    assertEquals(testObj.date.getTime(), new Date(1990, 10, 11).getTime());
-  },
-});
-
-test({
   name: "Will not serialize non date strings",
   fn() {
     class Test extends Serializable {
