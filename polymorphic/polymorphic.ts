@@ -125,7 +125,7 @@ function registerPolymorphicSwitch(
     classMap?.set(propertyKey, new Map());
     propertyKeyMap = classMap?.get(propertyKey);
   }
-  console.log(propertyKey, propertyValue);
+
   // Add value to initializer mapping
   propertyKeyMap?.set(propertyValue, initializerFunction);
 }
