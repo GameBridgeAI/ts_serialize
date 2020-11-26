@@ -66,7 +66,7 @@ export function PolymorphicSwitch(
     // Assert property should be static
     if (!Object.prototype.hasOwnProperty.call(target, propertyKey) && !value) {
       throw new Error(
-        `${target.toString()} doesn't have own property ${
+        `${target.toString()} does not have own property ${
           String(propertyKey)
         }, or no value provided`,
       );
