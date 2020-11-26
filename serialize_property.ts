@@ -43,34 +43,15 @@ interface SerializePropertyArgumentObject {
     | ToJsonStrategyArgument;
 }
 
-/** Property wrapper that adds serializable options to the class map
- * using the original propertyName as the map key
- */
-export function SerializeProperty(): PropertyDecorator;
-
-/** Property wrapper that adds serializable options to the class map
- * using the provided string as the map key
- */
-export function SerializeProperty(
-  decoratorArguments: string,
-): PropertyDecorator;
-
-/** Property wrapper that adds serializable options to the class map
- * using options, `serializedName` as the key or `propertyName` if
- * `serializedName` is not set
- */
-export function SerializeProperty(
-  decoratorArguments: SerializePropertyArgument,
-): PropertyDecorator;
-
 /** Property wrapper that adds serializable options to the class map */
 export function SerializeProperty(
-  decoratorArguments: SerializePropertyArgument = {},
+  args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
   return function _SerializeProperty(
     target: unknown,
     propertyName: string | symbol,
   ) {
+    const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
       target,

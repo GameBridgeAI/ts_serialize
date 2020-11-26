@@ -33,17 +33,21 @@ export declare interface TransformKey {
 
 /** Adds methods for serialization */
 export abstract class Serializable {
-  /** Default transform functionality */
+  /** key transform functionality */
   public tsTransformKey?(key: string): string {
     return key;
   }
-  /** Serializable to Json String */
+  /** to JSON String */
   public toJson(): string {
     return toJson(this);
   }
-  /** Deserialize to Serializable */
+  /** to instanceof */
   public fromJson(json: JsonValue | Object): this {
     return fromJson(this, json);
+  }
+  /** to JSONObject */
+  public tsSerialize(): JsonObject {
+    return toPojo(this);
   }
 }
 
@@ -80,16 +84,6 @@ export class SerializePropertyOptions {
     }
   }
 }
-
-/** list of FromJsonStrategy to one FromJsonStrategy composition */
-export function composeStrategy(
-  ...fns: FromJsonStrategyArgument
-): FromJsonStrategy;
-
-/** list of ToJsonStrategy to one ToJsonStrategy composition */
-export function composeStrategy(
-  ...fns: ToJsonStrategyArgument
-): ToJsonStrategy;
 
 /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
  * Converts value from functions provided as parameters

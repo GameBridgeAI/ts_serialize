@@ -25,12 +25,14 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Adds methods for serialization */
   export abstract class Serializable {
-    /** Default transform functionality */
+    /** key transform functionality */
     public tsTransformKey?(key: string): string;
-    /** Serializable to Json String */
+    /** to Json String */
     public toJson(): string;
-    /** Deserialize to Serializable */
+    /** to Serializable */
     public fromJson(json: JsonValue | Object): this;
+    /** to JSONObject */
+    public tsSerialize(): JsonObject;
   }
 
   /** Functions used when hydrating data */
@@ -56,21 +58,11 @@ declare module "@gamebridgeai/ts_serialize" {
     };
 
   /** Property wrapper that adds serializable options to the class map
-   * using the original propertyName as the map key
-   */
-  export function SerializeProperty(): PropertyDecorator;
-
-  /** Property wrapper that adds serializable options to the class map
-   * using the provided string as the map key
-   */
-  export function SerializeProperty(arg: string): PropertyDecorator;
-
-  /** Property wrapper that adds serializable options to the class map
    * using options, `serializedName` as the key or `propertyName` if
    * `serializedName` is not set
    */
   export function SerializeProperty(
-    arg: SerializePropertyArgument,
+    arg: string | SerializePropertyArgument,
   ): PropertyDecorator;
 
   /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
