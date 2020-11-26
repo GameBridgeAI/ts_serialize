@@ -3,7 +3,7 @@ import {
   createDateStrategy,
   FromJSONStrategy,
   iso8601Date,
-  readJSON,
+  readJson,
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
@@ -22,11 +22,11 @@ const customStrategy = (v: string) => `${v} strategy changed`;
 const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
 const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-const toJSONFixture = await readJSON("../fixtures/to.json") as Record<
+const toJSONFixture = await readJson("../fixtures/to.json") as Record<
   string,
   any
 >;
-const fromJSONFixture = await readJSON("../fixtures/from.json") as Record<
+const fromJSONFixture = await readJson("../fixtures/from.json") as Record<
   string,
   any
 >;
