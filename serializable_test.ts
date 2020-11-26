@@ -213,3 +213,17 @@ test({
     );
   },
 });
+
+test({
+  name: "should be able to serialize a serializable without any properties",
+  fn() {
+    class TestSerializable extends Serializable {}
+
+    assertEquals(new TestSerializable().toJson(), `{}`);
+    const serializedClass = new TestSerializable().fromJson({});
+    const propertyDescriptors = Object.getOwnPropertyDescriptors(
+      serializedClass,
+    );
+    assertEquals(Object.keys(serializedClass).length, 0);
+  },
+});
