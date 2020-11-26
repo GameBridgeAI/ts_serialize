@@ -471,3 +471,73 @@ test({
     );
   },
 });
+
+test({
+  name: "should be able to serialize a serializable without any properties",
+  fn() {
+    class TestSerializable extends Serializable {}
+
+    assertEquals(new TestSerializable().toJson(), `{}`);
+    const serializedClass = new TestSerializable().fromJson({});
+    const propertyDescriptors = Object.getOwnPropertyDescriptors(
+      serializedClass,
+    );
+    assertEquals(Object.keys(serializedClass).length, 0);
+  },
+});
+
+test({
+  name:
+    "should be able to serialize child class and have it inherit it's parent's serialization logic correctly",
+  fn() {
+    class TestSerializable extends Serializable {
+      @SerializeProperty()
+      public test_property = 1;
+    }
+    class TestSerializableChild extends TestSerializable {}
+    // Parent
+    assertEquals(
+      new TestSerializable().toJson(),
+      `{"test_property":1}`,
+    );
+    assertEquals(
+      new TestSerializable().fromJson(`{"test_property":32}`)
+        .test_property,
+      32,
+    );
+    // Child
+    assertEquals(
+      new TestSerializableChild().toJson(),
+      `{"test_property":1}`,
+    );
+    assertEquals(
+      new TestSerializableChild().fromJson(`{"test_property":32}`)
+        .test_property,
+      32,
+    );
+  },
+});
+
+test({
+  name:
+    "should be able to serialize grandchild class and have it inherit it's grandparent's serialization logic correctly",
+  fn() {
+    class TestSerializable extends Serializable {
+      @SerializeProperty()
+      public test_property = 0;
+    }
+    class TestSerializableChild extends TestSerializable {}
+    class TestSerializableGrandChild extends TestSerializableChild {}
+
+    // Grandchild
+    assertEquals(
+      new TestSerializableGrandChild().toJson(),
+      `{"test_property":0}`,
+    );
+    assertEquals(
+      new TestSerializableGrandChild().fromJson(`{"test_property":33}`)
+        .test_property,
+      33,
+    );
+  },
+});
