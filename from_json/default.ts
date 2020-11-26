@@ -2,6 +2,6 @@
 import { JSONValue } from "../serializable.ts";
 
 /** typed function */
-export function defaultFromJSON(value: JSONValue): any {
+export function fromJSONDefault(value: JSONValue): any {
   return value;
 }

@@ -5,6 +5,6 @@ import { JSONValue } from "../serializable.ts";
 /** Use the default replacer logic 
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#The_replacer_parameter
 */
-export function defaultToJSON(value: any): JSONValue {
+export function toJSONDefault(value: any): JSONValue {
   return value;
 }

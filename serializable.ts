@@ -1,9 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { defaultToJSON } from "./to_json/default.ts";
-import { defaultFromJSON } from "./from_json/default.ts";
-import { recursiveToJSON } from "./to_json/recursive.ts";
+import { toJSONDefault } from "./to_json/default.ts";
+import { fromJSONDefault } from "./from_json/default.ts";
+import { toJSONRecursive } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -132,7 +132,7 @@ export function toPojo(
     let {
       propertyKey,
       serializedKey,
-      toJSONStrategy = defaultToJSON,
+      toJSONStrategy = toJSONDefault,
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
@@ -144,7 +144,7 @@ export function toPojo(
         (value as Serializable)?.constructor?.prototype,
       )
     ) {
-      toJSONStrategy = recursiveToJSON;
+      toJSONStrategy = toJSONRecursive;
     }
 
     if (Array.isArray(value)) {
@@ -197,7 +197,7 @@ function fromJSON<T>(
 
         const {
           propertyKey,
-          fromJSONStrategy = defaultFromJSON,
+          fromJSONStrategy = fromJSONDefault,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
         const processedValue: unknown = Array.isArray(value)
