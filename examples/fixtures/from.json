@@ -5,7 +5,7 @@
     "fromJSONStrategyTest": "fromJSON",
     "toJSONStrategyTest": "fromJSON",
     "composeStrategyTest": "fromJSON",
-    "fromJSONAsTest":{
+    "asTest":{
         "sub_property": "fromJSON"
     },
     "isoDate": "2020-06-04T19:01:47.831Z",

@@ -1,7 +1,7 @@
 export {
+  as,
   composeStrategy,
   createDateStrategy,
-  fromJSONAs,
   FromJSONStrategy,
   iso8601Date,
   Serializable,

@@ -12,7 +12,7 @@ test({
     assertEquals(typeof mod.composeStrategy, "function");
     assertEquals(typeof mod.createDateStrategy, "function");
     assertEquals(typeof mod.iso8601Date, "function");
-    assertEquals(typeof mod.fromJSONAs, "function");
+    assertEquals(typeof mod.as, "function");
 
     assertEquals(Object.keys(mod).length, 6);
   },

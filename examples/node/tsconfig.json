@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
         "experimentalDecorators": true,
-        "resolveJSONModule": true,
+        "resolveJsonModule": true,
         "esModuleInterop": true
     }
 }

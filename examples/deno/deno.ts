@@ -1,7 +1,7 @@
 import {
+  as,
   composeStrategy,
   createDateStrategy,
-  fromJSONAs,
   FromJSONStrategy,
   iso8601Date,
   readJSON,
@@ -68,8 +68,8 @@ class Test extends Serializable {
   )
   composeStrategyTest = "toJSON";
 
-  @SerializeProperty({ fromJSONStrategy: fromJSONAs(Nested) })
-  fromJSONAsTest = new Nested();
+  @SerializeProperty({ fromJSONStrategy: as(Nested) })
+  asTest = new Nested();
 
   @SerializeProperty({ fromJSONStrategy: iso8601Date })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
@@ -92,10 +92,10 @@ assert(
   test.composeStrategyTest === "fromJSON strategy changed",
   "composeStrategyTest",
 );
-assert(test.fromJSONAsTest instanceof Nested, "fromJSONAsTest instanceof");
+assert(test.asTest instanceof Nested, "asTest instanceof");
 assert(
-  test.fromJSONAsTest.subProperty === "fromJSON",
-  "fromJSONAsTest.subProperty",
+  test.asTest.subProperty === "fromJSON",
+  "asTest.subProperty",
 );
 assert(test.isoDate instanceof Date, "isoDate instanceof");
 assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear()");

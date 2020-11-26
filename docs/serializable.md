@@ -72,7 +72,7 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 **FromJSON**
 
-Use a [strategy](./strategies) to revive the property into a class. `fromJSONAs` is 
+Use a [strategy](./strategies) to revive the property into a class. `as` is 
 a provided function export that takes one parameter, the instance type the object 
 will take when revived.
 
@@ -85,7 +85,7 @@ class Test1 extends Serializable {
 class Test2 extends Serializable {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJSONStrategy: fromJSONAs(Test1),
+    fromJSONStrategy: as(Test1),
   })
   nested!: Test1;
 }

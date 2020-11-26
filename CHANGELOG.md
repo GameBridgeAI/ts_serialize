@@ -92,7 +92,7 @@ to flag accidental deserializations of already-deserialized objects._
 ### Changed
 
 - various ci related things
-- added `fromJSONAs` exported function
+- added `as` exported function
 
 ## [v0.0.12] - 2020-6-09
 

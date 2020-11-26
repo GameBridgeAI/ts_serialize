@@ -16,5 +16,5 @@ export type {
 export { composeStrategy, Serializable } from "./serializable.ts";
 
 /** from json strategies */
-export { fromJSONAs } from "./from_json/as.ts";
+export { as } from "./from_json/as.ts";
 export { createDateStrategy, iso8601Date } from "./from_json/date.ts";

@@ -13,7 +13,7 @@ to get the latest release, however, for stability it is recommended to use a tag
 export {
   composeStrategy,
   createDateStrategy,
-  fromJSONAs,
+  as,
   FromJSONStrategy,
   iso8601Date,
   Serializable,
@@ -38,7 +38,7 @@ Then import from the package.
 import {
   composeStrategy,
   createDateStrategy,
-  fromJSONAs,
+  as,
   FromJSONStrategy,
   iso8601Date,
   Serializable,

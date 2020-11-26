@@ -75,7 +75,7 @@ declare module "@gamebridgeai/ts_serialize" {
   ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */
-  export function fromJSONAs<T>(
+  export function as<T>(
     type: T & { new (): Serializable },
   ): FromJSONStrategy;
 
