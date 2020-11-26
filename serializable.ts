@@ -4,13 +4,6 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { toJSONDefault } from "./strategy/to_json/default.ts";
 import { fromJSONDefault } from "./strategy/from_json/default.ts";
 import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
-import {
-  composeStrategy,
-  FromJSONStrategy,
-  FromJSONStrategyArgument,
-  ToJSONStrategy,
-  ToJSONStrategyArgument,
-} from "./strategy/compose_strategy.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -55,31 +48,6 @@ export abstract class Serializable {
   /** to JSONObject */
   public tsSerialize(): JSONObject {
     return toPojo(this);
-  }
-}
-
-/** options to use when (de)serializing values */
-export class SerializePropertyOptions {
-  public fromJSONStrategy?: FromJSONStrategy;
-  public toJSONStrategy?: ToJSONStrategy;
-
-  constructor(
-    public propertyKey: string | symbol,
-    public serializedKey: string,
-    fromJSONStrategy?: FromJSONStrategy | FromJSONStrategyArgument,
-    toJSONStrategy?: ToJSONStrategy | ToJSONStrategyArgument,
-  ) {
-    if (Array.isArray(fromJSONStrategy)) {
-      this.fromJSONStrategy = composeStrategy(...fromJSONStrategy);
-    } else if (fromJSONStrategy) {
-      this.fromJSONStrategy = fromJSONStrategy;
-    }
-
-    if (Array.isArray(toJSONStrategy)) {
-      this.toJSONStrategy = composeStrategy(...toJSONStrategy);
-    } else if (toJSONStrategy) {
-      this.toJSONStrategy = toJSONStrategy;
-    }
   }
 }
 

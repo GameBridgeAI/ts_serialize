@@ -6,7 +6,7 @@ import {
   ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
   SerializePropertyOptionsMap,
 } from "./serialize_property_options_map.ts";
-import { SerializePropertyOptions } from "./serializable.ts";
+import { SerializePropertyOptions } from "./serialize_property.ts";
 
 test({
   name: "SerializePropertyOptionsMap correctly initializes",

@@ -1,6 +1,5 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
-
-import { SerializePropertyOptions } from "./serializable.ts";
+import { SerializePropertyOptions } from "./serialize_property.ts";
 
 export const ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY =
   "This key name is already in use by another property, please use a different name";

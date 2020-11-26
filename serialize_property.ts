@@ -1,12 +1,10 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import {
-  SERIALIZABLE_CLASS_MAP,
-  SerializePropertyOptions,
-} from "./serializable.ts";
+import { SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import {
+  composeStrategy,
   FromJSONStrategy,
   FromJSONStrategyArgument,
   ToJSONStrategy,
@@ -15,6 +13,30 @@ import {
 
 export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
+/** options to use when (de)serializing values */
+export class SerializePropertyOptions {
+  public fromJSONStrategy?: FromJSONStrategy;
+  public toJSONStrategy?: ToJSONStrategy;
+
+  constructor(
+    public propertyKey: string | symbol,
+    public serializedKey: string,
+    fromJSONStrategy?: FromJSONStrategy | FromJSONStrategyArgument,
+    toJSONStrategy?: ToJSONStrategy | ToJSONStrategyArgument,
+  ) {
+    if (Array.isArray(fromJSONStrategy)) {
+      this.fromJSONStrategy = composeStrategy(...fromJSONStrategy);
+    } else if (fromJSONStrategy) {
+      this.fromJSONStrategy = fromJSONStrategy;
+    }
+
+    if (Array.isArray(toJSONStrategy)) {
+      this.toJSONStrategy = composeStrategy(...toJSONStrategy);
+    } else if (toJSONStrategy) {
+      this.toJSONStrategy = toJSONStrategy;
+    }
+  }
+}
 
 /**
  * Function to transform a property name into a serialized key programmatically
