@@ -19,11 +19,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      testName = "toJson";
+      testName = "toJSON";
     }
-    assertEquals(new Test().toJson(), `{"testName":"toJson"}`);
-    const testObj = new Test().fromJson(`{"testName":"fromJson"}`);
-    assertEquals(testObj.testName, "fromJson");
+    assertEquals(new Test().toJSON(), `{"testName":"toJSON"}`);
+    const testObj = new Test().fromJSON(`{"testName":"fromJSON"}`);
+    assertEquals(testObj.testName, "fromJSON");
   },
 });
 
@@ -32,11 +32,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("test_name")
-      testName = "toJson";
+      testName = "toJSON";
     }
-    assertEquals(new Test().toJson(), `{"test_name":"toJson"}`);
-    const testObj = new Test().fromJson({ testName: "fromJson" });
-    assertEquals(testObj.testName, "fromJson");
+    assertEquals(new Test().toJSON(), `{"test_name":"toJSON"}`);
+    const testObj = new Test().fromJSON({ testName: "fromJSON" });
+    assertEquals(testObj.testName, "fromJSON");
   },
 });
 
@@ -45,11 +45,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({ serializedKey: "test_name" })
-      testName = "toJson";
+      testName = "toJSON";
     }
-    assertEquals(new Test().toJson(), `{"test_name":"toJson"}`);
-    const testObj = new Test().fromJson(`{"test_name":"fromJson"}`);
-    assertEquals(testObj.testName, "fromJson");
+    assertEquals(new Test().toJSON(), `{"test_name":"toJSON"}`);
+    const testObj = new Test().fromJSON(`{"test_name":"fromJSON"}`);
+    assertEquals(testObj.testName, "fromJSON");
   },
 });
 
@@ -60,7 +60,7 @@ test({
       const TEST = Symbol("test");
       class Test extends Serializable {
         @SerializeProperty()
-        [TEST] = "toJson";
+        [TEST] = "toJSON";
       }
       fail("Allowed Symbol name without propertyName");
     } catch (e) {
@@ -76,33 +76,33 @@ test({
     const TEST2 = Symbol("test");
     class Test extends Serializable {
       @SerializeProperty("test_name")
-      [TEST] = "toJson";
+      [TEST] = "toJSON";
       @SerializeProperty({ serializedKey: "test_name2" })
-      [TEST2] = "toJson2";
+      [TEST2] = "toJSON2";
     }
     assertEquals(
-      new Test().toJson(),
-      `{"test_name":"toJson","test_name2":"toJson2"}`,
+      new Test().toJSON(),
+      `{"test_name":"toJSON","test_name2":"toJSON2"}`,
     );
-    const testObj = new Test().fromJson(
-      `{"test_name":"fromJson","test_name2":"fromJson2"}`,
+    const testObj = new Test().fromJSON(
+      `{"test_name":"fromJSON","test_name2":"fromJSON2"}`,
     );
-    assertEquals(testObj[TEST], "fromJson");
-    assertEquals(testObj[TEST2], "fromJson2");
+    assertEquals(testObj[TEST], "fromJSON");
+    assertEquals(testObj[TEST2], "fromJSON2");
   },
 });
 
 test({
-  name: "Uses a provided fromJsonStrategy",
+  name: "Uses a provided fromJSONStrategy",
   fn() {
     const change = () => `hello world`;
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: change,
+        fromJSONStrategy: change,
       })
       change!: string;
     }
-    const testObj = new Test().fromJson(`{"change":"hi earth"}`);
+    const testObj = new Test().fromJSON(`{"change":"hi earth"}`);
     assertEquals(testObj.change, "hello world");
   },
 });
@@ -113,11 +113,11 @@ test({
     const change = () => `hello world`;
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: change,
+        fromJSONStrategy: change,
       })
       change!: string;
     }
-    const testObj = new Test().fromJson(`{"change":"hi earth"}`);
+    const testObj = new Test().fromJSON(`{"change":"hi earth"}`);
     assertEquals(testObj.change, "hello world");
   },
 });
@@ -130,7 +130,7 @@ test({
       test!: string;
     }
     assertEquals(
-      typeof new Test().fromJson(`{"test":"string"}`).test,
+      typeof new Test().fromJSON(`{"test":"string"}`).test,
       "string",
     );
   },
@@ -145,7 +145,7 @@ test({
       @SerializeProperty()
       one!: number;
     }
-    const testObj = new Test().fromJson(`{"zero":0,"one":1}`);
+    const testObj = new Test().fromJSON(`{"zero":0,"one":1}`);
     assertEquals(typeof testObj.zero, "number");
     assertEquals(typeof testObj.one, "number");
   },
@@ -160,7 +160,7 @@ test({
       @SerializeProperty()
       false!: boolean;
     }
-    const testObj = new Test().fromJson(`{"true":true,"false":false}`);
+    const testObj = new Test().fromJSON(`{"true":true,"false":false}`);
     assertEquals(typeof testObj.true, "boolean");
     assertEquals(typeof testObj.false, "boolean");
   },
@@ -173,7 +173,7 @@ test({
       @SerializeProperty()
       null!: null;
     }
-    const testObj = new Test().fromJson(`{"null":null}`);
+    const testObj = new Test().fromJSON(`{"null":null}`);
     assertStrictEquals(testObj.null, null);
   },
 });
@@ -185,7 +185,7 @@ test({
       @SerializeProperty()
       object!: Record<string | symbol, unknown>;
     }
-    const testObj = new Test().fromJson(`{"object":{"test":"worked"}}`);
+    const testObj = new Test().fromJSON(`{"object":{"test":"worked"}}`);
     assertEquals(testObj.object.test, "worked");
   },
 });
@@ -197,7 +197,7 @@ test({
       @SerializeProperty()
       array!: any[];
     }
-    const testObj = new Test().fromJson(
+    const testObj = new Test().fromJSON(
       `{"array":["worked",0,{"subObj":["cool"]}]}`,
     );
     assert(Array.isArray(testObj.array));
@@ -216,11 +216,11 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: (v) => new OtherClass().fromJson(v),
+        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
       })
       array!: OtherClass[];
     }
-    const testObj = new Test().fromJson(
+    const testObj = new Test().fromJSON(
       `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`,
     );
     assertEquals(testObj.array.length, 5);
@@ -240,7 +240,7 @@ test({
     const testObj = new Test();
     assertEquals(testObj.serializeMe, "nice");
     assertEquals(testObj.dontSerializeMe, "great");
-    assertEquals(testObj.toJson(), `{"serialize_me":"nice"}`);
+    assertEquals(testObj.toJSON(), `{"serialize_me":"nice"}`);
   },
 });
 
@@ -278,7 +278,7 @@ test({
     const testObj = new Test2();
     assertEquals(testObj.serializeMe, "nice1");
     assertEquals(testObj.serializeMeInstead, "nice2");
-    assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
+    assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
   },
 });
 
@@ -294,7 +294,7 @@ test({
       serializeMeInstead = "nice2";
     }
     const testObj = new Test2();
-    testObj.fromJson(`{"serialize_me":"override"}`);
+    testObj.fromJSON(`{"serialize_me":"override"}`);
 
     assertEquals(testObj.serializeMe, "nice1");
     assertEquals(testObj.serializeMeInstead, "override");
@@ -314,7 +314,7 @@ test({
     }
     const testObj = new Test2();
     assertEquals(testObj.serializeMe, "nice2");
-    assertEquals(testObj.toJson(), `{"serialize_me_2":"nice2"}`);
+    assertEquals(testObj.toJSON(), `{"serialize_me_2":"nice2"}`);
   },
 });
 
@@ -331,7 +331,7 @@ test({
     }
     const testObj = new Test2();
 
-    testObj.fromJson(
+    testObj.fromJSON(
       `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`,
     );
     assertEquals(testObj.serializeMe, "override");
@@ -348,13 +348,13 @@ test({
     class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "serialize_me_2",
-        fromJsonStrategy: (json) => new Test1().fromJson(json),
+        fromJSONStrategy: (json) => new Test1().fromJSON(json),
       })
       nested!: Test1;
     }
     const testObj = new Test2();
 
-    testObj.fromJson({ "serialize_me_2": { "serialize_me_1": "pass" } });
+    testObj.fromJSON({ "serialize_me_2": { "serialize_me_1": "pass" } });
     assertEquals(testObj.nested.serializeMe, "pass");
   },
 });
@@ -375,7 +375,7 @@ test({
     const testObj = new Test2();
 
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
     );
   },
@@ -404,7 +404,7 @@ test({
     const testObj = new Test3();
 
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
     );
   },
@@ -419,7 +419,7 @@ test({
     }
     const testObj = new Test1();
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"_serializeMe":"nice1"}`,
     );
   },
@@ -433,7 +433,7 @@ test({
       serializeMe = "nice1";
     }
     assertEquals(
-      new Test1().fromJson({ "_serializeMe": "nice2" }).serializeMe,
+      new Test1().fromJSON({ "_serializeMe": "nice2" }).serializeMe,
       "nice2",
     );
   },
@@ -450,7 +450,7 @@ test({
     }
     const testObj = new Test1();
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"_serializeMe":"nice1"}`,
     );
   },
@@ -466,7 +466,7 @@ test({
       serializeMe = "nice1";
     }
     assertEquals(
-      new Test1().fromJson({ "_serializeMe": "nice2" }).serializeMe,
+      new Test1().fromJSON({ "_serializeMe": "nice2" }).serializeMe,
       "nice2",
     );
   },

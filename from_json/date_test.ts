@@ -9,11 +9,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+        fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
       })
       date!: Date;
     }
-    const testObj = new Test().fromJson({ "date": "1990-11-11" });
+    const testObj = new Test().fromJSON({ "date": "1990-11-11" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "1990-11-11T00:00:00.000Z");
   },
@@ -24,12 +24,12 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date,
       })
       date!: Date;
     }
     try {
-      new Test().fromJson(`{"date":"I am not a date!"}`);
+      new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
     } catch (error) {
       assertEquals(error.message, "Invalid date");
@@ -42,11 +42,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date,
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJson({ "date": "2020-12-31T12:00:00.300Z" });
+    const testObj = new Test().fromJSON({ "date": "2020-12-31T12:00:00.300Z" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.300Z");
   },
@@ -57,11 +57,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date,
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJson({ "date": "2020-12-31T12:00:00Z" });
+    const testObj = new Test().fromJSON({ "date": "2020-12-31T12:00:00Z" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.000Z");
   },
@@ -72,11 +72,11 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJsonStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date,
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJson(
+    const testObj = new Test().fromJSON(
       { "date": "2020-12-31T00:00:00-07:00" },
     );
     assert(testObj.date instanceof Date);

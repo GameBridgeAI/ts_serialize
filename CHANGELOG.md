@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v0.4.0] - 2020-11-19
 
 ### Changed
-- **breaking** `ISODateFromJson` renamed to `iso8601Date`
+- **breaking** `ISODateFromJSON` renamed to `iso8601Date`
 
 ### Added
 - better iso 8601  parsing support
@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-_The input to fromJson() is now a JsonValue, enforcing basic JSON requirements:
+_The input to fromJSON() is now a JSONValue, enforcing basic JSON requirements:
 Property values must be legal JSON values. This is meant to allow the compiler 
 to flag accidental deserializations of already-deserialized objects._
 
@@ -92,7 +92,7 @@ to flag accidental deserializations of already-deserialized objects._
 ### Changed
 
 - various ci related things
-- added `fromJsonAs` exported function
+- added `fromJSONAs` exported function
 
 ## [v0.0.12] - 2020-6-09
 

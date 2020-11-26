@@ -7,8 +7,8 @@ export { SerializeProperty } from "./serialize_property.ts";
 
 /** types, isolatedModules requires this to be `export type ...` */
 export type {
-  FromJsonStrategy,
-  ToJsonStrategy,
+  FromJSONStrategy,
+  ToJSONStrategy,
   TransformKey,
 } from "./serializable.ts";
 
@@ -16,5 +16,5 @@ export type {
 export { composeStrategy, Serializable } from "./serializable.ts";
 
 /** from json strategies */
-export { fromJsonAs } from "./from_json/as.ts";
+export { fromJSONAs } from "./from_json/as.ts";
 export { createDateStrategy, iso8601Date } from "./from_json/date.ts";

@@ -13,12 +13,12 @@ to get the latest release, however, for stability it is recommended to use a tag
 export {
   composeStrategy,
   createDateStrategy,
-  fromJsonAs,
-  FromJsonStrategy,
+  fromJSONAs,
+  FromJSONStrategy,
   iso8601Date,
   Serializable,
   SerializeProperty,
-  ToJsonStrategy,
+  ToJSONStrategy,
   TransformKey,
 } from "https://deno.land/x/ts_serialize/mod.ts";
 ```
@@ -38,12 +38,12 @@ Then import from the package.
 import {
   composeStrategy,
   createDateStrategy,
-  fromJsonAs,
-  FromJsonStrategy,
+  fromJSONAs,
+  FromJSONStrategy,
   iso8601Date,
   Serializable,
   SerializeProperty,
-  ToJsonStrategy,
+  ToJSONStrategy,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
 ```

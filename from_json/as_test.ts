@@ -1,25 +1,25 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "../test_deps.ts";
-import { fromJsonAs } from "./as.ts";
+import { fromJSONAs } from "./as.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
 test({
-  name: "fromJsonAs revives using `fromJson` as type",
+  name: "fromJSONAs revives using `fromJSON` as type",
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
       test = true;
     }
     const testObj = new Test();
-    assertEquals(fromJsonAs(Test)({ test: true }).test, testObj.test);
-    assert(fromJsonAs(Test)({ test: true }) instanceof Test);
+    assertEquals(fromJSONAs(Test)({ test: true }).test, testObj.test);
+    assert(fromJSONAs(Test)({ test: true }) instanceof Test);
   },
 });
 
 test({
-  name: "fromJsonAs works in nested properties",
+  name: "fromJSONAs works in nested properties",
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("test_one")
@@ -28,7 +28,7 @@ test({
 
     class Test2 extends Serializable {
       @SerializeProperty(
-        { serializedKey: "test_two", fromJsonStrategy: fromJsonAs(Test1) },
+        { serializedKey: "test_two", fromJSONStrategy: fromJSONAs(Test1) },
       )
       test2 = new Test1();
     }
@@ -38,7 +38,7 @@ test({
       test3 = false;
     }
 
-    const testObj = new Test3().fromJson(
+    const testObj = new Test3().fromJSON(
       `{"test_three":true,"test_two":{"test_one":false}}`,
     );
 
@@ -49,13 +49,13 @@ test({
 });
 
 test({
-  name: "fromJsonAs works with arrays of objects",
+  name: "fromJSONAs works with arrays of objects",
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
       test = true;
     }
-    const array: Test[] = fromJsonAs(Test)(
+    const array: Test[] = fromJSONAs(Test)(
       [{ a_property: "v1" }, { a_property: "v2" }],
     );
     assertEquals(array.length, 2);

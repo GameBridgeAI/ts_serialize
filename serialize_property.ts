@@ -1,12 +1,12 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  FromJsonStrategy,
-  FromJsonStrategyArgument,
+  FromJSONStrategy,
+  FromJSONStrategyArgument,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
-  ToJsonStrategy,
-  ToJsonStrategyArgument,
+  ToJSONStrategy,
+  ToJSONStrategyArgument,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
@@ -25,22 +25,22 @@ export type SerializePropertyArgument =
   | ToSerializedKeyStrategy
   | {
     serializedKey?: string | ToSerializedKeyStrategy;
-    fromJsonStrategy?:
-      | FromJsonStrategy
-      | FromJsonStrategyArgument;
-    toJsonStrategy?:
-      | ToJsonStrategy
-      | ToJsonStrategyArgument;
+    fromJSONStrategy?:
+      | FromJSONStrategy
+      | FromJSONStrategyArgument;
+    toJSONStrategy?:
+      | ToJSONStrategy
+      | ToJSONStrategyArgument;
   };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  fromJsonStrategy?:
-    | FromJsonStrategy
-    | FromJsonStrategyArgument;
-  toJsonStrategy?:
-    | ToJsonStrategy
-    | ToJsonStrategyArgument;
+  fromJSONStrategy?:
+    | FromJSONStrategy
+    | FromJSONStrategyArgument;
+  toJSONStrategy?:
+    | ToJSONStrategy
+    | ToJSONStrategyArgument;
 }
 
 /** Property wrapper that adds serializable options to the class map */
@@ -81,8 +81,8 @@ export function SerializeProperty(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
-        decoratorArgumentOptions.fromJsonStrategy,
-        decoratorArgumentOptions.toJsonStrategy,
+        decoratorArgumentOptions.fromJSONStrategy,
+        decoratorArgumentOptions.toJSONStrategy,
       ),
     );
   };
@@ -121,8 +121,8 @@ function getDecoratorArgumentOptions(
   if (typeof decoratorArguments.serializedKey === "function") {
     return {
       serializedKey: decoratorArguments.serializedKey(String(propertyName)),
-      fromJsonStrategy: decoratorArguments.fromJsonStrategy,
-      toJsonStrategy: decoratorArguments.toJsonStrategy,
+      fromJSONStrategy: decoratorArguments.fromJSONStrategy,
+      toJSONStrategy: decoratorArguments.toJSONStrategy,
     };
   }
 

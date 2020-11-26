@@ -55,7 +55,7 @@ test({
     const testObj = new Test2();
 
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
     );
   },

@@ -1,17 +1,17 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { FromJsonStrategy, JsonValue, Serializable } from "../serializable.ts";
+import { FromJSONStrategy, JSONValue, Serializable } from "../serializable.ts";
 
-/** revive data using `fromJson` on a subclass type */
-export function fromJsonAs<T>(
+/** revive data using `fromJSON` on a subclass type */
+export function fromJSONAs<T>(
   type: T & { new (): Serializable },
-): FromJsonStrategy {
-  return function _fromJsonAs(
-    value: JsonValue,
+): FromJSONStrategy {
+  return function _fromJSONAs(
+    value: JSONValue,
   ): Serializable | Serializable[] {
     if (Array.isArray(value)) {
-      return value.map((item) => new type().fromJson(item));
+      return value.map((item) => new type().fromJSON(item));
     }
-    return new type().fromJson(value);
+    return new type().fromJSON(value);
   };
 }

@@ -1,11 +1,11 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../test_deps.ts";
-import { defaultToJson } from "./default.ts";
+import { defaultToJSON } from "./default.ts";
 
 test({
-  name: "defaultToJson passes the value unmodified",
+  name: "defaultToJSON passes the value unmodified",
   fn() {
-    assertEquals(defaultToJson("Hello world"), "Hello world");
+    assertEquals(defaultToJSON("Hello world"), "Hello world");
   },
 });

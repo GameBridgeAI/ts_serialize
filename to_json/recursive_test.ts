@@ -1,12 +1,12 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../test_deps.ts";
-import { recursiveToJson } from "./recursive.ts";
+import { recursiveToJSON } from "./recursive.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
 test({
-  name: "recursiveToJson manages inheritance",
+  name: "recursiveToJSON manages inheritance",
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
@@ -14,6 +14,6 @@ test({
     }
 
     const testObj = new Test();
-    assertEquals(recursiveToJson(testObj).id, 1);
+    assertEquals(recursiveToJSON(testObj).id, 1);
   },
 });

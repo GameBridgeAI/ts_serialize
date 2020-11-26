@@ -1,13 +1,13 @@
 import {
   composeStrategy,
   createDateStrategy,
-  fromJsonAs,
-  FromJsonStrategy,
+  fromJSONAs,
+  FromJSONStrategy,
   iso8601Date,
-  readJson,
+  readJSON,
   Serializable,
   SerializeProperty,
-  ToJsonStrategy,
+  ToJSONStrategy,
   TransformKey,
 } from "./deps.ts";
 
@@ -19,83 +19,83 @@ function assert(boolean: boolean, msg?: string): void {
 }
 
 const customStrategy = (v: string) => `${v} strategy changed`;
-const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
-const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
+const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
+const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
-const toJsonFixture = await readJson("../fixtures/to.json") as Record<
+const toJSONFixture = await readJSON("../fixtures/to.json") as Record<
   string,
   any
 >;
-const fromJsonFixture = await readJson("../fixtures/from.json") as Record<
+const fromJSONFixture = await readJSON("../fixtures/from.json") as Record<
   string,
   any
 >;
 
 class Nested extends Serializable {
   @SerializeProperty("sub_property")
-  subProperty = "toJson";
+  subProperty = "toJSON";
 }
 
 class Test extends Serializable {
   notSerialized = "not serialized";
 
   @SerializeProperty()
-  serializedPropertyNoArg = "toJson";
+  serializedPropertyNoArg = "toJSON";
 
   @SerializeProperty("rename_test")
-  renameTest = "toJson";
+  renameTest = "toJSON";
 
   @SerializeProperty({ serializedKey: "rename_test_by_property" })
-  renameTestByProperty = "toJson";
+  renameTestByProperty = "toJSON";
 
-  @SerializeProperty({ fromJsonStrategy: customStrategy })
-  fromJsonStrategyTest = "toJson";
+  @SerializeProperty({ fromJSONStrategy: customStrategy })
+  fromJSONStrategyTest = "toJSON";
 
-  @SerializeProperty({ toJsonStrategy: customStrategy })
-  toJsonStrategyTest = "toJson";
+  @SerializeProperty({ toJSONStrategy: customStrategy })
+  toJSONStrategyTest = "toJSON";
 
   @SerializeProperty(
     {
-      toJsonStrategy: composeStrategy(
-        fromJsonStrategy,
+      toJSONStrategy: composeStrategy(
+        fromJSONStrategy,
         (v: string) => `${v} changed`,
       ),
-      fromJsonStrategy: composeStrategy(
+      fromJSONStrategy: composeStrategy(
         (v: string) => `${v} strategy`,
-        toJsonStrategy,
+        toJSONStrategy,
       ),
     },
   )
-  composeStrategyTest = "toJson";
+  composeStrategyTest = "toJSON";
 
-  @SerializeProperty({ fromJsonStrategy: fromJsonAs(Nested) })
-  fromJsonAsTest = new Nested();
+  @SerializeProperty({ fromJSONStrategy: fromJSONAs(Nested) })
+  fromJSONAsTest = new Nested();
 
-  @SerializeProperty({ fromJsonStrategy: iso8601Date })
+  @SerializeProperty({ fromJSONStrategy: iso8601Date })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
-  @SerializeProperty({ fromJsonStrategy: customDateStrategy })
+  @SerializeProperty({ fromJSONStrategy: customDateStrategy })
   createDate = new Date("2099-11-25");
 }
-assert(new Test().toJson() === JSON.stringify(toJsonFixture), "toJson()");
-const test = new Test().fromJson(fromJsonFixture);
+assert(new Test().toJSON() === JSON.stringify(toJSONFixture), "toJSON()");
+const test = new Test().fromJSON(fromJSONFixture);
 assert(test.notSerialized === "not serialized", "notSerialized");
-assert(test.serializedPropertyNoArg === "fromJson", "serializedPropertyNoArg");
-assert(test.renameTest === "fromJson", "renameTest");
-assert(test.renameTestByProperty === "fromJson", "renameTestByProperty");
+assert(test.serializedPropertyNoArg === "fromJSON", "serializedPropertyNoArg");
+assert(test.renameTest === "fromJSON", "renameTest");
+assert(test.renameTestByProperty === "fromJSON", "renameTestByProperty");
 assert(
-  test.fromJsonStrategyTest === "fromJson strategy changed",
-  "fromJsonStrategyTest",
+  test.fromJSONStrategyTest === "fromJSON strategy changed",
+  "fromJSONStrategyTest",
 );
-assert(test.toJsonStrategyTest === "fromJson", "toJsonStrategyTest");
+assert(test.toJSONStrategyTest === "fromJSON", "toJSONStrategyTest");
 assert(
-  test.composeStrategyTest === "fromJson strategy changed",
+  test.composeStrategyTest === "fromJSON strategy changed",
   "composeStrategyTest",
 );
-assert(test.fromJsonAsTest instanceof Nested, "fromJsonAsTest instanceof");
+assert(test.fromJSONAsTest instanceof Nested, "fromJSONAsTest instanceof");
 assert(
-  test.fromJsonAsTest.subProperty === "fromJson",
-  "fromJsonAsTest.subProperty",
+  test.fromJSONAsTest.subProperty === "fromJSON",
+  "fromJSONAsTest.subProperty",
 );
 assert(test.isoDate instanceof Date, "isoDate instanceof");
 assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear()");
@@ -126,26 +126,26 @@ class TestTransformKey4 extends TestTransformKey3 {
   public test4 = "test4";
 }
 
-assert(new TestTransformKey2().toJson() === `{"__test2__":"test2"}`);
+assert(new TestTransformKey2().toJSON() === `{"__test2__":"test2"}`);
 assert(
-  new TestTransformKey2().fromJson({ __test2__: "changed" }).test2 ===
+  new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2 ===
     `changed`,
 );
 
 assert(
-  new TestTransformKey3().toJson() ===
+  new TestTransformKey3().toJSON() ===
     `{"__test2__":"test2","--test3--":"test3"}`,
 );
 assert(
-  new TestTransformKey3().fromJson({ "--test3--": "changed" }).test3 ===
+  new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3 ===
     `changed`,
 );
 
 assert(
-  new TestTransformKey4().toJson() ===
+  new TestTransformKey4().toJSON() ===
     `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
 );
 assert(
-  new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4 ===
+  new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4 ===
     `changed`,
 );

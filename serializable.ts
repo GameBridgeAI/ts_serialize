@@ -1,26 +1,26 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { defaultToJson } from "./to_json/default.ts";
-import { defaultFromJson } from "./from_json/default.ts";
-import { recursiveToJson } from "./to_json/recursive.ts";
+import { defaultToJSON } from "./to_json/default.ts";
+import { defaultFromJSON } from "./from_json/default.ts";
+import { recursiveToJSON } from "./to_json/recursive.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
-export type JsonObject = {
-  [key: string]: JsonValue;
+export type JSONObject = {
+  [key: string]: JSONValue;
 };
 
 /** A JSON array where each value is a simple JSON value. */
-export interface JsonArray extends Array<JsonValue> {}
+export interface JSONArray extends Array<JSONValue> {}
 
 /** A property value in a JSON object. */
-export type JsonValue =
+export type JSONValue =
   | string
   | number
   | boolean
   | null
-  | JsonObject
-  | JsonArray;
+  | JSONObject
+  | JSONArray;
 
 /** to be implemented by external authors on their models  */
 export declare interface TransformKey {
@@ -38,64 +38,64 @@ export abstract class Serializable {
     return key;
   }
   /** to JSON String */
-  public toJson(): string {
-    return toJson(this);
+  public toJSON(): string {
+    return toJSON(this);
   }
   /** to instanceof */
-  public fromJson(json: JsonValue | Object): this {
-    return fromJson(this, json);
+  public fromJSON(json: JSONValue | Object): this {
+    return fromJSON(this, json);
   }
   /** to JSONObject */
-  public tsSerialize(): JsonObject {
+  public tsSerialize(): JSONObject {
     return toPojo(this);
   }
 }
 
 /** Functions used when hydrating data */
-export type FromJsonStrategy = (value: JsonValue) => any;
-export type FromJsonStrategyArgument =
-  (FromJsonStrategy | FromJsonStrategy[])[];
+export type FromJSONStrategy = (value: JSONValue) => any;
+export type FromJSONStrategyArgument =
+  (FromJSONStrategy | FromJSONStrategy[])[];
 
 /** Functions used when dehydrating data */
-export type ToJsonStrategy = (value: any) => JsonValue;
-export type ToJsonStrategyArgument = (ToJsonStrategy | ToJsonStrategy[])[];
+export type ToJSONStrategy = (value: any) => JSONValue;
+export type ToJSONStrategyArgument = (ToJSONStrategy | ToJSONStrategy[])[];
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
-  public fromJsonStrategy?: FromJsonStrategy;
-  public toJsonStrategy?: ToJsonStrategy;
+  public fromJSONStrategy?: FromJSONStrategy;
+  public toJSONStrategy?: ToJSONStrategy;
 
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJsonStrategy?: FromJsonStrategy | FromJsonStrategyArgument,
-    toJsonStrategy?: ToJsonStrategy | ToJsonStrategyArgument,
+    fromJSONStrategy?: FromJSONStrategy | FromJSONStrategyArgument,
+    toJSONStrategy?: ToJSONStrategy | ToJSONStrategyArgument,
   ) {
-    if (Array.isArray(fromJsonStrategy)) {
-      this.fromJsonStrategy = composeStrategy(...fromJsonStrategy);
-    } else if (fromJsonStrategy) {
-      this.fromJsonStrategy = fromJsonStrategy;
+    if (Array.isArray(fromJSONStrategy)) {
+      this.fromJSONStrategy = composeStrategy(...fromJSONStrategy);
+    } else if (fromJSONStrategy) {
+      this.fromJSONStrategy = fromJSONStrategy;
     }
 
-    if (Array.isArray(toJsonStrategy)) {
-      this.toJsonStrategy = composeStrategy(...toJsonStrategy);
-    } else if (toJsonStrategy) {
-      this.toJsonStrategy = toJsonStrategy;
+    if (Array.isArray(toJSONStrategy)) {
+      this.toJSONStrategy = composeStrategy(...toJSONStrategy);
+    } else if (toJSONStrategy) {
+      this.toJSONStrategy = toJSONStrategy;
     }
   }
 }
 
-/** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
+/** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
  * Converts value from functions provided as parameters
  */
 export function composeStrategy(
   ...fns:
-    | FromJsonStrategyArgument
-    | ToJsonStrategyArgument
-): FromJsonStrategy | ToJsonStrategy {
+    | FromJSONStrategyArgument
+    | ToJSONStrategyArgument
+): FromJSONStrategy | ToJSONStrategy {
   return function _composeStrategy(val: any): any {
     return fns.flat().reduce(
-      (acc: any, fn: FromJsonStrategy | ToJsonStrategy) => fn(acc),
+      (acc: any, fn: FromJSONStrategy | ToJSONStrategy) => fn(acc),
       val,
     );
   };
@@ -116,7 +116,7 @@ const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
 /** Converts to object using mapped keys */
 export function toPojo(
   context: any,
-): JsonObject {
+): JSONObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
@@ -127,12 +127,12 @@ export function toPojo(
         ?.prototype}`,
     );
   }
-  const record: JsonObject = {};
+  const record: JSONObject = {};
   for (
     let {
       propertyKey,
       serializedKey,
-      toJsonStrategy = defaultToJson,
+      toJSONStrategy = defaultToJSON,
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
@@ -144,7 +144,7 @@ export function toPojo(
         (value as Serializable)?.constructor?.prototype,
       )
     ) {
-      toJsonStrategy = recursiveToJson;
+      toJSONStrategy = recursiveToJSON;
     }
 
     if (Array.isArray(value)) {
@@ -152,24 +152,24 @@ export function toPojo(
         if (item instanceof Serializable) {
           return toPojo(item);
         }
-        return toJsonStrategy(item);
+        return toJSONStrategy(item);
       });
     } else if (value !== undefined) {
-      record[serializedKey] = toJsonStrategy(value);
+      record[serializedKey] = toJSONStrategy(value);
     }
   }
   return record;
 }
 
 /** Convert to `pojo` with our mapping logic then to string */
-function toJson<T>(context: T): string {
+function toJSON<T>(context: T): string {
   return JSON.stringify(toPojo(context));
 }
 
 /** Convert from object/string to mapped object on the context */
-function fromJson<T>(
+function fromJSON<T>(
   context: Serializable,
-  json: JsonValue | Object,
+  json: JSONValue | Object,
 ): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -187,9 +187,9 @@ function fromJson<T>(
     context,
     JSON.parse(
       _json,
-      /** Processes the value through the provided or default `fromJsonStrategy` */
-      function revive(key: string, value: JsonValue): unknown {
-        // After the last iteration of the fromJsonStrategy a function
+      /** Processes the value through the provided or default `fromJSONStrategy` */
+      function revive(key: string, value: JSONValue): unknown {
+        // After the last iteration of the fromJSONStrategy a function
         // will be called one more time with a empty string key
         if (key === "") {
           return value;
@@ -197,12 +197,12 @@ function fromJson<T>(
 
         const {
           propertyKey,
-          fromJsonStrategy = defaultFromJson,
+          fromJSONStrategy = defaultFromJSON,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
         const processedValue: unknown = Array.isArray(value)
-          ? value.map((v) => fromJsonStrategy(v))
-          : fromJsonStrategy(value);
+          ? value.map((v) => fromJSONStrategy(v))
+          : fromJSONStrategy(value);
 
         if (propertyKey) {
           context[propertyKey as keyof Serializable] = processedValue as any;

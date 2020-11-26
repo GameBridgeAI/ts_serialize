@@ -13,16 +13,16 @@ class Test extends Serializable {
 }
 
 assertEquals(
-  new Test().toJson(),
+  new Test().toJSON(),
   `{"propertyOne":"Hello","propertyTwo":"World!"}`
 );
-const testObj = new Test().fromJson(
-  `{"propertyOne":"From","propertyTwo":"Json!","notSerialized":"changed"}`
+const testObj = new Test().fromJSON(
+  `{"propertyOne":"From","propertyTwo":"JSON!","notSerialized":"changed"}`
 );
 assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "Json!");
+assertEquals(testObj.propertyTwo, "JSON!");
 assertEquals(testObj.notSerialized, "changed");
-assertEquals(testObj.toJson(), `{"propertyOne":"From","propertyTwo":"Json!"}`);
+assertEquals(testObj.toJSON(), `{"propertyOne":"From","propertyTwo":"JSON!"}`);
 ```
 ### Inheritance
 
@@ -44,12 +44,12 @@ class Test2 extends Test1 {
 const testObj = new Test2();
 assertEquals(testObj.serializeMe, "nice1");
 assertEquals(testObj.serializeMeInstead, "nice2");
-assertEquals(testObj.toJson(), `{"serialize_me":"nice2"}`);
+assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
 ```
 
 ### Nested Class Serialization
 
-**ToJson**
+**ToJSON**
 
 Serializing a nested class will follow the serialization rules set from the class:
 
@@ -67,12 +67,12 @@ class Test2 extends Serializable {
 }
 
 const testObj = new Test2();
-assertEquals(testObj.toJson(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 ```
 
-**FromJson**
+**FromJSON**
 
-Use a [strategy](./strategies) to revive the property into a class. `fromJsonAs` is 
+Use a [strategy](./strategies) to revive the property into a class. `fromJSONAs` is 
 a provided function export that takes one parameter, the instance type the object 
 will take when revived.
 
@@ -85,13 +85,13 @@ class Test1 extends Serializable {
 class Test2 extends Serializable {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJsonStrategy: fromJsonAs(Test1),
+    fromJSONStrategy: fromJSONAs(Test1),
   })
   nested!: Test1;
 }
 
 const testObj = new Test2();
-testObj.fromJson(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
+testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 
@@ -113,26 +113,26 @@ class Test extends Serializable {
 }
 
 assertEquals(
-  new Test().toJson(),
+  new Test().toJSON(),
   `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
 );
-const testObj = new Test().fromJson(
-  `{"propertyOne":"From","property_two":"Json!","__propertyThree__":"bar","notSerialized":"changed"}`,
+const testObj = new Test().fromJSON(
+  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
 );
 assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "Json!");
+assertEquals(testObj.propertyTwo, "JSON!");
 assertEquals(testObj.notSerialized, "changed");
 assertEquals(
-  testObj.toJson(),
-  `{"propertyOne":"From","property_two":"Json!","__propertyThree__":"bar"}`,
+  testObj.toJSON(),
+  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
 );
 ```
 
 `SerializeProperty` also excepts an options object with the properties:
 
 - `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the key in the serialized object
-- `toJsonStrategy` (Optional) `{ToJsonStrategy}` - Used when serializing
-- `fromJsonStrategy` (Optional) `{FromJsonStrategy}` - Used when deserializing
+- `toJSONStrategy` (Optional) `{ToJSONStrategy}` - Used when serializing
+- `fromJSONStrategy` (Optional) `{FromJSONStrategy}` - Used when deserializing
 
 For example the class in the above code block could also be written as:
 
@@ -147,18 +147,18 @@ class Test extends Serializable {
   notSerialized = "not-serialized";
 }
 assertEquals(
-  new Test().toJson(),
+  new Test().toJSON(),
   `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
 );
-const testObj = new Test().fromJson(
-  `{"propertyOne":"From","property_two":"Json!","__propertyThree__":"bar","notSerialized":"changed"}`,
+const testObj = new Test().fromJSON(
+  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
 );
 assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "Json!");
+assertEquals(testObj.propertyTwo, "JSON!");
 assertEquals(testObj.notSerialized, "changed");
 assertEquals(
-  testObj.toJson(),
-  `{"propertyOne":"From","property_two":"Json!","__propertyThree__":"bar"}`,
+  testObj.toJSON(),
+  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
 );
 ```
 
