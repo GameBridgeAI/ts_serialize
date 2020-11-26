@@ -1,9 +1,9 @@
 import {
+  polymorphicClassFromJSON,
   PolymorphicResolver,
-  serializePolymorphicClass,
 } from "./polymorphic.ts";
-import { JsonValue, Serializable } from "./serializable.ts";
-import { SerializeProperty } from "./serialize_property.ts";
+import { JsonValue, Serializable } from "../serializable.ts";
+import { SerializeProperty } from "../serialize_property.ts";
 
 abstract class MyBaseClass extends Serializable {
   @SerializeProperty()
@@ -34,18 +34,26 @@ abstract class MyBaseClass extends Serializable {
 
 class MyPolyClassImplementation extends MyBaseClass {
   public static _class = "MyPolyClassImplementation";
+  @SerializeProperty()
+  public requiredVal = 32;
 }
 
 class MyOtherPolyClass extends MyBaseClass {
   public static _class = "MyOtherPolyClass";
+  @SerializeProperty()
+  public requiredVal = 33;
+
+  public testMethod() {
+    console.log("custom logic");
+  }
 }
 
-const myPolyClassInstance = serializePolymorphicClass(
+const myPolyClassInstance = polymorphicClassFromJSON(
   MyBaseClass,
   { "_class": MyPolyClassImplementation._class },
 );
 
-const myOtherPolyClassInstance = serializePolymorphicClass(
+const myOtherPolyClassInstance = polymorphicClassFromJSON(
   MyBaseClass,
   { "_class": MyOtherPolyClass._class },
 );
@@ -61,7 +69,7 @@ console.log("=== Test full serialize ===");
 const data =
   `{"_class":"MyOtherPolyClass", "someProperty": 13, "parentValue": 33}`;
 
-const test = serializePolymorphicClass(MyBaseClass, data);
+const test = polymorphicClassFromJSON(MyBaseClass, data);
 
 console.log(test);
 
