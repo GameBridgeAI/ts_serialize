@@ -62,7 +62,7 @@ declare module "@gamebridgeai/ts_serialize" {
    * `serializedName` is not set
    */
   export function SerializeProperty(
-    arg: string | SerializePropertyArgument,
+    arg?: string | SerializePropertyArgument,
   ): PropertyDecorator;
 
   /** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
