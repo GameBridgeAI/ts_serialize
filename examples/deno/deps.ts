@@ -1,5 +1,4 @@
 export {
-  as,
   composeStrategy,
   createDateStrategy,
   FromJSONStrategy,
@@ -7,6 +6,7 @@ export {
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
+  toSerializable,
   TransformKey,
 } from "https://deno.land/x/ts_serialize/mod.ts";
 export { readJSON } from "https://deno.land/std@0.68.0/fs/mod.ts";

@@ -1,7 +1,6 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  as,
   composeStrategy,
   createDateStrategy,
   FromJSONStrategy,
@@ -9,6 +8,7 @@ import {
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
+  toSerializable,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
 import toJSONFixture from "../fixtures/to.json";
@@ -63,7 +63,7 @@ class Test extends Serializable {
   )
   composeStrategyTest = "toJSON";
 
-  @SerializeProperty({ fromJSONStrategy: as(Nested) })
+  @SerializeProperty({ fromJSONStrategy: toSerializable(Nested) })
   asTest = new Nested();
 
   @SerializeProperty({ fromJSONStrategy: iso8601Date })

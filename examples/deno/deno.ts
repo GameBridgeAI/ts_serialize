@@ -1,5 +1,4 @@
 import {
-  as,
   composeStrategy,
   createDateStrategy,
   FromJSONStrategy,
@@ -8,6 +7,7 @@ import {
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
+  toSerializable,
   TransformKey,
 } from "./deps.ts";
 
@@ -68,7 +68,7 @@ class Test extends Serializable {
   )
   composeStrategyTest = "toJSON";
 
-  @SerializeProperty({ fromJSONStrategy: as(Nested) })
+  @SerializeProperty({ fromJSONStrategy: toSerializable(Nested) })
   asTest = new Nested();
 
   @SerializeProperty({ fromJSONStrategy: iso8601Date })

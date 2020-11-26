@@ -1,9 +1,16 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { toJSONDefault } from "./to_json/default.ts";
-import { fromJSONDefault } from "./from_json/default.ts";
-import { toJSONRecursive } from "./to_json/recursive.ts";
+import { toJSONDefault } from "./strategy/to_json/default.ts";
+import { fromJSONDefault } from "./strategy/from_json/default.ts";
+import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
+import {
+  composeStrategy,
+  FromJSONStrategy,
+  FromJSONStrategyArgument,
+  ToJSONStrategy,
+  ToJSONStrategyArgument,
+} from "./strategy/compose_strategy.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -51,15 +58,6 @@ export abstract class Serializable {
   }
 }
 
-/** Functions used when hydrating data */
-export type FromJSONStrategy = (value: JSONValue) => any;
-export type FromJSONStrategyArgument =
-  (FromJSONStrategy | FromJSONStrategy[])[];
-
-/** Functions used when dehydrating data */
-export type ToJSONStrategy = (value: any) => JSONValue;
-export type ToJSONStrategyArgument = (ToJSONStrategy | ToJSONStrategy[])[];
-
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
   public fromJSONStrategy?: FromJSONStrategy;
@@ -83,22 +81,6 @@ export class SerializePropertyOptions {
       this.toJSONStrategy = toJSONStrategy;
     }
   }
-}
-
-/** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
- * Converts value from functions provided as parameters
- */
-export function composeStrategy(
-  ...fns:
-    | FromJSONStrategyArgument
-    | ToJSONStrategyArgument
-): FromJSONStrategy | ToJSONStrategy {
-  return function _composeStrategy(val: any): any {
-    return fns.flat().reduce(
-      (acc: any, fn: FromJSONStrategy | ToJSONStrategy) => fn(acc),
-      val,
-    );
-  };
 }
 
 /** Options for each class */

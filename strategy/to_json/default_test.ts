@@ -1,6 +1,6 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, test } from "../test_deps.ts";
+import { assertEquals, test } from "../../test_deps.ts";
 import { toJSONDefault } from "./default.ts";
 
 test({

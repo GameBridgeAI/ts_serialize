@@ -5,16 +5,18 @@
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";
 
-/** types, isolatedModules requires this to be `export type ...` */
+/** types */
+export type { TransformKey } from "./serializable.ts";
+/** abstract class */
+export { Serializable } from "./serializable.ts";
+/** strategy helper */
+export { composeStrategy } from "./strategy/compose_strategy.ts";
+/** types */
 export type {
   FromJSONStrategy,
   ToJSONStrategy,
-  TransformKey,
-} from "./serializable.ts";
-
-/** abstract class and and compose strategy functions */
-export { composeStrategy, Serializable } from "./serializable.ts";
+} from "./strategy/compose_strategy.ts";
 
 /** from json strategies */
-export { as } from "./from_json/as.ts";
-export { createDateStrategy, iso8601Date } from "./from_json/date.ts";
+export { toSerializable } from "./strategy/from_json/to_serializable.ts";
+export { createDateStrategy, iso8601Date } from "./strategy/from_json/date.ts";

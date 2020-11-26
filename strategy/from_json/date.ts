@@ -1,6 +1,6 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
-
-import { FromJSONStrategy, JSONValue } from "../serializable.ts";
+import { FromJSONStrategy } from "../compose_strategy.ts";
+import { JSONValue } from "../../serializable.ts";
 
 /** allows authors to pass a regex to parse as a date */
 export function createDateStrategy(regex: RegExp): FromJSONStrategy {

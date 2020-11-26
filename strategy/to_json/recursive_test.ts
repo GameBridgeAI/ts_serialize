@@ -1,9 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, test } from "../test_deps.ts";
+import { assertEquals, test } from "../../test_deps.ts";
 import { toJSONRecursive } from "./recursive.ts";
-import { Serializable } from "../serializable.ts";
-import { SerializeProperty } from "../serialize_property.ts";
+import { Serializable } from "../../serializable.ts";
+import { SerializeProperty } from "../../serialize_property.ts";
 
 test({
   name: "toJSONRecursive manages inheritance",

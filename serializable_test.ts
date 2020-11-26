@@ -1,17 +1,25 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "./test_deps.ts";
-import { composeStrategy, Serializable, TransformKey } from "./serializable.ts";
+import { Serializable, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
+import { composeStrategy } from "./strategy/compose_strategy.ts";
 
 test({
   name: "adds methods to extended classes",
   fn() {
-    class TestClass extends Serializable {}
+    class TestClass extends Serializable {
+      @SerializeProperty()
+      public test: number = 99;
+    }
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
     assertEquals(typeof testObj.toJSON, "function");
     assertEquals(typeof testObj.fromJSON, "function");
+    assertEquals(typeof testObj.tsSerialize, "function");
+    assertEquals(testObj.toJSON(), `{"test":99}`);
+    assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
+    assertEquals(testObj.tsSerialize(), { test: 99 });
   },
 });
 

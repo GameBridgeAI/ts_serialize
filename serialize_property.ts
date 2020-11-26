@@ -1,15 +1,17 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  FromJSONStrategy,
-  FromJSONStrategyArgument,
   SERIALIZABLE_CLASS_MAP,
   SerializePropertyOptions,
-  ToJSONStrategy,
-  ToJSONStrategyArgument,
 } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
+import {
+  FromJSONStrategy,
+  FromJSONStrategyArgument,
+  ToJSONStrategy,
+  ToJSONStrategyArgument,
+} from "./strategy/compose_strategy.ts";
 
 export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";

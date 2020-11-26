@@ -85,7 +85,7 @@ class Test1 extends Serializable {
 class Test2 extends Serializable {
   @SerializeProperty({
     serializedKey: "serialize_me_2",
-    fromJSONStrategy: as(Test1),
+    fromJSONStrategy: toSerializable(Test1),
   })
   nested!: Test1;
 }
