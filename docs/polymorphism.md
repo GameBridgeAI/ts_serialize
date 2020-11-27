@@ -106,7 +106,7 @@ class MyBlueClass extends MyColourClass {
   }
 }
 
-// Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
+// Serialize using JSON.parse, read `colour` off of the parsed object, then parse using the value provided in `@PolymorphicSwitch`
 const redClass = polymorphicClassFromJSON(
   MyColourClass,
   `{"colour":"RED","crimson":true}`,
@@ -145,7 +145,7 @@ class MyBlueClass extends MyColourClass {
   }
 }
 
-// Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
+// Serialize using JSON.parse, read `crimson` off of the parsed object, then parse using the value provided in `@PolymorphicSwitch`
 const redClass = polymorphicClassFromJSON(MyColourClass, `{"crimson":true}`);
 
 console.log(`Is a red class? ${redClass instanceof MyRedClass}`);
