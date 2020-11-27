@@ -14,6 +14,10 @@ test({
     assertEquals(typeof mod.iso8601Date, "function");
     assertEquals(typeof mod.toSerializable, "function");
 
-    assertEquals(Object.keys(mod).length, 6);
+    assertEquals(typeof mod.polymorphicClassFromJSON, "function");
+    assertEquals(typeof mod.PolymorphicResolver, "function");
+    assertEquals(typeof mod.PolymorphicSwitch, "function");
+
+    assertEquals(Object.keys(mod).length, 9);
   },
 });
