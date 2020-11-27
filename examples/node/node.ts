@@ -180,7 +180,7 @@ class TestClass extends AbstractClass {
 
 const testData = { _class: "TestClass", someProperty: "new value" };
 
-const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
+const polyClass = polymorphicClassFromJSON(AbstractClass, testData) as TestClass;
 
 assert(polyClass instanceof TestClass);
 assert(polyClass.someProperty === "new value");
@@ -203,14 +203,14 @@ class TestClass2 extends AbstractClass2 {
 
 const testData1 = { _class: "TestClass1", someProperty: "new value" };
 
-const polyClass1 = polymorphicClassFromJSON(AbstractClass2, testData1);
+const polyClass1 = polymorphicClassFromJSON(AbstractClass2, testData1) as TestClass1;
 
 assert(polyClass1 instanceof TestClass1);
 assert(polyClass1.someProperty === "new value");
 
 const testData2 = { _class: "TestClass2", someProperty: "new value" };
 
-const polyClass2 = polymorphicClassFromJSON(AbstractClass2, testData2);
+const polyClass2 = polymorphicClassFromJSON(AbstractClass2, testData2) as TestClass2;
 
 assert(polyClass2 instanceof TestClass2);
 assert(polyClass2.someProperty === "new value");
