@@ -1,9 +1,8 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, fail } from "https://deno.land/std@0.77.0/testing/asserts.ts";
-import { JsonValue, Serializable } from "../serializable.ts";
-import { SerializeProperty } from "../serialize_property.ts";
-import { assertEquals, test } from "../test_deps.ts";
+import { JSONValue, Serializable } from "./serializable.ts";
+import { SerializeProperty } from "./serialize_property.ts";
+import { assert, assertEquals, fail, test } from "./test_deps.ts";
 import {
   polymorphicClassFromJSON,
   PolymorphicResolver,
@@ -23,9 +22,9 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        input: string | JsonValue | Object,
+        input: string | JSONValue | Object,
       ): Serializable {
-        const inputObject = new ResolverHelperClass().fromJson(input);
+        const inputObject = new ResolverHelperClass().fromJSON(input);
 
         switch (inputObject._class) {
           case "TestClass":
@@ -64,9 +63,9 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        input: string | JsonValue | Object,
+        input: string | JSONValue | Object,
       ): Serializable {
-        const inputObject = new ResolverHelperClass().fromJson(input);
+        const inputObject = new ResolverHelperClass().fromJSON(input);
 
         switch (inputObject._class) {
           case "TestClass1":

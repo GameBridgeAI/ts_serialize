@@ -1,12 +1,12 @@
 {
-    "serializedPropertyNoArg": "fromJson",
-    "rename_test": "fromJson",
-    "rename_test_by_property": "fromJson",
-    "fromJsonStrategyTest": "fromJson",
-    "toJsonStrategyTest": "fromJson",
-    "composeStrategyTest": "fromJson",
-    "fromJsonAsTest":{
-        "sub_property": "fromJson"
+    "serializedPropertyNoArg": "fromJSON",
+    "rename_test": "fromJSON",
+    "rename_test_by_property": "fromJSON",
+    "fromJSONStrategyTest": "fromJSON",
+    "toJSONStrategyTest": "fromJSON",
+    "composeStrategyTest": "fromJSON",
+    "asTest":{
+        "sub_property": "fromJSON"
     },
     "isoDate": "2020-06-04T19:01:47.831Z",
     "createDate": "2099-11-25"

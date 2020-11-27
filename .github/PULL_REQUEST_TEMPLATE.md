@@ -1,19 +1,15 @@
-## Fixes
+**Description**
 
-_Please link to the issue this PR addresses_
+_Please link to the issue this PR addresses and add a few sentences describing the overall problem and goals of the pull request's commits._
 
-## Description
-
-_A few sentences describing the overall problem and goals of the pull request's commits._
-
-## Proposed changes in this PR
+**Proposed changes in this PR**
 
 - foo
 - bar
 - baz
 
-## Things to look at
+**Things to look at**
 
 - [ ] Test coverage
 - [ ] Code Style
-- [ ] Documentation (READMEs etc)
+- [ ] Documentation (`README.md`, `doc/`, `examples/`, etc..)

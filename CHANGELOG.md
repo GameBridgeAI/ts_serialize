@@ -9,8 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - fixed #83
+- fixed #81
+- fixed #63
+- **breaking** the great json->JSON change program wide too follow the JS convention 
+- **breaking** fromJSONas -> toSerializable
+- deno@1.5.4
+- std@0.79.0
+- moved lots of code
 
 ### Added
+- new error_messages.ts file 
 - Added `PolymorphicResolver` and `PolymorphicSwitch` decorators, and 
 `polymorphicClassFromJSON` function for deserializing polymorphic data
  structures
@@ -18,7 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [v0.4.0] - 2020-11-19
 
 ### Changed
-- **breaking** `ISODateFromJson` renamed to `iso8601Date`
+- **breaking** `ISODateFromJSON` renamed to `iso8601Date`
 
 ### Added
 - better iso 8601  parsing support
@@ -51,7 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-_The input to fromJson() is now a JsonValue, enforcing basic JSON requirements:
+_The input to fromJSON() is now a JSONValue, enforcing basic JSON requirements:
 Property values must be legal JSON values. This is meant to allow the compiler 
 to flag accidental deserializations of already-deserialized objects._
 
@@ -96,7 +104,7 @@ to flag accidental deserializations of already-deserialized objects._
 ### Changed
 
 - various ci related things
-- added `fromJsonAs` exported function
+- added `as` exported function
 
 ## [v0.0.12] - 2020-6-09
 

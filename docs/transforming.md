@@ -1,3 +1,11 @@
+# 🥣 ts_serialize 
+
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Global transformKey
 
 `Serializable` has an optional function `tsTransformKey(key: string): string`, we also
@@ -14,9 +22,9 @@ class TestTransformKey extends Serializable implements TransformKey {
   public test = "test";
 }
 
-assertEquals(new TestTransformKey().toJson(), `{"__test__":"test"}`);
+assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
 assertEquals(
-  new TestTransformKey().fromJson({ __test__: "changed" }).test,
+  new TestTransformKey().fromJSON({ __test__: "changed" }).test,
   `changed`
 );
 ```
@@ -41,11 +49,11 @@ class TestTransformKey3 extends TestTransformKey2 {
 }
 
 assertEquals(
-  new TestTransformKey3().toJson(),
+  new TestTransformKey3().toJSON(),
   `{"__test2__":"test2","__test3__":"test3"}`
 );
 assertEquals(
-  new TestTransformKey3().fromJson({ __test3__: "changed" }).test3,
+  new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
   `changed`
 );
 ```
@@ -77,11 +85,11 @@ class TestTransformKey4 extends TestTransformKey3 {
   public test4 = "test4";
 }
 assertEquals(
-  new TestTransformKey4().toJson(),
+  new TestTransformKey4().toJSON(),
   `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
 );
 assertEquals(
-  new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4,
+  new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
   `changed`
 );
 ```
@@ -108,15 +116,15 @@ class TestTransformKey2 extends TestTransformKey {
 }
 
 assertEquals(
-  new TestTransformKey2().toJson(),
+  new TestTransformKey2().toJSON(),
   `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`
 );
 assertEquals(
-  new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
+  new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
   `changed`
 );
 assertEquals(
-  new TestTransformKey2().fromJson({ changed2: "changed" }).changeMe2,
+  new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
   `changed`
 );
 ```

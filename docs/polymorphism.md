@@ -1,3 +1,11 @@
+# 🥣 ts_serialize 
+
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Polymorphism
 
 The `@PolymorphicResolver` and `@PolymorphicSwitch` decorators can be used
@@ -22,7 +30,7 @@ abstract class MyColourClass extends Serializable {
 
   @PolymorphicResolver
   public static resolvePolymorphic(input: string): MyColourClass {
-    const colourClass = new PolymorphicColourClass().fromJson(input);
+    const colourClass = new PolymorphicColourClass().fromJSON(input);
 
     switch (colourClass.colour) {
       case Colour.RED:
@@ -116,7 +124,8 @@ class MyBlueClass extends MyColourClass {
   }
 }
 
-// Serialize using JSON.parse, read `colour` off of the parsed object, then parse using the value provided in `@PolymorphicSwitch`
+// Serialize using JSON.parse, read `colour` off of the parsed object
+// then parse using the value provided in `@PolymorphicSwitch`
 const redClass = polymorphicClassFromJSON(
   MyColourClass,
   `{"colour":"RED","crimson":true}`,
@@ -135,9 +144,9 @@ may not have a simple one to one property value to implementation mapping
 abstract class MyColourClass extends Serializable {}
 
 class MyRedClass extends MyColourClass {
-  @SerializeProperty()
   @PolymorphicSwitch(() => new MyRedClass(), true)
   @PolymorphicSwitch(() => new MyRedClass(), false)
+  @SerializeProperty()
   private crimson = false;
 
   public isCrimson(): boolean {

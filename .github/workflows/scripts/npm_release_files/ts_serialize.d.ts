@@ -1,97 +1,110 @@
 declare module "@gamebridgeai/ts_serialize" {
   /** A JSON object where each property value is a simple JSON value. */
-  export type JsonObject = { [key: string]: JsonValue };
+  export type JSONObject = { [key: string]: JSONValue };
 
   /** A JSON array where each value is a simple JSON value. */
-  export interface JsonArray extends Array<JsonValue> {}
+  export interface JSONArray extends Array<JSONValue> {}
 
   /** A property value in a JSON object. */
-  export type JsonValue =
+  export type JSONValue =
     | string
     | number
     | boolean
     | null
-    | JsonObject
-    | JsonArray;
+    | JSONObject
+    | JSONArray;
 
   /** to be implemented by external authors on their models  */
   export interface TransformKey {
     /** a function that will be called against
-   * every property key transforming the key
-   * with the provided function
-   */
+     * every property key transforming the key
+     * with the provided function
+     */
     tsTransformKey(key: string): string;
   }
 
   /** Adds methods for serialization */
   export abstract class Serializable {
-    /** Default transform functionality */
+    /** key transform functionality */
     public tsTransformKey?(key: string): string;
-    /** Serializable to Json String */
-    public toJson(): string;
-    /** Deserialize to Serializable */
-    public fromJson(json: string | JsonValue | Object): this;
+    /** to JSON String */
+    public toJSON(): string;
+    /** to Serializable */
+    public fromJSON(json: string | JSONValue | Object): this;
+    /** to JSONObject */
+    public tsSerialize(): JSONObject;
   }
 
   /** Functions used when hydrating data */
-  export type FromJsonStrategy = (value: JsonValue) => any;
-  export type FromJsonStrategyArgument =
-    (FromJsonStrategy | FromJsonStrategy[])[];
+  export type FromJSONStrategy = (value: JSONValue) => any;
+  export type FromJSONStrategyArgument =
+    (FromJSONStrategy | FromJSONStrategy[])[];
 
   /** Functions used when dehydrating data */
-  export type ToJsonStrategy = (value: any) => JsonValue;
-  export type ToJsonStrategyArgument = (ToJsonStrategy | ToJsonStrategy[])[];
+  export type ToJSONStrategy = (value: any) => JSONValue;
+  export type ToJSONStrategyArgument = (ToJSONStrategy | ToJSONStrategy[])[];
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
     | string
     | {
       serializedKey?: string;
-      fromJsonStrategy?:
-        | FromJsonStrategy
-        | FromJsonStrategyArgument;
-      toJsonStrategy?:
-        | ToJsonStrategy
-        | ToJsonStrategyArgument;
+      fromJSONStrategy?:
+        | FromJSONStrategy
+        | FromJSONStrategyArgument;
+      toJSONStrategy?:
+        | ToJSONStrategy
+        | ToJSONStrategyArgument;
     };
-
-  /** Property wrapper that adds serializable options to the class map
-   * using the original propertyName as the map key
-   */
-  export function SerializeProperty(): PropertyDecorator;
-
-  /** Property wrapper that adds serializable options to the class map
-   * using the provided string as the map key
-   */
-  export function SerializeProperty(arg: string): PropertyDecorator;
 
   /** Property wrapper that adds serializable options to the class map
    * using options, `serializedName` as the key or `propertyName` if
    * `serializedName` is not set
    */
   export function SerializeProperty(
-    arg: SerializePropertyArgument,
+    arg?: string | SerializePropertyArgument,
   ): PropertyDecorator;
 
-  /** Function to build a `fromJsonStrategy` or `toJsonStrategy`.
+  /** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
    * Converts value from functions provided as parameters
    */
   export function composeStrategy(
     ...fns:
-      | FromJsonStrategyArgument
-      | ToJsonStrategyArgument
-  ): FromJsonStrategy | ToJsonStrategy;
+      | FromJSONStrategyArgument
+      | ToJSONStrategyArgument
+  ): FromJSONStrategy | ToJSONStrategy;
 
-  /** revive data using `fromJson` on a subclass type */
-  export function fromJsonAs<T>(
+  /** revive data using `fromJSON` on a subclass type */
+  export function toSerializable<T>(
     type: T & { new (): Serializable },
-  ): FromJsonStrategy;
+  ): FromJSONStrategy;
 
   /** allows authors to pass a regex to parse as a date */
-  export function createDateStrategy(regex: RegExp): FromJsonStrategy;
+  export function createDateStrategy(regex: RegExp): FromJSONStrategy;
 
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(input: JsonValue): any;
+  export function iso8601Date(input: JSONValue): any;
+
+  export type InitializerFunction = () => Serializable;
+
+  export type ResolverFunction = (
+    input: string | JSONValue | Object,
+  ) => Serializable;
+
+  export function polymorphicClassFromJSON<T extends Serializable>(
+    classPrototype: Object & { prototype: T },
+    input: string | JSONValue | Object,
+  ): T;
+
+  export function PolymorphicResolver(
+    target: unknown,
+    propertyKey: string | symbol,
+  ): void;
+
+  export function PolymorphicSwitch(
+    initializerFunction: InitializerFunction,
+    value?: unknown,
+  ): PropertyDecorator;
 }

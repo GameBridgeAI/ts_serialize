@@ -1,10 +1,10 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
-
-import { FromJsonStrategy, JsonValue } from "../serializable.ts";
+import { FromJSONStrategy } from "../compose_strategy.ts";
+import { JSONValue } from "../../serializable.ts";
 
 /** allows authors to pass a regex to parse as a date */
-export function createDateStrategy(regex: RegExp): FromJsonStrategy {
-  return function _createDateStrategy(input: JsonValue): Date {
+export function createDateStrategy(regex: RegExp): FromJSONStrategy {
+  return function _createDateStrategy(input: JSONValue): Date {
     if (typeof input !== "string" || !regex.exec(input)) {
       throw new Error("invalid date");
     }
@@ -13,7 +13,7 @@ export function createDateStrategy(regex: RegExp): FromJsonStrategy {
 }
 
 /** Test a string for a ISO 8601 Date */
-export function iso8601Date(input: JsonValue): any {
+export function iso8601Date(input: JSONValue): any {
   /** a provided regex to deal with iso formats
    * @example 2008-08-30T01:45:36
    * @example 2008-08-30T01:45:36.123Z
