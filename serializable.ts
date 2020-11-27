@@ -42,7 +42,7 @@ export abstract class Serializable {
     return toJson(this);
   }
   /** Deserialize to Serializable */
-  public fromJson(json: JsonValue | Object): this {
+  public fromJson(json: string | JsonValue | Object): this {
     return fromJson(this, json);
   }
 
