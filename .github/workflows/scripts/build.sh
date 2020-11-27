@@ -2,6 +2,9 @@
 
 # Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
+# Bash strict mode
+set -euo pipefail
+
 if [ -z "$1" ]; then
     echo "Error: Tag version not provided";
     exit 1

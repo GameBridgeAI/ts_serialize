@@ -4,6 +4,9 @@
 
 # @description test build functions for package.json file from a github tag varialbes
 
+# Bash strict mode
+set -euo pipefail
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 mkdir "$DIR/test_tmp"
