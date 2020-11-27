@@ -27,7 +27,7 @@ A zero dependency library for serializing data.
 
 ## Built With
 
-- [Deno](http://deno.land) :sauropod:
+- [Deno](http://deno.land) 🦕
 
 ## Contributing
 
@@ -44,8 +44,8 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-- **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) :frog:
-- **Chris Dufour** - _Initial work_ - [@ChrisDufourMB](https://github.com/ChrisDufourMB) :pizza: :cat: :crown:
+- **Scott Hardy** - _Initial work_ - [@shardyMBAI](https://github.com/shardyMBAI) 🐸
+- **Chris Dufour** - _Initial work_ - [@ChrisDufourMB](https://github.com/ChrisDufourMB) 🍕 🐱 👑
 
 See also the list of [contributors](./.github/CONTRIBUTORS.md) who participated in this project.
 

@@ -3,16 +3,20 @@
 import {
   composeStrategy,
   createDateStrategy,
-  fromJsonAs,
-  FromJsonStrategy,
+  FromJSONStrategy,
   iso8601Date,
+  JSONValue,
+  polymorphicClassFromJSON,
+  PolymorphicResolver,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
-  ToJsonStrategy,
+  ToJSONStrategy,
+  toSerializable,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
-import toJsonFixture from "../fixtures/to.json";
-import fromJsonFixture from "../fixtures/from.json";
+import toJSONFixture from "../fixtures/to.json";
+import fromJSONFixture from "../fixtures/from.json";
 
 function assert(boolean: boolean, msg?: string): void {
   if (!boolean) {
@@ -22,75 +26,75 @@ function assert(boolean: boolean, msg?: string): void {
 }
 
 const customStrategy = (v: string) => `${v} strategy changed`;
-const fromJsonStrategy: FromJsonStrategy = (v: string) => `${v} strategy`;
-const toJsonStrategy: ToJsonStrategy = (v: string) => `${v} changed`;
+const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
+const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
 
 class Nested extends Serializable {
   @SerializeProperty("sub_property")
-  subProperty = "toJson";
+  subProperty = "toJSON";
 }
 
 class Test extends Serializable {
   notSerialized = "not serialized";
 
   @SerializeProperty()
-  serializedPropertyNoArg = "toJson";
+  serializedPropertyNoArg = "toJSON";
 
   @SerializeProperty("rename_test")
-  renameTest = "toJson";
+  renameTest = "toJSON";
 
   @SerializeProperty({ serializedKey: "rename_test_by_property" })
-  renameTestByProperty = "toJson";
+  renameTestByProperty = "toJSON";
 
-  @SerializeProperty({ fromJsonStrategy: customStrategy })
-  fromJsonStrategyTest = "toJson";
+  @SerializeProperty({ fromJSONStrategy: customStrategy })
+  fromJSONStrategyTest = "toJSON";
 
-  @SerializeProperty({ toJsonStrategy: customStrategy })
-  toJsonStrategyTest = "toJson";
+  @SerializeProperty({ toJSONStrategy: customStrategy })
+  toJSONStrategyTest = "toJSON";
 
   @SerializeProperty(
     {
-      toJsonStrategy: composeStrategy(
-        fromJsonStrategy,
+      toJSONStrategy: composeStrategy(
+        fromJSONStrategy,
         (v: string) => `${v} changed`,
       ),
-      fromJsonStrategy: composeStrategy(
+      fromJSONStrategy: composeStrategy(
         (v: string) => `${v} strategy`,
-        toJsonStrategy,
+        toJSONStrategy,
       ),
     },
   )
-  composeStrategyTest = "toJson";
+  composeStrategyTest = "toJSON";
 
-  @SerializeProperty({ fromJsonStrategy: fromJsonAs(Nested) })
-  fromJsonAsTest = new Nested();
+  @SerializeProperty({ fromJSONStrategy: toSerializable(Nested) })
+  asTest = new Nested();
 
-  @SerializeProperty({ fromJsonStrategy: iso8601Date })
+  @SerializeProperty({ fromJSONStrategy: iso8601Date })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
-  @SerializeProperty({ fromJsonStrategy: customDateStrategy })
+  @SerializeProperty({ fromJSONStrategy: customDateStrategy })
   createDate = new Date("2099-11-25");
 }
-assert(new Test().toJson() === JSON.stringify(toJsonFixture), "toJson()");
-const test = new Test().fromJson(fromJsonFixture);
+assert(new Test().toJSON() === JSON.stringify(toJSONFixture), "toJSON()");
+const test = new Test().fromJSON(fromJSONFixture);
 assert(test.notSerialized === "not serialized", "notSerialized");
-assert(test.serializedPropertyNoArg === "fromJson", "serializedPropertyNoArg");
-assert(test.renameTest === "fromJson", "renameTest");
-assert(test.renameTestByProperty === "fromJson", "renameTestByProperty");
+assert(test.serializedPropertyNoArg === "fromJSON", "serializedPropertyNoArg");
+assert(test.renameTest === "fromJSON", "renameTest");
+assert(test.renameTestByProperty === "fromJSON", "renameTestByProperty");
 assert(
-  test.fromJsonStrategyTest === "fromJson strategy changed",
-  "fromJsonStrategyTest",
+  test.fromJSONStrategyTest === "fromJSON strategy changed",
+  "fromJSONStrategyTest",
 );
-assert(test.toJsonStrategyTest === "fromJson", "toJsonStrategyTest");
+assert(test.toJSONStrategyTest === "fromJSON", "toJSONStrategyTest");
 assert(
-  test.composeStrategyTest === "fromJson strategy changed",
+  test.composeStrategyTest === "fromJSON strategy changed",
   "composeStrategyTest",
 );
-assert(test.fromJsonAsTest instanceof Nested, "fromJsonAsTest instanceof");
+assert(test.asTest instanceof Nested, "asTest instanceof");
 assert(
-  test.fromJsonAsTest.subProperty === "fromJson",
-  "fromJsonAsTest.subProperty",
+  test.asTest.subProperty === "fromJSON",
+  "asTest.subProperty",
 );
 assert(test.isoDate instanceof Date, "isoDate instanceof");
 assert(test.isoDate.getFullYear() === 2020, "isoDate.getFullYear()");
@@ -121,26 +125,101 @@ class TestTransformKey4 extends TestTransformKey3 {
   public test4 = "test4";
 }
 
-assert(new TestTransformKey2().toJson() === `{"__test2__":"test2"}`);
+assert(new TestTransformKey2().toJSON() === `{"__test2__":"test2"}`);
 assert(
-  new TestTransformKey2().fromJson({ __test2__: "changed" }).test2 ===
+  new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2 ===
     `changed`,
 );
 
 assert(
-  new TestTransformKey3().toJson() ===
+  new TestTransformKey3().toJSON() ===
     `{"__test2__":"test2","--test3--":"test3"}`,
 );
 assert(
-  new TestTransformKey3().fromJson({ "--test3--": "changed" }).test3 ===
+  new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3 ===
     `changed`,
 );
 
 assert(
-  new TestTransformKey4().toJson() ===
+  new TestTransformKey4().toJSON() ===
     `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
 );
 assert(
-  new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4 ===
+  new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4 ===
     `changed`,
 );
+
+class ResolverHelperClass extends Serializable {
+  @SerializeProperty()
+  public _class?: string;
+}
+
+abstract class AbstractClass extends Serializable {
+  // Property name can be whatever, even an inaccessible symbol
+  @PolymorphicResolver
+  public static [Symbol()](
+    input: string | JSONValue | Object,
+  ): Serializable {
+    const inputObject = new ResolverHelperClass().fromJSON(input);
+
+    switch (inputObject._class) {
+      case "TestClass":
+        return new TestClass();
+      default:
+        throw new Error(
+          `Unable to determine polymorphic class type ${inputObject._class}`,
+        );
+    }
+  }
+}
+
+class TestClass extends AbstractClass {
+  @SerializeProperty()
+  public someProperty = "some default value";
+}
+
+const testData = { _class: "TestClass", someProperty: "new value" };
+
+const polyClass = polymorphicClassFromJSON(
+  AbstractClass,
+  testData,
+) as TestClass;
+
+assert(polyClass instanceof TestClass);
+assert(polyClass.someProperty === "new value");
+
+abstract class AbstractClass2 extends Serializable {}
+
+class TestClass1 extends AbstractClass2 {
+  @PolymorphicSwitch(() => new TestClass1())
+  public static _class = "TestClass1";
+  @SerializeProperty()
+  public someProperty = "original value";
+}
+
+class TestClass2 extends AbstractClass2 {
+  @PolymorphicSwitch(() => new TestClass2())
+  public static _class = "TestClass2";
+  @SerializeProperty()
+  public someProperty = "original value";
+}
+
+const testData1 = { _class: "TestClass1", someProperty: "new value" };
+
+const polyClass1 = polymorphicClassFromJSON(
+  AbstractClass2,
+  testData1,
+) as TestClass1;
+
+assert(polyClass1 instanceof TestClass1);
+assert(polyClass1.someProperty === "new value");
+
+const testData2 = { _class: "TestClass2", someProperty: "new value" };
+
+const polyClass2 = polymorphicClassFromJSON(
+  AbstractClass2,
+  testData2,
+) as TestClass2;
+
+assert(polyClass2 instanceof TestClass2);
+assert(polyClass2.someProperty === "new value");

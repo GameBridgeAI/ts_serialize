@@ -1,35 +1,24 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "./test_deps.ts";
-import { composeStrategy, Serializable, TransformKey } from "./serializable.ts";
+import { Serializable, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 
 test({
   name: "adds methods to extended classes",
   fn() {
-    class TestClass extends Serializable {}
+    class TestClass extends Serializable {
+      @SerializeProperty()
+      public test: number = 99;
+    }
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
-    assertEquals(typeof testObj.toJson, "function");
-    assertEquals(typeof testObj.fromJson, "function");
-  },
-});
-
-test({
-  name: "composeStrategy composes a List of functions",
-  fn() {
-    const addLetter = (letter: string) => (v: string) => `${v}${letter}`;
-    const shout = (v: string) => `${v}!!!`;
-    const strategy = composeStrategy(
-      addLetter(" "),
-      addLetter("W"),
-      addLetter("o"),
-      addLetter("r"),
-      addLetter("l"),
-      addLetter("d"),
-      shout,
-    );
-    assertEquals(strategy("Hello"), "Hello World!!!");
+    assertEquals(typeof testObj.toJSON, "function");
+    assertEquals(typeof testObj.fromJSON, "function");
+    assertEquals(typeof testObj.tsSerialize, "function");
+    assertEquals(testObj.toJSON(), `{"test":99}`);
+    assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
+    assertEquals(testObj.tsSerialize(), { test: 99 });
   },
 });
 
@@ -41,9 +30,9 @@ test({
       public test = "test";
     }
 
-    assertEquals(new TestTransformKey().toJson(), `{"test":"test"}`);
+    assertEquals(new TestTransformKey().toJSON(), `{"test":"test"}`);
     assertEquals(
-      new TestTransformKey().fromJson({ test: "changed" }).test,
+      new TestTransformKey().fromJSON({ test: "changed" }).test,
       `changed`,
     );
   },
@@ -61,9 +50,9 @@ test({
       public test = "test";
     }
 
-    assertEquals(new TestTransformKey().toJson(), `{"__test__":"test"}`);
+    assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
     assertEquals(
-      new TestTransformKey().fromJson({ __test__: "changed" }).test,
+      new TestTransformKey().fromJSON({ __test__: "changed" }).test,
       `changed`,
     );
   },
@@ -88,18 +77,18 @@ test({
       public test3 = "test3";
     }
 
-    assertEquals(new TestTransformKey2().toJson(), `{"__test2__":"test2"}`);
+    assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
-      new TestTransformKey2().fromJson({ __test2__: "changed" }).test2,
+      new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
       `changed`,
     );
 
     assertEquals(
-      new TestTransformKey3().toJson(),
+      new TestTransformKey3().toJSON(),
       `{"__test2__":"test2","__test3__":"test3"}`,
     );
     assertEquals(
-      new TestTransformKey3().fromJson({ __test3__: "changed" }).test3,
+      new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
       `changed`,
     );
   },
@@ -132,27 +121,27 @@ test({
       public test4 = "test4";
     }
 
-    assertEquals(new TestTransformKey2().toJson(), `{"__test2__":"test2"}`);
+    assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
-      new TestTransformKey2().fromJson({ __test2__: "changed" }).test2,
+      new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
       `changed`,
     );
 
     assertEquals(
-      new TestTransformKey3().toJson(),
+      new TestTransformKey3().toJSON(),
       `{"__test2__":"test2","--test3--":"test3"}`,
     );
     assertEquals(
-      new TestTransformKey3().fromJson({ "--test3--": "changed" }).test3,
+      new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3,
       `changed`,
     );
 
     assertEquals(
-      new TestTransformKey4().toJson(),
+      new TestTransformKey4().toJSON(),
       `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
     );
     assertEquals(
-      new TestTransformKey4().fromJson({ "--test4--": "changed" }).test4,
+      new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
       `changed`,
     );
   },
@@ -176,11 +165,11 @@ test({
     }
 
     assertEquals(
-      new TestTransformKey2().toJson(),
+      new TestTransformKey2().toJSON(),
       `{"__test2__":"test2","changed":"change me"}`,
     );
     assertEquals(
-      new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
+      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
       `changed`,
     );
   },
@@ -204,11 +193,11 @@ test({
     }
 
     assertEquals(
-      new TestTransformKey2().toJson(),
+      new TestTransformKey2().toJSON(),
       `{"__test2__":"test2","changed":"change me"}`,
     );
     assertEquals(
-      new TestTransformKey2().fromJson({ changed: "changed" }).changeMe,
+      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
       `changed`,
     );
   },

@@ -1,18 +1,41 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import {
-  FromJsonStrategy,
-  FromJsonStrategyArgument,
-  SERIALIZABLE_CLASS_MAP,
-  SerializePropertyOptions,
-  ToJsonStrategy,
-  ToJsonStrategyArgument,
-} from "./serializable.ts";
+import { SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
+import {
+  composeStrategy,
+  FromJSONStrategy,
+  FromJSONStrategyArgument,
+  ToJSONStrategy,
+  ToJSONStrategyArgument,
+} from "./strategy/compose_strategy.ts";
+import { ERROR_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
-export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
-  "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
+/** options to use when (de)serializing values */
+export class SerializePropertyOptions {
+  public fromJSONStrategy?: FromJSONStrategy;
+  public toJSONStrategy?: ToJSONStrategy;
+
+  constructor(
+    public propertyKey: string | symbol,
+    public serializedKey: string,
+    fromJSONStrategy?: FromJSONStrategy | FromJSONStrategyArgument,
+    toJSONStrategy?: ToJSONStrategy | ToJSONStrategyArgument,
+  ) {
+    if (Array.isArray(fromJSONStrategy)) {
+      this.fromJSONStrategy = composeStrategy(...fromJSONStrategy);
+    } else if (fromJSONStrategy) {
+      this.fromJSONStrategy = fromJSONStrategy;
+    }
+
+    if (Array.isArray(toJSONStrategy)) {
+      this.toJSONStrategy = composeStrategy(...toJSONStrategy);
+    } else if (toJSONStrategy) {
+      this.toJSONStrategy = toJSONStrategy;
+    }
+  }
+}
 
 /**
  * Function to transform a property name into a serialized key programmatically
@@ -25,52 +48,33 @@ export type SerializePropertyArgument =
   | ToSerializedKeyStrategy
   | {
     serializedKey?: string | ToSerializedKeyStrategy;
-    fromJsonStrategy?:
-      | FromJsonStrategy
-      | FromJsonStrategyArgument;
-    toJsonStrategy?:
-      | ToJsonStrategy
-      | ToJsonStrategyArgument;
+    fromJSONStrategy?:
+      | FromJSONStrategy
+      | FromJSONStrategyArgument;
+    toJSONStrategy?:
+      | ToJSONStrategy
+      | ToJSONStrategyArgument;
   };
 
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  fromJsonStrategy?:
-    | FromJsonStrategy
-    | FromJsonStrategyArgument;
-  toJsonStrategy?:
-    | ToJsonStrategy
-    | ToJsonStrategyArgument;
+  fromJSONStrategy?:
+    | FromJSONStrategy
+    | FromJSONStrategyArgument;
+  toJSONStrategy?:
+    | ToJSONStrategy
+    | ToJSONStrategyArgument;
 }
-
-/** Property wrapper that adds serializable options to the class map
- * using the original propertyName as the map key
- */
-export function SerializeProperty(): PropertyDecorator;
-
-/** Property wrapper that adds serializable options to the class map
- * using the provided string as the map key
- */
-export function SerializeProperty(
-  decoratorArguments: string,
-): PropertyDecorator;
-
-/** Property wrapper that adds serializable options to the class map
- * using options, `serializedName` as the key or `propertyName` if
- * `serializedName` is not set
- */
-export function SerializeProperty(
-  decoratorArguments: SerializePropertyArgument,
-): PropertyDecorator;
 
 /** Property wrapper that adds serializable options to the class map */
 export function SerializeProperty(
-  decoratorArguments: SerializePropertyArgument = {},
+  args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
   return function _SerializeProperty(
     target: unknown,
     propertyName: string | symbol,
   ) {
+    const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
       target,
@@ -100,8 +104,8 @@ export function SerializeProperty(
       new SerializePropertyOptions(
         propertyName,
         decoratorArgumentOptions.serializedKey,
-        decoratorArgumentOptions.fromJsonStrategy,
-        decoratorArgumentOptions.toJsonStrategy,
+        decoratorArgumentOptions.fromJSONStrategy,
+        decoratorArgumentOptions.toJSONStrategy,
       ),
     );
   };
@@ -133,15 +137,15 @@ function getDecoratorArgumentOptions(
     !decoratorArguments.serializedKey &&
     typeof propertyName === "symbol"
   ) {
-    throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
+    throw new Error(ERROR_SYMBOL_PROPERTY_NAME);
   }
 
   // Property key transform function with additional options
   if (typeof decoratorArguments.serializedKey === "function") {
     return {
       serializedKey: decoratorArguments.serializedKey(String(propertyName)),
-      fromJsonStrategy: decoratorArguments.fromJsonStrategy,
-      toJsonStrategy: decoratorArguments.toJsonStrategy,
+      fromJSONStrategy: decoratorArguments.fromJSONStrategy,
+      toJSONStrategy: decoratorArguments.toJSONStrategy,
     };
   }
 

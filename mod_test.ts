@@ -12,7 +12,7 @@ test({
     assertEquals(typeof mod.composeStrategy, "function");
     assertEquals(typeof mod.createDateStrategy, "function");
     assertEquals(typeof mod.iso8601Date, "function");
-    assertEquals(typeof mod.fromJsonAs, "function");
+    assertEquals(typeof mod.toSerializable, "function");
 
     assertEquals(typeof mod.polymorphicClassFromJSON, "function");
     assertEquals(typeof mod.PolymorphicResolver, "function");

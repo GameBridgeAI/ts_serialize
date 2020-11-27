@@ -9,7 +9,7 @@ fi
 
 .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
-curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.2"
+curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.4"
 
 export PATH="$HOME/.deno/bin:$PATH"
 

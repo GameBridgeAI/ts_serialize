@@ -4,28 +4,25 @@
 
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";
-
-/** types, isolatedModules requires this to be `export type ...` */
+/** types */
+export type { TransformKey } from "./serializable.ts";
+/** abstract class */
+export { Serializable } from "./serializable.ts";
+/** strategy helper */
+export { composeStrategy } from "./strategy/compose_strategy.ts";
+/** types */
 export type {
-  FromJsonStrategy,
-  ToJsonStrategy,
-  TransformKey,
-} from "./serializable.ts";
-
-/** abstract class and and compose strategy functions */
-export { composeStrategy, Serializable } from "./serializable.ts";
-
+  FromJSONStrategy,
+  ToJSONStrategy,
+} from "./strategy/compose_strategy.ts";
 /** from json strategies */
-export { fromJsonAs } from "./from_json/as.ts";
-export { createDateStrategy, iso8601Date } from "./from_json/date.ts";
-
+export { toSerializable } from "./strategy/from_json/to_serializable.ts";
+export { createDateStrategy, iso8601Date } from "./strategy/from_json/date.ts";
+/** polymorphic classes */
 export {
   polymorphicClassFromJSON,
   PolymorphicResolver,
   PolymorphicSwitch,
-} from "./polymorphic/polymorphic.ts";
-
-export type {
-  InitializerFunction,
-  ResolverFunction,
-} from "./polymorphic/polymorphic.ts";
+} from "./polymorphic.ts";
+/** types */
+export type { InitializerFunction, ResolverFunction } from "./polymorphic.ts";

@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Installing
 
-Fork the project to your machine and `cd` into that folder. If you are getting errors about the
+Fork and clone the project to your machine and `cd` into that folder. If you are getting errors about the
 `deno` namespace you can run
 
 ```
@@ -55,7 +55,7 @@ test({
     const testObj = new Test2();
 
     assertEquals(
-      testObj.toJson(),
+      testObj.toJSON(),
       `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
     );
   },

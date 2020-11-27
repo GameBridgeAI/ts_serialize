@@ -1,12 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
-
-import { SerializePropertyOptions } from "./serializable.ts";
-
-export const ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY =
-  "This key name is already in use by another property, please use a different name";
-
-export const ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY =
-  "This serialize key is already in use by another property, please use a different name";
+import { SerializePropertyOptions } from "./serialize_property.ts";
+import {
+  ERROR_DUPLICATE_PROPERTY_KEY,
+  ERROR_DUPLICATE_SERIALIZE_KEY,
+} from "./error_messages.ts";
 
 /** Double indexed map of Serialized Property Options
  * The property options of a Serialize Property can be looked up by both the
@@ -34,12 +31,12 @@ export class SerializePropertyOptionsMap {
   public set(serializePropertyOptions: SerializePropertyOptions): void {
     if (this.serializedKeyMap.has(serializePropertyOptions.serializedKey)) {
       throw new Error(
-        `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: ${serializePropertyOptions.serializedKey}`,
+        `${ERROR_DUPLICATE_SERIALIZE_KEY}: ${serializePropertyOptions.serializedKey}`,
       );
     }
     if (this.propertyKeyMap.has(serializePropertyOptions.propertyKey)) {
       throw new Error(
-        `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: ${serializePropertyOptions.propertyKey.toString()}`,
+        `${ERROR_DUPLICATE_PROPERTY_KEY}: ${serializePropertyOptions.propertyKey.toString()}`,
       );
     }
     this.propertyKeyIgnoreSet.delete(serializePropertyOptions.propertyKey);
