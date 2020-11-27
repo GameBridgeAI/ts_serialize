@@ -23,6 +23,7 @@ A zero dependency library for serializing data.
 - [Serializable and SerializeProperty](https://gamebridgeai.github.io/ts_serialize/serializable)
 - [Strategies](https://gamebridgeai.github.io/ts_serialize/strategies)
 - [Global transformKey](https://gamebridgeai.github.io/ts_serialize/transforming)
+- [Polymorphism](https://gamebridgeai.github.io/ts_serialize/polymorphism)
 
 ## Built With
 

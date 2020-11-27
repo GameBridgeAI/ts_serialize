@@ -133,6 +133,30 @@ test({
 
 test({
   name:
+    "should be able to deserialize a polymorphic class using a polymorphic switch resolver across multiple properties",
+  fn() {
+    abstract class AbstractClass extends Serializable {}
+
+    class TestClass extends AbstractClass {
+      @PolymorphicSwitch(() => new TestClass())
+      public static _class = "TestClass";
+    }
+    class TestClass2 extends AbstractClass {
+      @PolymorphicSwitch(() => new TestClass2(), "amazing")
+      public aDifferentField = "Some non _class field";
+    }
+
+    const testData = { aDifferentField: "amazing" };
+
+    const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
+
+    assert(polyClass instanceof TestClass2);
+    assertEquals(polyClass.aDifferentField, "amazing");
+  },
+});
+
+test({
+  name:
     "should be able to deserialize a polymorphic class using a polymorphic switch resolver using an instance property",
   fn() {
     abstract class AbstractClass extends Serializable {}
