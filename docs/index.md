@@ -23,6 +23,7 @@ A zero dependency library for serializing data.
 - [Serializable and SerializeProperty](./serializable)
 - [Strategies](./strategies)
 - [Global transformKey](./transforming)
+- [Polymorphism](./polymorphism)
 
 ### Contributing
 

@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixed #83
 
 ### Added
+- Added `PolymorphicResolver` and `PolymorphicSwitch` decorators, and 
+`polymorphicClassFromJSON` function for deserializing polymorphic data
+ structures
 
 ## [v0.4.0] - 2020-11-19
 

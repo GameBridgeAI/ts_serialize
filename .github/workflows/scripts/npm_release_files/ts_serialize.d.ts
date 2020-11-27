@@ -30,7 +30,7 @@ declare module "@gamebridgeai/ts_serialize" {
     /** Serializable to Json String */
     public toJson(): string;
     /** Deserialize to Serializable */
-    public fromJson(json: JsonValue | Object): this;
+    public fromJson(json: string | JsonValue | Object): this;
   }
 
   /** Functions used when hydrating data */

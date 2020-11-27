@@ -18,3 +18,14 @@ export { composeStrategy, Serializable } from "./serializable.ts";
 /** from json strategies */
 export { fromJsonAs } from "./from_json/as.ts";
 export { createDateStrategy, iso8601Date } from "./from_json/date.ts";
+
+export {
+  polymorphicClassFromJSON,
+  PolymorphicResolver,
+  PolymorphicSwitch,
+} from "./polymorphic/polymorphic.ts";
+
+export type {
+  InitializerFunction,
+  ResolverFunction,
+} from "./polymorphic/polymorphic.ts";

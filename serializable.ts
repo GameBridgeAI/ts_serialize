@@ -42,7 +42,7 @@ export abstract class Serializable {
     return toJson(this);
   }
   /** Deserialize to Serializable */
-  public fromJson(json: JsonValue | Object): this {
+  public fromJson(json: string | JsonValue | Object): this {
     return fromJson(this, json);
   }
 
@@ -221,7 +221,7 @@ function toJson<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJson<T>(
   context: Serializable,
-  json: JsonValue | Object,
+  json: string | JsonValue | Object,
 ): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
