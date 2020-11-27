@@ -6,7 +6,9 @@ implementations.
 
 ### Polymorphic Resolver
 
-The following example shows an example of how the `@PolymorphicResolver` decorator can be used to directly determine the type of an abstract class implementor, which will then be used when deserializing JSON input
+The following example shows how the `@PolymorphicResolver` decorator can be
+used to directly determine the type of an abstract class implementor, 
+which will then be used when deserializing JSON input.
 
 ```ts
 enum Colour {
@@ -68,9 +70,14 @@ console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 ```
 
 ### Polymorphic Switch Resolver
-The `@PolymorphicSwitch` decorator can be used as a quick way to serialize simple polymorphic types based on the properties of a child class. Unlike the `@PolymorphicResolver` decorator all implementors should have to do is annotate an existing property and provide an initializer.
 
-Note that currently `@PolymorphicSwitch` can only be applied to child classes deserializing from their direct parent class.
+The `@PolymorphicSwitch` decorator can be used as a quick way to serialize
+simple polymorphic types based on the properties of a child class. 
+Unlike the `@PolymorphicResolver` decorator all implementors should have
+to do is annotate an existing property and provide an initializer.
+
+Note that currently `@PolymorphicSwitch` can only be applied to child
+classes deserializing from their direct parent class.
 
 ```ts
 enum Colour {
@@ -118,7 +125,8 @@ console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 // > Is crimson? true
 ```
 
-`@PolymorphicSwitch` is also useful on more complex polymorphic types that may not have a simple one to one property value to implementation mapping
+`@PolymorphicSwitch` is also useful on more complex polymorphic types that 
+may not have a simple one to one property value to implementation mapping
 
 ```ts
 abstract class MyColourClass extends Serializable {}
