@@ -10,8 +10,8 @@ import {
 import { Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
-  ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
-  ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
+  ERROR_DUPLICATE_SERIALIZE_KEY,
+  ERROR_SYMBOL_PROPERTY_NAME,
 } from "./error_messages.ts";
 
 test({
@@ -64,7 +64,7 @@ test({
       }
       fail("Allowed Symbol name without propertyName");
     } catch (e) {
-      assertEquals(e.message, ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
+      assertEquals(e.message, ERROR_SYMBOL_PROPERTY_NAME);
     }
   },
 });
@@ -258,7 +258,7 @@ test({
     } catch (e) {
       assertEquals(
         e.message,
-        `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: serialize_me`,
+        `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`,
       );
     }
   },

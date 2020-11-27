@@ -4,7 +4,8 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { toJSONDefault } from "./strategy/to_json/default.ts";
 import { fromJSONDefault } from "./strategy/from_json/default.ts";
 import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
-import { ERROR_MESSAGE_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
+import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
+import { JsonValue } from "https://deno.land/x/ts_serialize@v0.3.6/serializable.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -47,8 +48,8 @@ export abstract class Serializable {
     return toJSON(this);
   }
   /** Deserialize to Serializable */
-  public fromJson(json: string | JsonValue | Object): this {
-    return fromJson(this, json);
+  public fromJSON(json: string | JsonValue | Object): this {
+    return fromJSON(this, json);
   }
   /** to JSONObject */
   public tsSerialize(): JSONObject {
@@ -87,7 +88,7 @@ export abstract class Serializable {
 
       if (!newSerializableOptions) {
         // This shouldn't happen considering we just added that value
-        throw new Error(ERROR_MESSAGE_MISSING_PROPERTIES_MAP);
+        throw new Error(ERROR_MISSING_PROPERTIES_MAP);
       }
 
       return newSerializableOptions;
@@ -116,7 +117,7 @@ export function toPojo(
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
+      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
         ?.prototype}`,
     );
   }
@@ -169,7 +170,7 @@ function fromJSON<T>(
   );
   if (!serializablePropertyMap) {
     throw new Error(
-      `${ERROR_MESSAGE_MISSING_PROPERTIES_MAP}: ${context?.constructor
+      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
         ?.prototype}`,
     );
   }

@@ -10,7 +10,7 @@ import {
   ToJSONStrategy,
   ToJSONStrategyArgument,
 } from "./strategy/compose_strategy.ts";
-import { ERROR_MESSAGE_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
+import { ERROR_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
@@ -137,7 +137,7 @@ function getDecoratorArgumentOptions(
     !decoratorArguments.serializedKey &&
     typeof propertyName === "symbol"
   ) {
-    throw new Error(ERROR_MESSAGE_SYMBOL_PROPERTY_NAME);
+    throw new Error(ERROR_SYMBOL_PROPERTY_NAME);
   }
 
   // Property key transform function with additional options

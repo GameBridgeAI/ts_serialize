@@ -23,9 +23,6 @@ export {
   polymorphicClassFromJSON,
   PolymorphicResolver,
   PolymorphicSwitch,
-} from "./polymorphic/polymorphic.ts";
+} from "./polymorphic.ts";
 /** types */
-export type {
-  InitializerFunction,
-  ResolverFunction,
-} from "./polymorphic/polymorphic.ts";
+export type { InitializerFunction, ResolverFunction } from "./polymorphic.ts";

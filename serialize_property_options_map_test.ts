@@ -6,8 +6,8 @@ import {
 } from "./serialize_property_options_map.ts";
 import { SerializePropertyOptions } from "./serialize_property.ts";
 import {
-  ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY,
-  ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
+  ERROR_DUPLICATE_PROPERTY_KEY,
+  ERROR_DUPLICATE_SERIALIZE_KEY,
 } from "./error_messages.ts";
 
 test({
@@ -90,7 +90,7 @@ test({
       testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
-      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY}: a`);
+      assertEquals(e.message, `${ERROR_DUPLICATE_PROPERTY_KEY}: a`);
     }
   },
 });
@@ -107,7 +107,7 @@ test({
       testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
-      assertEquals(e.message, `${ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY}: a`);
+      assertEquals(e.message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: a`);
     }
   },
 });
