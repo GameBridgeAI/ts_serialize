@@ -1,3 +1,11 @@
+# 🥣 ts_serialize 
+
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
+[![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 ## Strategies
 
 `Strategies` are functions or a composed list of functions to execute on the values when
@@ -76,4 +84,5 @@ assert(testObj.date instanceof Date);
 assertEquals(testObj.date.getFullYear(), 2099);
 ```
 
-Now that you know about strategies, there is one more trick: [Global transformKey](./transforming)
+[Global transformKey](./transforming) is a function that models can use to 
+apply key transformations to all properties including children.
