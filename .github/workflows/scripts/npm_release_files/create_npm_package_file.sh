@@ -4,15 +4,20 @@
 
 # @description builds a package.json file from github tag varialbes
 
-if [ -z "$1" ]; then
+# Bash strict mode
+set -euo pipefail
+
+version=${1:-}
+
+if [ -z "$version" ]; then
     echo "Error: Tag version not provided";
     exit 1
 fi
 
-cat <<EOF >> "package.json" 
+cat <<EOF > "package.json"
 {
   "name": "@gamebridgeai/ts_serialize",
-  "version": "$1",
+  "version": "$version",
   "description": "A zero dependency library for serializing data.",
   "main": "ts_serialize.js",
   "types": "ts_serialize.d.ts",
@@ -38,4 +43,3 @@ cat <<EOF >> "package.json"
     ]
 }
 EOF
-    
