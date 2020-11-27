@@ -91,6 +91,8 @@ abstract class MyColourClass extends Serializable {
 }
 
 class MyRedClass extends MyColourClass {
+  // Note that this static property is NOT part of serialization
+  // colour will be set by MyColourClass#colour's `@SerializeProperty` annotation
   @PolymorphicSwitch(() => new MyRedClass())
   private static colour = Colour.RED;
 
@@ -105,6 +107,7 @@ class MyRedClass extends MyColourClass {
 class MyBlueClass extends MyColourClass {
   @PolymorphicSwitch(() => new MyBlueClass())
   private static colour = Colour.BLUE;
+
   @SerializeProperty()
   private aqua = false;
 
