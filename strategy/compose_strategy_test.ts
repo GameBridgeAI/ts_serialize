@@ -1,7 +1,7 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 import { test } from "../test_deps.ts";
 import { composeStrategy } from "./compose_strategy.ts";
-import { assertEquals } from "https://deno.land/std@0.77.0/testing/asserts.ts";
+import { assertEquals } from "../test_deps.ts";
 
 test({
   name: "composeStrategy composes a List of functions",

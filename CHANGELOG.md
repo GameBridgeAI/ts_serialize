@@ -9,8 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - fixed #83
+- fixed #81
+- fixed #63
+- **breaking** the great json->JSON change program wide too follow the JS convention 
+- **breaking** fromJSONas -> toSerializable
+- deno@1.5.4
+- std@0.79.0
+- moved lots of code
 
 ### Added
+- new error_messages.ts file 
 
 ## [v0.4.0] - 2020-11-19
 
