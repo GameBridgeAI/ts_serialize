@@ -4,6 +4,7 @@ import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts
 import { toJSONDefault } from "./strategy/to_json/default.ts";
 import { fromJSONDefault } from "./strategy/from_json/default.ts";
 import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
+import { ERROR_MESSAGE_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -104,9 +105,6 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
   unknown,
   SerializePropertyOptionsMap
 >();
-
-const ERROR_MESSAGE_MISSING_PROPERTIES_MAP =
-  "Unable to load serializer properties for the given context";
 
 /** Converts to object using mapped keys */
 export function toPojo(

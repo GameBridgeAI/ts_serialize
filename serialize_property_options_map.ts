@@ -1,11 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 import { SerializePropertyOptions } from "./serialize_property.ts";
-
-export const ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY =
-  "This key name is already in use by another property, please use a different name";
-
-export const ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY =
-  "This serialize key is already in use by another property, please use a different name";
+import {
+  ERROR_MESSAGE_DUPLICATE_PROPERTY_KEY,
+  ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
+} from "./error_messages.ts";
 
 /** Double indexed map of Serialized Property Options
  * The property options of a Serialize Property can be looked up by both the

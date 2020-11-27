@@ -8,11 +8,11 @@ import {
   test,
 } from "./test_deps.ts";
 import { Serializable } from "./serializable.ts";
+import { SerializeProperty } from "./serialize_property.ts";
 import {
+  ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY,
   ERROR_MESSAGE_SYMBOL_PROPERTY_NAME,
-  SerializeProperty,
-} from "./serialize_property.ts";
-import { ERROR_MESSAGE_DUPLICATE_SERIALIZE_KEY } from "./serialize_property_options_map.ts";
+} from "./error_messages.ts";
 
 test({
   name: "Serializes properties as propertyName without options",

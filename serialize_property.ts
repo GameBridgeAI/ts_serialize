@@ -10,9 +10,8 @@ import {
   ToJSONStrategy,
   ToJSONStrategyArgument,
 } from "./strategy/compose_strategy.ts";
+import { ERROR_MESSAGE_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
-export const ERROR_MESSAGE_SYMBOL_PROPERTY_NAME =
-  "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
   public fromJSONStrategy?: FromJSONStrategy;
