@@ -5,7 +5,6 @@ import { toJSONDefault } from "./strategy/to_json/default.ts";
 import { fromJSONDefault } from "./strategy/from_json/default.ts";
 import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
 import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
-import { JsonValue } from "https://deno.land/x/ts_serialize@v0.3.6/serializable.ts";
 
 /** A JSON object where each property value is a simple JSON value. */
 export type JSONObject = {
@@ -48,7 +47,7 @@ export abstract class Serializable {
     return toJSON(this);
   }
   /** Deserialize to Serializable */
-  public fromJSON(json: string | JsonValue | Object): this {
+  public fromJSON(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
   /** to JSONObject */
@@ -163,7 +162,7 @@ function toJSON<T>(context: T): string {
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
-  json: string | JsonValue | Object,
+  json: string | JSONValue | Object,
 ): T {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,

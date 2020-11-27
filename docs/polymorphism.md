@@ -20,9 +20,9 @@ abstract class MyColourClass extends Serializable {
   @SerializeProperty()
   public colour?: Colour;
 
-  @PolymorphicResolver
+  @PolymorphicResolver()
   public static resolvePolymorphic(input: string): MyColourClass {
-    const colourClass = new PolymorphicColourClass().fromJson(input);
+    const colourClass = new PolymorphicColourClass().fromJSON(input);
 
     switch (colourClass.colour) {
       case Colour.RED:
@@ -116,7 +116,8 @@ class MyBlueClass extends MyColourClass {
   }
 }
 
-// Serialize using JSON.parse, read `colour` off of the parsed object, then parse using the value provided in `@PolymorphicSwitch`
+// Serialize using JSON.parse, read `colour` off of the parsed object
+// then parse using the value provided in `@PolymorphicSwitch`
 const redClass = polymorphicClassFromJSON(
   MyColourClass,
   `{"colour":"RED","crimson":true}`,
@@ -135,9 +136,9 @@ may not have a simple one to one property value to implementation mapping
 abstract class MyColourClass extends Serializable {}
 
 class MyRedClass extends MyColourClass {
-  @SerializeProperty()
   @PolymorphicSwitch(() => new MyRedClass(), true)
   @PolymorphicSwitch(() => new MyRedClass(), false)
+  @SerializeProperty()
   private crimson = false;
 
   public isCrimson(): boolean {
