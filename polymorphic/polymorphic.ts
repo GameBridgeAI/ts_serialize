@@ -21,6 +21,12 @@ import { JsonValue, Serializable } from "../serializable.ts";
  * initializer function
  */
 
+export const ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH =
+  "Missing static property value or value in PolymorphicSwitch";
+
+export const ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS =
+  "Failed to resolve polymorphic class";
+
 // @PolymorphicResolver method decorator
 export function PolymorphicResolver(
   target: unknown, // Target class
@@ -70,11 +76,7 @@ export function PolymorphicSwitch(
       !Object.prototype.hasOwnProperty.call(target, propertyKey) &&
       !hasValue
     ) {
-      throw new Error(
-        `${target.toString()} does not have own property ${
-          String(propertyKey)
-        }, and no value provided`,
-      );
+      throw new Error(ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH);
     }
 
     let targetConstructor = target;
@@ -165,7 +167,7 @@ function resolvePolymorphicClass<T extends Serializable>(
     return resolvedClass as T;
   }
 
-  throw new Error(`Could not resolve class for ${classPrototype.toString()}`);
+  throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
 }
 
 /**
@@ -178,7 +180,7 @@ function resolveSwitchMap(
   const classMap = POLYMORPHIC_SWITCH_MAP.get(classPrototype);
 
   if (!classMap) {
-    throw new Error(`Could not determine classMap for ${classPrototype}`);
+    throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
   }
 
   const inputObject = typeof input === "string" ? JSON.parse(input) : input;
