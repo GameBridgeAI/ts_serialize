@@ -26,9 +26,9 @@ import {
 
 /** @PolymorphicResolver method decorator */
 export function PolymorphicResolver(
-  target: unknown, // Target class
-  propertyKey: string | symbol, // The name of the static method
-) {
+  target: unknown,
+  propertyKey: string | symbol,
+): void {
   registerPolymorphicResolver(
     target,
     (target as Record<typeof propertyKey, () => Serializable>)[

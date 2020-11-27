@@ -86,4 +86,25 @@ declare module "@gamebridgeai/ts_serialize" {
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
   export function iso8601Date(input: JSONValue): any;
+
+  export type InitializerFunction = () => Serializable;
+
+  export type ResolverFunction = (
+    input: string | JSONValue | Object,
+  ) => Serializable;
+
+  export function polymorphicClassFromJSON<T extends Serializable>(
+    classPrototype: Object & { prototype: T },
+    input: string | JSONValue | Object,
+  ): T;
+
+  export function PolymorphicResolver(
+    target: unknown,
+    propertyKey: string | symbol,
+  ): void;
+
+  export function PolymorphicSwitch(
+    initializerFunction: InitializerFunction,
+    value?: unknown,
+  ): PropertyDecorator;
 }
