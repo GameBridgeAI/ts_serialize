@@ -61,10 +61,10 @@ export function PolymorphicSwitch(
 ): PropertyDecorator {
   // Because `undefined` can be used as a value here, we need to check if the argument was even set
   const hasValue = arguments.hasOwnProperty("1");
-  return (
+  return function _PolymorphicSwitch(
     target: Function | Object, // The constructor of the class for static properties, and the class it's self for instance properties
     propertyKey: string | symbol,
-  ) => {
+  ) {
     // Assert property should be static
     if (
       !Object.prototype.hasOwnProperty.call(target, propertyKey) &&

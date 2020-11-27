@@ -20,7 +20,7 @@ abstract class MyColourClass extends Serializable {
   @SerializeProperty()
   public colour?: Colour;
 
-  @PolymorphicResolver()
+  @PolymorphicResolver
   public static resolvePolymorphic(input: string): MyColourClass {
     const colourClass = new PolymorphicColourClass().fromJSON(input);
 

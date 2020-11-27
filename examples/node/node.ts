@@ -5,6 +5,10 @@ import {
   createDateStrategy,
   FromJSONStrategy,
   iso8601Date,
+  JSONValue,
+  polymorphicClassFromJSON,
+  PolymorphicResolver,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
@@ -144,3 +148,69 @@ assert(
   new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4 ===
     `changed`,
 );
+
+class ResolverHelperClass extends Serializable {
+  @SerializeProperty()
+  public _class?: string;
+}
+
+abstract class AbstractClass extends Serializable {
+  // Property name can be whatever, even an inaccessible symbol
+  @PolymorphicResolver
+  public static [Symbol()](
+    input: string | JSONValue | Object,
+  ): Serializable {
+    const inputObject = new ResolverHelperClass().fromJSON(input);
+
+    switch (inputObject._class) {
+      case "TestClass":
+        return new TestClass();
+      default:
+        throw new Error(
+          `Unable to determine polymorphic class type ${inputObject._class}`,
+        );
+    }
+  }
+}
+
+class TestClass extends AbstractClass {
+  @SerializeProperty()
+  public someProperty = "some default value";
+}
+
+const testData = { _class: "TestClass", someProperty: "new value" };
+
+const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
+
+assert(polyClass instanceof TestClass);
+assert(polyClass.someProperty === "new value");
+
+abstract class AbstractClass2 extends Serializable {}
+
+class TestClass1 extends AbstractClass2 {
+  @PolymorphicSwitch(() => new TestClass1())
+  public static _class = "TestClass1";
+  @SerializeProperty()
+  public someProperty = "original value";
+}
+
+class TestClass2 extends AbstractClass2 {
+  @PolymorphicSwitch(() => new TestClass2())
+  public static _class = "TestClass2";
+  @SerializeProperty()
+  public someProperty = "original value";
+}
+
+const testData1 = { _class: "TestClass1", someProperty: "new value" };
+
+const polyClass1 = polymorphicClassFromJSON(AbstractClass2, testData1);
+
+assert(polyClass1 instanceof TestClass1);
+assert(polyClass1.someProperty === "new value");
+
+const testData2 = { _class: "TestClass2", someProperty: "new value" };
+
+const polyClass2 = polymorphicClassFromJSON(AbstractClass2, testData2);
+
+assert(polyClass2 instanceof TestClass2);
+assert(polyClass2.someProperty === "new value");
