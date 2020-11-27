@@ -33,6 +33,10 @@ export declare interface TransformKey {
 
 /** Adds methods for serialization */
 export abstract class Serializable {
+  /** allow empty class serialization */
+  constructor() {
+    this.getOrInitializeDefaultSerializerLogicForParents();
+  }
   /** key transform functionality */
   public tsTransformKey?(key: string): string {
     return key;
@@ -48,6 +52,47 @@ export abstract class Serializable {
   /** to JSONObject */
   public tsSerialize(): JSONObject {
     return toPojo(this);
+  }
+  /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
+  private getOrInitializeDefaultSerializerLogicForParents(
+    targetPrototype = this.constructor.prototype, // This will the the class instance, regardless of how low level it is
+  ): SerializePropertyOptionsMap | undefined {
+    // Don't create serialization logic for Serializable
+    if (targetPrototype === Serializable.prototype) {
+      return undefined;
+    }
+
+    const serializableOptions = SERIALIZABLE_CLASS_MAP.get(targetPrototype);
+    if (!serializableOptions) {
+      // If the parent has a serialization map then inherit it
+      let parentMap = SERIALIZABLE_CLASS_MAP.get(
+        Object.getPrototypeOf(targetPrototype),
+      );
+
+      // If the parent is also missing it's map then generate it if necessary
+      if (!parentMap) {
+        parentMap = this.getOrInitializeDefaultSerializerLogicForParents(
+          Object.getPrototypeOf(targetPrototype),
+        );
+      }
+
+      SERIALIZABLE_CLASS_MAP.set(
+        targetPrototype,
+        new SerializePropertyOptionsMap(parentMap),
+      );
+      const newSerializableOptions = SERIALIZABLE_CLASS_MAP.get(
+        targetPrototype,
+      );
+
+      if (!newSerializableOptions) {
+        // This shouldn't happen considering we just added that value
+        throw new Error(ERROR_MESSAGE_MISSING_PROPERTIES_MAP);
+      }
+
+      return newSerializableOptions;
+    }
+
+    return serializableOptions;
   }
 }
 
