@@ -1,12 +1,12 @@
 # Serialization and you
 
-_Serialization_ is the term that describes a method to represent data so it an be transferred, stored and accessed by multiple systems or languages.
+_Serialization_ is the term that describes a method to represent data so it can be transferred, stored, and accessed by multiple systems or languages.
 
 There are many serialization formats; for our examples we will talk about JavaScript Object Notation (JSON). JSON is standard, language-independent file format that represends objects as key and value pairs in human readable text.
 
 JavaScript (and by extension TypeScript) also have "Objects"; these objects have their own rules for the keys and values. Methods (functions) can be a value for a key, while in JSON a function cannot be a value. Most importantly: JavaScript and TypeScript objects are not JSON.
 
-For example let's look at a simple User record for an application as a JSON representation and as an object.
+For example, let's look at a simple User record for an application as a JSON representation and as an object.
 
 Our User will have a first name, last name, and time when it was created.
 
@@ -58,7 +58,7 @@ const user = new User().deserialize(JSON.parse(`{
 `)});
 ```
 
-By passing the JSON as our input we can use JavaScript to read it and convert it to what we need. For our date we create a new Date from the string value. To serialize we do the same thing but return a JSON value.
+By passing the JSON as our input we can use JavaScript to read it and convert it to what we need. For our date, we create a new Date from the string value. To serialize, we do the same thing but return a JSON value.
 
 ```ts
 class User {
@@ -98,7 +98,7 @@ A web app will use a library like Axios or Angular's HttpClient to make requests
 3. Not all keys are meant to be sent over the wire.
 4. Interceptors need special logic to avoid modifying other, non-JSON content types, such as `multipart/form-data`.
 
-## Introducing ts_serialize@v1.0.0
+## ts_serialize v1.0.0
 
 `ts_serialize` is a program that supports Node.js, Deno, and browser environments. It is built to deal with all the problems mentioned while keeping serialization simple. It does this by providing a base class that model classes can extend. The base class adds the functions needed for (de)serialization and provides a decorator to define how properties are (de)serialized. Let's use ts_serialize to redefine our User Model.
 
@@ -160,6 +160,6 @@ ts_serialize keeps track of the original and serialized property names, so we do
 
 The example also uses the `iso8601Date` utility function to deserializing timestamps in standard ISO-8601 formats.
 
-There are many more details in our documentation online https://gamebridgeai.github.io/ts_serialize and the program is "free open-source software" (FOSS) on GitHub https://github.com/GameBridgeAI/ts_serialize
+There are more details in our documentation online https://gamebridgeai.github.io/ts_serialize and the program is "free open-source software" (FOSS) on GitHub https://github.com/GameBridgeAI/ts_serialize
 
 Thank you for reading.
