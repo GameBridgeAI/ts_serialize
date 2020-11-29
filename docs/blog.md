@@ -159,8 +159,8 @@ class User extends Serializable {
 }
 ```
 
-We don't ned to convert it back because we track the original property name.
+We don't need to convert it back because we track the original property name.
 
-There are man more details in our documentation online https://gamebridgeai.github.io/ts_serialize
+There are man more details in our documentation online https://gamebridgeai.github.io/ts_serialize and the program is "free open-source software" (FOSS) on GitHub https://github.com/GameBridgeAI/ts_serialize
 
 Thank you for reading.
