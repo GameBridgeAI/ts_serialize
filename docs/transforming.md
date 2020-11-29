@@ -6,6 +6,8 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[Home](./index)
+
 ## Global transformKey
 
 `Serializable` has an optional function `tsTransformKey(key: string): string`, we also
@@ -130,4 +132,6 @@ assertEquals(
 ```
 
 `tsTransformKey` is an efficient way to deal with
-camelCase to snake_case conversions.
+camelCase to snake_case conversions. Classes that can 
+change type based on their properties can also be with 
+ouo [Polymorphism](./polymorphism) decorators.

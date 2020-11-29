@@ -10,15 +10,18 @@ test({
     class TestClass extends Serializable {
       @SerializeProperty()
       public test: number = 99;
+
+      @SerializeProperty("test_one")
+      public test1: number = 100;
     }
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
     assertEquals(typeof testObj.toJSON, "function");
     assertEquals(typeof testObj.fromJSON, "function");
     assertEquals(typeof testObj.tsSerialize, "function");
-    assertEquals(testObj.toJSON(), `{"test":99}`);
+    assertEquals(testObj.toJSON(), `{"test":99,"test_one":100}`);
     assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
-    assertEquals(testObj.tsSerialize(), { test: 99 });
+    assertEquals(testObj.tsSerialize(), { test: 99, test_one: 100 });
   },
 });
 

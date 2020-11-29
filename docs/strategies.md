@@ -6,6 +6,8 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[Home](./index)
+
 ## Strategies
 
 `Strategies` are functions or a composed list of functions to execute on the values when

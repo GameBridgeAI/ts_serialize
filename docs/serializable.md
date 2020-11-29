@@ -6,10 +6,17 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[Home](./index)
+
 ## Serializable and SerializeProperty
 
 Import `Serializable` and `SerializeProperty`, extend `Serializable` from your `class`
 and use the `SerializeProperty` decorator on any properties you want serialized.
+
+`Serializable` will add three methods `toJSON`, `fromJson`, and `tsSerialize`. 
+- `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
+- `toJSON` - converts the model to a JSON string
+- `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value  transformations
 
 ```ts
 class Test extends Serializable {
@@ -80,7 +87,7 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 **FromJSON**
 
-Use a [strategy](./strategies) to revive the property into a class. `as` is 
+Use a [strategy](./strategies) to revive the property into a class. `toSerializable` is 
 a provided function export that takes one parameter, the instance type the object 
 will take when revived.
 
