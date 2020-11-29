@@ -19,25 +19,21 @@ and use the `SerializeProperty` decorator on any properties you want serialized.
 - `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value  transformations
 
 ```ts
-class Test extends Serializable {
+class TestClass extends Serializable {
   @SerializeProperty()
-  propertyOne = "Hello";
-  @SerializeProperty()
-  propertyTwo = "World!";
-  notSerialized = "not-serialized";
-}
+  public test: number = 99;
 
-assertEquals(
-  new Test().toJSON(),
-  `{"propertyOne":"Hello","propertyTwo":"World!"}`
-);
-const testObj = new Test().fromJSON(
-  `{"propertyOne":"From","propertyTwo":"JSON!","notSerialized":"changed"}`
-);
-assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "JSON!");
-assertEquals(testObj.notSerialized, "changed");
-assertEquals(testObj.toJSON(), `{"propertyOne":"From","propertyTwo":"JSON!"}`);
+  @SerializeProperty("test_one")
+  public test1: number = 100;
+}
+const testObj = new TestClass();
+assert(testObj instanceof Serializable);
+assertEquals(typeof testObj.toJSON, "function");
+assertEquals(typeof testObj.fromJSON, "function");
+assertEquals(typeof testObj.tsSerialize, "function");
+assertEquals(testObj.toJSON(), `{"test":99,"test_one":100}`);
+assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
+assertEquals(testObj.tsSerialize(), { test: 99, test_one: 100 });
 ```
 ### Inheritance
 
