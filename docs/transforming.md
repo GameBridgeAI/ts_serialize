@@ -134,4 +134,4 @@ assertEquals(
 `tsTransformKey` is an efficient way to deal with
 camelCase to snake_case conversions. Classes that can 
 change type based on their properties can also be with 
-ouo [Polymorphism](./polymorphism) decorators.
+managed with our [Polymorphism](./polymorphism) decorators.
