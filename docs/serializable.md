@@ -13,10 +13,10 @@
 Import `Serializable` and `SerializeProperty`, extend `Serializable` from your `class`
 and use the `SerializeProperty` decorator on any properties you want serialized.
 
-`Serializable` will add three methods `toJSON`, `fromJson`, and `tsSerialize`. 
+`Serializable` will add three methods `toJSON`, `fromJSON`, and `tsSerialize`. 
 - `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
 - `toJSON` - converts the model to a JSON string
-- `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value  transformations
+- `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value transformations
 
 ```ts
 class TestClass extends Serializable {
