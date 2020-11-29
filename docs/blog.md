@@ -1,16 +1,10 @@
 # Serialization and you
 
-What is serialization in computer science? It is the term that describes a method to 
-represent data so it an be transferred, stored and accessed my multiple systems or languages.
+What is serialization in computer science? It is the term that describes a method to represent data so it an be transferred, stored and accessed my multiple systems or languages.
 
-There are different ways of serialization, for our examples we will talk about 
-JavaScript Object Notation (JSON). JSON is an open based file format, it is language-independent, 
-and it will represent a key and value pair that is in human readable text.
+There are different ways of serialization, for our examples we will talk about JavaScript Object Notation (JSON). JSON is an open based file format, it is language-independent, and it will represent a key and value pair that is in human readable text.
 
-Javascript (and by nature TypeScript) also have "Objects", these objects have their
-own rules for the keys and values. Methods (functions) can be a value for a key, while in
-JSON a function cannot be a value. Most importantly: JavaScript and TypeScript objects
-are not JSON.
+Javascript (and by nature TypeScript) also have "Objects", these objects have their own rules for the keys and values. Methods (functions) can be a value for a key, while in JSON a function cannot be a value. Most importantly: JavaScript and TypeScript objects are not JSON.
 
 For example let's look at a simple User for an application as a JSON representation and as an object.
 
@@ -36,15 +30,11 @@ class User {
 }
 ```
 
-Let's go through the differences between the keys and values. In this example both JSON keys and
-the object keys are strings, however; the keys themselves are different. An underscore "_" is used
-to separate words rather than a capital letter. 
+Let's go through the differences between the keys and values. In this example both JSON keys and the object keys are strings, however; the keys themselves are different. An underscore "_" is used to separate words rather than a capital letter. 
 
-The values from or our dataset also has some differences, in JSON they are all strings, but in the object 
-the "createdDate" value is not a string, it is JavaScript "Date" which is made from the string.
+The values from or our dataset also has some differences, in JSON they are all strings, but in the object the "createdDate" value is not a string, it is JavaScript "Date" which is made from the string.
 
-Serialization is how we are able to match the different keys together and convert values into their programmable
-version. To do that functions can be added to our object, continuing with our example starting with converting JSON to the Object:
+Serialization is how we are able to match the different keys together and convert values into their programmable version. To do that functions can be added to our object, continuing with our example starting with converting JSON to the Object:
 
 ```ts
 class User {
@@ -59,10 +49,7 @@ class User {
     }
 }
 ```
-By passing the JSON as our input we can use JavaScript to read it and convert it to what we need.
-For our date we create a new Date from the string value. When we set the key on the object we
-make sure the "_" is removed and to capitalize the next letter. Serializing we do the same thing but
-return a JSON value.
+By passing the JSON as our input we can use JavaScript to read it and convert it to what we need. For our date we create a new Date from the string value. When we set the key on the object we make sure the "_" is removed and to capitalize the next letter. Serializing we do the same thing but return a JSON value.
 
 ```ts
 class User {
@@ -84,27 +71,21 @@ class User {
     }
 }
 ```
-JSON is a common format and many programming languages have tools to help with conversions, JavaScript 
-is no different. "JSON.stringify" helps with making the JSON file format from a object that we can define.
-This allows us to convert the keys and the values, our date also has a built in function "toJSON" that helps 
-turn the date into a string value to be stored in a JSON format.
+JSON is a common format and many programming languages have tools to help with conversions, JavaScript  is no different. "JSON.stringify" helps with making the JSON file format from a object that we can define. This allows us to convert the keys and the values, our date also has a built in function "toJSON" that helps turn the date into a string value to be stored in a JSON format.
 
 ## Why is this a problem?
 
-Defining these functions that convert to and from JSON for every model is a lot of work and can lead to
-duplicate code, to save on time things can be applied in a global fashion, for example, the key conversions
-is often done a different time from serialization. Let's look at an HTTP request to understand
-
-A user signing up will send us data and we'll send data back to the user:
+Defining these functions that convert to and from JSON for every model is a lot of work and can lead to duplicate code, to save on time things can be applied in a global fashion, for example, the key conversions is often done a different time from serialization. Let's look at an HTTP request to understand. A user signing up will send us data and we'll send data back to the user:
 
 User's Machine -> HTTP request with JSON data -> A server that creates and saves a user -> HTTP response with JSON data -> User's machine (success)
 
-Interceptors are functions that will run right before every HTTP request and right after every HTTP response, 
-developers can use these functions to apply the key conversions. There are a few problems with this approach:
+Interceptors are functions that will run right before every HTTP request and right after every HTTP response, developers can use these functions to apply the key conversions. There are a few problems with this approach:
+
 1. Serializing the value and keys at different times means there needs to be an underlying knowledge of the interceptor and what it does
 2. not all keys should be converted (this conversion is often called the snake_case camelCase conversion)
 3. not all keys should be sent to the server and received back from the server
 4. although our model does have our functions, it is not a true representation of how a model is (de)serialized
+5. you change the request content-type to "application/json" even when it should be "multipart/form-data"
 
 ## Introducing ts_serialize@v1.0.0
 
