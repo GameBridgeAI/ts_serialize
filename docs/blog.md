@@ -55,7 +55,7 @@ const user = new User().deserialize(JSON.parse(`{
     "first_name": "Theodore",
     "last_name": "Esquire",
     "created_date": "2020-09-24T00:00:00.000Z"
-`)});
+}`));
 ```
 
 By passing the JSON as our input we can use JavaScript to read it and convert it to what we need. For our date we create a new Date from the string value. To serialize we do the same thing but return a JSON value.
@@ -160,6 +160,6 @@ ts_serialize keeps track of the original and serialized property names, so we do
 
 The example also uses the `iso8601Date` utility function to deserializing timestamps in standard ISO-8601 formats.
 
-There are many more details in our documentation online https://gamebridgeai.github.io/ts_serialize and the program is "free open-source software" (FOSS) on GitHub https://github.com/GameBridgeAI/ts_serialize
+There are more details in our documentation at https://gamebridgeai.github.io/ts_serialize. The library is provided under the MIT license on GitHub at  https://github.com/GameBridgeAI/ts_serialize and is available in the `npm` and `deno` package registries.
 
 Thank you for reading.
