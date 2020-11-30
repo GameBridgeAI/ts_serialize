@@ -6,31 +6,34 @@
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+[Home](./index)
+
 ## Serializable and SerializeProperty
 
 Import `Serializable` and `SerializeProperty`, extend `Serializable` from your `class`
 and use the `SerializeProperty` decorator on any properties you want serialized.
 
-```ts
-class Test extends Serializable {
-  @SerializeProperty()
-  propertyOne = "Hello";
-  @SerializeProperty()
-  propertyTwo = "World!";
-  notSerialized = "not-serialized";
-}
+`Serializable` will add three methods `toJSON`, `fromJSON`, and `tsSerialize`. 
+- `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
+- `toJSON` - converts the model to a JSON string
+- `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value transformations
 
-assertEquals(
-  new Test().toJSON(),
-  `{"propertyOne":"Hello","propertyTwo":"World!"}`
-);
-const testObj = new Test().fromJSON(
-  `{"propertyOne":"From","propertyTwo":"JSON!","notSerialized":"changed"}`
-);
-assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "JSON!");
-assertEquals(testObj.notSerialized, "changed");
-assertEquals(testObj.toJSON(), `{"propertyOne":"From","propertyTwo":"JSON!"}`);
+```ts
+class TestClass extends Serializable {
+  @SerializeProperty()
+  public test: number = 99;
+
+  @SerializeProperty("test_one")
+  public test1: number = 100;
+}
+const testObj = new TestClass();
+assert(testObj instanceof Serializable);
+assertEquals(typeof testObj.toJSON, "function");
+assertEquals(typeof testObj.fromJSON, "function");
+assertEquals(typeof testObj.tsSerialize, "function");
+assertEquals(testObj.toJSON(), `{"test":99,"test_one":100}`);
+assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
+assertEquals(testObj.tsSerialize(), { test: 99, test_one: 100 });
 ```
 ### Inheritance
 
@@ -80,7 +83,7 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 **FromJSON**
 
-Use a [strategy](./strategies) to revive the property into a class. `as` is 
+Use a [strategy](./strategies) to revive the property into a class. `toSerializable` is 
 a provided function export that takes one parameter, the instance type the object 
 will take when revived.
 
