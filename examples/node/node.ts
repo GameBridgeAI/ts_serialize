@@ -254,5 +254,5 @@ class TestObjectContaining1 extends Serializable {
 const testObj1 = new TestObjectContaining1().fromJSON(
   { test: { testing: { someClassProp: "changed" } } },
 );
-assert(testObj.test.testing instanceof Serializable);
-assert(testObj.test.testing.someClassProp, "changed");
+assert(testObj1.test.testing instanceof Serializable);
+assert(testObj1.test.testing.someClassProp === "changed");

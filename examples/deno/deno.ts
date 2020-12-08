@@ -173,11 +173,11 @@ assert(testObj.test.testing[0].someClassProp === "changed");
 
 class TestObjectContaining1 extends Serializable {
   @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-  test!: { [k: string]: SomeClass1 };
+  test!: { [k: string]: SomeClass };
 }
 
 const testObj1 = new TestObjectContaining1().fromJSON(
   { test: { testing: { someClassProp: "changed" } } },
 );
-assert(testObj.test.testing instanceof Serializable);
-assert(testObj.test.testing.someClassProp, "changed");
+assert(testObj1.test.testing instanceof Serializable);
+assert(testObj1.test.testing.someClassProp, "changed");
