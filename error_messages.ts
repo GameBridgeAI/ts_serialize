@@ -17,3 +17,5 @@ export const ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH =
 
 export const ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS =
   "Failed to resolve polymorphic class";
+
+export const ERROR_INVALID_DATE = "Invalid date";
