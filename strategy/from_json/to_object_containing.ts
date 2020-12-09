@@ -14,7 +14,7 @@ export function toObjectContaining<T>(
       return null;
     }
 
-    const record: { [_: string]: Serializable | Serializable[] | null } = {};
+    const record: Record<string, Serializable | Serializable[] | null> = {};
     // check that JSONValue is something we can deal with
     // and also make the type checker happy
     if (typeof value === "object" && !Array.isArray(value)) {
