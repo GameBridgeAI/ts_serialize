@@ -4,6 +4,11 @@ import { assert, assertEquals, test } from "../../test_deps.ts";
 import { toObjectContaining } from "./to_object_containing.ts";
 import { Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
+import { fail } from "https://deno.land/std@0.79.0/testing/asserts.ts";
+import {
+  ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
+  ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
+} from "../../error_messages.ts";
 
 test({
   name: "toObjectContaining revives using `fromJSON` as type",
@@ -86,5 +91,51 @@ test({
 
     const testObj = new Test().fromJSON({ test: null });
     assertEquals(testObj.test, null);
+  },
+});
+
+test({
+  name: "toObjectContaining subclass must be an [object Object]",
+  fn() {
+    class SomeClass extends Serializable {
+      @SerializeProperty()
+      someClassProp = "test";
+    }
+
+    class Test extends Serializable {
+      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+      test!: { [k: string]: SomeClass };
+    }
+    try {
+      const testObj = new Test().fromJSON(
+        { test: { testing: "changed" } },
+      );
+      fail(`testObj ${testObj} did not fail`);
+    } catch (error) {
+      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+    }
+  },
+});
+
+test({
+  name: "toObjectContaining value must be an [object Object]",
+  fn() {
+    class SomeClass extends Serializable {
+      @SerializeProperty()
+      someClassProp = "test";
+    }
+
+    class Test extends Serializable {
+      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+      test!: { [k: string]: SomeClass };
+    }
+    try {
+      const testObj = new Test().fromJSON(
+        { test: "changed" },
+      );
+      fail(`testObj ${testObj} did not fail`);
+    } catch (error) {
+      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
+    }
   },
 });

@@ -20,7 +20,12 @@ test({
       "string",
     );
     assertEquals(typeof mod.ERROR_INVALID_DATE, "string");
+    assertEquals(typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE, "string");
+    assertEquals(
+      typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
+      "string",
+    );
 
-    assertEquals(Object.keys(mod).length, 7);
+    assertEquals(Object.keys(mod).length, 9);
   },
 });

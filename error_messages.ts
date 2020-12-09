@@ -19,3 +19,9 @@ export const ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS =
   "Failed to resolve polymorphic class";
 
 export const ERROR_INVALID_DATE = "Invalid date";
+
+export const ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE =
+  "The value is not an object";
+
+export const ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE =
+  "The sub-value is not an object";

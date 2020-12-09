@@ -2,6 +2,10 @@
 
 import { JSONArray, JSONValue, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
+import {
+  ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
+  ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
+} from "../../error_messages.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
 export function toObjectContaining<T>(
@@ -12,6 +16,12 @@ export function toObjectContaining<T>(
   ) {
     if (value == null) {
       return null;
+    }
+
+    console.log(value, Object.prototype.toString.call(value));
+
+    if (Object.prototype.toString.call(value) !== "[object Object]") {
+      throw Error(ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
 
     const record: Record<string, Serializable | Serializable[] | null> = {};
@@ -30,6 +40,10 @@ export function toObjectContaining<T>(
             new type().fromJSON(v)
           );
           continue;
+        }
+
+        if (Object.prototype.toString.call(value[prop]) !== "[object Object]") {
+          throw Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
         }
 
         record[prop] = new type().fromJSON(value[prop]);
