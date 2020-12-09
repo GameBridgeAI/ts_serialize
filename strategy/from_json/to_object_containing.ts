@@ -18,8 +18,6 @@ export function toObjectContaining<T>(
       return null;
     }
 
-    console.log(value, Object.prototype.toString.call(value));
-
     if (Object.prototype.toString.call(value) !== "[object Object]") {
       throw Error(ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
