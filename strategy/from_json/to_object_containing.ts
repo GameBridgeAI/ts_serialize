@@ -10,19 +10,29 @@ export function toObjectContaining<T>(
   return function _toObjectContaining(
     value: JSONValue,
   ) {
-    const record: { [_: string]: Serializable | Serializable[] } = {};
+    if (value == null) {
+      return null;
+    }
+
+    const record: { [_: string]: Serializable | Serializable[] | null } = {};
     // check that JSONValue is something we can deal with
+    // and also make the type checker happy
     if (typeof value === "object" && !Array.isArray(value)) {
       for (const prop in value) {
-        if (value[prop]) {
-          if (Array.isArray(value[prop])) {
-            record[prop] = (value[prop] as JSONArray).map((v: JSONValue) =>
-              new type().fromJSON(v)
-            );
-          } else {
-            record[prop] = new type().fromJSON(value[prop]);
-          }
+        // null is a JSONValue
+        if (value[prop] === null) {
+          record[prop] = null;
+          continue;
         }
+
+        if (Array.isArray(value[prop])) {
+          record[prop] = (value[prop] as JSONArray).map((v: JSONValue) =>
+            new type().fromJSON(v)
+          );
+          continue;
+        }
+
+        record[prop] = new type().fromJSON(value[prop]);
       }
     }
     return record;
