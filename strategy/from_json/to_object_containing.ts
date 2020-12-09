@@ -39,9 +39,14 @@ export function toObjectContaining<T>(
         }
 
         if (Array.isArray(value[prop])) {
-          record[prop] = (value[prop] as JSONArray).map((v: JSONValue) =>
-            new type().fromJSON(v)
-          );
+          record[prop] = (value[prop] as JSONArray).map((v: JSONValue) => {
+            if (
+              Object.prototype.toString.call(v) !== "[object Object]"
+            ) {
+              throw Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+            }
+            return new type().fromJSON(v);
+          });
           continue;
         }
 

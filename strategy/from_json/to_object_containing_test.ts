@@ -96,7 +96,7 @@ test({
 });
 
 test({
-  name: "toObjectContaining subclass must be an [object Object]",
+  name: "toObjectContaining sub-value must be an [object Object]",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -142,7 +142,7 @@ test({
 });
 
 test({
-  name: "toObjectContaining value must be an [object Object] - throw on arrays",
+  name: "toObjectContaining recommend toSerializable() if array",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -163,6 +163,35 @@ test({
         error.message,
         ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
       );
+    }
+  },
+});
+
+test({
+  name:
+    "toObjectContaining throws is array sub-value values are not [object Object]",
+  fn() {
+    class SomeClass extends Serializable {
+      @SerializeProperty()
+      someClassProp = "test";
+    }
+
+    class Test extends Serializable {
+      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+      test!: { [k: string]: SomeClass[] };
+    }
+
+    try {
+      const testObj = new Test().fromJSON(
+        {
+          test: {
+            testing: [88],
+          },
+        },
+      );
+      fail(`testObj ${testObj} did not fail`);
+    } catch (error) {
+      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
