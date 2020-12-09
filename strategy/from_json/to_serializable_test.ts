@@ -63,3 +63,16 @@ test({
     assertEquals(array[0].test, "v1");
   },
 });
+
+test({
+  name: "toSerializable works with arrays of objects",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty("a_property")
+      test = true;
+    }
+    const array: Test[] = toSerializable(Test)([]);
+    assertEquals(array.length, 0);
+    assert(array[0] instanceof Test);
+  },
+});
