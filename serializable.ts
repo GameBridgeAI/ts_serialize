@@ -175,7 +175,7 @@ function fromJSON<T>(
   }
 
   const _json = typeof json === "string" ? json : JSON.stringify(json);
-
+  console.log(_json);
   return Object.assign(
     context,
     JSON.parse(
@@ -193,9 +193,20 @@ function fromJSON<T>(
           fromJSONStrategy = fromJSONDefault,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
-        const processedValue: unknown = Array.isArray(value)
-          ? value.map((v) => fromJSONStrategy(v))
-          : fromJSONStrategy(value);
+        // const processedValue: unknown = Array.isArray(value)
+        //   ? value.map((v) => fromJSONStrategy(v))
+        //   : fromJSONStrategy(value);
+
+        let processedValue: unknown;
+        if (Array.isArray(value)) {
+          if (value.length) {
+            processedValue = value.map((v) => fromJSONStrategy(v));
+          } else {
+            processedValue = fromJSONStrategy(value);
+          }
+        } else {
+          processedValue = fromJSONStrategy(value);
+        }
 
         if (propertyKey) {
           context[propertyKey as keyof Serializable] = processedValue as any;

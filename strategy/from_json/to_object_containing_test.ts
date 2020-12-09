@@ -8,6 +8,7 @@ import { fail } from "https://deno.land/std@0.79.0/testing/asserts.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
+  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE,
 } from "../../error_messages.ts";
 
 test({
@@ -136,6 +137,29 @@ test({
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {
       assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
+    }
+  },
+});
+
+test({
+  name: "toObjectContaining value must be an [object Object] - throw on arrays",
+  fn() {
+    class SomeClass extends Serializable {
+      @SerializeProperty()
+      someClassProp = "test";
+    }
+
+    class Test extends Serializable {
+      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+      test!: { [k: string]: SomeClass };
+    }
+    try {
+      const testObj = new Test().fromJSON(
+        { test: [] },
+      );
+      fail(`testObj ${testObj} did not fail`);
+    } catch (error) {
+      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE);
     }
   },
 });
