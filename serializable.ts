@@ -175,7 +175,7 @@ function fromJSON<T>(
   }
 
   const _json = typeof json === "string" ? json : JSON.stringify(json);
-  console.log(_json);
+
   return Object.assign(
     context,
     JSON.parse(
