@@ -8,7 +8,7 @@ import { fail } from "https://deno.land/std@0.79.0/testing/asserts.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
-  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE,
+  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
 } from "../../error_messages.ts";
 
 test({
@@ -159,7 +159,10 @@ test({
       );
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {
-      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE);
+      assertEquals(
+        error.message,
+        ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
+      );
     }
   },
 });

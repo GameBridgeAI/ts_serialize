@@ -26,7 +26,7 @@ test({
       "string",
     );
     assertEquals(
-      typeof mod.ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE,
+      typeof mod.ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
       "string",
     );
 

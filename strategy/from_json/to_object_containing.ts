@@ -5,7 +5,7 @@ import { FromJSONStrategy } from "../compose_strategy.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
-  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE,
+  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
 } from "../../error_messages.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
@@ -20,7 +20,7 @@ export function toObjectContaining<T>(
     }
 
     if (Array.isArray(value)) {
-      throw Error(ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZE);
+      throw Error(ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE);
     }
 
     if (Object.prototype.toString.call(value) !== "[object Object]") {
