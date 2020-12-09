@@ -65,7 +65,7 @@ test({
 });
 
 test({
-  name: "toSerializable works with arrays of objects",
+  name: "toSerializable works with empty arrays",
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
@@ -73,6 +73,5 @@ test({
     }
     const array: Test[] = toSerializable(Test)([]);
     assertEquals(array.length, 0);
-    assert(array[0] instanceof Test);
   },
 });
