@@ -155,7 +155,7 @@ test({
     }
     try {
       const testObj = new Test().fromJSON(
-        { test: [] },
+        { test: [99] },
       );
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {

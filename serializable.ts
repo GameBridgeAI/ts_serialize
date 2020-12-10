@@ -193,7 +193,7 @@ function fromJSON<T>(
           fromJSONStrategy = fromJSONDefault,
         } = serializablePropertyMap.getBySerializedKey(key) || {};
 
-        const processedValue: unknown = Array.isArray(value) && value.length
+        const processedValue: unknown = Array.isArray(value)
           ? value.map((v) => fromJSONStrategy(v))
           : fromJSONStrategy(value);
 
