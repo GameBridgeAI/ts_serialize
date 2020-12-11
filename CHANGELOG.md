@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- `toObjectContaining` fixes #89
+- `toObjectContaining` and `fromObjectContaining` fixing #89
 
 ## [v1.0.0] - 2020-11-29
 
