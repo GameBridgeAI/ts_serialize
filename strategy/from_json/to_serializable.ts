@@ -2,11 +2,11 @@
 
 import { JSONValue, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
-import { FunctionSerializable, getNew, NewSerializable } from "../_utils.ts";
+import { getNew, StrategyTypeArgument } from "../_utils.ts";
 
 /** revive data using `fromJSON` on a subclass type */
 export function toSerializable<T>(
-  type: NewSerializable<T> | FunctionSerializable,
+  type: StrategyTypeArgument<T>,
 ): FromJSONStrategy {
   return function _toSerializable(
     value: JSONValue,

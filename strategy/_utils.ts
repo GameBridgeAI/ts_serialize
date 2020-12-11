@@ -1,10 +1,10 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 import { Serializable } from "../serializable.ts";
 
+type NewSerializable<T> = T & (new () => Serializable);
+type FunctionSerializable = () => Serializable;
 /** for strategies */
-export type NewSerializable<T> = T & (new () => Serializable);
-/** for strategies */
-export type FunctionSerializable = () => Serializable;
+export type StrategyTypeArgument<T> = NewSerializable<T> | FunctionSerializable;
 
 /** for strategy values */
 export function isObject(obj: any): obj is Record<string, any> {
@@ -13,9 +13,9 @@ export function isObject(obj: any): obj is Record<string, any> {
 
 /** for strategy type arguments */
 function isNewable<T>(
-  v: NewSerializable<T> | FunctionSerializable,
-): v is NewSerializable<T> {
-  return !!v.name;
+  type: NewSerializable<T> | FunctionSerializable,
+): type is NewSerializable<T> {
+  return !!type.name;
 }
 
 /** get new strategy type arguments */
