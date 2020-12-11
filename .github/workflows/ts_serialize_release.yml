@@ -15,7 +15,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Run tests
         run: |
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.5.4"
+          curl -L https://deno.land/x/install/install.sh | sh -s "v1.6.0"
           export PATH="$HOME/.deno/bin:$PATH"
           deno fmt --check
           deno test

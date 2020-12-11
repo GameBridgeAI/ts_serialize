@@ -94,3 +94,23 @@ test({
     assertEquals(array[0].someClassProp, "from_constructor");
   },
 });
+
+test({
+  name: "Revives an empty array of `type`",
+  fn() {
+    class OtherClass extends Serializable {
+      @SerializeProperty()
+      id!: number;
+    }
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
+      })
+      array!: OtherClass[];
+    }
+    const testObj = new Test().fromJSON({ array: [] });
+
+    assert(Array.isArray(testObj.array));
+    assertEquals(testObj.array.length, 0);
+  },
+});
