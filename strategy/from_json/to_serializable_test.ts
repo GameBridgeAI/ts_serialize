@@ -63,3 +63,54 @@ test({
     assertEquals(array[0].test, "v1");
   },
 });
+
+test({
+  name: "toSerializable works with empty arrays",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty("a_property")
+      test = true;
+    }
+    const array: Test[] = toSerializable(Test)([]);
+    assertEquals(array.length, 0);
+  },
+});
+
+test({
+  name: "toSerializable works with constructor args",
+  fn() {
+    class Test extends Serializable {
+      constructor(someClassProp: string) {
+        super();
+        this.someClassProp = someClassProp;
+      }
+      @SerializeProperty()
+      someClassProp: string;
+    }
+    const array: Test[] = toSerializable(() => new Test("from_constructor"))(
+      [{}],
+    );
+    assertEquals(array.length, 1);
+    assertEquals(array[0].someClassProp, "from_constructor");
+  },
+});
+
+test({
+  name: "Revives an empty array of `type`",
+  fn() {
+    class OtherClass extends Serializable {
+      @SerializeProperty()
+      id!: number;
+    }
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
+      })
+      array!: OtherClass[];
+    }
+    const testObj = new Test().fromJSON({ array: [] });
+
+    assert(Array.isArray(testObj.array));
+    assertEquals(testObj.array.length, 0);
+  },
+});

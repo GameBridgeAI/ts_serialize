@@ -6,6 +6,7 @@ export {
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
+  toObjectContaining,
   toSerializable,
   TransformKey,
 } from "https://deno.land/x/ts_serialize/mod.ts";

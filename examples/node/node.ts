@@ -4,6 +4,7 @@ import {
   composeStrategy,
   createDateStrategy,
   FromJSONStrategy,
+  fromObjectContaining,
   iso8601Date,
   JSONValue,
   polymorphicClassFromJSON,
@@ -12,6 +13,7 @@ import {
   Serializable,
   SerializeProperty,
   ToJSONStrategy,
+  toObjectContaining,
   toSerializable,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
@@ -223,3 +225,52 @@ const polyClass2 = polymorphicClassFromJSON(
 
 assert(polyClass2 instanceof TestClass2);
 assert(polyClass2.someProperty === "new value");
+
+class SomeClass extends Serializable {
+  @SerializeProperty()
+  someClassProp = "test";
+}
+
+class TestObjectContaining extends Serializable {
+  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+  test!: { [k: string]: SomeClass[] };
+}
+
+const testObj = new TestObjectContaining().fromJSON(
+  {
+    test: {
+      testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
+    },
+  },
+);
+assert(Array.isArray(testObj.test.testing));
+assert(testObj.test.testing[0] instanceof Serializable);
+assert(testObj.test.testing[0].someClassProp === "changed");
+
+class TestObjectContaining1 extends Serializable {
+  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+  test!: { [k: string]: SomeClass };
+}
+
+const testObj1 = new TestObjectContaining1().fromJSON(
+  { test: { testing: { someClassProp: "changed" } } },
+);
+assert(testObj1.test.testing instanceof Serializable);
+assert(testObj1.test.testing.someClassProp === "changed");
+
+class SomeOtherClass extends Serializable {
+  @SerializeProperty()
+  someClassProp = "test";
+}
+
+class TestObjContaining extends Serializable {
+  @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+  test: { [k: string]: SomeOtherClass[] } = {
+    testing: [new SomeOtherClass(), new SomeOtherClass(), new SomeOtherClass()],
+  };
+}
+
+assert(
+  new TestObjContaining().toJSON() ===
+    `{"test":{"testing":[{"someClassProp":"test"},{"someClassProp":"test"},{"someClassProp":"test"}]}}`,
+);

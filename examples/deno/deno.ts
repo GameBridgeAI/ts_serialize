@@ -149,3 +149,35 @@ assert(
   new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4 ===
     `changed`,
 );
+
+class SomeClass extends Serializable {
+  @SerializeProperty()
+  someClassProp = "test";
+}
+
+class TestObjectContaining extends Serializable {
+  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+  test!: { [k: string]: SomeClass[] };
+}
+
+const testObj = new TestObjectContaining().fromJSON(
+  {
+    test: {
+      testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
+    },
+  },
+);
+assert(Array.isArray(testObj.test.testing));
+assert(testObj.test.testing[0] instanceof Serializable);
+assert(testObj.test.testing[0].someClassProp === "changed");
+
+class TestObjectContaining1 extends Serializable {
+  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+  test!: { [k: string]: SomeClass };
+}
+
+const testObj1 = new TestObjectContaining1().fromJSON(
+  { test: { testing: { someClassProp: "changed" } } },
+);
+assert(testObj1.test.testing instanceof Serializable);
+assert(testObj1.test.testing.someClassProp, "changed");

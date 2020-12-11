@@ -22,7 +22,21 @@ declare module "@gamebridgeai/ts_serialize" {
      */
     tsTransformKey(key: string): string;
   }
-
+  /** to be implemented by external authors on their models  */
+  export interface ToJSON {
+    /** to JSON String */
+    toJson(): string;
+  }
+  /** to be implemented by external authors on their models  */
+  export interface FromJSON {
+    /** to Serializable Object */
+    fromJSON(json: string | JSONValue | Object): this;
+  }
+  /** to be implemented by external authors on their models  */
+  export interface Serialize {
+    /** to JSONObject */
+    tsSerialize(): JSONObject;
+  }
   /** Adds methods for serialization */
   export abstract class Serializable {
     /** key transform functionality */
@@ -78,6 +92,16 @@ declare module "@gamebridgeai/ts_serialize" {
   export function toSerializable<T>(
     type: T & { new (): Serializable },
   ): FromJSONStrategy;
+
+  /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
+  export function toObjectContaining<T>(
+    type: T & { new (): Serializable },
+  ): FromJSONStrategy;
+
+  /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
+  export function fromObjectContaining(
+    value: Record<string, Serializable | Serializable[]>,
+  ): JSONObject;
 
   /** allows authors to pass a regex to parse as a date */
   export function createDateStrategy(regex: RegExp): FromJSONStrategy;

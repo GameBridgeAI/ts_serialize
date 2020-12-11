@@ -85,7 +85,7 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 Use a [strategy](./strategies) to revive the property into a class. `toSerializable` is 
 a provided function export that takes one parameter, the instance type the object 
-will take when revived.
+will take when revived, it will also revive to an array of Serializable objects.
 
 ```ts
 class Test1 extends Serializable {
@@ -104,6 +104,32 @@ class Test2 extends Serializable {
 const testObj = new Test2();
 testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
+```
+
+`toObjectContaining` revives a record of string keys to Serializable objects, it will also revive to 
+an array of Serializable objects.
+
+```ts
+class SomeClass extends Serializable {
+  @SerializeProperty()
+  someClassProp = "test";
+}
+
+class Test extends Serializable {
+  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+  test!: { [k: string]: SomeClass[] };
+}
+
+const testObj = new Test().fromJSON(
+  {
+    test: {
+      testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
+    },
+  },
+);
+assert(Array.isArray(testObj.test.testing));
+assert(testObj.test.testing[0] instanceof Serializable);
+assertEquals(testObj.test.testing[0].someClassProp, "changed");
 ```
 
 ### SerializeProperty options

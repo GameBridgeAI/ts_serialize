@@ -3,6 +3,7 @@
 import { assert, assertEquals, fail, test } from "../../test_deps.ts";
 import { createDateStrategy, iso8601Date } from "./date.ts";
 import { Serializable, SerializeProperty } from "../../mod.ts";
+import { ERROR_INVALID_DATE } from "../../error_messages.ts";
 
 test({
   name: "createDateStrategy - creates strategy from regex",
@@ -20,7 +21,25 @@ test({
 });
 
 test({
-  name: "Will not serialize non date strings",
+  name: "createDateStrategy - Will not deserialize non date strings",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+      })
+      date!: Date;
+    }
+    try {
+      new Test().fromJSON(`{"date":"I am not a date!"}`);
+      fail("Non date string did not error");
+    } catch (error) {
+      assertEquals(error.message, ERROR_INVALID_DATE);
+    }
+  },
+});
+
+test({
+  name: "iso8601Date - Will not deserialize non date strings",
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
@@ -32,7 +51,7 @@ test({
       new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
     } catch (error) {
-      assertEquals(error.message, "Invalid date");
+      assertEquals(error.message, ERROR_INVALID_DATE);
     }
   },
 });
@@ -81,5 +100,23 @@ test({
     );
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T07:00:00.000Z");
+  },
+});
+
+test({
+  name: "createDateStrategy - throws on invalid dates",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: createDateStrategy(/^Im going to shoot my foot$/),
+      })
+      date!: Date;
+    }
+    try {
+      new Test().fromJSON(`{"date":"Im going to shoot my foot"}`);
+      fail("Non date string did not error");
+    } catch (error) {
+      assertEquals(error.message, ERROR_INVALID_DATE);
+    }
   },
 });
