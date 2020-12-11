@@ -41,7 +41,7 @@ export declare interface FromJSON {
 }
 
 export declare interface Serialize {
-  tsSerialize(json: string | JSONValue | Object): this;
+  tsSerialize(): JSONObject;
 }
 
 /** Adds methods for serialization */
