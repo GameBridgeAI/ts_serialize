@@ -39,7 +39,7 @@ test({
 });
 
 test({
-  name: "iso8601Date - Will not serialize non date strings",
+  name: "iso8601Date - Will not deserialize non date strings",
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
