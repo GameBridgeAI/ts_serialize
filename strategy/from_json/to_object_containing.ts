@@ -33,10 +33,7 @@ export function toObjectContaining<T>(
           record[prop] = null;
           continue;
         }
-        // only process Serializable or Serializable[]
-        if (!isObject(value[prop])) {
-          throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
-        }
+
         // Serializable[]
         if (Array.isArray(value[prop])) {
           record[prop] = (value[prop] as JSONArray).map((v: JSONValue) => {
@@ -46,6 +43,11 @@ export function toObjectContaining<T>(
             return getNew(type).fromJSON(v);
           });
           continue;
+        }
+
+        // only process Serializable
+        if (!isObject(value[prop])) {
+          throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
         }
 
         record[prop] = getNew(type).fromJSON(value[prop]);
