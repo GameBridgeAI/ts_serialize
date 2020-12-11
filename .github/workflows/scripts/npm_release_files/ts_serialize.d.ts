@@ -84,6 +84,11 @@ declare module "@gamebridgeai/ts_serialize" {
     type: T & { new (): Serializable },
   ): FromJSONStrategy;
 
+  /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
+  export function fromObjectContaining(
+    value: Record<string, Serializable | Serializable[]>,
+  ): JSONObject;
+
   /** allows authors to pass a regex to parse as a date */
   export function createDateStrategy(regex: RegExp): FromJSONStrategy;
 

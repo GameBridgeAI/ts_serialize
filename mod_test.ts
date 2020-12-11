@@ -14,11 +14,11 @@ test({
     assertEquals(typeof mod.iso8601Date, "function");
     assertEquals(typeof mod.toSerializable, "function");
     assertEquals(typeof mod.toObjectContaining, "function");
-
+    assertEquals(typeof mod.fromObjectContaining, "function");
     assertEquals(typeof mod.polymorphicClassFromJSON, "function");
     assertEquals(typeof mod.PolymorphicResolver, "function");
     assertEquals(typeof mod.PolymorphicSwitch, "function");
 
-    assertEquals(Object.keys(mod).length, 10);
+    assertEquals(Object.keys(mod).length, 11);
   },
 });

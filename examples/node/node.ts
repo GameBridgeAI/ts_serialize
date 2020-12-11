@@ -4,6 +4,7 @@ import {
   composeStrategy,
   createDateStrategy,
   FromJSONStrategy,
+  fromObjectContaining,
   iso8601Date,
   JSONValue,
   polymorphicClassFromJSON,
@@ -256,3 +257,20 @@ const testObj1 = new TestObjectContaining1().fromJSON(
 );
 assert(testObj1.test.testing instanceof Serializable);
 assert(testObj1.test.testing.someClassProp === "changed");
+
+class SomeOtherClass extends Serializable {
+  @SerializeProperty()
+  someClassProp = "test";
+}
+
+class TestObjContaining extends Serializable {
+  @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+  test: { [k: string]: SomeOtherClass[] } = {
+    testing: [new SomeOtherClass(), new SomeOtherClass(), new SomeOtherClass()],
+  };
+}
+
+assert(
+  new TestObjContaining().toJSON() ===
+    `{"test":{"testing":[{"someClassProp":"test"},{"someClassProp":"test"},{"someClassProp":"test"}]}}`,
+);

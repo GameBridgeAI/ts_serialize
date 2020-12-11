@@ -2,6 +2,7 @@
 
 import { JSONObject, JSONValue, Serializable } from "../../serializable.ts";
 
+/** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
 export function fromObjectContaining(
   value: Record<string, Serializable | Serializable[]>,
 ): JSONObject {
