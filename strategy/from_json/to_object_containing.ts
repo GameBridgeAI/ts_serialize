@@ -5,26 +5,23 @@ import { FromJSONStrategy } from "../compose_strategy.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
-  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
 } from "../../error_messages.ts";
-
-function isObject(obj: any): obj is Record<string, any> {
-  return Object.prototype.toString.call(obj) === "[object Object]";
-}
+import {
+  FunctionSerializable,
+  getNew,
+  isObject,
+  NewSerializable,
+} from "../_utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
 export function toObjectContaining<T>(
-  type: T & { new (): Serializable },
+  type: NewSerializable<T> | FunctionSerializable,
 ): FromJSONStrategy {
   return function _toObjectContaining(
     value: JSONValue,
   ) {
     if (value == null) {
       return null;
-    }
-
-    if (Array.isArray(value)) {
-      throw new Error(ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE);
     }
 
     if (!isObject(value)) {
@@ -34,20 +31,19 @@ export function toObjectContaining<T>(
     const record: Record<string, Serializable | Serializable[] | null> = {};
     // check that JSONValue is something we can deal with
     // but mostly to make the type checker happy
-    if (typeof value === "object") {
+    if (typeof value === "object" && !Array.isArray(value)) {
       for (const prop in value) {
         // null is a JSONValue
         if (value[prop] === null) {
           record[prop] = null;
           continue;
         }
-
         if (Array.isArray(value[prop])) {
           record[prop] = (value[prop] as JSONArray).map((v: JSONValue) => {
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }
-            return new type().fromJSON(v);
+            return getNew(type).fromJSON(v);
           });
           continue;
         }
@@ -56,7 +52,7 @@ export function toObjectContaining<T>(
           throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
         }
 
-        record[prop] = new type().fromJSON(value[prop]);
+        record[prop] = getNew(type).fromJSON(value[prop]);
       }
     }
     return record;

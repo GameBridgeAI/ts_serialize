@@ -75,3 +75,22 @@ test({
     assertEquals(array.length, 0);
   },
 });
+
+test({
+  name: "toSerializable works with constructor args",
+  fn() {
+    class Test extends Serializable {
+      constructor(someClassProp: string) {
+        super();
+        this.someClassProp = someClassProp;
+      }
+      @SerializeProperty()
+      someClassProp: string;
+    }
+    const array: Test[] = toSerializable(() => new Test("from_constructor"))(
+      [{}],
+    );
+    assertEquals(array.length, 1);
+    assertEquals(array[0].someClassProp, "from_constructor");
+  },
+});

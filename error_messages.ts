@@ -25,6 +25,3 @@ export const ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE =
 
 export const ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE =
   "The sub-value is not an object";
-
-export const ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE =
-  "The value is an array, did you mean to use `toSerializable()`?";

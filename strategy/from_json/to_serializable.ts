@@ -2,17 +2,18 @@
 
 import { JSONValue, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
+import { FunctionSerializable, getNew, NewSerializable } from "../_utils.ts";
 
 /** revive data using `fromJSON` on a subclass type */
 export function toSerializable<T>(
-  type: T & { new (): Serializable },
+  type: NewSerializable<T> | FunctionSerializable,
 ): FromJSONStrategy {
   return function _toSerializable(
     value: JSONValue,
   ): Serializable | Serializable[] {
     if (Array.isArray(value)) {
-      return value.map((item) => new type().fromJSON(item));
+      return value.map((item) => getNew(type).fromJSON(item));
     }
-    return new type().fromJSON(value);
+    return getNew(type).fromJSON(value);
   };
 }

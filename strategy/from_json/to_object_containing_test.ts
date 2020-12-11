@@ -8,7 +8,6 @@ import { fail } from "https://deno.land/std@0.79.0/testing/asserts.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
-  ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
 } from "../../error_messages.ts";
 
 test({
@@ -142,32 +141,6 @@ test({
 });
 
 test({
-  name: "toObjectContaining recommend toSerializable() if array",
-  fn() {
-    class SomeClass extends Serializable {
-      @SerializeProperty()
-      someClassProp = "test";
-    }
-
-    class Test extends Serializable {
-      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
-    }
-    try {
-      const testObj = new Test().fromJSON(
-        { test: [99] },
-      );
-      fail(`testObj ${testObj} did not fail`);
-    } catch (error) {
-      assertEquals(
-        error.message,
-        ERROR_TO_OBJECT_CONTAINING_USE_TO_SERIALIZABLE,
-      );
-    }
-  },
-});
-
-test({
   name:
     "toObjectContaining throws is array sub-value values are not [object Object]",
   fn() {
@@ -193,5 +166,36 @@ test({
     } catch (error) {
       assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
+  },
+});
+
+test({
+  name: "toObjectContaining works with constructor arguments",
+  fn() {
+    class SomeClass extends Serializable {
+      constructor(someClassProp: string) {
+        super();
+        this.someClassProp = someClassProp;
+      }
+      @SerializeProperty()
+      someClassProp: string;
+    }
+
+    class Test extends Serializable {
+      @SerializeProperty(
+        {
+          fromJSONStrategy: toObjectContaining(() =>
+            new SomeClass("from_constructor")
+          ),
+        },
+      )
+      test!: { [k: string]: SomeClass };
+    }
+
+    const testObj = new Test().fromJSON(
+      { test: { testing: {} } },
+    );
+    assert(testObj.test.testing instanceof Serializable);
+    assertEquals(testObj.test.testing.someClassProp, "from_constructor");
   },
 });
