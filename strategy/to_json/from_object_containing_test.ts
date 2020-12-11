@@ -69,7 +69,6 @@ test({
 });
 
 test({
-  only: true,
   name: "fromObjectContaining works with nested strategies",
   fn() {
     class TheClass extends Serializable {
