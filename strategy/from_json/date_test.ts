@@ -21,7 +21,7 @@ test({
 });
 
 test({
-  name: "createDateStrategy - Will not serialize non date strings",
+  name: "createDateStrategy - Will not deserialize non date strings",
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
