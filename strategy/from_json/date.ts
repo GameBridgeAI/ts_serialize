@@ -9,7 +9,11 @@ export function createDateStrategy(regex: RegExp): FromJSONStrategy {
     if (typeof input !== "string" || !regex.exec(input)) {
       throw new Error(ERROR_INVALID_DATE);
     }
-    return new Date(input);
+    const date = new Date(input);
+    if (date.toJSON() === null) {
+      throw new Error(ERROR_INVALID_DATE);
+    }
+    return date;
   };
 }
 

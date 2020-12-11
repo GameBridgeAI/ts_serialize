@@ -102,3 +102,21 @@ test({
     assertEquals(testObj.date.toISOString(), "2020-12-31T07:00:00.000Z");
   },
 });
+
+test({
+  name: "createDateStrategy - throws on invalid dates",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: createDateStrategy(/^Im going to shoot my foot$/),
+      })
+      date!: Date;
+    }
+    try {
+      new Test().fromJSON(`{"date":"Im going to shoot my foot"}`);
+      fail("Non date string did not error");
+    } catch (error) {
+      assertEquals(error.message, ERROR_INVALID_DATE);
+    }
+  },
+});
