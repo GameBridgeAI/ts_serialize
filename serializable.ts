@@ -32,6 +32,18 @@ export declare interface TransformKey {
   tsTransformKey(key: string): string;
 }
 
+export declare interface ToJSON {
+  toJson(): string;
+}
+
+export declare interface FromJSON {
+  fromJSON(json: string | JSONValue | Object): this;
+}
+
+export declare interface Serialize {
+  tsSerialize(json: string | JSONValue | Object): this;
+}
+
 /** Adds methods for serialization */
 export abstract class Serializable {
   /** allow empty class serialization */
