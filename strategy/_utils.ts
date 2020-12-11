@@ -17,8 +17,6 @@ function isNewable<T>(
 ): type is NewSerializable<T> {
   return (type && typeof type === "function" && type.prototype &&
     type.prototype.constructor) === type;
-
-  // return !!type.name;
 }
 
 /** get new strategy type arguments */
