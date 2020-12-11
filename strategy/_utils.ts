@@ -15,7 +15,10 @@ export function isObject(obj: any): obj is Record<string, any> {
 function isNewable<T>(
   type: NewSerializable<T> | FunctionSerializable,
 ): type is NewSerializable<T> {
-  return !!type.name;
+  return (type && typeof type === "function" && type.prototype &&
+    type.prototype.constructor) === type;
+
+  // return !!type.name;
 }
 
 /** get new strategy type arguments */
