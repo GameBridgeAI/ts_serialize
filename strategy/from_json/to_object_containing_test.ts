@@ -1,10 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "../../test_deps.ts";
+import { assert, assertEquals, fail, test } from "../../test_deps.ts";
 import { toObjectContaining } from "./to_object_containing.ts";
 import { Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
-import { fail } from "https://deno.land/std@0.79.0/testing/asserts.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
