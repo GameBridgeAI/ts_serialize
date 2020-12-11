@@ -45,10 +45,10 @@ export function toObjectContaining<T>(
             }
             return getNew(type).fromJSON(v);
           });
-        } // Serializable
-        else {
-          record[prop] = getNew(type).fromJSON(value[prop]);
+          continue;
         }
+
+        record[prop] = getNew(type).fromJSON(value[prop]);
       }
     }
     return record;
