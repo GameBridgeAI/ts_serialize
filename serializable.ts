@@ -195,14 +195,14 @@ function fromJSON<T>(
       propertyKey,
       fromJSONStrategy = fromJSONDefault,
     } = serializablePropertyMap.getBySerializedKey(key) || {};
+
     if (!propertyKey) {
       continue;
     }
-    const processedValue: unknown = Array.isArray(value)
+
+    accumulator[propertyKey as keyof T] = Array.isArray(value)
       ? value.map((v) => fromJSONStrategy(v))
       : fromJSONStrategy(value as JSONValue);
-
-    accumulator[propertyKey as keyof T] = processedValue as any;
   }
 
   return Object.assign(
