@@ -208,7 +208,6 @@ test({
 });
 
 test({
-  // only: true,
   name:
     "Nested fields shouldn't overwrite containing class fields of the same name",
   fn() {
@@ -237,7 +236,6 @@ test({
 });
 
 test({
-  // only: true,
   name: "deserialize recursive nested with same field",
   fn() {
     class Test1 extends Serializable {
