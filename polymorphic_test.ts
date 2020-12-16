@@ -141,6 +141,7 @@ test({
       public static _class = "TestClass";
     }
     class TestClass2 extends AbstractClass {
+      @SerializeProperty()
       @PolymorphicSwitch(() => new TestClass2(), "amazing")
       public aDifferentField = "Some non _class field";
     }

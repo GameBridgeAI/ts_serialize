@@ -3,6 +3,7 @@
 import { assert, assertEquals, test } from "./test_deps.ts";
 import { Serializable, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
+import { toSerializable } from "./strategy/from_json/to_serializable.ts";
 
 test({
   name: "adds methods to extended classes",
@@ -203,5 +204,74 @@ test({
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
       `changed`,
     );
+  },
+});
+
+test({
+  // only: true,
+  name:
+    "Nested fields shouldn't overwrite containing class fields of the same name",
+  fn() {
+    class Embedded extends Serializable {
+      @SerializeProperty()
+      public field1?: string;
+    }
+
+    class Root extends Serializable {
+      @SerializeProperty()
+      field1?: string;
+      @SerializeProperty({ fromJSONStrategy: toSerializable(Embedded) })
+      public embedded?: Embedded[];
+    }
+
+    const input = {
+      field1: "field_value_in_outer_class",
+      embedded: [
+        { field1: "field_value_in_inner_class" },
+      ],
+    };
+
+    const root = new Root().fromJSON(input);
+    assertEquals(root.field1, "field_value_in_outer_class");
+  },
+});
+
+test({
+  // only: true,
+  name: "deserialize recursive nested with same field",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty()
+      test_field = "Test1_test_field";
+    }
+    class Test2 extends Serializable {
+      @SerializeProperty()
+      test_field = "Test2_test_field";
+      @SerializeProperty({
+        fromJSONStrategy: (json) => new Test1().fromJSON(json),
+      })
+      nested!: Test1;
+    }
+    class Test3 extends Serializable {
+      @SerializeProperty()
+      test_field = "Test3_test_field";
+      @SerializeProperty({
+        fromJSONStrategy: (json) => new Test2().fromJSON(json),
+      })
+      nested!: Test2;
+    }
+    const testObj = new Test3();
+    testObj.fromJSON(
+      {
+        "test_field": "3",
+        "nested": {
+          "test_field": "2",
+          "nested": { "test_field": "1" },
+        },
+      },
+    );
+    assertEquals(testObj.test_field, "3");
+    assertEquals(testObj.nested.test_field, "2");
+    assertEquals(testObj.nested.nested.test_field, "1");
   },
 });

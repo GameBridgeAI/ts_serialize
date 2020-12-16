@@ -35,7 +35,7 @@ test({
       testName = "toJSON";
     }
     assertEquals(new Test().toJSON(), `{"test_name":"toJSON"}`);
-    const testObj = new Test().fromJSON({ testName: "fromJSON" });
+    const testObj = new Test().fromJSON({ test_name: "fromJSON" });
     assertEquals(testObj.testName, "fromJSON");
   },
 });
