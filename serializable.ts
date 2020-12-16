@@ -179,6 +179,7 @@ function fromJSON<T>(
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
+
   if (!serializablePropertyMap) {
     throw new Error(
       `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
@@ -197,10 +198,12 @@ function fromJSON<T>(
     const processedValue: unknown = Array.isArray(value)
       ? value.map((v) => fromJSONStrategy(v))
       : fromJSONStrategy(value as JSONValue);
+
     if (propertyKey) {
       accumulator[propertyKey as keyof T] = processedValue as any;
     }
   }
+
   return Object.assign(
     context,
     accumulator as T,
