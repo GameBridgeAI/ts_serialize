@@ -179,6 +179,7 @@ function fromJSON<T>(
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
+
   if (!serializablePropertyMap) {
     throw new Error(
       `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
@@ -186,35 +187,26 @@ function fromJSON<T>(
     );
   }
 
-  const _json = typeof json === "string" ? json : JSON.stringify(json);
+  const _json = typeof json === "string" ? JSON.parse(json) : json;
+  const accumulator: Partial<T> = {};
+
+  for (const [key, value] of Object.entries(_json)) {
+    const {
+      propertyKey,
+      fromJSONStrategy = fromJSONDefault,
+    } = serializablePropertyMap.getBySerializedKey(key) || {};
+
+    if (!propertyKey) {
+      continue;
+    }
+
+    accumulator[propertyKey as keyof T] = Array.isArray(value)
+      ? value.map((v) => fromJSONStrategy(v))
+      : fromJSONStrategy(value as JSONValue);
+  }
 
   return Object.assign(
     context,
-    JSON.parse(
-      _json,
-      /** Processes the value through the provided or default `fromJSONStrategy` */
-      function revive(key: string, value: JSONValue): unknown {
-        // After the last iteration of the fromJSONStrategy a function
-        // will be called one more time with a empty string key
-        if (key === "") {
-          return value;
-        }
-
-        const {
-          propertyKey,
-          fromJSONStrategy = fromJSONDefault,
-        } = serializablePropertyMap.getBySerializedKey(key) || {};
-
-        const processedValue: unknown = Array.isArray(value)
-          ? value.map((v) => fromJSONStrategy(v))
-          : fromJSONStrategy(value);
-
-        if (propertyKey) {
-          context[propertyKey as keyof Serializable] = processedValue as any;
-          return;
-        }
-        return processedValue;
-      },
-    ),
+    accumulator as T,
   );
 }

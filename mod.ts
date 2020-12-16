@@ -5,7 +5,12 @@
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";
 /** types */
-export type { TransformKey } from "./serializable.ts";
+export type {
+  FromJSON,
+  Serialize,
+  ToJSON,
+  TransformKey,
+} from "./serializable.ts";
 /** abstract class */
 export { Serializable } from "./serializable.ts";
 /** strategy helper */
