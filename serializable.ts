@@ -66,11 +66,10 @@ function getOrInitializeDefaultSerializerLogicForParents(
       );
     }
 
-    SERIALIZABLE_CLASS_MAP.set(
+    return SERIALIZABLE_CLASS_MAP.set(
       targetPrototype,
       new SerializePropertyOptionsMap(parentMap),
-    );
-    return SERIALIZABLE_CLASS_MAP.get(
+    ).get(
       targetPrototype,
     );
   }
