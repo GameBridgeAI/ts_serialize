@@ -175,10 +175,9 @@ function fromJSON<T>(
     const {
       propertyKey,
       fromJSONStrategy = fromJSONDefault,
-    } =
-      (SERIALIZABLE_CLASS_MAP.get(
-        context?.constructor?.prototype,
-      ) as SerializePropertyOptionsMap).getBySerializedKey(key) || {};
+    } = (SERIALIZABLE_CLASS_MAP.get(
+      context?.constructor?.prototype,
+    ) as SerializePropertyOptionsMap).getBySerializedKey(key) || {};
 
     if (!propertyKey) {
       continue;
