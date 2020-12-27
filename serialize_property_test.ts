@@ -13,7 +13,6 @@ import {
   ERROR_DUPLICATE_SERIALIZE_KEY,
   ERROR_SYMBOL_PROPERTY_NAME,
 } from "./error_messages.ts";
-import { composeStrategy } from "./strategy/compose_strategy.ts";
 
 test({
   name: "Serializes properties as propertyName without options",
