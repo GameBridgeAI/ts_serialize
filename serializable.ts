@@ -168,17 +168,6 @@ function fromJSON<T>(
   context: Serializable,
   json: string | JSONValue | Object,
 ): T {
-  const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype,
-  );
-
-  if (!serializablePropertyMap) {
-    throw new Error(
-      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
-        ?.prototype}`,
-    );
-  }
-
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};
 
@@ -186,7 +175,10 @@ function fromJSON<T>(
     const {
       propertyKey,
       fromJSONStrategy = fromJSONDefault,
-    } = serializablePropertyMap.getBySerializedKey(key) || {};
+    } =
+      (SERIALIZABLE_CLASS_MAP.get(
+        context?.constructor?.prototype,
+      ) as SerializePropertyOptionsMap).getBySerializedKey(key) || {};
 
     if (!propertyKey) {
       continue;
