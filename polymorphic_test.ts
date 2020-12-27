@@ -154,7 +154,7 @@ test({
 });
 
 test({
-  name: "fail",
+  name: "polymorphicClassFromJSON errors with no context",
   fn() {
     class Test {
       public prototype = {} as Serializable;
