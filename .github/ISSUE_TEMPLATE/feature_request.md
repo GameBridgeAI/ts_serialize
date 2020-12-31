@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Request for comments on an idea for this project
-title: "[RFC] - "
+title: "Please use our discussions tab"
 labels: "wontfix"
 assignees: ""
 ---
