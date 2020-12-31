@@ -1,16 +1,9 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "./test_deps.ts";
-import {
-  FromJSON,
-  JSONValue,
-  Serializable,
-  toPojo,
-  TransformKey,
-} from "./serializable.ts";
+import { assert, assertEquals, fail, test } from "./test_deps.ts";
+import { Serializable, toPojo, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import { toSerializable } from "./strategy/from_json/to_serializable.ts";
-import { fail } from "https://deno.land/std@0.80.0/testing/asserts.ts";
 import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
 
 test({
