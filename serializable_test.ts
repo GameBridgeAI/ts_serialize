@@ -1,9 +1,10 @@
 // Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "./test_deps.ts";
-import { Serializable, TransformKey } from "./serializable.ts";
+import { assert, assertEquals, fail, test } from "./test_deps.ts";
+import { Serializable, toPojo, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import { toSerializable } from "./strategy/from_json/to_serializable.ts";
+import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
 
 test({
   name: "adds methods to extended classes",
@@ -271,5 +272,32 @@ test({
     assertEquals(testObj.test_field, "3");
     assertEquals(testObj.nested.test_field, "2");
     assertEquals(testObj.nested.nested.test_field, "1");
+  },
+});
+
+test({
+  name: "toPojo errors with no context",
+  fn() {
+    try {
+      toPojo({});
+      fail("to Pojo did not error with no context");
+    } catch (e) {
+      assertEquals(
+        e.message,
+        `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,
+      );
+    }
+  },
+});
+
+test({
+  name: "default strategy with array values",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty()
+      public test: string[] = ["test"];
+    }
+
+    assertEquals(new Test().tsSerialize(), { test: ["test"] });
   },
 });

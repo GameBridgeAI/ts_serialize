@@ -8,6 +8,10 @@ import {
   PolymorphicResolver,
   PolymorphicSwitch,
 } from "./polymorphic.ts";
+import {
+  ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS,
+  ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
+} from "./error_messages.ts";
 
 test({
   name:
@@ -127,6 +131,44 @@ test({
 
     assert(polyClass instanceof TestClass);
     assertEquals(polyClass.someProperty, "new value");
+  },
+});
+
+test({
+  name: "PolymorphicSwitch errors without a value on the property",
+  fn() {
+    abstract class AbstractClass extends Serializable {}
+    try {
+      class TestClass extends AbstractClass {
+        @PolymorphicSwitch(() => new TestClass())
+        public static _class: string;
+      }
+      fail("PolymorphicSwitch did not error without a value");
+    } catch (e) {
+      assertEquals(
+        e.message,
+        ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
+      );
+    }
+  },
+});
+
+test({
+  name: "polymorphicClassFromJSON errors with no context",
+  fn() {
+    class Test {
+      public prototype = {} as Serializable;
+    }
+
+    try {
+      polymorphicClassFromJSON(
+        new Test(),
+        {},
+      );
+      fail("polymorphicClassFromJSON did not error with no context");
+    } catch (e) {
+      assertEquals(e.message, ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
+    }
   },
 });
 
