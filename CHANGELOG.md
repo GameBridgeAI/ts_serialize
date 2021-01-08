@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [v1.1.3] -2021-01-08
+
+### Changed
+- deno@1.6.3 fixing #96
+- std@0.83.0
+
+## [v1.1.2] -2021-01-08
+
 ### Changed
 - fixed a typo in nodeJS export
 
