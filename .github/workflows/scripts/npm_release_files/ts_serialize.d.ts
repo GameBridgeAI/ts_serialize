@@ -25,7 +25,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** to be implemented by external authors on their models  */
   export interface ToJSON {
     /** to JSON String */
-    toJson(): string;
+    toJSON(): string;
   }
   /** to be implemented by external authors on their models  */
   export interface FromJSON {
