@@ -3,11 +3,13 @@ import { Serializable } from "../serializable.ts";
 import { isNewable } from "./_utils.ts";
 
 export type NewSerializable<T> = T & (new () => Serializable);
-export type FunctionSerializable = () => Serializable;
+type FunctionSerializable = () => Serializable;
+/** for strategies */
+export type StrategyTypeArgument<T> = NewSerializable<T> | FunctionSerializable;
 
 /** get new strategy type arguments */
 export function getNew<T>(
-  type: NewSerializable<T> | FunctionSerializable,
+  type: StrategyTypeArgument<T>,
 ): Serializable {
   return isNewable(type) ? new type() : type();
 }

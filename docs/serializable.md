@@ -199,4 +199,29 @@ assertEquals(
 );
 ```
 
+## Short cutting the `@SerializeProperty` decorator
+
+While `@SerializeProperty` is handy with to and from JSON strategies, it can still be verbose 
+to declare the strategies for each property. `@SerializeProperty` can have shortcut functions that provide
+the to and from JSON strategies accepting arguments. An example short cut is providing a `type` to use with 
+`toSerializable`:
+
+```ts
+export function DeserializeAs<T>(type: T & { new (): Serializable }): PropertyDecorator {
+    return SerializeProperty({ fromJSONStrategy: toSerializable(type) });
+}
+
+class A extends Serializable {
+  @SerializeProperty("property_a")
+  public propertyA: string;
+}
+
+class B extends Serializable {
+  @DeserializeAs(A)
+  public property: A;
+}
+```
+
+While this is a simple example these functions can be as complex as you would like.
+
 [Strategies](./strategies) are ways to convert data to and from a JSON value.
