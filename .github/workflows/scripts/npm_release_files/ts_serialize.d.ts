@@ -42,11 +42,11 @@ declare module "@gamebridgeai/ts_serialize" {
     /** key transform functionality */
     public tsTransformKey?(key: string): string;
     /** to JSON String */
-    public toJSON?(): string;
+    public toJSON(): string;
     /** to Serializable */
-    public fromJSON?(json: string | JSONValue | Object): this;
+    public fromJSON(json: string | JSONValue | Object): this;
     /** to JSONObject */
-    public tsSerialize?(): JSONObject;
+    public tsSerialize(): JSONObject;
   }
 
   /** Functions used when hydrating data */
