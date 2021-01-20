@@ -5,6 +5,7 @@ import {
   createDateStrategy,
   FromJSONStrategy,
   fromObjectContaining,
+  getNew,
   iso8601Date,
   JSONValue,
   polymorphicClassFromJSON,
@@ -273,4 +274,20 @@ class TestObjContaining extends Serializable {
 assert(
   new TestObjContaining().toJSON() ===
     `{"test":{"testing":[{"someClassProp":"test"},{"someClassProp":"test"},{"someClassProp":"test"}]}}`,
+);
+
+class TestGetNew extends Serializable {
+  @SerializeProperty()
+  public test: string;
+  constructor({ test = "" }: Partial<TestGetNew>) {
+    super();
+    this.test = test;
+  }
+}
+
+assert(
+  getNew(
+    () => new TestGetNew({ test: "from_constructor" }),
+  ).toJSON() ===
+    `{"test":"from_constructor"}`,
 );

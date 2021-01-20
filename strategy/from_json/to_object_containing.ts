@@ -6,7 +6,8 @@ import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
 } from "../../error_messages.ts";
-import { getNew, isObject, StrategyTypeArgument } from "../_utils.ts";
+import { isObject, StrategyTypeArgument } from "../_utils.ts";
+import { getNew } from "../utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
 export function toObjectContaining<T>(
