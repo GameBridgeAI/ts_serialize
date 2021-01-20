@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, fail, test } from "./test_deps.ts";
 import { Serializable, toPojo, TransformKey } from "./serializable.ts";

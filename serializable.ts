@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { toJSONDefault } from "./strategy/to_json/default.ts";
@@ -88,15 +88,15 @@ export abstract class Serializable {
     return key;
   }
   /** to JSON String */
-  public toJSON(): string {
+  public toJSON?(): string {
     return toJSON(this);
   }
   /** Deserialize to Serializable */
-  public fromJSON(json: string | JSONValue | Object): this {
+  public fromJSON?(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
   /** to JSONObject */
-  public tsSerialize(): JSONObject {
+  public tsSerialize?(): JSONObject {
     return toPojo(this);
   }
 }

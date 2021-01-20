@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import babelCore from "https://dev.jspm.io/npm:@babel/standalone";
 import babelPluginProposalClassProperties from "https://dev.jspm.io/npm:@babel/plugin-proposal-class-properties";

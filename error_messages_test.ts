@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "./test_deps.ts";
 import * as mod from "./error_messages.ts";
