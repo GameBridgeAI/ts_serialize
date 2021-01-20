@@ -6,4 +6,6 @@ labels: "wontfix"
 assignees: ""
 ---
 
-Please use our [discussions](https://github.com/GameBridgeAI/ts_serialize/discussions) tab for new features, this will be auto labelled as `wontfix` and will be closed.
+Please use our
+[discussions](https://github.com/GameBridgeAI/ts_serialize/discussions) tab for
+new features, this will be auto labelled as `wontfix` and will be closed.

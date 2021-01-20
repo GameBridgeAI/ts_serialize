@@ -1,7 +1,7 @@
-# 🥣 ts_serialize 
+# 🥣 ts_serialize
 
-[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
-[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)
 [![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -10,9 +10,10 @@
 
 ## Global transformKey
 
-`Serializable` has an optional function `tsTransformKey(key: string): string`, we also
-provide an interface `TransformKey` to implement for type safety. This function
-can be provided to change all the keys without having to specify the change for each property.
+`Serializable` has an optional function `tsTransformKey(key: string): string`,
+we also provide an interface `TransformKey` to implement for type safety. This
+function can be provided to change all the keys without having to specify the
+change for each property.
 
 ```ts
 class TestTransformKey extends Serializable implements TransformKey {
@@ -27,7 +28,7 @@ class TestTransformKey extends Serializable implements TransformKey {
 assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
 assertEquals(
   new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-  `changed`
+  `changed`,
 );
 ```
 
@@ -52,11 +53,11 @@ class TestTransformKey3 extends TestTransformKey2 {
 
 assertEquals(
   new TestTransformKey3().toJSON(),
-  `{"__test2__":"test2","__test3__":"test3"}`
+  `{"__test2__":"test2","__test3__":"test3"}`,
 );
 assertEquals(
   new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-  `changed`
+  `changed`,
 );
 ```
 
@@ -88,11 +89,11 @@ class TestTransformKey4 extends TestTransformKey3 {
 }
 assertEquals(
   new TestTransformKey4().toJSON(),
-  `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
+  `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
 );
 assertEquals(
   new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-  `changed`
+  `changed`,
 );
 ```
 
@@ -119,19 +120,18 @@ class TestTransformKey2 extends TestTransformKey {
 
 assertEquals(
   new TestTransformKey2().toJSON(),
-  `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`
+  `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
 );
 assertEquals(
   new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-  `changed`
+  `changed`,
 );
 assertEquals(
   new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
-  `changed`
+  `changed`,
 );
 ```
 
-`tsTransformKey` is an efficient way to deal with
-camelCase to snake_case conversions. Classes that can 
-change type based on their properties can also be with 
-managed with our [Polymorphism](./polymorphism) decorators.
+`tsTransformKey` is an efficient way to deal with camelCase to snake_case
+conversions. Classes that can change type based on their properties can also be
+with managed with our [Polymorphism](./polymorphism) decorators.

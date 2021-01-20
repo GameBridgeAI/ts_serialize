@@ -1,7 +1,7 @@
-# 🥣 ts_serialize 
+# 🥣 ts_serialize
 
-[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
-[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)
 [![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -10,13 +10,16 @@
 
 ## Serializable and SerializeProperty
 
-Import `Serializable` and `SerializeProperty`, extend `Serializable` from your `class`
-and use the `SerializeProperty` decorator on any properties you want serialized.
+Import `Serializable` and `SerializeProperty`, extend `Serializable` from your
+`class` and use the `SerializeProperty` decorator on any properties you want
+serialized.
 
-`Serializable` will add three methods `toJSON`, `fromJSON`, and `tsSerialize`. 
+`Serializable` will add three methods `toJSON`, `fromJSON`, and `tsSerialize`.
+
 - `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
 - `toJSON` - converts the model to a JSON string
-- `tsSerialize` - converts the model to "Plain old Javascript object" with any provided key or value transformations
+- `tsSerialize` - converts the model to "Plain old Javascript object" with any
+  provided key or value transformations
 
 ```ts
 class TestClass extends Serializable {
@@ -35,11 +38,12 @@ assertEquals(testObj.toJSON(), `{"test":99,"test_one":100}`);
 assertEquals(new TestClass().fromJSON({ test: 88 }).test, 88);
 assertEquals(testObj.tsSerialize(), { test: 99, test_one: 100 });
 ```
+
 ### Inheritance
 
-Inherited classes override the key when serializing. If you override
-a property any value used for that key will be overridden by the
-child value. _With collisions the child always overrides the parent_
+Inherited classes override the key when serializing. If you override a property
+any value used for that key will be overridden by the child value. _With
+collisions the child always overrides the parent_
 
 ```ts
 class Test1 extends Serializable {
@@ -62,7 +66,8 @@ assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
 
 **ToJSON**
 
-Serializing a nested class will follow the serialization rules set from the class:
+Serializing a nested class will follow the serialization rules set from the
+class:
 
 ```ts
 class Test1 extends Serializable {
@@ -83,9 +88,10 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 **FromJSON**
 
-Use a [strategy](./strategies) to revive the property into a class. `toSerializable` is 
-a provided function export that takes one parameter, the instance type the object 
-will take when revived, it will also revive to an array of Serializable objects.
+Use a [strategy](./strategies) to revive the property into a class.
+`toSerializable` is a provided function export that takes one parameter, the
+instance type the object will take when revived, it will also revive to an array
+of Serializable objects.
 
 ```ts
 class Test1 extends Serializable {
@@ -106,8 +112,8 @@ testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
 assertEquals(testObj.nested.serializeMe, "custom value");
 ```
 
-`toObjectContaining` revives a record of string keys to Serializable objects, it will also revive to 
-an array of Serializable objects.
+`toObjectContaining` revives a record of string keys to Serializable objects, it
+will also revive to an array of Serializable objects.
 
 ```ts
 class SomeClass extends Serializable {
@@ -134,9 +140,9 @@ assertEquals(testObj.test.testing[0].someClassProp, "changed");
 
 ### SerializeProperty options
 
-Passing a string or a function as an argument to `SerializeProperty` causes the property to use
-that name as the key when serialized. The function has one parameter, the `key` as string and 
-should return a string.
+Passing a string or a function as an argument to `SerializeProperty` causes the
+property to use that name as the key when serialized. The function has one
+parameter, the `key` as string and should return a string.
 
 ```ts
 class Test extends Serializable {
@@ -167,7 +173,8 @@ assertEquals(
 
 `SerializeProperty` also excepts an options object with the properties:
 
-- `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the key in the serialized object
+- `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the
+  key in the serialized object
 - `toJSONStrategy` (Optional) `{ToJSONStrategy}` - Used when serializing
 - `fromJSONStrategy` (Optional) `{FromJSONStrategy}` - Used when deserializing
 
@@ -179,7 +186,7 @@ class Test extends Serializable {
   propertyOne = "Hello";
   @SerializeProperty("property_two")
   propertyTwo = "World!";
-  @SerializeProperty({ serializedKey: (key) => `__${key}__`})
+  @SerializeProperty({ serializedKey: (key) => `__${key}__` })
   propertyThree = "foo";
   notSerialized = "not-serialized";
 }
@@ -201,14 +208,17 @@ assertEquals(
 
 ## Short cutting the `@SerializeProperty` decorator
 
-While `@SerializeProperty` is handy with to and from JSON strategies, it can still be verbose 
-to declare the strategies for each property. `@SerializeProperty` can have shortcut functions that provide
-the to and from JSON strategies accepting arguments. An example short cut is providing a `type` to use with 
-`toSerializable`:
+While `@SerializeProperty` is handy with to and from JSON strategies, it can
+still be verbose to declare the strategies for each property.
+`@SerializeProperty` can have shortcut functions that provide the to and from
+JSON strategies accepting arguments. An example short cut is providing a `type`
+to use with `toSerializable`:
 
 ```ts
-export function DeserializeAs<T>(type: T & { new (): Serializable }): PropertyDecorator {
-    return SerializeProperty({ fromJSONStrategy: toSerializable(type) });
+export function DeserializeAs<T>(
+  type: T & { new (): Serializable },
+): PropertyDecorator {
+  return SerializeProperty({ fromJSONStrategy: toSerializable(type) });
 }
 
 class A extends Serializable {
@@ -222,6 +232,7 @@ class B extends Serializable {
 }
 ```
 
-While this is a simple example these functions can be as complex as you would like.
+While this is a simple example these functions can be as complex as you would
+like.
 
 [Strategies](./strategies) are ways to convert data to and from a JSON value.

@@ -1,7 +1,7 @@
-# 🥣 ts_serialize 
+# 🥣 ts_serialize
 
-[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
-[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)
 [![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -10,15 +10,15 @@
 
 ## Polymorphism
 
-The `@PolymorphicResolver` and `@PolymorphicSwitch` decorators can be used
-to cleanly handle deserializing abstract types into their constituent 
+The `@PolymorphicResolver` and `@PolymorphicSwitch` decorators can be used to
+cleanly handle deserializing abstract types into their constituent
 implementations.
 
 ### Polymorphic Resolver
 
-The following example shows how the `@PolymorphicResolver` decorator can be
-used to directly determine the type of an abstract class implementor, 
-which will then be used when deserializing JSON input.
+The following example shows how the `@PolymorphicResolver` decorator can be used
+to directly determine the type of an abstract class implementor, which will then
+be used when deserializing JSON input.
 
 ```ts
 enum Colour {
@@ -82,12 +82,12 @@ console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 ### Polymorphic Switch Resolver
 
 The `@PolymorphicSwitch` decorator can be used as a quick way to serialize
-simple polymorphic types based on the properties of a child class. 
-Unlike the `@PolymorphicResolver` decorator all implementors should have
-to do is annotate an existing property and provide an initializer.
+simple polymorphic types based on the properties of a child class. Unlike the
+`@PolymorphicResolver` decorator all implementors should have to do is annotate
+an existing property and provide an initializer.
 
-Note that currently `@PolymorphicSwitch` can only be applied to child
-classes deserializing from their direct parent class.
+Note that currently `@PolymorphicSwitch` can only be applied to child classes
+deserializing from their direct parent class.
 
 ```ts
 enum Colour {
@@ -139,8 +139,8 @@ console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 // > Is crimson? true
 ```
 
-`@PolymorphicSwitch` is also useful on more complex polymorphic types that 
-may not have a simple one to one property value to implementation mapping
+`@PolymorphicSwitch` is also useful on more complex polymorphic types that may
+not have a simple one to one property value to implementation mapping
 
 ```ts
 abstract class MyColourClass extends Serializable {}
@@ -176,8 +176,9 @@ console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 // > Is crimson? true
 ```
 
-In the case a class has a property that contains a polymorphic value, a `FromJSONStrategy`
-that uses `polymorphicClassFromJSON` can be used to deserialize to the correct class.
+In the case a class has a property that contains a polymorphic value, a
+`FromJSONStrategy` that uses `polymorphicClassFromJSON` can be used to
+deserialize to the correct class.
 
 ```ts
 abstract class PolymorphicBase extends Serializable {}
@@ -196,12 +197,12 @@ class TypeTwo extends PolymorphicBase {
 
 class WithPolymorphic extends Serializable {
   @SerializeProperty({
-    fromJSONStrategy: json => polymorphicClassFromJSON(MyColourClass, json),
+    fromJSONStrategy: (json) => polymorphicClassFromJSON(MyColourClass, json),
   })
   public property: PolymorphicBase;
 }
 
-const polymorphic = new WithPolymorphic().fromJSON({ type: 2 });
+const polymorphic = new WithPolymorphic().fromJSON({ _type: 2 });
 
-console.log(polymorphic.property instanceof TypeTwo) // true
+console.log(polymorphic.property instanceof TypeTwo); // true
 ```
