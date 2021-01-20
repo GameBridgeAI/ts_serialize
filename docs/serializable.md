@@ -222,4 +222,6 @@ class B extends Serializable {
 }
 ```
 
+While this is a simple example these functions can be as complex as you would like.
+
 [Strategies](./strategies) are ways to convert data to and from a JSON value.
