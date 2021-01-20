@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- new `strategy/utils.ts` exposing `getNew(type)` for custom decorators
 
 ## [v1.1.4] - 2021-01-19
 
