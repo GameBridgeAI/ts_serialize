@@ -88,15 +88,15 @@ export abstract class Serializable {
     return key;
   }
   /** to JSON String */
-  public toJSON?(): string {
+  public toJSON(): string {
     return toJSON(this);
   }
   /** Deserialize to Serializable */
-  public fromJSON?(json: string | JSONValue | Object): this {
+  public fromJSON(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
   /** to JSONObject */
-  public tsSerialize?(): JSONObject {
+  public tsSerialize(): JSONObject {
     return toPojo(this);
   }
 }
