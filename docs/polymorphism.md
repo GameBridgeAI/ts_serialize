@@ -181,7 +181,7 @@ In the case a class has a property that contains a polymorphic value, a
 deserialize to the correct class.
 
 ```ts
-abstract class c extends Serializable {}
+abstract class PolymorphicBase extends Serializable {}
 
 class TypeOne extends PolymorphicBase {
   @PolymorphicSwitch(() => new TypeOne(), 1)
