@@ -17,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - fixes #105
 - fixes #99
 
+### Changed
+- deno@1.7.0
+- std@0.84.0
+
 ## [v1.1.4] - 2021-01-19
 
 ### Changed
