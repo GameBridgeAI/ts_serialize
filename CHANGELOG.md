@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
-## [v1.1.4] -2021-01-19
+## [v1.1.4] - 2021-01-19
 
 ### Changed
 - Chore: update copyright
