@@ -132,11 +132,15 @@ declare module "@gamebridgeai/ts_serialize" {
     value?: unknown,
   ): PropertyDecorator;
 
-  export type NewSerializable<T> = T & (new () => Serializable);
-  export type FunctionSerializable = () => Serializable;
+  type NewSerializable<T> = T & (new () => Serializable);
+  type FunctionSerializable = () => Serializable;
+  /** for strategies */
+  export type StrategyTypeArgument<T> =
+    | NewSerializable<T>
+    | FunctionSerializable;
 
   /** get new strategy type arguments */
   export function getNew<T>(
-    type: NewSerializable<T> | FunctionSerializable,
+    type: StrategyTypeArgument<T>,
   ): Serializable;
 }

@@ -203,7 +203,7 @@ assertEquals(
 
 While `@SerializeProperty` is handy with to and from JSON strategies, it can still be verbose 
 to declare the strategies for each property. `@SerializeProperty` can have shortcut functions that provide
-the to and from JSON strategies excepting arguments. An example short cut is providing a `type` to use with 
+the to and from JSON strategies accepting arguments. An example short cut is providing a `type` to use with 
 `toSerializable`:
 
 ```ts
