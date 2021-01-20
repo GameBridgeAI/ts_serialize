@@ -35,3 +35,7 @@ export {
 export type { InitializerFunction, ResolverFunction } from "./polymorphic.ts";
 
 export { getNew } from "./strategy/utils.ts";
+export type {
+  FunctionSerializable,
+  NewSerializable,
+} from "./strategy/utils.ts";

@@ -1,8 +1,7 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
-import { Serializable } from "../serializable.ts";
 
-export type NewSerializable<T> = T & (new () => Serializable);
-export type FunctionSerializable = () => Serializable;
+import { FunctionSerializable, NewSerializable } from "./utils.ts";
+
 /** for strategies */
 export type StrategyTypeArgument<T> = NewSerializable<T> | FunctionSerializable;
 
