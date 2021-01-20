@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 import { FromJSONStrategy } from "../compose_strategy.ts";
 import { JSONValue } from "../../serializable.ts";
 import { ERROR_INVALID_DATE } from "../../error_messages.ts";

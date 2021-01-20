@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+# Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 # Bash strict mode
 set -euo pipefail

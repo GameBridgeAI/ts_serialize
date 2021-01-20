@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 export const ERROR_MISSING_PROPERTIES_MAP =
   "Unable to load serializer properties for the given context";

@@ -1,4 +1,4 @@
-// Copyright 2018-2020 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONArray, JSONValue, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
