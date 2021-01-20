@@ -175,3 +175,33 @@ console.log(`Is a red class? ${redClass instanceof MyRedClass}`);
 console.log(`Is crimson? ${(redClass as MyRedClass).isCrimson()}`);
 // > Is crimson? true
 ```
+
+In the case a class has a property that contains a polymorphic value, a `FromJSONStrategy`
+that uses `polymorphicClassFromJSON` can be used to deserialize to the correct class.
+
+```ts
+abstract class PolymorphicBase extends Serializable {}
+
+class TypeOne extends PolymorphicBase {
+  @PolymorphicSwitch(() => new TypeOne(), 1)
+  @SerializeProperty()
+  private _type = 1;
+}
+
+class TypeTwo extends PolymorphicBase {
+  @PolymorphicSwitch(() => new TypeTwo(), 2)
+  @SerializeProperty()
+  private _type = 2;
+}
+
+class WithPolymorphic extends Serializable {
+  @SerializeProperty({
+    fromJSONStrategy: json => polymorphicClassFromJSON(MyColourClass, json),
+  })
+  public property: PolymorphicBase;
+}
+
+const polymorphic = new WithPolymorphic().fromJSON({ type: 2 });
+
+console.log(polymorphic.property instanceof TypeTwo) // true
+```
