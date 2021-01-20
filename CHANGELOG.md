@@ -7,9 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+
+## [v1.1.5] - 2021-01-20
+
 ### Added
 - docs for @SerializeProperty short cut functions   
 - new `strategy/utils.ts` exposing `getNew(type)` for custom decorators
+- fixes #100
+- fixes #105
+- fixes #99
 
 ## [v1.1.4] - 2021-01-19
 
