@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### added
+- docs for @SerializeProperty short cut functions
+
 
 ## [v1.1.4] - 2021-01-19
 
