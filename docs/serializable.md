@@ -216,7 +216,7 @@ and `fromJSONStrategy`. An example short cut is providing a `type` to use with
 
 ```ts
 export function DeserializeAs<T>(
-  type: StrategyTypeArgument<T>,
+  type: SerializableConstructor<T>,
 ): PropertyDecorator {
   return SerializeProperty({ fromJSONStrategy: toSerializable(type) });
 }
