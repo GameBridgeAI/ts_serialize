@@ -130,7 +130,7 @@ declare module "@gamebridgeai/ts_serialize" {
   ) => Serializable;
 
   export function polymorphicClassFromJSON<T extends Serializable>(
-    classPrototype: Object & { prototype: T },
+    classPrototype: SerializableConstructor<T>,
     input: string | JSONValue | Object,
   ): T;
 
