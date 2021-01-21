@@ -140,7 +140,7 @@ declare module "@gamebridgeai/ts_serialize" {
     | FunctionSerializable;
 
   /** get new strategy type arguments */
-  export function getNew<T>(
+  export function getNewSerializable<T>(
     type: SerializableConstructor<T>,
   ): Serializable;
 }

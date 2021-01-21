@@ -12,7 +12,7 @@ export type SerializableConstructor<T> =
   | FunctionSerializable;
 
 /** get new strategy type arguments */
-export function getNew<T>(
+export function getNewSerializable<T>(
   type: SerializableConstructor<T>,
 ): Serializable {
   return isNewable(type) ? new type() : type();

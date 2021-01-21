@@ -13,7 +13,7 @@ and this project adheres to
 ### Added
 
 - docs for @SerializeProperty short cut functions
-- new `strategy/utils.ts` exposing `getNew(type)` for custom decorators
+- new `strategy/utils.ts` exposing `getNewSerializable(type)` for custom decorators
 - fixes #100
 - fixes #105
 - fixes #99

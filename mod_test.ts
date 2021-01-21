@@ -18,7 +18,7 @@ test({
     assertEquals(typeof mod.polymorphicClassFromJSON, "function");
     assertEquals(typeof mod.PolymorphicResolver, "function");
     assertEquals(typeof mod.PolymorphicSwitch, "function");
-    assertEquals(typeof mod.getNew, "function");
+    assertEquals(typeof mod.getNewSerializable, "function");
 
     assertEquals(Object.keys(mod).length, 12);
   },

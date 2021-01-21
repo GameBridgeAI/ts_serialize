@@ -5,7 +5,7 @@ import {
   createDateStrategy,
   FromJSONStrategy,
   fromObjectContaining,
-  getNew,
+  getNewSerializable,
   iso8601Date,
   JSONValue,
   polymorphicClassFromJSON,
@@ -286,7 +286,7 @@ class TestGetNew extends Serializable {
 }
 
 assert(
-  getNew(
+  getNewSerializable(
     () => new TestGetNew({ test: "from_constructor" }),
   ).toJSON() ===
     `{"test":"from_constructor"}`,
