@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.1.6] - 2021-01-21
+
+### Add
+- update nodeJS types
+
 ## [v1.1.5] - 2021-01-20
 
 ### Added
