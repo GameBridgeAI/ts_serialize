@@ -33,3 +33,7 @@ export {
 } from "./polymorphic.ts";
 /** types */
 export type { InitializerFunction, ResolverFunction } from "./polymorphic.ts";
+
+export { getNewSerializable } from "./strategy/utils.ts";
+/** types */
+export type { SerializableConstructor } from "./strategy/utils.ts";

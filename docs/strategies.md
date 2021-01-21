@@ -1,7 +1,7 @@
-# 🥣 ts_serialize 
+# 🥣 ts_serialize
 
-[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg) 
-[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg) 
+[![tests](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/tests/badge.svg)
+[![release](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)](https://github.com/GameBridgeAI/ts_serialize/workflows/release/badge.svg)
 [![github doc](https://img.shields.io/badge/github-doc-5279AA.svg)](https://gamebridgeai.github.io/ts_serialize)
 [![deno doc](https://doc.deno.land/badge.svg)](https://doc.deno.land/https/deno.land/x/ts_serialize/mod.ts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -10,8 +10,9 @@
 
 ## Strategies
 
-`Strategies` are functions or a composed list of functions to execute on the values when
-serializing or deserializing. The functions take one argument which is the value to process.
+`Strategies` are functions or a composed list of functions to execute on the
+values when serializing or deserializing. The functions take one argument which
+is the value to process.
 
 ```ts
 const fromJSONStrategy = (v: string): BigInt => BigInt(v);
@@ -48,14 +49,14 @@ class Test extends Serializable {
 
 assertEquals(
   new Test().fromJSON(`{"property":"Hello"}`).property,
-  "Hello World!!!"
+  "Hello World!!!",
 );
 ```
 
 ### Dates
 
-Dates can use the `fromJSONStrategy` to revive a serialized string into a Date object. `ts_serialize`
-provides a `iso8601Date` function to parse ISO Dates.
+Dates can use the `fromJSONStrategy` to revive a serialized string into a Date
+object. `ts_serialize` provides a `iso8601Date` function to parse ISO Dates.
 
 ```ts
 class Test extends Serializable {
@@ -70,8 +71,8 @@ assert(testObj.date instanceof Date);
 assertEquals(testObj.date.getFullYear(), 2020);
 ```
 
-`createDateStrategy()` can be use to make a reviving date strategy. 
-Pass a regex to make your own.
+`createDateStrategy()` can be use to make a reviving date strategy. Pass a regex
+to make your own.
 
 ```ts
 class Test extends Serializable {
@@ -86,5 +87,5 @@ assert(testObj.date instanceof Date);
 assertEquals(testObj.date.getFullYear(), 2099);
 ```
 
-[Global transformKey](./transforming) is a function that models can use to 
-apply key transformations to all properties including children.
+[Global transformKey](./transforming) is a function that models can use to apply
+key transformations to all properties including children.

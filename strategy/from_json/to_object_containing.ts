@@ -6,11 +6,12 @@ import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
 } from "../../error_messages.ts";
-import { getNew, isObject, StrategyTypeArgument } from "../_utils.ts";
+import { isObject } from "../_utils.ts";
+import { getNewSerializable, SerializableConstructor } from "../utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
 export function toObjectContaining<T>(
-  type: StrategyTypeArgument<T>,
+  type: SerializableConstructor<T>,
 ): FromJSONStrategy {
   return function _toObjectContaining(
     value: JSONValue,
@@ -40,7 +41,7 @@ export function toObjectContaining<T>(
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }
-            return getNew(type).fromJSON(v);
+            return getNewSerializable(type).fromJSON(v);
           });
           continue;
         }
@@ -50,7 +51,7 @@ export function toObjectContaining<T>(
           throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
         }
 
-        record[prop] = getNew(type).fromJSON(value[prop]);
+        record[prop] = getNewSerializable(type).fromJSON(value[prop]);
       }
     }
     return record;

@@ -6,4 +6,4 @@ From this directory run
 deno run --unstable --allow-read deno.ts
 ```
 
-*note:* `--unstable` and `--allow-read` are needed for the `readJson` usage.
+_note:_ `--unstable` and `--allow-read` are needed for the `readJson` usage.

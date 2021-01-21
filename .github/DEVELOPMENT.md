@@ -6,12 +6,16 @@ an request for comments (RFC) before adding a feature without a discussion.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. `ts_serialize` is built with `deno`. Follow the [deno install instructions](https://github.com/denoland/deno_install) to ge it installed on your machine.
+These instructions will get you a copy of the project up and running on your
+local machine for development and testing purposes. `ts_serialize` is built with
+`deno`. Follow the
+[deno install instructions](https://github.com/denoland/deno_install) to ge it
+installed on your machine.
 
 ### Installing
 
-Fork and clone the project to your machine and `cd` into that folder. If you are getting errors about the
-`deno` namespace you can run
+Fork and clone the project to your machine and `cd` into that folder. If you are
+getting errors about the `deno` namespace you can run
 
 ```
 $ deno types > deno.d.ts
@@ -33,8 +37,10 @@ $ deno test mod_test.ts
 
 ### Coding style and tests
 
-We follow the [Deno style guide](https://deno.land/manual/contributing/style_guide)
-for code, including tests. Every file should have a `_test.ts` file testing all exported symbols.
+We follow the
+[Deno style guide](https://deno.land/manual/contributing/style_guide) for code,
+including tests. Every file should have a `_test.ts` file testing all exported
+symbols.
 
 If you find a bug a test case is the right place to start. Test example:
 
@@ -56,7 +62,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
     );
   },
 });
