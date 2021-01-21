@@ -209,10 +209,10 @@ assertEquals(
 ## Short cutting the `@SerializeProperty` decorator
 
 While `@SerializeProperty` is handy with to and from JSON strategies, it can
-still be verbose to declare the strategies for each property.
-`@SerializeProperty` can have shortcut functions that provide the to and from
-JSON strategies accepting arguments. An example short cut is providing a `type`
-to use with `toSerializable`:
+still be verbose to declare the strategies for each property. You can define your own
+decorator functions to wrap `@SerializeProperty` and provide the `toJSONStrategy`
+and `fromJSONStrategy`. An example short cut is providing a `type` to use with
+`toSerializable`:
 
 ```ts
 export function DeserializeAs<T>(
