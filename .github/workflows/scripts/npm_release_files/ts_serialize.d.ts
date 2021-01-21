@@ -49,6 +49,18 @@ declare module "@gamebridgeai/ts_serialize" {
     public tsSerialize(): JSONObject;
   }
 
+  type NewSerializable<T> = T & (new () => Serializable);
+  type FunctionSerializable = () => Serializable;
+  /** for strategies */
+  export type SerializableConstructor<T> =
+    | NewSerializable<T>
+    | FunctionSerializable;
+
+  /** get new strategy type arguments */
+  export function getNewSerializable<T>(
+    type: SerializableConstructor<T>,
+  ): Serializable;
+
   /** Functions used when hydrating data */
   export type FromJSONStrategy = (value: JSONValue) => any;
   export type FromJSONStrategyArgument =
@@ -90,12 +102,12 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** revive data using `fromJSON` on a subclass type */
   export function toSerializable<T>(
-    type: T & { new (): Serializable },
+    type: SerializableConstructor<T>,
   ): FromJSONStrategy;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining<T>(
-    type: T & { new (): Serializable },
+    type: SerializableConstructor<T>,
   ): FromJSONStrategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
@@ -131,16 +143,4 @@ declare module "@gamebridgeai/ts_serialize" {
     initializerFunction: InitializerFunction,
     value?: unknown,
   ): PropertyDecorator;
-
-  type NewSerializable<T> = T & (new () => Serializable);
-  type FunctionSerializable = () => Serializable;
-  /** for strategies */
-  export type SerializableConstructor<T> =
-    | NewSerializable<T>
-    | FunctionSerializable;
-
-  /** get new strategy type arguments */
-  export function getNewSerializable<T>(
-    type: SerializableConstructor<T>,
-  ): Serializable;
 }
