@@ -29,14 +29,15 @@ jobs:
         with:
           deno-version: ${{ matrix.deno }}
       
-      - name: deno format check
+      - name: Deno Format Check
         run: deno fmt --check
+        if: matrix.os != 'macOS-latest'
 
       - name: Cache Dependencies
         run: deno cache test_deps.ts
 
-      - name: Run deno Tests
+      - name: Run Deno Tests
         run: deno test
 
-      - name: Run package.json generation tests
+      - name: Run package.json Generation Tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
