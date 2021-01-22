@@ -31,7 +31,7 @@ jobs:
       
       - name: Deno Format Check
         run: deno fmt --check
-        if: matrix.os != 'macOS-latest'
+        if: matrix.os != 'windows-latest'
 
       - name: Cache Dependencies
         run: deno cache test_deps.ts
