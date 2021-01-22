@@ -4,7 +4,7 @@ name: release
 
 on:
   push:
-    tags: "v*"
+    tags: "v*.*.*"
 
 jobs:
   test:
@@ -36,7 +36,7 @@ jobs:
 
       - name: Run package.json Generation Tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
-    
+
     build:
       name: Release
       runs-on: ubuntu-latest
@@ -54,7 +54,6 @@ jobs:
           uses: denolib/setup-deno@v2
           with:
             deno-version: ${{ matrix.deno }}
-
 
         - name: Build NPM Module
           run: .github/workflows/scripts/build.sh ${{ github.ref }}
