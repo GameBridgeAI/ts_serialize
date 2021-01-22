@@ -37,41 +37,41 @@ jobs:
       - name: Run package.json Generation Tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
-    build:
-      name: Release
-      runs-on: ubuntu-latest
-      needs: test
+  build:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: test
 
-      strategy:
-        matrix:
-          deno: ["v1.6.x"]
+    strategy:
+      matrix:
+        deno: ["v1.6.x"]
 
-      steps:
-        - name: Setup repo
-          uses: actions/checkout@v2
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
 
-        - name: Setup Deno
-          uses: denolib/setup-deno@v2
-          with:
-            deno-version: ${{ matrix.deno }}
+      - name: Setup Deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: ${{ matrix.deno }}
 
-        - name: Build NPM Module
-          run: .github/workflows/scripts/build.sh ${{ github.ref }}
+      - name: Build NPM Module
+        run: .github/workflows/scripts/build.sh ${{ github.ref }}
 
-        - name: Create Release
-          id: create_release
-          uses: actions/create-release@v1
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          with:
-            tag_name: ${{ github.ref }}
-            release_name: Release ${{ github.ref }}
-            draft: false
-            prerelease: false
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
-        - name: Deploy to NPM
-          run: |
-            cd dist
-            npm publish --access public
-          env:
-            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+      - name: Deploy to NPM
+        run: |
+          cd dist
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
