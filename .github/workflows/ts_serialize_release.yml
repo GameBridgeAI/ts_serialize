@@ -1,54 +1,78 @@
 # Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
-name: release
+name: Release
+
 on:
   push:
-    tags:
-      - "v*"
+    tags: ["v*.*.*"]
 
 jobs:
   test:
-    name: ts serialize tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        deno: ["v1.6.x"]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+
     steps:
-      - name: Clone repository
+      - name: Setup repo
         uses: actions/checkout@v2
-      - name: Run tests
-        run: |
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.6.3"
-          export PATH="$HOME/.deno/bin:$PATH"
-          deno fmt --check
-          deno test
-  build:
-    name: Release
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Get github tag
-        id: get_github_tag
-        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup-node
-        uses: actions/setup-node@v1
+
+      - name: Setup Deno
+        uses: denolib/setup-deno@v2
         with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-      - name: Build
-        run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: false
-          prerelease: false
-      - name: Deploy
-        run: |
-          cd dist
-          npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+          deno-version: ${{ matrix.deno }}
+      
+      - name: Deno Format Check
+        run: deno fmt --check
+        if: matrix.os != 'windows-latest'
+
+      - name: Cache Dependencies
+        run: deno cache test_deps.ts
+
+      - name: Run Deno Tests
+        run: deno test
+
+      - name: Run package.json Generation Tests
+        run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
+    
+    build:
+      name: Release
+      runs-on: ubuntu-latest
+      needs: test
+
+      strategy:
+        matrix:
+          deno: ["v1.6.x"]
+
+      steps:
+        - name: Setup repo
+          uses: actions/checkout@v2
+
+        - name: Setup Deno
+          uses: denolib/setup-deno@v2
+          with:
+            deno-version: ${{ matrix.deno }}
+
+
+        - name: Build NPM Module
+          run: .github/workflows/scripts/build.sh ${{ github.ref }}
+
+        - name: Create Release
+          id: create_release
+          uses: actions/create-release@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            tag_name: ${{ github.ref }}
+            release_name: Release ${{ github.ref }}
+            draft: false
+            prerelease: false
+
+        - name: Deploy to NPM
+          run: |
+            cd dist
+            npm publish --access public
+          env:
+            NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}

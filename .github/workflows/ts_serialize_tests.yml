@@ -1,19 +1,43 @@
 # Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
+# This workflow will install Deno and run tests across stable and nightly builds on Windows, Ubuntu and macOS.
+# For more information see: https://github.com/denolib/setup-deno
+
 name: tests
-on: [pull_request, push]
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+    branches: ['**']
 
 jobs:
   test:
-    name: ts serialize tests
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        deno: ["v1.6.x"]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+
     steps:
-      - name: clone repository
+      - name: Setup repo
         uses: actions/checkout@v2
-      - name: run tests
-        run: |
-          .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
-          curl -L https://deno.land/x/install/install.sh | sh -s "v1.6.3"
-          export PATH="$HOME/.deno/bin:$PATH"
-          deno fmt --check
-          deno test
+
+      - name: Setup Deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: ${{ matrix.deno }}
+      
+      - name: Deno Format Check
+        run: deno fmt --check
+        if: matrix.os != 'windows-latest'
+
+      - name: Cache Dependencies
+        run: deno cache test_deps.ts
+
+      - name: Run Deno Tests
+        run: deno test
+
+      - name: Run package.json Generation Tests
+        run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
