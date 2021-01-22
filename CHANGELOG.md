@@ -8,6 +8,9 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.0] - 2021-01-22
+- minor for new test targets
+
 ## [v1.1.7] - 2021-01-21
 
 ### Changed
