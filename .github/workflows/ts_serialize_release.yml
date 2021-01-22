@@ -47,6 +47,10 @@ jobs:
         deno: ["v1.6.x"]
 
     steps:
+      - name: Get github tag
+        id: get_github_tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF#refs/tags/}
+
       - name: Setup repo
         uses: actions/checkout@v2
 
@@ -56,7 +60,7 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Build NPM Module
-        run: .github/workflows/scripts/build.sh ${{ github.ref }}
+        run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
 
       - name: Create Release
         id: create_release
