@@ -59,6 +59,12 @@ jobs:
         with:
           deno-version: ${{ matrix.deno }}
 
+      - name: Setup-node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
       - name: Build NPM Module
         run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
 
