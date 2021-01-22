@@ -8,6 +8,11 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.1.7] - 2021-01-21
+
+### Changed
+- github action updates test/release
+
 ## [v1.1.6] - 2021-01-21
 
 ### Add
