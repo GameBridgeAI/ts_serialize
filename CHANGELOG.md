@@ -8,17 +8,24 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Added
+
+- missing copyright statement
+
 ## [v1.2.0] - 2021-01-22
+
 - minor for new test targets
 
 ## [v1.1.7] - 2021-01-21
 
 ### Changed
+
 - github action updates test/release
 
 ## [v1.1.6] - 2021-01-21
 
 ### Add
+
 - update nodeJS types
 
 ## [v1.1.5] - 2021-01-20
