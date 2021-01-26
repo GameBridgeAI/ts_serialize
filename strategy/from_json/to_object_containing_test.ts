@@ -26,7 +26,6 @@ test({
     const testObj = new Test().fromJSON(
       { test: { testing: { someClassProp: "changed" } } },
     );
-    console.log(testObj);
     assert(testObj.test.testing instanceof Serializable);
     assertEquals(testObj.test.testing.someClassProp, "changed");
   },
