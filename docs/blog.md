@@ -88,7 +88,7 @@ class User {
   lastName: string = "Esquire";
   createdDate: Date = new Date("2020-09-24T00:00:00.000Z");
 
-  deserialize(json: string): this {
+  deserialize(json: Record<string, any>): this {
     this.firstName = json.first_name; // string -> string
     this.lastName = json.last_name; // string -> string
     this.createdDate = new Date(json.created_date); // string -> Date
