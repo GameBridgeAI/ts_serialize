@@ -3,17 +3,19 @@
 import { Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import { toSerializable } from "./strategy/from_json/to_serializable.ts";
+const TEST_TIMES = 10;
+const MEASURE_TIMES = 1e6;
 
 class Embedded extends Serializable {
   @SerializeProperty()
-  public field1?: string;
+  public field1: string = "default";
 }
 
 class Root extends Serializable {
   @SerializeProperty()
-  field1?: string;
+  field1: string = "default";
   @SerializeProperty({ fromJSONStrategy: toSerializable(Embedded) })
-  public embedded?: Embedded[];
+  public embedded?: Embedded[] = [];
 }
 
 const input = {
@@ -23,25 +25,80 @@ const input = {
   ],
 };
 
-for (let i = 0; i < 10; i++) {
-  performance.mark(`start_benchmark_1m_${i}`);
-  for (let j = 0; j < 1e6; j++) {
+console.log("running fromJSON");
+for (let i = 0; i < TEST_TIMES; i++) {
+  performance.mark(`start_fromJSON_benchmark_1m_${i}`);
+  for (let j = 0; j < MEASURE_TIMES; j++) {
     new Root().fromJSON(input);
   }
-  performance.mark(`end_benchmark_1m_${i}`);
+  performance.mark(`end_fromJSON_benchmark_1m_${i}`);
   performance.measure(
-    "measure_benchmark_1m",
-    `start_benchmark_1m_${i}`,
-    `end_benchmark_1m_${i}`,
+    "measure_fromJSON_benchmark_1m",
+    `start_fromJSON_benchmark_1m_${i}`,
+    `end_fromJSON_benchmark_1m_${i}`,
   );
 }
 
-const measured = performance.getEntriesByName("measure_benchmark_1m");
+const fromJSONMeasured = performance.getEntriesByName(
+  "measure_fromJSON_benchmark_1m",
+);
 
 console.log(
-  measured,
-  `average: ${measured.reduce(
+  fromJSONMeasured,
+  `\nfromJSON average: ${fromJSONMeasured.reduce(
     (acc, { duration }) => acc + duration,
     0,
-  ) / measured.length}`,
+  ) / fromJSONMeasured.length}`,
+);
+
+console.log("running toJSON");
+for (let i = 0; i < TEST_TIMES; i++) {
+  performance.mark(`start_toJSON_benchmark_1m_${i}`);
+  for (let j = 0; j < MEASURE_TIMES; j++) {
+    new Root().toJSON();
+  }
+  performance.mark(`end_toJSON_benchmark_1m_${i}`);
+  performance.measure(
+    "measure_toJSON_benchmark_1m",
+    `start_toJSON_benchmark_1m_${i}`,
+    `end_toJSON_benchmark_1m_${i}`,
+  );
+}
+
+const toJSONMeasured = performance.getEntriesByName(
+  "measure_toJSON_benchmark_1m",
+);
+
+console.log(
+  toJSONMeasured,
+  `\ntoJSON average: ${toJSONMeasured.reduce(
+    (acc, { duration }) => acc + duration,
+    0,
+  ) / toJSONMeasured.length}`,
+);
+
+console.log("running tsSerialize");
+for (let i = 0; i < TEST_TIMES; i++) {
+  performance.mark(`start_tsSerialize_benchmark_1m_${i}`);
+  for (let j = 0; j < MEASURE_TIMES; j++) {
+    new Root().tsSerialize();
+  }
+  performance.mark(`end_tsSerialize_benchmark_1m_${i}`);
+  performance.measure(
+    "measure_tsSerialize_benchmark_1m",
+    `start_tsSerialize_benchmark_1m_${i}`,
+    `end_tsSerialize_benchmark_1m_${i}`,
+  );
+}
+
+const tsSerializeMeasured = performance.getEntriesByName(
+  "measure_tsSerialize_benchmark_1m",
+);
+
+console.log(
+  tsSerializeMeasured,
+  `\ntsSerialize average: ${tsSerializeMeasured.reduce(
+    (acc, { duration }) => acc + duration,
+    0,
+  ) / tsSerializeMeasured.length}`,
 );
