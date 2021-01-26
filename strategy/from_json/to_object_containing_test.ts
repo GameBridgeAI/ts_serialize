@@ -10,6 +10,7 @@ import {
 } from "../../error_messages.ts";
 
 test({
+  only: true,
   name: "toObjectContaining revives using `fromJSON` as type",
   fn() {
     class SomeClass extends Serializable {
@@ -25,6 +26,7 @@ test({
     const testObj = new Test().fromJSON(
       { test: { testing: { someClassProp: "changed" } } },
     );
+    console.log(testObj);
     assert(testObj.test.testing instanceof Serializable);
     assertEquals(testObj.test.testing.someClassProp, "changed");
   },

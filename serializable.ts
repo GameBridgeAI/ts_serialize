@@ -124,38 +124,39 @@ export function toPojo(
         ?.prototype}`,
     );
   }
-  const record: JSONObject = {};
-  for (
-    let {
-      propertyKey,
-      serializedKey,
-      toJSONStrategy = toJSONDefault,
-    } of serializablePropertyMap.propertyOptions()
-  ) {
-    // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[propertyKey as string];
+  return serializablePropertyMap.propertyOptions().reduce(
+    (acc, curr) => {
+      let {
+        propertyKey,
+        serializedKey,
+        toJSONStrategy = toJSONDefault,
+      } = curr;
+      // Assume that key is always a string, a check is done earlier in SerializeProperty
+      const value = context[propertyKey as string];
+      // If the value is serializable then use the recursive replacer
+      if (
+        SERIALIZABLE_CLASS_MAP.get(
+          (value as Serializable)?.constructor?.prototype,
+        )
+      ) {
+        toJSONStrategy = toJSONRecursive;
+      }
 
-    // If the value is serializable then use the recursive replacer
-    if (
-      SERIALIZABLE_CLASS_MAP.get(
-        (value as Serializable)?.constructor?.prototype,
-      )
-    ) {
-      toJSONStrategy = toJSONRecursive;
-    }
+      if (Array.isArray(value)) {
+        acc[serializedKey] = value.map((item: any) => {
+          if (item instanceof Serializable) {
+            return toPojo(item);
+          }
+          return toJSONStrategy(item);
+        });
+      } else if (value !== undefined) {
+        acc[serializedKey] = toJSONStrategy(value);
+      }
 
-    if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: any) => {
-        if (item instanceof Serializable) {
-          return toPojo(item);
-        }
-        return toJSONStrategy(item);
-      });
-    } else if (value !== undefined) {
-      record[serializedKey] = toJSONStrategy(value);
-    }
-  }
-  return record;
+      return acc;
+    },
+    {} as JSONObject,
+  );
 }
 
 /** Convert to `pojo` with our mapping logic then to string */
@@ -169,27 +170,28 @@ function fromJSON<T>(
   json: string | JSONValue | Object,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
-  const accumulator: Partial<T> = {};
-
-  for (const [key, value] of Object.entries(_json)) {
-    const {
-      propertyKey,
-      fromJSONStrategy = fromJSONDefault,
-    } = (SERIALIZABLE_CLASS_MAP.get(
-      context?.constructor?.prototype,
-    ) as SerializePropertyOptionsMap).getBySerializedKey(key) || {};
-
-    if (!propertyKey) {
-      continue;
-    }
-
-    accumulator[propertyKey as keyof T] = Array.isArray(value)
-      ? value.map((v) => fromJSONStrategy(v))
-      : fromJSONStrategy(value as JSONValue);
-  }
-
   return Object.assign(
     context,
-    accumulator as T,
+    Object.entries(_json).reduce(
+      (acc: Partial<T>, [key, value]) => {
+        const {
+          propertyKey,
+          fromJSONStrategy = fromJSONDefault,
+        } = (SERIALIZABLE_CLASS_MAP.get(
+          context?.constructor?.prototype,
+        ) as SerializePropertyOptionsMap).getBySerializedKey(key) || {};
+
+        if (!propertyKey) {
+          return acc;
+        }
+
+        acc[propertyKey as keyof T] = Array.isArray(value)
+          ? value.map((v) => fromJSONStrategy(v))
+          : fromJSONStrategy(value as JSONValue);
+
+        return acc;
+      },
+      {},
+    ) as T,
   );
 }

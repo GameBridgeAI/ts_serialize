@@ -131,7 +131,7 @@ export class SerializePropertyOptionsMap {
     ]);
   }
 
-  public propertyOptions(): Iterable<SerializePropertyOptions> {
-    return this.getMergedWithParentMap().values();
+  public propertyOptions(): SerializePropertyOptions[] {
+    return Array.from(this.getMergedWithParentMap().values());
   }
 }

@@ -14,46 +14,35 @@ export function toObjectContaining<T>(
   type: SerializableConstructor<T>,
 ): FromJSONStrategy {
   return function _toObjectContaining(
-    value: JSONValue,
+    object: JSONValue,
   ) {
-    if (value == null) {
+    if (object == null) {
       return null;
     }
 
-    if (!isObject(value)) {
+    if (!isObject(object)) {
       throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
 
-    const record: Record<string, Serializable | Serializable[] | null> = {};
-    // check that JSONValue is something we can deal with
-    // but mostly to make the type checker happy
-    if (typeof value === "object" && !Array.isArray(value)) {
-      for (const prop in value) {
-        // null is a JSONValue
-        if (value[prop] === null) {
-          record[prop] = null;
-          continue;
-        }
-
-        // Serializable[]
-        if (Array.isArray(value[prop])) {
-          record[prop] = (value[prop] as JSONArray).map((v: JSONValue) => {
+    if (!Array.isArray(object)) {
+      return Object.entries(object).reduce((acc, [key, value]) => {
+        if (value == null) {
+          acc[key] = null;
+        } else if (Array.isArray(value)) {
+          acc[key] = value.map((v: JSONValue) => {
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }
             return getNewSerializable(type).fromJSON(v);
           });
-          continue;
-        }
-
-        // only process Serializable
-        if (!isObject(value[prop])) {
+        } else if (!isObject(value)) {
           throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+        } else {
+          acc[key] = getNewSerializable(type).fromJSON(value);
         }
-
-        record[prop] = getNewSerializable(type).fromJSON(value[prop]);
-      }
+        return acc;
+      }, {} as Record<string, Serializable | Serializable[] | null>);
     }
-    return record;
+    return {};
   };
 }
