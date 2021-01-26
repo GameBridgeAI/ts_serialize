@@ -36,26 +36,12 @@ for (let i = 0; i < 10; i++) {
   );
 }
 
-// console.log(
-//   performance.getEntriesByName("measure_benchmark_1m")[0].toJSON(),
-// );
+const measured = performance.getEntriesByName("measure_benchmark_1m");
+
 console.log(
-  performance.getEntriesByName("measure_benchmark_1m"),
+  measured,
+  `average: ${measured.reduce(
+    (acc, { duration }) => acc + duration,
+    0,
+  ) / measured.length}`,
 );
-// console.time("benchmark_10");
-// for (let i = 0; i < 1e1; i++) {
-//   new Root().fromJSON(input);
-// }
-// console.timeEnd("benchmark_10");
-
-// console.time("benchmark_1k");
-// for (let i = 0; i < 1e3; i++) {
-//   new Root().fromJSON(input);
-// }
-// console.timeEnd("benchmark_1k");
-
-// console.time("benchmark_1m");
-// for (let i = 0; i < 1e6; i++) {
-//   new Root().fromJSON(input);
-// }
-// console.timeEnd("benchmark_1m");
