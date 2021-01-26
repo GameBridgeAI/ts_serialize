@@ -10,7 +10,6 @@ import {
 } from "../../error_messages.ts";
 
 test({
-  only: true,
   name: "toObjectContaining revives using `fromJSON` as type",
   fn() {
     class SomeClass extends Serializable {

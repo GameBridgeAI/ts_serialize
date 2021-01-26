@@ -170,14 +170,13 @@ function resolveSwitchMap(
   }
 
   const inputObject = typeof input === "string" ? JSON.parse(input) : input;
-
-  for (const [propertyKey, valueMap] of classMap.entries()) {
-    const value = inputObject[propertyKey];
-    const initializer = valueMap.get(value);
-    if (initializer) {
-      return initializer();
+  let initializer: InitializerFunction | undefined;
+  Array.from(classMap.entries()).forEach(([propertyKey, valueMap]) => {
+    if (initializer !== undefined) {
+      return;
     }
-  }
-
-  return null;
+    const value = inputObject[propertyKey];
+    initializer = valueMap.get(value) as InitializerFunction;
+  });
+  return typeof initializer === "function" ? initializer() : null;
 }
