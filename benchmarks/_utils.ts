@@ -4,7 +4,7 @@ import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
 export const only = Deno.args.includes("--benchmark");
-export const ignore = !Deno.args.includes("--benchmark");
+export const ignore = !only;
 
 export enum TestAmount {
   Ten = 10,
