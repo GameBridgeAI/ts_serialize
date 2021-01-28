@@ -11,6 +11,7 @@ and this project adheres to
 ### Added
 
 - missing copyright statement
+- basic benchmark tests
 
 ## [v1.2.0] - 2021-01-22
 
