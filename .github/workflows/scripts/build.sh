@@ -12,10 +12,6 @@ fi
 
 .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
-curl -L https://deno.land/x/install/install.sh | sh -s "v1.6.3"
-
-export PATH="$HOME/.deno/bin:$PATH"
-
 mkdir dist
 
 deno run -r --unstable --allow-read --allow-run --no-check ./.github/workflows/scripts/npm_release_files/babel_ts_serialize.ts > dist/ts_serialize.js
@@ -36,6 +32,7 @@ cd dist
 cd ../examples/node
 
 npm ci
+
 npm ln ../../dist
 
 npm test
