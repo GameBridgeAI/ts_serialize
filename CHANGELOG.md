@@ -12,6 +12,10 @@ and this project adheres to
 
 - missing copyright statement
 - basic benchmark tests
+- update deno@1.7.1, std@0.85.0
+- change builds to use v1.x
+- removed deno install from build script
+- deno fmt with new rules
 
 ## [v1.2.0] - 2021-01-22
 

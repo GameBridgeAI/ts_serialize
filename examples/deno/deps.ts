@@ -10,4 +10,4 @@ export {
   toSerializable,
   TransformKey,
 } from "https://deno.land/x/ts_serialize/mod.ts";
-export { readJson } from "https://deno.land/std@0.84.0/fs/mod.ts";
+export { readJson } from "https://deno.land/std@0.85.0/fs/mod.ts";
