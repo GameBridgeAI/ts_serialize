@@ -8,6 +8,8 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.1] - 2021-01-29
+
 ### Added
 
 - missing copyright statement
