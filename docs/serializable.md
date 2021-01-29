@@ -209,12 +209,12 @@ assertEquals(
 ## Short cutting the `@SerializeProperty` decorator
 
 While `@SerializeProperty` is handy with to and from JSON strategies, it can
-still be verbose to declare the strategies for each property. You can define your 
-owndecorator functions to wrap `@SerializeProperty` and provide the `toJSONStrategy`
-and `fromJSONStrategy`. An example short cut is providing a `type` to use with
-`toSerializable`. `SerializableConstructor` and `getNewSerializable` are provided 
-to allow a raw serializable type or a function that returns a constructed serializable 
-type enabling constructor arguments: 
+still be verbose to declare the strategies for each property. You can define
+your owndecorator functions to wrap `@SerializeProperty` and provide the
+`toJSONStrategy` and `fromJSONStrategy`. An example short cut is providing a
+`type` to use with `toSerializable`. `SerializableConstructor` and
+`getNewSerializable` are provided to allow a raw serializable type or a function
+that returns a constructed serializable type enabling constructor arguments:
 
 ```ts
 export function DeserializeAs<T>(
