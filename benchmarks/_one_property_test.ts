@@ -1,7 +1,18 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test } from "../test_deps.ts";
-import { ignore, input, only, Root, TestAmount } from "./_utils.ts";
+import { ignore, only, TestAmount } from "./_utils.ts";
+import { Serializable } from "../serializable.ts";
+import { SerializeProperty } from "../serialize_property.ts";
+
+export class Root extends Serializable {
+  @SerializeProperty()
+  property: string = "default";
+}
+
+export const input = {
+  property: "from_input",
+};
 
 test({
   only,
@@ -21,13 +32,12 @@ test({
         `end_fromJSON_benchmark_1m_${i}`,
       );
     }
-    const fromJSONMeasured = performance.getEntriesByName(
+    const measured = performance.getEntriesByName(
       "measure_fromJSON_benchmark_1m",
     );
 
-    const avg = fromJSONMeasured.reduce((acc, { duration }) =>
-      acc + duration, 0) /
-      fromJSONMeasured.length;
+    const avg = measured.reduce((acc, { duration }) => acc + duration, 0) /
+      measured.length;
     console.log(avg);
   },
 });
@@ -51,12 +61,11 @@ test({
         `end_toJSON_benchmark_1m_${i}`,
       );
     }
-    const toJSONMeasured = performance.getEntriesByName(
+    const measured = performance.getEntriesByName(
       "measure_toJSON_benchmark_1m",
     );
-    const avg = toJSONMeasured.reduce((acc, { duration }) =>
-      acc + duration, 0) /
-      toJSONMeasured.length;
+    const avg = measured.reduce((acc, { duration }) => acc + duration, 0) /
+      measured.length;
     console.log(avg);
   },
 });
@@ -81,12 +90,11 @@ test({
       );
     }
 
-    const tsSerializeMeasured = performance.getEntriesByName(
+    const measured = performance.getEntriesByName(
       "measure_tsSerialize_benchmark_1m",
     );
-    const avg = tsSerializeMeasured.reduce((acc, { duration }) =>
-      acc + duration, 0) /
-      tsSerializeMeasured.length;
+    const avg = measured.reduce((acc, { duration }) => acc + duration, 0) /
+      measured.length;
     console.log(avg);
   },
 });
