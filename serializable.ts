@@ -87,7 +87,7 @@ function getOrInitializeDefaultSerializerLogicForParents(
  *     const example = new Example()
  *     example.toJSON()
  *     example.fromJSON()
- *     example.tsSerialize()s
+ *     example.tsSerialize()
  */
 export abstract class Serializable {
   /** allow empty class serialization */
