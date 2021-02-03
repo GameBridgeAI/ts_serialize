@@ -5,14 +5,12 @@ import { ignore, only, TestAmount } from "./_utils.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
-export class Root extends Serializable {
+class Root extends Serializable {
   @SerializeProperty()
   property: string = "default";
 }
 
-export const input = {
-  property: "from_input",
-};
+const input = { property: "from_input" };
 
 test({
   only,
