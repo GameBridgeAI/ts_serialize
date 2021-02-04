@@ -26,14 +26,14 @@ export type InitializerFunction = () => Serializable;
  * 
  * 2. Implicitly using \@PolymorphicSwitch instance property on a child class.
  * 
- * This works by getting the decorated class' parent prototype and creating a map
- * for a specific class, property key, and value combination to the provided 
- * initializer function
+ * This works by mapping the decorated class' parent prototype to the child
+ * class, property key, property value (or property value test), and initializer
+ * function
  */
 
 /** \@PolymorphicResolver method decorator */
 export function PolymorphicResolver(
-  target: unknown,
+  target: Object,
   propertyKey: string | symbol,
 ): void {
   registerPolymorphicResolver(
@@ -46,14 +46,14 @@ export function PolymorphicResolver(
 
 export type ResolverFunction = (
   json: string | JSONValue | Object,
-) => Serializable;
+) => Serializable | null;
 
-/** Map of class constructors to functions that take in a JSON input and output a class instance that inherits Serializable */
-const POLYMORPHIC_RESOLVER_MAP = new Map<unknown, ResolverFunction>();
+/** Map of parent class constructors to functions that take in a JSON input and output a class instance that inherits Serializable */
+const POLYMORPHIC_RESOLVER_MAP = new Map<Object, ResolverFunction>();
 
 /** Adds a class and a resolver function to the resolver map */
 function registerPolymorphicResolver(
-  classPrototype: unknown,
+  classPrototype: Object,
   resolver: ResolverFunction,
 ): void {
   POLYMORPHIC_RESOLVER_MAP.set(classPrototype, resolver);
@@ -62,7 +62,7 @@ function registerPolymorphicResolver(
 /**
  * \@PolymorphicSwitch property decorator.
  * 
- * Maps the provided value or 
+ * Maps the provided initializer function and value or propertyValueTest to the parent class
  */
 export function PolymorphicSwitch(
   initializerFunction: InitializerFunction,
@@ -92,10 +92,7 @@ export function PolymorphicSwitch(
   };
 }
 
-const POLYMORPHIC_SWITCH_MAP = new Map<
-  Object,
-  Set<PolymorphicClassOptions>
->();
+const POLYMORPHIC_SWITCH_MAP = new Map<Object, Set<PolymorphicClassOptions>>();
 
 type PolymorphicClassOptions = {
   classDefinition: Object;
@@ -106,6 +103,9 @@ type PolymorphicClassOptions = {
 
 export type PropertyValueTest = (propertyValue: unknown) => boolean;
 
+/**
+ * Registers a set of polymorphic class options with a parent class
+ */
 function registerPolymorphicSwitch<T>(
   parentClassConstructor: Object,
   classDefinition: Object,
@@ -118,7 +118,7 @@ function registerPolymorphicSwitch<T>(
   parentClassConstructor: Object,
   classDefinition: Object,
   propertyKey: string | symbol,
-  propertyValueTest: Exclude<T, Function>,
+  propertyValue: Exclude<T, Function>,
   initializer: InitializerFunction,
 ): void;
 
@@ -154,7 +154,7 @@ function registerPolymorphicSwitch<T>(
   }
 }
 
-/** Return a resolved class type by checking the value of a property key */
+/** Return a resolved class type by testing the value of a property key */
 function resolvePolymorphicSwitch(
   parentClassConstructor: Object,
   json: string | JSONValue | Object,

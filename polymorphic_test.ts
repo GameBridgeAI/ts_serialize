@@ -150,6 +150,30 @@ test({
 });
 
 test({
+  name: "polymorphic switch symbol property name",
+  fn() {
+    abstract class AbstractClass extends Serializable {}
+
+    const symbol = Symbol("some symbol name");
+    class TestClass extends AbstractClass {
+      @SerializeProperty("class")
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public [symbol]: string;
+
+      @SerializeProperty()
+      public someProperty?: string;
+    }
+
+    const testData = { "class": "TestClass", "someProperty": "new value" };
+    const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
+
+    assert(polyClass instanceof TestClass);
+    assertEquals((polyClass as TestClass).someProperty, "new value");
+    assertEquals((polyClass as TestClass)[symbol], "TestClass");
+  },
+});
+
+test({
   name: "polymorphic switch resolver works across multiple properties",
   fn() {
     abstract class AbstractClass extends Serializable {}
