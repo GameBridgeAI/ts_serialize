@@ -119,8 +119,10 @@ test({
     abstract class AbstractClass extends Serializable {}
 
     class TestClass extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass())
-      public static _class = "TestClass";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public _class = "TestClass";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
@@ -131,25 +133,6 @@ test({
 
     assert(polyClass instanceof TestClass);
     assertEquals(polyClass.someProperty, "new value");
-  },
-});
-
-test({
-  name: "PolymorphicSwitch errors without a value on the property",
-  fn() {
-    abstract class AbstractClass extends Serializable {}
-    try {
-      class TestClass extends AbstractClass {
-        @PolymorphicSwitch(() => new TestClass())
-        public static _class: string;
-      }
-      fail("PolymorphicSwitch did not error without a value");
-    } catch (e) {
-      assertEquals(
-        e.message,
-        ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
-      );
-    }
   },
 });
 
@@ -179,8 +162,9 @@ test({
     abstract class AbstractClass extends Serializable {}
 
     class TestClass extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass())
-      public static _class = "TestClass";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public _class = "TestClass";
     }
     class TestClass2 extends AbstractClass {
       @SerializeProperty()
@@ -198,55 +182,40 @@ test({
 });
 
 test({
-  name:
-    "should be able to deserialize a polymorphic class using a polymorphic switch resolver using an instance property",
-  fn() {
-    abstract class AbstractClass extends Serializable {}
-
-    class TestClass extends AbstractClass {
-      @SerializeProperty()
-      @PolymorphicSwitch(() => new TestClass(), "TestClass")
-      public _class = "TestClass";
-      @SerializeProperty()
-      public someProperty = "original value";
-    }
-
-    const testData = { _class: "TestClass", someProperty: "new value" };
-
-    const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
-
-    assert(polyClass instanceof TestClass);
-    assertEquals(polyClass.someProperty, "new value");
-  },
-});
-
-test({
   name: "polymorphic switch resolver should work with multiple classes",
   fn() {
     abstract class AbstractClass extends Serializable {}
 
     class TestClass1 extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass1())
-      public static _class = "TestClass1";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass1(), "TestClass1")
+      public _class = "TestClass1";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
 
     class TestClass2 extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass2())
-      public static _class = "TestClass2";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass2(), "TestClass2")
+      public _class = "TestClass2";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
     class TestClass3 extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass3())
-      public static _class = "TestClass3";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass3(), "TestClass3")
+      public _class = "TestClass3";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
     class TestClass4 extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass4())
-      public static _class = "TestClass4";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass4(), "TestClass4")
+      public _class = "TestClass4";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
@@ -274,8 +243,10 @@ test({
     abstract class AbstractClass extends Serializable {}
 
     class TestClass extends AbstractClass {
-      @PolymorphicSwitch(() => new TestClass())
-      public static _class = "TestClass";
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public _class = "TestClass";
+
       @SerializeProperty()
       public someProperty = "original value";
     }
@@ -288,5 +259,48 @@ test({
       return;
     }
     fail();
+  },
+});
+
+test({
+  name:
+    "polymorphic switch should apply transform keys on switched values based on the target class's serialization logic",
+  fn() {
+    abstract class AbstractClass extends Serializable {
+      public tsTransformKey(key: string): string {
+        return "__" + key;
+      }
+    }
+
+    class TestClass extends AbstractClass {
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public class = "TestClass";
+
+      @SerializeProperty()
+      public someProperty = "original value";
+
+      public tsTransformKey(key: string): string {
+        return "+" + key;
+      }
+    }
+
+    class TestClass2 extends AbstractClass {
+      @SerializeProperty("some_property")
+      @PolymorphicSwitch(() => new TestClass2(), "some value")
+      public someProperty = "some value";
+    }
+
+    const testData = { "+class": "TestClass", "+someProperty": "new value" };
+    const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
+
+    assert(polyClass instanceof TestClass);
+    assertEquals((polyClass as TestClass).someProperty, "new value");
+
+    const testData2 = { "some_property": "some value" };
+    const polyClass2 = polymorphicClassFromJSON(AbstractClass, testData2);
+
+    assert(polyClass2 instanceof TestClass2);
+    assertEquals((polyClass2 as TestClass2).someProperty, "some value");
   },
 });

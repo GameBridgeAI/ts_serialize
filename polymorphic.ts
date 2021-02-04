@@ -1,6 +1,10 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { JSONValue, Serializable } from "./serializable.ts";
+import {
+  JSONValue,
+  Serializable,
+  SERIALIZABLE_CLASS_MAP,
+} from "./serializable.ts";
 import {
   ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS,
   ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
@@ -38,7 +42,7 @@ export function PolymorphicResolver(
 }
 
 export type ResolverFunction = (
-  input: string | JSONValue | Object,
+  json: string | JSONValue | Object,
 ) => Serializable;
 
 /** Map of class constructors to functions that take in a JSON input and output a class instance that inherits Serializable */
@@ -57,39 +61,16 @@ function registerPolymorphicResolver(
  */
 export function PolymorphicSwitch(
   initializerFunction: InitializerFunction,
-  value?: unknown,
+  value: unknown,
 ): PropertyDecorator {
-  // Because `undefined` can be used as a value here, we need to check if the argument was even set
-  const hasValue = arguments.hasOwnProperty("1");
   return function _PolymorphicSwitch(
-    target: Function | Object, // The constructor of the class for static properties, and the class it's self for instance properties
+    target: Object, // The class it's self
     propertyKey: string | symbol,
   ) {
-    // Assert property should be static
-    if (
-      !Object.prototype.hasOwnProperty.call(target, propertyKey) &&
-      !hasValue
-    ) {
-      throw new Error(ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH);
-    }
-
-    let targetConstructor = target;
-
-    if (typeof target !== "function") {
-      targetConstructor = target.constructor;
-    }
-
-    const parentPrototype = Object.getPrototypeOf(targetConstructor);
-
-    // BUG: propertyKey can also be symbol, but typescript/deno throws an error due to https://github.com/microsoft/TypeScript/issues/1863
-    const propertyValue = (target as Record<typeof propertyKey, unknown>)[
-      (propertyKey as string)
-    ] || value;
-
     registerPolymorphicSwitch(
-      parentPrototype,
+      Object.getPrototypeOf(target.constructor), // Parent's prototype
       propertyKey,
-      propertyValue,
+      value,
       initializerFunction,
     );
   };
@@ -138,18 +119,18 @@ export function polymorphicClassFromJSON<T extends Serializable>(
 }
 
 /** Calls the polymorphic resolver or polymorphic switch resolver for the provided class prototype
- * and input, and returns the initialized child class. Throws an exception 
+ * and input, and returns the initialized child class. Throws an exception if no class can be resolved
  */
 function resolvePolymorphicClass<T extends Serializable>(
   classPrototype: Object & { prototype: T },
-  input: string | JSONValue | Object,
+  json: string | JSONValue | Object,
 ): T {
   const classResolver = POLYMORPHIC_RESOLVER_MAP.get(classPrototype);
   if (classResolver) {
-    return classResolver(input) as T;
+    return classResolver(json) as T;
   }
 
-  const resolvedClass = resolveSwitchMap(classPrototype, input);
+  const resolvedClass = resolveSwitchMap(classPrototype, json);
 
   if (resolvedClass) {
     return resolvedClass as T;
@@ -158,10 +139,10 @@ function resolvePolymorphicClass<T extends Serializable>(
   throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
 }
 
-/** Return a resolved class type by checking types on the input. Currently the input is simply `JSON.parse` */
+/** Return a resolved class type by checking the value of a property key */
 function resolveSwitchMap(
   classPrototype: unknown,
-  input: string | JSONValue | Object,
+  json: string | JSONValue | Object,
 ): Serializable | null {
   const classMap = POLYMORPHIC_SWITCH_MAP.get(classPrototype);
 
@@ -169,15 +150,30 @@ function resolveSwitchMap(
     throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
   }
 
-  const inputObject = typeof input === "string" ? JSON.parse(input) : input;
+  const _json = typeof json === "string" ? JSON.parse(json) : json;
 
   for (const [propertyKey, valueMap] of classMap.entries()) {
-    const value = inputObject[propertyKey];
-    const initializer = valueMap.get(value);
-    if (initializer) {
-      return initializer();
+    for (const [propertyValue, initializer] of valueMap.entries()) {
+      // Get the serialized key relative to the property key for the initialized class, and compare that to the property value
+      const initialized = initializer();
+
+      const classMap = SERIALIZABLE_CLASS_MAP.get(
+        Object.getPrototypeOf(initialized),
+      );
+
+      if (!classMap) {
+        continue;
+      }
+
+      const serializedKey = classMap.getByPropertyKey(propertyKey)
+        ?.serializedKey;
+
+      if (serializedKey && propertyValue === _json[serializedKey]) {
+        return initialized;
+      }
     }
   }
 
+  // Return null if no child could be matched to this value
   return null;
 }
