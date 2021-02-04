@@ -5,15 +5,18 @@ import {
   Serializable,
   SERIALIZABLE_CLASS_MAP,
 } from "./serializable.ts";
-import {
-  ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS,
-  ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
-} from "./error_messages.ts";
+import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";
+import { fromJSONDefault } from "./strategy/from_json/default.ts";
+
+/**
+ * Function type to ensure that initializers take no arguments and return a valid serializable
+ */
+export type InitializerFunction = () => Serializable;
 
 /** Polymorphic class deserializer
  * 
  * There are currently 2 ways of doing polymorphic deserialization:
- * 1. Manually using @PolymorphicResolver on a static method on the parent class
+ * 1. Manually using \@PolymorphicResolver on a static method on the parent class
  * 
  * This works by keeping a map of target 'parent' classes to resolver functions.
  * These are set when a static method is annotated with @PolymorphicResolver.
@@ -21,14 +24,14 @@ import {
  * input the input is passed to whatever the corresponding resolver function,
  * which will make a determination and returns an instance of a 'child' class
  * 
- * 2. Implicitly using @PolymorphicSwitch on a static or instance property on a child class.
+ * 2. Implicitly using \@PolymorphicSwitch instance property on a child class.
  * 
  * This works by getting the decorated class' parent prototype and creating a map
  * for a specific class, property key, and value combination to the provided 
  * initializer function
  */
 
-/** @PolymorphicResolver method decorator */
+/** \@PolymorphicResolver method decorator */
 export function PolymorphicResolver(
   target: unknown,
   propertyKey: string | symbol,
@@ -56,56 +59,151 @@ function registerPolymorphicResolver(
   POLYMORPHIC_RESOLVER_MAP.set(classPrototype, resolver);
 }
 
-/** @PolymorphicSwitch property decorator
- * Note: This will only create de-serializer logic for the target class' direct parent class
+/**
+ * \@PolymorphicSwitch property decorator.
+ * 
+ * Maps the provided value or 
  */
 export function PolymorphicSwitch(
   initializerFunction: InitializerFunction,
-  value: unknown,
+  propertyValueTest: PropertyValueTest,
+): PropertyDecorator;
+
+export function PolymorphicSwitch<T>(
+  initializerFunction: InitializerFunction,
+  value: Exclude<T, Function>,
+): PropertyDecorator;
+
+export function PolymorphicSwitch(
+  initializerFunction: InitializerFunction,
+  valueOrTest: PropertyValueTest | unknown,
 ): PropertyDecorator {
   return function _PolymorphicSwitch(
     target: Object, // The class it's self
     propertyKey: string | symbol,
   ) {
     registerPolymorphicSwitch(
-      Object.getPrototypeOf(target.constructor), // Parent's prototype
+      Object.getPrototypeOf(target).constructor, // Parent's prototype
+      target,
       propertyKey,
-      value,
+      valueOrTest,
       initializerFunction,
     );
   };
 }
 
-export type InitializerFunction = () => Serializable;
-/** Parent constructor -> property key -> value -> initializer */
 const POLYMORPHIC_SWITCH_MAP = new Map<
-  unknown,
-  Map<string | symbol, Map<unknown, InitializerFunction>>
+  Object,
+  Set<PolymorphicClassOptions>
 >();
 
-/** Add an initializer function or a specific combination of parent prototype, property key, and value */
-function registerPolymorphicSwitch(
-  parentPrototype: unknown,
+type PolymorphicClassOptions = {
+  classDefinition: Object;
+  propertyKey: string | symbol;
+  propertyValueTest: PropertyValueTest;
+  initializer: InitializerFunction;
+};
+
+export type PropertyValueTest = (propertyValue: unknown) => boolean;
+
+function registerPolymorphicSwitch<T>(
+  parentClassConstructor: Object,
+  classDefinition: Object,
   propertyKey: string | symbol,
-  propertyValue: unknown,
-  initializerFunction: InitializerFunction,
+  propertyValueTest: PropertyValueTest,
+  initializer: InitializerFunction,
+): void;
+
+function registerPolymorphicSwitch<T>(
+  parentClassConstructor: Object,
+  classDefinition: Object,
+  propertyKey: string | symbol,
+  propertyValueTest: Exclude<T, Function>,
+  initializer: InitializerFunction,
+): void;
+
+function registerPolymorphicSwitch<T>(
+  parentClassConstructor: Object,
+  classDefinition: Object,
+  propertyKey: string | symbol,
+  valueOrTest: PropertyValueTest | unknown,
+  initializer: InitializerFunction,
 ): void {
-  // Get map for parent prototype, or initialize if it doesn't exist
-  let classMap = POLYMORPHIC_SWITCH_MAP.get(parentPrototype);
-  if (!classMap) {
-    POLYMORPHIC_SWITCH_MAP.set(parentPrototype, new Map());
-    classMap = POLYMORPHIC_SWITCH_MAP.get(parentPrototype);
+  let classPropertiesSet = POLYMORPHIC_SWITCH_MAP.get(parentClassConstructor);
+
+  if (!classPropertiesSet) {
+    classPropertiesSet = new Set<PolymorphicClassOptions>();
+    POLYMORPHIC_SWITCH_MAP.set(parentClassConstructor, classPropertiesSet);
   }
 
-  // Get map for property key, or initialize if it doesn't exist
-  let propertyKeyMap = classMap?.get(propertyKey);
-  if (!propertyKeyMap) {
-    classMap?.set(propertyKey, new Map());
-    propertyKeyMap = classMap?.get(propertyKey);
+  if (valueOrTest instanceof Function) {
+    classPropertiesSet.add({
+      classDefinition,
+      propertyKey,
+      propertyValueTest: valueOrTest as PropertyValueTest,
+      initializer,
+    });
+  } else {
+    // If a value was provided set the property value test to be a simple equality check
+    classPropertiesSet.add({
+      classDefinition,
+      propertyKey,
+      propertyValueTest: (propertyValue) => propertyValue === valueOrTest,
+      initializer,
+    });
+  }
+}
+
+/** Return a resolved class type by checking the value of a property key */
+function resolvePolymorphicSwitch(
+  parentClassConstructor: Object,
+  json: string | JSONValue | Object,
+): Serializable | null {
+  const classOptionsSet = POLYMORPHIC_SWITCH_MAP.get(
+    parentClassConstructor,
+  );
+
+  if (!classOptionsSet) {
+    return null;
   }
 
-  // Add value to initializer mapping
-  propertyKeyMap?.set(propertyValue, initializerFunction);
+  const _json = typeof json === "string" ? JSON.parse(json) : json;
+
+  for (
+    const {
+      classDefinition,
+      propertyKey,
+      propertyValueTest,
+      initializer,
+    } of classOptionsSet.values()
+  ) {
+    const classMap = SERIALIZABLE_CLASS_MAP.get(
+      classDefinition,
+    );
+
+    if (!classMap) {
+      continue;
+    }
+
+    const serializePropertyOptions = classMap.getByPropertyKey(propertyKey);
+
+    if (!serializePropertyOptions) {
+      continue;
+    }
+
+    const fromJSONStrategy = serializePropertyOptions.fromJSONStrategy ||
+      fromJSONDefault;
+    const deserializedValue = fromJSONStrategy(
+      _json[serializePropertyOptions.serializedKey],
+    );
+
+    if (propertyValueTest(deserializedValue)) {
+      return initializer();
+    }
+  }
+
+  // Return null if no child could be matched to this value
+  return null;
 }
 
 /** Uses either the polymorphic resolver or the polymorphic switch resolver to determine the
@@ -130,50 +228,11 @@ function resolvePolymorphicClass<T extends Serializable>(
     return classResolver(json) as T;
   }
 
-  const resolvedClass = resolveSwitchMap(classPrototype, json);
+  const resolvedClass = resolvePolymorphicSwitch(classPrototype, json);
 
   if (resolvedClass) {
     return resolvedClass as T;
   }
 
   throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
-}
-
-/** Return a resolved class type by checking the value of a property key */
-function resolveSwitchMap(
-  classPrototype: unknown,
-  json: string | JSONValue | Object,
-): Serializable | null {
-  const classMap = POLYMORPHIC_SWITCH_MAP.get(classPrototype);
-
-  if (!classMap) {
-    throw new Error(ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
-  }
-
-  const _json = typeof json === "string" ? JSON.parse(json) : json;
-
-  for (const [propertyKey, valueMap] of classMap.entries()) {
-    for (const [propertyValue, initializer] of valueMap.entries()) {
-      // Get the serialized key relative to the property key for the initialized class, and compare that to the property value
-      const initialized = initializer();
-
-      const classMap = SERIALIZABLE_CLASS_MAP.get(
-        Object.getPrototypeOf(initialized),
-      );
-
-      if (!classMap) {
-        continue;
-      }
-
-      const serializedKey = classMap.getByPropertyKey(propertyKey)
-        ?.serializedKey;
-
-      if (serializedKey && propertyValue === _json[serializedKey]) {
-        return initialized;
-      }
-    }
-  }
-
-  // Return null if no child could be matched to this value
-  return null;
 }

@@ -15,10 +15,6 @@ test({
       typeof mod.ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS,
       "string",
     );
-    assertEquals(
-      typeof mod.ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH,
-      "string",
-    );
     assertEquals(typeof mod.ERROR_INVALID_DATE, "string");
     assertEquals(typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE, "string");
     assertEquals(
@@ -26,6 +22,6 @@ test({
       "string",
     );
 
-    assertEquals(Object.keys(mod).length, 9);
+    assertEquals(Object.keys(mod).length, 8);
   },
 });
