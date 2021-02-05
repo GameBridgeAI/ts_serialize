@@ -23,26 +23,22 @@ export type JSONValue =
   | JSONObject
   | JSONArray;
 
-/** a function that will be called against every property key transforming the key
- * with the provided function 
- */
+/** called against every property key transforming the key with the provided function */
 export declare interface TransformKey {
   tsTransformKey(key: string): string;
 }
 
-/** a function that returns the object with transformations as a string */
+/** returns the object as a string with transformations */
 export declare interface ToJSON {
   toJSON(): string;
 }
 
-/** a function that creates a new javascript object with transformations 
- * and returns the object
- */
+/** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
   fromJSON(json: string | JSONValue | Object): this;
 }
 
-/** a function that returns the javascript object as a `JSONObject` */
+/** returns the javascript object as a `JSONObject` with transformations */
 export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
@@ -83,10 +79,11 @@ function getOrInitializeDefaultSerializerLogicForParents(
 /** @class Serializable
  * @abstract
  * @classdesc provides a constructed class for serializing data
+ * @example
  *     class Example extends Serializable {}
  *     const example = new Example()
  *     example.toJSON()
- *     example.fromJSON()
+ *     example.fromJSON(json)
  *     example.tsSerialize()
  */
 export abstract class Serializable {
@@ -94,25 +91,15 @@ export abstract class Serializable {
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
-  /** key transform functionality
-   * `tsTransformKey` can be implemented on a class to provide
-   * a strategy for converting keys. The transformation will be
-   * inherited by children until redescribed.
-   */
   public tsTransformKey?(key: string): string {
     return key;
   }
-  /** to JSON String */
   public toJSON(): string {
     return toJSON(this);
   }
-  /** convert an object or JSON string to Javascript object */
   public fromJSON(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
-  /** convert a Javascript object or JSON string to a plain old javascript object
-   * for HTTPClients that infer the content-type
-   */
   public tsSerialize(): JSONObject {
     return toPojo(this);
   }
