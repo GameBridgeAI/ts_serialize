@@ -37,9 +37,7 @@ export class SerializePropertyOptions {
   }
 }
 
-/**
- * Function to transform a property name into a serialized key programmatically
- */
+/** Function to transform a property name into a serialized key programmatically */
 export type ToSerializedKeyStrategy = (propertyName: string) => string;
 
 /** string/symbol property name or options for (de)serializing values */
@@ -56,6 +54,7 @@ export type SerializePropertyArgument =
       | ToJSONStrategyArgument;
   };
 
+/** converted interface for `SerializePropertyArgument` */
 interface SerializePropertyArgumentObject {
   serializedKey: string;
   fromJSONStrategy?:
@@ -66,7 +65,32 @@ interface SerializePropertyArgumentObject {
     | ToJSONStrategyArgument;
 }
 
-/** Property wrapper that adds serializable options to the class map */
+/** Property wrapper that adds `SerializeProperty` options to the class map
+ * 
+ *       class ExampleOne extends Serializable {
+ *         @SerializeProperty()
+ *         public testName = "toJSON";
+ *       }
+ * 
+ *       class ExampleTwo extends Serializable {
+ *         @SerializeProperty("test_name")
+ *         public testName = "toJSON";
+ *       }
+ * 
+ *       class ExampleTwo extends Serializable {
+ *         @SerializeProperty((key) => string)
+ *         public testName = "toJSON";
+ *       }
+ * 
+ *       class ExampleThree extends Serializable {
+ *         @SerializeProperty({
+ *           serializeKey: "test_name",
+ *           fromJSONStrategy: (jsonValue) => any
+ *           toJSONStrategy: (any) => jsonValue
+ *         })
+ *         public testName = "toJSON";
+ *       }  
+ */
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {

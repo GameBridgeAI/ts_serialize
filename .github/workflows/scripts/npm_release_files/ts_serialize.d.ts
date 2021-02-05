@@ -51,6 +51,7 @@ declare module "@gamebridgeai/ts_serialize" {
 
   type NewSerializable<T> = T & (new () => Serializable);
   type FunctionSerializable = () => Serializable;
+
   /** for strategies */
   export type SerializableConstructor<T> =
     | NewSerializable<T>
