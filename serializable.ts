@@ -76,9 +76,8 @@ function getOrInitializeDefaultSerializerLogicForParents(
   return SERIALIZABLE_CLASS_MAP.get(targetPrototype);
 }
 
-/** @class Serializable
- * @abstract
- * @classdesc provides a constructed class for serializing data
+/** Serializable
+ *  provides a constructed class for serializing data
  *  to be used with the decorator `SerializeProperty`
  * 
  *       class Example extends Serializable {

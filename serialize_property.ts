@@ -65,7 +65,7 @@ interface SerializePropertyArgumentObject {
     | ToJSONStrategyArgument;
 }
 
-/** Property wrapper that adds serializable options to the class map
+/** Property wrapper that adds `SerializeProperty` options to the class map
  * 
  *       class ExampleOne extends Serializable {
  *         @SerializeProperty()
