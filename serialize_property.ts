@@ -66,30 +66,30 @@ interface SerializePropertyArgumentObject {
 }
 
 /** Property wrapper that adds serializable options to the class map
- * @example
- *      class ExampleOne extends Serializable {
- *        @SerializeProperty()
- *        public testName = "toJSON";
- *      }
  * 
- *      class ExampleTwo extends Serializable {
- *        @SerializeProperty("test_name")
- *        public testName = "toJSON";
- *      }
+ *       class ExampleOne extends Serializable {
+ *         @SerializeProperty()
+ *         public testName = "toJSON";
+ *       }
  * 
- *      class ExampleTwo extends Serializable {
- *        @SerializeProperty((key) => string)
- *        public testName = "toJSON";
- *      }
+ *       class ExampleTwo extends Serializable {
+ *         @SerializeProperty("test_name")
+ *         public testName = "toJSON";
+ *       }
  * 
- *      class ExampleThree extends Serializable {
- *        @SerializeProperty({
- *          serializeKey: "test_name",
- *          fromJSONStrategy: (jsonValue) => any
- *          toJSONStrategy: (any) => jsonValue
- *        })
- *        public testName = "toJSON";
- *      }  
+ *       class ExampleTwo extends Serializable {
+ *         @SerializeProperty((key) => string)
+ *         public testName = "toJSON";
+ *       }
+ * 
+ *       class ExampleThree extends Serializable {
+ *         @SerializeProperty({
+ *           serializeKey: "test_name",
+ *           fromJSONStrategy: (jsonValue) => any
+ *           toJSONStrategy: (any) => jsonValue
+ *         })
+ *         public testName = "toJSON";
+ *       }  
  */
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,

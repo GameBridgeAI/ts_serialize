@@ -79,12 +79,16 @@ function getOrInitializeDefaultSerializerLogicForParents(
 /** @class Serializable
  * @abstract
  * @classdesc provides a constructed class for serializing data
- * @example
- *     class Example extends Serializable {}
- *     const example = new Example()
- *     example.toJSON()
- *     example.fromJSON(json)
- *     example.tsSerialize()
+ *  to be used with the decorator `SerializeProperty`
+ * 
+ *       class Example extends Serializable {
+ *         @SerializeProperty()
+ *         public testName = "toJSON";
+ *       }
+ *       const example = new Example()
+ *       example.toJSON()
+ *       example.fromJSON(json)
+ *       example.tsSerialize()
  */
 export abstract class Serializable {
   /** allow empty class serialization */
