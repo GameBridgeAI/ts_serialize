@@ -8,6 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.2] - 2021-02-06
+
+### Added
+
+- config file for issue template screen adding useful links
+
+### Changed
+
+- docs for requesting a new feature to use our discussions tab
+
 ## [v1.2.1] - 2021-01-29
 
 ### Added
