@@ -12,7 +12,7 @@ and this project adheres to
 
 ## Added
 
-- resolveJsonModule for node example
+- resolveJsonModule and esModuleInterop for node example
 
 ## [v1.2.2] - 2021-02-06
 
