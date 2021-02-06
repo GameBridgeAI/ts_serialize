@@ -8,6 +8,12 @@ and this project adheres to
 
 ## [Unreleased]
 
+## [v1.2.3] - 2021-02-06
+
+## Added
+
+- resolveJsonModule for node example
+
 ## [v1.2.2] - 2021-02-06
 
 ### Added
