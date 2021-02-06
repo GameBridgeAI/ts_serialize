@@ -8,8 +8,8 @@ point out on the issue that you are doing the work.
 These instructions will get you a copy of the project up and running on your
 local machine for development and testing purposes. `ts_serialize` is built with
 `deno`. Follow the
-[deno install instructions](https://github.com/denoland/deno_install) to
-install it on your machine.
+[deno install instructions](https://github.com/denoland/deno_install) to install
+it on your machine.
 
 ### Installing
 
