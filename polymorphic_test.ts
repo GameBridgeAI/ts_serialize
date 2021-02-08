@@ -41,9 +41,9 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        input: string | JSONValue | Object,
+        json: string | JSONValue | Object,
       ): Serializable {
-        const inputObject = new ResolverHelperClass().fromJSON(input);
+        const inputObject = new ResolverHelperClass().fromJSON(json);
 
         switch (inputObject._class) {
           case "TestClass":
@@ -82,9 +82,9 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        input: string | JSONValue | Object,
+        json: string | JSONValue | Object,
       ): Serializable {
-        const inputObject = new ResolverHelperClass().fromJSON(input);
+        const inputObject = new ResolverHelperClass().fromJSON(json);
 
         switch (inputObject._class) {
           case "TestClass1":

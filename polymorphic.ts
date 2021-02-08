@@ -211,9 +211,9 @@ function resolvePolymorphicSwitch(
  */
 export function polymorphicClassFromJSON<T extends Serializable>(
   classPrototype: Object & { prototype: T },
-  input: string | JSONValue | Object,
+  json: string | JSONValue | Object,
 ): T {
-  return resolvePolymorphicClass(classPrototype, input).fromJSON(input);
+  return resolvePolymorphicClass(classPrototype, json).fromJSON(json);
 }
 
 /** Calls the polymorphic resolver or polymorphic switch resolver for the provided class prototype
