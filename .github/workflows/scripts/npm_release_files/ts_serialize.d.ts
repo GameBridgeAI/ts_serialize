@@ -125,22 +125,34 @@ declare module "@gamebridgeai/ts_serialize" {
 
   export type InitializerFunction = () => Serializable;
 
+  export type PropertyValueTest = (propertyValue: unknown) => boolean;
+
   export type ResolverFunction = (
-    input: string | JSONValue | Object,
+    json: string | JSONValue | Object,
   ) => Serializable;
 
   export function polymorphicClassFromJSON<T extends Serializable>(
     classPrototype: Object & { prototype: T },
-    input: string | JSONValue | Object,
+    json: string | JSONValue | Object,
   ): T;
-
+  /** Adds a class and a resolver function to the resolver map */
   export function PolymorphicResolver(
     target: unknown,
     propertyKey: string | symbol,
   ): void;
 
+  /**
+   * \@PolymorphicSwitch property decorator.
+   * 
+   * Maps the provided initializer function and value or propertyValueTest to the parent class
+   */
   export function PolymorphicSwitch(
     initializerFunction: InitializerFunction,
-    value?: unknown,
+    propertyValueTest: PropertyValueTest,
+  ): PropertyDecorator;
+
+  export function PolymorphicSwitch<T>(
+    initializerFunction: InitializerFunction,
+    value: Exclude<T, Function>,
   ): PropertyDecorator;
 }
