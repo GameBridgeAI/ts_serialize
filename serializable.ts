@@ -6,15 +6,15 @@ import { fromJSONDefault } from "./strategy/from_json/default.ts";
 import { toJSONRecursive } from "./strategy/to_json/recursive.ts";
 import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
 
-/** A JSON object where each property value is a simple JSON value. */
+/** A `JSONObject` where each `string` property value is a `JSONValue`. */
 export type JSONObject = {
   [key: string]: JSONValue;
 };
 
-/** A JSON array where each value is a simple JSON value. */
+/** A `JSONArray` where each value is a `JSONValue`. */
 export interface JSONArray extends Array<JSONValue> {}
 
-/** A property value in a JSON object. */
+/** A JSONValue */
 export type JSONValue =
   | string
   | number
@@ -23,23 +23,22 @@ export type JSONValue =
   | JSONObject
   | JSONArray;
 
-/** to be implemented by external authors on their models  */
+/** called against every property key transforming the key with the provided function */
 export declare interface TransformKey {
-  /** a function that will be called against
-   * every property key transforming the key
-   * with the provided function
-   */
   tsTransformKey(key: string): string;
 }
 
+/** returns the object as a string with transformations */
 export declare interface ToJSON {
-  toJson(): string;
+  toJSON(): string;
 }
 
+/** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
   fromJSON(json: string | JSONValue | Object): this;
 }
 
+/** returns the javascript object as a `JSONObject` with transformations */
 export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
@@ -77,25 +76,33 @@ function getOrInitializeDefaultSerializerLogicForParents(
   return SERIALIZABLE_CLASS_MAP.get(targetPrototype);
 }
 
-/** Adds methods for serialization */
+/** Serializable
+ *  provides a constructed class for serializing data
+ *  to be used with the decorator `SerializeProperty`
+ * 
+ *       class Example extends Serializable {
+ *         @SerializeProperty()
+ *         public testName = "toJSON";
+ *       }
+ *       const example = new Example()
+ *       example.toJSON()
+ *       example.fromJSON(json)
+ *       example.tsSerialize()
+ */
 export abstract class Serializable {
   /** allow empty class serialization */
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
-  /** key transform functionality */
   public tsTransformKey?(key: string): string {
     return key;
   }
-  /** to JSON String */
   public toJSON(): string {
     return toJSON(this);
   }
-  /** Deserialize to Serializable */
   public fromJSON(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
-  /** to JSONObject */
   public tsSerialize(): JSONObject {
     return toPojo(this);
   }

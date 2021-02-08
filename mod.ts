@@ -1,6 +1,6 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
-/** This module is browser compatible. */
+// This module is browser compatible.
 
 /** property decorator */
 export { SerializeProperty } from "./serialize_property.ts";

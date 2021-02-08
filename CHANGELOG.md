@@ -23,6 +23,22 @@ and this project adheres to
 - **breaking** `@PolymorphicSwitch` no longer supports static properties
 - Removed `ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH` error message
 
+## [v1.2.3] - 2021-02-06
+
+## Added
+
+- resolveJsonModule and esModuleInterop for node example
+
+## [v1.2.2] - 2021-02-06
+
+### Added
+
+- config file for issue template screen adding useful links
+
+### Changed
+
+- docs for requesting a new feature to use our discussions tab
+
 ## [v1.2.1] - 2021-01-29
 
 ### Added

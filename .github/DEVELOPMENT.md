@@ -1,16 +1,15 @@
 # Setting up an environment
 
 If you are going to fix an issue or add a feature request please make sure to
-point out on the issue that you are doing the work. Please use an issue to make
-an request for comments (RFC) before adding a feature without a discussion.
+point out on the issue that you are doing the work.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your
 local machine for development and testing purposes. `ts_serialize` is built with
 `deno`. Follow the
-[deno install instructions](https://github.com/denoland/deno_install) to ge it
-installed on your machine.
+[deno install instructions](https://github.com/denoland/deno_install) to install
+it on your machine.
 
 ### Installing
 
