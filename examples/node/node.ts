@@ -194,15 +194,17 @@ assert(polyClass.someProperty === "new value");
 abstract class AbstractClass2 extends Serializable {}
 
 class TestClass1 extends AbstractClass2 {
-  @PolymorphicSwitch(() => new TestClass1())
-  public static _class = "TestClass1";
+  @SerializeProperty()
+  @PolymorphicSwitch(() => new TestClass1(), "TestClass1")
+  public _class = "TestClass1";
   @SerializeProperty()
   public someProperty = "original value";
 }
 
 class TestClass2 extends AbstractClass2 {
-  @PolymorphicSwitch(() => new TestClass2())
-  public static _class = "TestClass2";
+  @SerializeProperty()
+  @PolymorphicSwitch(() => new TestClass2(), "TestClass2")
+  public _class = "TestClass2";
   @SerializeProperty()
   public someProperty = "original value";
 }

@@ -150,6 +150,53 @@ test({
 });
 
 test({
+  name: "polymorphic switch should ignore classes that aren't serializable",
+  fn() {
+    abstract class AbstractClass extends Serializable {}
+
+    class TestClass extends AbstractClass {
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public class = "TestClass";
+
+      public someProperty = "original value";
+    }
+
+    const testData = { "class": "TestClass", "someProperty": "new value" };
+    try {
+      polymorphicClassFromJSON(AbstractClass, testData);
+      fail("Should not be able to resolve child of AbstractClass");
+    } catch (e) {
+      assert(e instanceof Error);
+      assertEquals(e.message, "Failed to resolve polymorphic class");
+    }
+  },
+});
+
+test({
+  name:
+    "polymorphic switch should not be able to serialize properties that aren't serializable",
+  fn() {
+    abstract class AbstractClass extends Serializable {}
+
+    class TestClass extends AbstractClass {
+      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      public class = "TestClass";
+      @SerializeProperty()
+      public someProperty = "original value";
+    }
+
+    const testData = { "class": "TestClass", "someProperty": "new value" };
+    try {
+      polymorphicClassFromJSON(AbstractClass, testData);
+      fail("Should not be able to resolve child of AbstractClass");
+    } catch (e) {
+      assert(e instanceof Error);
+      assertEquals(e.message, "Failed to resolve polymorphic class");
+    }
+  },
+});
+
+test({
   name: "polymorphic switch symbol property name",
   fn() {
     abstract class AbstractClass extends Serializable {}
