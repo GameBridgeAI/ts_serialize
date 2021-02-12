@@ -8,10 +8,6 @@ and this project adheres to
 
 ## [Unreleased]
 
-### Changed
-
-- change the CI target for ubuntu from `ubuntu-latest` to `ubuntu-20.04`
-
 ## [v1.2.3] - 2021-02-06
 
 ## Added
