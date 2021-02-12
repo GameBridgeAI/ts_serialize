@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         deno: ["v1.x"]
-        os: [macOS-latest, windows-latest, ubuntu-latest]
+        os: [macOS-latest, windows-latest, ubuntu-20.04]
 
     steps:
       - name: Setup repo
@@ -23,7 +23,7 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
-      
+
       - name: Deno Format Check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
@@ -39,7 +39,7 @@ jobs:
 
   build:
     name: Release
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     needs: test
 
     strategy:
