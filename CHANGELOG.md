@@ -10,7 +10,6 @@ and this project adheres to
 
 ### Changed
 
-- change the CI target for ubuntu from `ubuntu-latest` to `ubuntu-20.04`
 - **breaking** Refactor `@PolymorphicSwitch` to use de-serialization logic from
   `@SerializeProperties`
 
