@@ -32,7 +32,11 @@ export {
   PolymorphicSwitch,
 } from "./polymorphic.ts";
 /** types */
-export type { InitializerFunction, ResolverFunction } from "./polymorphic.ts";
+export type {
+  InitializerFunction,
+  PropertyValueTest,
+  ResolverFunction,
+} from "./polymorphic.ts";
 
 export { getNewSerializable } from "./strategy/utils.ts";
 /** types */

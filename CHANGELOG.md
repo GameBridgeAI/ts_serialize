@@ -8,6 +8,21 @@ and this project adheres to
 
 ## [Unreleased]
 
+### Changed
+
+- **breaking** Refactor `@PolymorphicSwitch` to use de-serialization logic from
+  `@SerializeProperties`
+
+### Added
+
+- `@PolymorphicSwitch` now supports custom test functions when checking the
+  property value
+
+### Removed
+
+- **breaking** `@PolymorphicSwitch` no longer supports static properties
+- Removed `ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH` error message
+
 ## [v1.2.3] - 2021-02-06
 
 ## Added

@@ -12,9 +12,6 @@ export const ERROR_DUPLICATE_SERIALIZE_KEY =
 export const ERROR_SYMBOL_PROPERTY_NAME =
   "The key name cannot be inferred from a symbol. A value for serializedName must be provided";
 
-export const ERROR_MISSING_STATIC_OR_VALUE_ON_POLYMORPHIC_SWITCH =
-  "Missing static property value or value in PolymorphicSwitch";
-
 export const ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS =
   "Failed to resolve polymorphic class";
 
