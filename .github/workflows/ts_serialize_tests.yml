@@ -42,11 +42,11 @@ jobs:
       - name: Examine test coverage
         run: deno coverage --unstable test_coverage_profile
 
-      - name: locv test coverage
+      - name: lcov test coverage
         run: deno coverage --unstable test_coverage_profile --lcov > test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
-      - name: generate test coverage html from locv
+      - name: generate test coverage html from lcov
         run: genhtml -o test_coverage_profile/html test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
