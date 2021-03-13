@@ -47,7 +47,7 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: test coverage test
-        uses: vebr/jest-lcov-reporter@v0.2.0
+        uses: romeovs/lcov-reporter-action@v0.2.16
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           lcov-file: test_coverage_profile.lcov
