@@ -9,6 +9,7 @@ and this project adheres to
 ## [unreleased]
 
 ## Added
+
 - ci with test coverage
 - ci fails to build if we do not have 100% test coverage
 - GitHub actions reports on the PR with coverage reports
