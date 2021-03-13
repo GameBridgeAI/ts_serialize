@@ -5,4 +5,5 @@ examples/node/*
 !examples/node/tsconfig.json
 !examples/node/package.json
 !examples/node/README.md
+coverage_profile
 .DS_Store

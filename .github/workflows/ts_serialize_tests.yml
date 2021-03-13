@@ -36,8 +36,11 @@ jobs:
       - name: Cache Dependencies
         run: deno cache test_deps.ts
 
-      - name: Run Deno Tests
-        run: deno test
+      - name: Run Deno Tests with coverage
+        run: deno test --coverage=coverage_profile --unstable
+
+      - name: Examine coverage
+        run: deno coverage --unstable coverage_profile
 
       - name: Run package.json Generation Tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
