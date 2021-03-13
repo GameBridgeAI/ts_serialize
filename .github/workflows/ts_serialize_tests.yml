@@ -43,10 +43,10 @@ jobs:
         run: deno coverage --unstable test_coverage_profile
 
       - name: locv test coverage
-        run: deno coverage --unstable test_coverage_profile --lcov > test_coverage_profile/locv/test_coverage_profile.lcov
+        run: deno coverage --unstable test_coverage_profile --lcov > test_coverage_profile.lcov
 
       - name: generate test coverage html from locv
-        run: genhtml -o test_coverage_profile/html test_coverage_profile/locv/test_coverage_profile.lcov
+        run: genhtml -o test_coverage_profile/html test_coverage_profile.lcov
 
       - name: Run package.json Generation Tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
