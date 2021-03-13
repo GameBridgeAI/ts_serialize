@@ -47,8 +47,9 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
 
       - name: install lcov and generate test coverage html
-        run: apt-get update && apt-get install lcov
-        run: genhtml -o test_coverage_profile/html test_coverage_profile.lcov
+        steps:
+         - run: apt-get update && apt-get install lcov
+         - run: genhtml -o test_coverage_profile/html test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
       - name: Run package.json Generation Tests
