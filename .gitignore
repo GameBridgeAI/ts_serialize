@@ -5,6 +5,6 @@ examples/node/*
 !examples/node/tsconfig.json
 !examples/node/package.json
 !examples/node/README.md
-test_coverage_profile
-test_coverage_profile.lcov
+coverage
+coverage.lcov
 .DS_Store

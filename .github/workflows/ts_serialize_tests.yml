@@ -37,20 +37,22 @@ jobs:
         run: deno cache test_deps.ts
 
       - name: Run Deno Tests with coverage
-        run: deno test --coverage=test_coverage_profile --unstable
+        run: deno test --coverage=coverage --unstable
 
       - name: Examine test coverage
-        run: deno coverage --unstable test_coverage_profile
+        run: deno coverage --unstable coverage
 
       - name: lcov test coverage
-        run: deno coverage --unstable test_coverage_profile --lcov > test_coverage_profile.lcov
+        run: deno coverage --unstable coverage --lcov > coverage.lcov
         if: matrix.os == 'ubuntu-latest'
 
-      - name: test coverage test
-        uses: romeovs/lcov-reporter-action@v0.2.16
+      - name: Report code coverage
+        uses: zgosalvez/github-actions-report-lcov@v1
         with:
+          coverage-files: coverage/*.json
+          minimum-coverage: 100
+          artifact-name: code-coverage-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: ./test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
       - name: Run package.json Generation Tests
