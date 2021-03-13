@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unreleased]
+
+## Added
+- ci with test coverage
+- ci fails to build if we do not have 100% test coverage
+- GitHub actions reports on the PR with coverage reports
+
 ## [v1.3.0] - 2021-02-25
 
 ### Changed
