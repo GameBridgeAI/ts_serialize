@@ -32,7 +32,7 @@ jobs:
         run: deno cache test_deps.ts
 
       - name: Run Deno Tests with coverage
-        run: deno test --coverage=coverage_profile --unstable
+        steps: deno test --coverage=coverage_profile --unstable
 
       - name: Examine coverage
         run: deno coverage --unstable coverage_profile
