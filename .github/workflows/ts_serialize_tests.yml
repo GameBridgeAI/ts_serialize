@@ -46,8 +46,11 @@ jobs:
         run: deno coverage --unstable test_coverage_profile --lcov > test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
-      - name: install lcov and generate test coverage html
-        run: apt-get update && apt-get install lcov && genhtml -o test_coverage_profile/html test_coverage_profile.lcov
+      - name: test coverage test
+        uses: vebr/jest-lcov-reporter@v0.2.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
       - name: Run package.json Generation Tests
