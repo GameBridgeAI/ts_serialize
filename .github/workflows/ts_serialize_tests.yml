@@ -39,9 +39,6 @@ jobs:
       - name: Run Deno Tests with coverage
         run: deno test --coverage=coverage --unstable
 
-      - name: Examine test coverage
-        run: deno coverage --unstable coverage
-
       - name: lcov test coverage
         run: deno coverage --unstable coverage --lcov > coverage.lcov
         if: matrix.os == 'ubuntu-latest'
