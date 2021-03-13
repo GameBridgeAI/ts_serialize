@@ -50,7 +50,7 @@ jobs:
         uses: romeovs/lcov-reporter-action@v0.2.16
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          lcov-file: test_coverage_profile.lcov
+          lcov-file: ./test_coverage_profile.lcov
         if: matrix.os == 'ubuntu-latest'
 
       - name: Run package.json Generation Tests
