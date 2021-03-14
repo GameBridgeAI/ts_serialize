@@ -481,52 +481,6 @@ test({
     assert(polyClass instanceof TestClass2020);
     assertEquals((polyClass as TestClass2020).someDate?.getFullYear(), 2020);
 
-    const testData2 = { "someDate": "2010-06-01" };
-    const polyClass2 = polymorphicClassFromJSON(AbstractClass, testData2);
-
-    assert(polyClass2 instanceof TestClassOtherYear);
-    assertNotEquals(
-      (polyClass2 as TestClassOtherYear).someDate?.getFullYear(),
-      2020,
-    );
-  },
-});
-
-test({
-  name: "polymorphic switch complex custom test - as string",
-  fn() {
-    abstract class AbstractClass extends Serializable {}
-
-    class TestClass2020 extends AbstractClass {
-      @SerializeProperty({
-        fromJSONStrategy: (value) => new Date(value as string),
-      })
-      // Only deserialize if this value matches the year 2020
-      @PolymorphicSwitch(
-        () => new TestClass2020(),
-        (propertyValue) => (propertyValue as Date).getFullYear() === 2020,
-      )
-      public someDate?: Date;
-    }
-
-    class TestClassOtherYear extends AbstractClass {
-      @SerializeProperty({
-        fromJSONStrategy: (value) => new Date(value as string),
-      })
-      // Only deserialize if this value doesn't match the year 2020
-      @PolymorphicSwitch(
-        () => new TestClassOtherYear(),
-        (propertyValue) => (propertyValue as Date).getFullYear() !== 2020,
-      )
-      public someDate?: Date;
-    }
-
-    const testData = { "someDate": "2020-06-01" };
-    const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
-
-    assert(polyClass instanceof TestClass2020);
-    assertEquals((polyClass as TestClass2020).someDate?.getFullYear(), 2020);
-
     const testData2 = `{ "someDate": "2010-06-01" }`;
     const polyClass2 = polymorphicClassFromJSON(AbstractClass, testData2);
 
