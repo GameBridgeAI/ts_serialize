@@ -21,9 +21,9 @@ First, a JSON User document:
 
 ```json
 {
-    "first_name":  "Theodore",
-    "last_name": "Esquire",
-    "created_date": "2020-09-24T00:00:00.000Z"
+  "first_name": "Theodore",
+  "last_name": "Esquire",
+  "created_date": "2020-09-24T00:00:00.000Z"
 }
 ```
 

@@ -481,7 +481,7 @@ test({
     assert(polyClass instanceof TestClass2020);
     assertEquals((polyClass as TestClass2020).someDate?.getFullYear(), 2020);
 
-    const testData2 = { "someDate": "2010-06-01" };
+    const testData2 = `{ "someDate": "2010-06-01" }`;
     const polyClass2 = polymorphicClassFromJSON(AbstractClass, testData2);
 
     assert(polyClass2 instanceof TestClassOtherYear);
