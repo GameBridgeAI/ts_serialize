@@ -8,3 +8,4 @@ examples/node/*
 coverage
 coverage.lcov
 .DS_Store
+.vscode
