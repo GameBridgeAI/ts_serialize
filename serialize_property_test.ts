@@ -562,7 +562,7 @@ test({
 });
 
 test({
-  name: "custom toJSONStrategy with array",
+  name: "custom toJSONStrategy with an array of data",
   fn() {
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: (v) => v.join(".") })

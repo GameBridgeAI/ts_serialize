@@ -157,6 +157,8 @@ export function toPojo(
         if (item instanceof Serializable) {
           return toPojo(item);
         }
+
+        // if item is not Serializable we will apply the toJSONStrategy on the whole array so return items as is
         notSerializableElements = true;
         return item;
       });
@@ -195,16 +197,16 @@ function fromJSON<T>(
       continue;
     }
 
+    // if strategy is not provided we apply the default on the value/elements of the array
     if (!fromJSONStrategy) {
       const defaultFromJSONStrategy = fromJSONDefault;
       accumulator[propertyKey as keyof T] = Array.isArray(value)
       ? value.map((v) => defaultFromJSONStrategy(v)) : defaultFromJSONStrategy(value as JSONValue)
       continue;
     }
+
+    // if a strategy is provided we apply the strategy on the entire array
     accumulator[propertyKey as keyof T] = fromJSONStrategy(value as JSONValue);
-    // accumulator[propertyKey as keyof T] = Array.isArray(value)
-    //   ? value.map((v) => fromJSONStrategy(v))
-    //   : fromJSONStrategy(value as JSONValue);
   }
 
   return Object.assign(
