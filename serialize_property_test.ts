@@ -7,7 +7,7 @@ import {
   fail,
   test,
 } from "./test_deps.ts";
-import { Serializable } from "./serializable.ts";
+import { JSONArray, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
   ERROR_DUPLICATE_SERIALIZE_KEY,
@@ -216,7 +216,7 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
+        fromJSONStrategy: (v) => (v as JSONArray).map(el => new OtherClass().fromJSON(el)),
       })
       array!: OtherClass[];
     }
@@ -558,5 +558,16 @@ test({
       public test_property = 0;
     }
     assertEquals(new Test().toJSON(), `{"test_property":0}`);
+  },
+});
+
+test({
+  name: "custom toJSONStrategy with array",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({ toJSONStrategy: (v) => v.join(".") })
+      public test_property = [0,1];
+    }
+    assertEquals(new Test().toJSON(), `{"test_property":"0.1"}`);
   },
 });

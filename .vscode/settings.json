@@ -1,1 +1,6 @@
-{ "deno.enable": true }
+{
+    "deno.enable": true,
+    "deno.lint": true,
+    "deno.unstable": false,
+    "deno.path": "/Users/saim.khan/.deno/bin/deno"
+}

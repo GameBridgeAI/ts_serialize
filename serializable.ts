@@ -152,12 +152,17 @@ export function toPojo(
     }
 
     if (Array.isArray(value)) {
+      let notSerializableElements = false;
       record[serializedKey] = value.map((item: any) => {
         if (item instanceof Serializable) {
           return toPojo(item);
         }
-        return toJSONStrategy(item);
+        notSerializableElements = true;
+        return item;
       });
+      if(notSerializableElements) {
+        record[serializedKey] = toJSONStrategy(value);
+      }
     } else if (value !== undefined) {
       record[serializedKey] = toJSONStrategy(value);
     }
@@ -181,7 +186,7 @@ function fromJSON<T>(
   for (const [key, value] of Object.entries(_json)) {
     const {
       propertyKey,
-      fromJSONStrategy = fromJSONDefault,
+      fromJSONStrategy,
     } = SERIALIZABLE_CLASS_MAP.get(
       context?.constructor?.prototype,
     )?.getBySerializedKey(key) || {};
@@ -190,9 +195,16 @@ function fromJSON<T>(
       continue;
     }
 
-    accumulator[propertyKey as keyof T] = Array.isArray(value)
-      ? value.map((v) => fromJSONStrategy(v))
-      : fromJSONStrategy(value as JSONValue);
+    if (!fromJSONStrategy) {
+      const defaultFromJSONStrategy = fromJSONDefault;
+      accumulator[propertyKey as keyof T] = Array.isArray(value)
+      ? value.map((v) => defaultFromJSONStrategy(v)) : defaultFromJSONStrategy(value as JSONValue)
+      continue;
+    }
+    accumulator[propertyKey as keyof T] = fromJSONStrategy(value as JSONValue);
+    // accumulator[propertyKey as keyof T] = Array.isArray(value)
+    //   ? value.map((v) => fromJSONStrategy(v))
+    //   : fromJSONStrategy(value as JSONValue);
   }
 
   return Object.assign(
