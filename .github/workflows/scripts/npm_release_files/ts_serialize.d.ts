@@ -2,9 +2,6 @@ declare module "@gamebridgeai/ts_serialize" {
   /** A JSON object where each property value is a simple JSON value. */
   export type JSONObject = { [key: string]: JSONValue };
 
-  /** A JSON array where each value is a simple JSON value. */
-  export interface JSONArray extends Array<JSONValue> {}
-
   /** A property value in a JSON object. */
   export type JSONValue =
     | string
@@ -12,7 +9,7 @@ declare module "@gamebridgeai/ts_serialize" {
     | boolean
     | null
     | JSONObject
-    | JSONArray;
+    | JSONValue[];
 
   /** to be implemented by external authors on their models  */
   export interface TransformKey {
