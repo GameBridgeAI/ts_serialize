@@ -64,24 +64,17 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Functions used when hydrating data */
   export type FromJSONStrategy = (value: JSONValue) => any;
-  export type FromJSONStrategyArgument =
-    (FromJSONStrategy | FromJSONStrategy[])[];
 
   /** Functions used when dehydrating data */
   export type ToJSONStrategy = (value: any) => JSONValue;
-  export type ToJSONStrategyArgument = (ToJSONStrategy | ToJSONStrategy[])[];
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
     | string
     | {
       serializedKey?: string;
-      fromJSONStrategy?:
-        | FromJSONStrategy
-        | FromJSONStrategyArgument;
-      toJSONStrategy?:
-        | ToJSONStrategy
-        | ToJSONStrategyArgument;
+      fromJSONStrategy?: FromJSONStrategy;
+      toJSONStrategy?: ToJSONStrategy;
     };
 
   /** Property wrapper that adds serializable options to the class map
@@ -96,9 +89,10 @@ declare module "@gamebridgeai/ts_serialize" {
    * Converts value from functions provided as parameters
    */
   export function composeStrategy(
-    ...fns:
-      | FromJSONStrategyArgument
-      | ToJSONStrategyArgument
+    ...fns: (
+      | FromJSONStrategy
+      | ToJSONStrategy
+    )[]
   ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */
@@ -144,7 +138,7 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /**
    * \@PolymorphicSwitch property decorator.
-   * 
+   *
    * Maps the provided initializer function and value or propertyValueTest to the parent class
    */
   export function PolymorphicSwitch(
