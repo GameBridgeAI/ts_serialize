@@ -6,6 +6,7 @@ export type FromJSONStrategy = (value: JSONValue) => any;
 
 /** Functions used when dehydrating data */
 export type ToJSONStrategy = (value: any) => JSONValue;
+
 /** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
  * Converts value from functions provided as parameters
  */

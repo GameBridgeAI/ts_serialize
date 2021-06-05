@@ -8,6 +8,10 @@ and this project adheres to
 
 ## [Unreleased]
 
+- removes array as an strategy, use `composeStrategy` instead
+- fmt with deno@1.10.3
+
+
 ## [v1.3.1] - 2021-03-14
 
 ## Added
