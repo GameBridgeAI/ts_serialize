@@ -14,18 +14,18 @@ import { fromJSONDefault } from "./strategy/from_json/default.ts";
 export type InitializerFunction = () => Serializable;
 
 /** Polymorphic class deserializer
- * 
+ *
  * There are currently 2 ways of doing polymorphic deserialization:
  * 1. Manually using \@PolymorphicResolver on a static method on the parent class
- * 
+ *
  * This works by keeping a map of target 'parent' classes to resolver functions.
  * These are set when a static method is annotated with @PolymorphicResolver.
- * You can then call `serializePolymorphicClass` with the parent class and an 
+ * You can then call `serializePolymorphicClass` with the parent class and an
  * input the input is passed to whatever the corresponding resolver function,
  * which will make a determination and returns an instance of a 'child' class
- * 
+ *
  * 2. Implicitly using \@PolymorphicSwitch instance property on a child class.
- * 
+ *
  * This works by mapping the decorated class' parent prototype to the child
  * class, property key, property value (or property value test), and initializer
  * function
@@ -61,7 +61,7 @@ function registerPolymorphicResolver(
 
 /**
  * \@PolymorphicSwitch property decorator.
- * 
+ *
  * Maps the provided initializer function and value or propertyValueTest to the parent class
  */
 export function PolymorphicSwitch(

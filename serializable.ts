@@ -79,7 +79,7 @@ function getOrInitializeDefaultSerializerLogicForParents(
 /** Serializable
  *  provides a constructed class for serializing data
  *  to be used with the decorator `SerializeProperty`
- * 
+ *
  *       class Example extends Serializable {
  *         @SerializeProperty()
  *         public testName = "toJSON";
