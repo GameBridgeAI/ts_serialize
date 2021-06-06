@@ -11,9 +11,6 @@ export type JSONObject = {
   [key: string]: JSONValue;
 };
 
-/** A `JSONArray` where each value is a `JSONValue`. */
-export interface JSONArray extends Array<JSONValue> {}
-
 /** A JSONValue */
 export type JSONValue =
   | string
@@ -21,7 +18,7 @@ export type JSONValue =
   | boolean
   | null
   | JSONObject
-  | JSONArray;
+  | JSONValue[];
 
 /** called against every property key transforming the key with the provided function */
 export declare interface TransformKey {
@@ -79,7 +76,7 @@ function getOrInitializeDefaultSerializerLogicForParents(
 /** Serializable
  *  provides a constructed class for serializing data
  *  to be used with the decorator `SerializeProperty`
- * 
+ *
  *       class Example extends Serializable {
  *         @SerializeProperty()
  *         public testName = "toJSON";

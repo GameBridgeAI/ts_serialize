@@ -4,11 +4,8 @@ import { SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import {
-  composeStrategy,
   FromJSONStrategy,
-  FromJSONStrategyArgument,
   ToJSONStrategy,
-  ToJSONStrategyArgument,
 } from "./strategy/compose_strategy.ts";
 import { ERROR_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
@@ -20,18 +17,14 @@ export class SerializePropertyOptions {
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJSONStrategy?: FromJSONStrategy | FromJSONStrategyArgument,
-    toJSONStrategy?: ToJSONStrategy | ToJSONStrategyArgument,
+    fromJSONStrategy?: FromJSONStrategy,
+    toJSONStrategy?: ToJSONStrategy,
   ) {
-    if (Array.isArray(fromJSONStrategy)) {
-      this.fromJSONStrategy = composeStrategy(...fromJSONStrategy);
-    } else if (fromJSONStrategy) {
+    if (fromJSONStrategy) {
       this.fromJSONStrategy = fromJSONStrategy;
     }
 
-    if (Array.isArray(toJSONStrategy)) {
-      this.toJSONStrategy = composeStrategy(...toJSONStrategy);
-    } else if (toJSONStrategy) {
+    if (toJSONStrategy) {
       this.toJSONStrategy = toJSONStrategy;
     }
   }
@@ -46,42 +39,34 @@ export type SerializePropertyArgument =
   | ToSerializedKeyStrategy
   | {
     serializedKey?: string | ToSerializedKeyStrategy;
-    fromJSONStrategy?:
-      | FromJSONStrategy
-      | FromJSONStrategyArgument;
-    toJSONStrategy?:
-      | ToJSONStrategy
-      | ToJSONStrategyArgument;
+    fromJSONStrategy?: FromJSONStrategy;
+    toJSONStrategy?: ToJSONStrategy;
   };
 
 /** converted interface for `SerializePropertyArgument` */
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  fromJSONStrategy?:
-    | FromJSONStrategy
-    | FromJSONStrategyArgument;
-  toJSONStrategy?:
-    | ToJSONStrategy
-    | ToJSONStrategyArgument;
+  fromJSONStrategy?: FromJSONStrategy;
+  toJSONStrategy?: ToJSONStrategy;
 }
 
 /** Property wrapper that adds `SerializeProperty` options to the class map
- * 
+ *
  *       class ExampleOne extends Serializable {
  *         @SerializeProperty()
  *         public testName = "toJSON";
  *       }
- * 
+ *
  *       class ExampleTwo extends Serializable {
  *         @SerializeProperty("test_name")
  *         public testName = "toJSON";
  *       }
- * 
+ *
  *       class ExampleTwo extends Serializable {
  *         @SerializeProperty((key) => string)
  *         public testName = "toJSON";
  *       }
- * 
+ *
  *       class ExampleThree extends Serializable {
  *         @SerializeProperty({
  *           serializeKey: "test_name",
@@ -89,7 +74,7 @@ interface SerializePropertyArgumentObject {
  *           toJSONStrategy: (any) => jsonValue
  *         })
  *         public testName = "toJSON";
- *       }  
+ *       }
  */
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
@@ -135,7 +120,7 @@ export function SerializeProperty(
   };
 }
 
-/** Parses the arguments provided to SerializeProperty and 
+/** Parses the arguments provided to SerializeProperty and
  * returns an object used to create a key mapping
  */
 function getDecoratorArgumentOptions(

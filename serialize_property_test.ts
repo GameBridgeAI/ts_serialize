@@ -538,25 +538,3 @@ test({
     );
   },
 });
-
-test({
-  name: "fromJSONStrategy with array",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty({ fromJSONStrategy: [(v) => v] })
-      public test_property = 0;
-    }
-    assertEquals(new Test().fromJSON({ test_property: 99 }).test_property, 99);
-  },
-});
-
-test({
-  name: "toJSONStrategy with array",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty({ toJSONStrategy: [(v) => v] })
-      public test_property = 0;
-    }
-    assertEquals(new Test().toJSON(), `{"test_property":0}`);
-  },
-});

@@ -4,8 +4,8 @@ import { isNewable } from "./_utils.ts";
 
 export type NewSerializable<T> = T & (new () => Serializable);
 type FunctionSerializable = () => Serializable;
-/** for strategies can be a provided function 
- * returning a `new` constructed type or 
+/** for strategies can be a provided function
+ * returning a `new` constructed type or
  * a raw type to be constructed  */
 export type SerializableConstructor<T> =
   | NewSerializable<T>
