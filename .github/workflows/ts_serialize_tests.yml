@@ -65,4 +65,4 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: .github/workflows/scripts/build.sh ${{ v0.0.0-test }}
+        run: .github/workflows/scripts/build.sh "v0.0.0-test"
