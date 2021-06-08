@@ -1,7 +1,7 @@
 deno.d.ts
 dist/*
 examples/node/*
-!examples/node/test.ts
+!examples/node/node_tests.ts
 !examples/node/tsconfig.json
 !examples/node/package.json
 !examples/node/README.md

@@ -2,9 +2,9 @@
   "name": "node_example",
   "version": "0.0.0",
   "description": "",
-  "main": "test.js",
+  "main": "node_tests.js",
   "scripts": {
-    "test": "tsc -p tsconfig.json && node test.js"
+    "test": "tsc -p tsconfig.json && node node_tests.js"
   },
   "author": "@gamebridgeai",
   "license": "ISC",
