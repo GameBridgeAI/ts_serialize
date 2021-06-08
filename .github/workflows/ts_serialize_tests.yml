@@ -24,19 +24,19 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Setup Deno
+      - name: Setup deno
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
       
-      - name: Deno Format Check
+      - name: Deno format check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
 
-      - name: Cache Dependencies
+      - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: deno test # with coverage
+      - name: Deno test # with coverage
         # run: deno test --coverage=coverage --unstable
         run: deno test
 
@@ -55,5 +55,14 @@ jobs:
         # if: matrix.os == 'ubuntu-latest'
         if: false
 
-      - name: Run package.json Generation Tests
+      - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
+
+      - name: Setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+
+      - name: Build and test NPM module
+        run: .github/workflows/scripts/build.sh "v0.0.0-test"

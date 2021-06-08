@@ -67,21 +67,21 @@ jobs:
       - name: Setup repo
         uses: actions/checkout@v2
 
-      - name: Setup Deno
+      - name: Setup deno
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
 
-      - name: Setup-node
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
 
-      - name: Build NPM Module
+      - name: Build and test NPM module
         run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
 
-      - name: Create Release
+      - name: Create release
         id: create_release
         uses: actions/create-release@v1
         env:
