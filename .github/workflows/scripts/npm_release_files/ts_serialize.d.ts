@@ -39,7 +39,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** Adds methods for serialization */
   export abstract class Serializable {
     /** key transform functionality */
-    public tsTransformKey?(key: string): string;
+    public tsTransformKey(key: string): string;
     /** to JSON String */
     public toJSON(): string;
     /** to Serializable */

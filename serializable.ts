@@ -93,7 +93,7 @@ export abstract class Serializable {
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
-  public tsTransformKey?(key: string): string {
+  public tsTransformKey(key: string): string {
     return key;
   }
   public toJSON(): string {

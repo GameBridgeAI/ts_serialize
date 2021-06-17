@@ -12,14 +12,13 @@ export type ToJSONStrategy = (value: any) => JSONValue;
  */
 export function composeStrategy(
   ...fns: (
-    | FromJSONStrategy
     | ToJSONStrategy
+    | FromJSONStrategy
   )[]
 ): FromJSONStrategy | ToJSONStrategy {
-  return function _composeStrategy(val: any): any {
-    return fns.reduce(
-      (acc: any, fn: FromJSONStrategy | ToJSONStrategy) => fn(acc),
-      val,
-    );
+  return function _composeStrategy(
+    val: any,
+  ): unknown {
+    return fns.reduce((acc, fn) => fn(acc), val);
   };
 }
