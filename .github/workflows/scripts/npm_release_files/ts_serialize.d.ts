@@ -27,6 +27,8 @@ declare module "@gamebridgeai/ts_serialize" {
   /** to be implemented by external authors on their models  */
   export interface FromJSON {
     /** to Serializable Object */
+    /** `Object` is used with Angular's HttpClient */
+    // deno-lint-ignore ban-types
     fromJSON(json: string | JSONValue | Object): this;
   }
   /** to be implemented by external authors on their models  */
@@ -41,6 +43,8 @@ declare module "@gamebridgeai/ts_serialize" {
     /** to JSON String */
     public toJSON(): string;
     /** to Serializable */
+    /** `Object` is used with Angular's HttpClient */
+    // deno-lint-ignore ban-types
     public fromJSON(json: string | JSONValue | Object): this;
     /** to JSONObject */
     public tsSerialize(): JSONObject;
@@ -49,14 +53,9 @@ declare module "@gamebridgeai/ts_serialize" {
   type NewSerializable<T> = T & (new () => Serializable);
   type FunctionSerializable = () => Serializable;
 
-  /** for strategies */
-  export type SerializableConstructor<T> =
-    | NewSerializable<T>
-    | FunctionSerializable;
-
   /** get new strategy type arguments */
-  export function getNewSerializable<T>(
-    type: SerializableConstructor<T>,
+  export function getNewSerializable(
+    type: unknown,
   ): Serializable;
 
   /** Functions used when hydrating data */
@@ -93,13 +92,13 @@ declare module "@gamebridgeai/ts_serialize" {
   ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */
-  export function toSerializable<T>(
-    type: SerializableConstructor<T>,
+  export function toSerializable(
+    type: unknown,
   ): FromJSONStrategy;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining<T>(
-    type: SerializableConstructor<T>,
+    type: unknown,
   ): FromJSONStrategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
@@ -120,11 +119,15 @@ declare module "@gamebridgeai/ts_serialize" {
   export type PropertyValueTest = (propertyValue: unknown) => boolean;
 
   export type ResolverFunction = (
+    /** `Object` is used with Angular's HttpClient */
+    // deno-lint-ignore ban-types
     json: string | JSONValue | Object,
   ) => Serializable;
 
   export function polymorphicClassFromJSON<T extends Serializable>(
-    classPrototype: Object & { prototype: T },
+    classPrototype: unknown & { prototype: T },
+    /** `Object` is used with Angular's HttpClient */
+    // deno-lint-ignore ban-types
     json: string | JSONValue | Object,
   ): T;
   /** Adds a class and a resolver function to the resolver map */
@@ -145,6 +148,6 @@ declare module "@gamebridgeai/ts_serialize" {
 
   export function PolymorphicSwitch<T>(
     initializerFunction: InitializerFunction,
-    value: Exclude<T, Function>,
+    value: Exclude<T, PropertyValueTest>,
   ): PropertyDecorator;
 }
