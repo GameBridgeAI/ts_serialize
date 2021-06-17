@@ -34,7 +34,7 @@ jobs:
       - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: Run deno dests with coverage
+      - name: Run deno tests with coverage
         run: deno test --coverage=coverage --unstable
 
       - name: LCOV test coverage
