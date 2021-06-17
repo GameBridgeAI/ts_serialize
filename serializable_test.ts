@@ -11,10 +11,10 @@ test({
   fn() {
     class TestClass extends Serializable {
       @SerializeProperty()
-      public test: number = 99;
+      public test = 99;
 
       @SerializeProperty("test_one")
-      public test1: number = 100;
+      public test1 = 100;
     }
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
@@ -279,7 +279,7 @@ test({
   name: "toPojo errors with no context",
   fn() {
     try {
-      toPojo({});
+      toPojo({} as Serializable);
       fail("to Pojo did not error with no context");
     } catch (e) {
       assertEquals(

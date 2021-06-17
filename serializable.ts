@@ -32,6 +32,8 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
+  /** `Object` is used with Angular's HttpClient */
+  // deno-lint-ignore ban-types
   fromJSON(json: string | JSONValue | Object): this;
 }
 
@@ -42,7 +44,7 @@ export declare interface Serialize {
 
 /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
 function getOrInitializeDefaultSerializerLogicForParents(
-  targetPrototype: any, // This will the the class instance, regardless of how low level it is
+  targetPrototype: Serializable,
 ): SerializePropertyOptionsMap | undefined {
   // Don't create serialization logic for Serializable
   if (targetPrototype === Serializable.prototype) {
@@ -97,6 +99,8 @@ export abstract class Serializable {
   public toJSON(): string {
     return toJSON(this);
   }
+  /** `Object` is used with Angular's HttpClient */
+  // deno-lint-ignore ban-types
   public fromJSON(json: string | JSONValue | Object): this {
     return fromJSON(this, json);
   }
@@ -116,7 +120,7 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
 
 /** Converts to object using mapped keys */
 export function toPojo(
-  context: any,
+  context: Serializable,
 ): JSONObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -137,19 +141,19 @@ export function toPojo(
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[propertyKey as string];
+    const value = context[propertyKey as keyof Serializable];
 
     // If the value is serializable then use the recursive replacer
     if (
       SERIALIZABLE_CLASS_MAP.get(
-        (value as Serializable)?.constructor?.prototype,
+        value?.constructor?.prototype,
       )
     ) {
       toJSONStrategy = toJSONRecursive;
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: any) => {
+      record[serializedKey] = value.map((item: JSONValue) => {
         if (item instanceof Serializable) {
           return toPojo(item);
         }
@@ -163,13 +167,15 @@ export function toPojo(
 }
 
 /** Convert to `pojo` with our mapping logic then to string */
-function toJSON<T>(context: T): string {
+function toJSON(context: Serializable): string {
   return JSON.stringify(toPojo(context));
 }
 
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
+  /** `Object` is used with Angular's HttpClient */
+  // deno-lint-ignore ban-types
   json: string | JSONValue | Object,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
