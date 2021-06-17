@@ -27,9 +27,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** to be implemented by external authors on their models  */
   export interface FromJSON {
     /** to Serializable Object */
-    /** `Object` is used with Angular's HttpClient */
-    // deno-lint-ignore ban-types
-    fromJSON(json: string | JSONValue | Object): this;
+    fromJSON(json: string | JSONValue | unknown): this;
   }
   /** to be implemented by external authors on their models  */
   export interface Serialize {
@@ -43,9 +41,7 @@ declare module "@gamebridgeai/ts_serialize" {
     /** to JSON String */
     public toJSON(): string;
     /** to Serializable */
-    /** `Object` is used with Angular's HttpClient */
-    // deno-lint-ignore ban-types
-    public fromJSON(json: string | JSONValue | Object): this;
+    public fromJSON(json: string | JSONValue | unknown): this;
     /** to JSONObject */
     public tsSerialize(): JSONObject;
   }
@@ -121,16 +117,12 @@ declare module "@gamebridgeai/ts_serialize" {
   export type PropertyValueTest = (propertyValue: unknown) => boolean;
 
   export type ResolverFunction = (
-    /** `Object` is used with Angular's HttpClient */
-    // deno-lint-ignore ban-types
-    json: string | JSONValue | Object,
+    json: string | JSONValue | unknown,
   ) => Serializable;
 
   export function polymorphicClassFromJSON<T extends Serializable>(
     classPrototype: unknown & { prototype: T },
-    /** `Object` is used with Angular's HttpClient */
-    // deno-lint-ignore ban-types
-    json: string | JSONValue | Object,
+    json: string | JSONValue | unknown,
   ): T;
   /** Adds a class and a resolver function to the resolver map */
   export function PolymorphicResolver(

@@ -32,9 +32,7 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
-  /** `Object` is used with Angular's HttpClient */
-  // deno-lint-ignore ban-types
-  fromJSON(json: string | JSONValue | Object): this;
+  fromJSON(json: string | JSONValue | unknown): this;
 }
 
 /** returns the javascript object as a `JSONObject` with transformations */
@@ -99,9 +97,7 @@ export abstract class Serializable {
   public toJSON(): string {
     return toJSON(this);
   }
-  /** `Object` is used with Angular's HttpClient */
-  // deno-lint-ignore ban-types
-  public fromJSON(json: string | JSONValue | Object): this {
+  public fromJSON(json: string | JSONValue | unknown): this {
     return fromJSON(this, json);
   }
   public tsSerialize(): JSONObject {
@@ -174,9 +170,7 @@ function toJSON(context: Serializable): string {
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
-  /** `Object` is used with Angular's HttpClient */
-  // deno-lint-ignore ban-types
-  json: string | JSONValue | Object,
+  json: string | JSONValue | unknown,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};

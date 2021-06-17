@@ -41,9 +41,7 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        /** `Object` is used with Angular's HttpClient */
-        // deno-lint-ignore ban-types
-        json: string | JSONValue | Object,
+        json: string | JSONValue | unknown,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
@@ -84,9 +82,7 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        /** `Object` is used with Angular's HttpClient */
-        // deno-lint-ignore ban-types
-        json: string | JSONValue | Object,
+        json: string | JSONValue | unknown,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
