@@ -163,7 +163,7 @@ abstract class AbstractClass extends Serializable {
   // Property name can be whatever, even an inaccessible symbol
   @PolymorphicResolver
   public static [Symbol()](
-    json: string | JSONValue | unknown,
+    json: JSONValue,
   ): Serializable {
     const inputObject = new ResolverHelperClass().fromJSON(json);
 
