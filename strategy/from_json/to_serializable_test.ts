@@ -2,7 +2,7 @@
 
 import { assert, assertEquals, test } from "../../test_deps.ts";
 import { toSerializable } from "./to_serializable.ts";
-import { Serializable } from "../../serializable.ts";
+import { JSONValue, Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
 
 test({
@@ -104,7 +104,8 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
+        fromJSONStrategy: (arr) =>
+          (arr as JSONValue[]).map((v) => new OtherClass().fromJSON(v)),
       })
       array!: OtherClass[];
     }

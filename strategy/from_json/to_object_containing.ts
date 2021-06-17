@@ -37,7 +37,7 @@ export function toObjectContaining(
 
         // Serializable[]
         if (Array.isArray(value[prop])) {
-          record[prop] = (value[prop] as JSONValue[]).map((v: JSONValue) => {
+          record[prop] = (value[prop] as JSONValue[]).map((v) => {
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }

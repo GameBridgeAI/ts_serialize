@@ -7,7 +7,7 @@ import {
   fail,
   test,
 } from "./test_deps.ts";
-import { Serializable } from "./serializable.ts";
+import { JSONValue, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
   ERROR_DUPLICATE_SERIALIZE_KEY,
@@ -216,7 +216,8 @@ test({
     }
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: (v) => new OtherClass().fromJSON(v),
+        fromJSONStrategy: (arr) =>
+          (arr as JSONValue[]).map((v) => new OtherClass().fromJSON(v)),
       })
       array!: OtherClass[];
     }
@@ -226,6 +227,19 @@ test({
     assertEquals(testObj.array.length, 5);
     assert(testObj.array[0] instanceof OtherClass);
     assertEquals(testObj.array[4].id, 5);
+  },
+});
+
+test({
+  name: "custom toJSONStrategy with an array of data",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        toJSONStrategy: (v) => v.join("."),
+      })
+      public test_property = [0, 1];
+    }
+    assertEquals(new Test().toJSON(), `{"test_property":"0.1"}`);
   },
 });
 
@@ -391,6 +405,8 @@ test({
     class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "outer_property",
+        toJSONStrategy: (values: Test1[]) =>
+          values.map(((v) => v.tsSerialize())),
       })
       nested: Test1[] = [new Test1()];
     }
@@ -398,6 +414,8 @@ test({
     class Test3 extends Serializable {
       @SerializeProperty({
         serializedKey: "outer_outer_property",
+        toJSONStrategy: (values: Test2[]) =>
+          values.map(((v) => v.tsSerialize())),
       })
       nested2: Test2[] = [new Test2()];
     }

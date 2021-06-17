@@ -148,16 +148,7 @@ export function toPojo(
       toJSONStrategy = toJSONRecursive;
     }
 
-    if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: JSONValue) => {
-        if (item instanceof Serializable) {
-          return toPojo(item);
-        }
-        return toJSONStrategy(item);
-      });
-    } else if (value !== undefined) {
-      record[serializedKey] = toJSONStrategy(value);
-    }
+    record[serializedKey] = toJSONStrategy(value);
   }
   return record;
 }
@@ -187,9 +178,7 @@ function fromJSON<T>(
       continue;
     }
 
-    accumulator[propertyKey as keyof T] = Array.isArray(value)
-      ? value.map((v) => fromJSONStrategy(v))
-      : fromJSONStrategy(value as JSONValue);
+    accumulator[propertyKey as keyof T] = fromJSONStrategy(value as JSONValue);
   }
 
   return Object.assign(
