@@ -1,5 +1,7 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
+// deno-lint-ignore-file
+
 import {
   composeStrategy,
   createDateStrategy,
@@ -161,7 +163,7 @@ abstract class AbstractClass extends Serializable {
   // Property name can be whatever, even an inaccessible symbol
   @PolymorphicResolver
   public static [Symbol()](
-    json: string | JSONValue | Object,
+    json: JSONValue,
   ): Serializable {
     const inputObject = new ResolverHelperClass().fromJSON(json);
 

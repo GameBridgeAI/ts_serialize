@@ -21,7 +21,10 @@ test({
       typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
       "string",
     );
-
-    assertEquals(Object.keys(mod).length, 8);
+    assertEquals(
+      typeof mod.ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED,
+      "string",
+    );
+    assertEquals(Object.keys(mod).length, 9);
   },
 });

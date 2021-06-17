@@ -41,7 +41,7 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        json: string | JSONValue | Object,
+        json: JSONValue,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
@@ -82,7 +82,7 @@ test({
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver
       public static [Symbol()](
-        json: string | JSONValue | Object,
+        json: JSONValue,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
@@ -306,9 +306,9 @@ test({
   fn() {
     abstract class AbstractClass extends Serializable {}
 
-    class TestClass extends AbstractClass {
+    class _TestClass extends AbstractClass {
       @SerializeProperty()
-      @PolymorphicSwitch(() => new TestClass(), "TestClass")
+      @PolymorphicSwitch(() => new _TestClass(), "TestClass")
       public class = "TestClass";
 
       @SerializeProperty()
@@ -392,7 +392,7 @@ test({
       public someProperty = "original value";
     }
 
-    const testData = { some_class: "TestClass", someProperty: "some value" };
+    const testData = { "some_class": "TestClass", someProperty: "some value" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass);

@@ -39,5 +39,3 @@ export type {
 } from "./polymorphic.ts";
 
 export { getNewSerializable } from "./strategy/utils.ts";
-/** types */
-export type { SerializableConstructor } from "./strategy/utils.ts";

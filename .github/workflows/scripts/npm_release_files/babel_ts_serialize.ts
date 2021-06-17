@@ -12,6 +12,7 @@ const { code } = await p.status();
 
 if (code === 0) {
   const source = await p.output();
+  // deno-lint-ignore no-explicit-any
   const { transform } = babelCore as any;
   const { code } = transform(
     new TextDecoder().decode(source),

@@ -58,7 +58,7 @@ test({
   fn() {
     try {
       const TEST = Symbol("test");
-      class Test extends Serializable {
+      class _Test extends Serializable {
         @SerializeProperty()
         [TEST] = "toJSON";
       }
@@ -195,7 +195,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      array!: any[];
+      array!: unknown[];
     }
     const testObj = new Test().fromJSON(
       `{"array":["worked",0,{"subObj":["cool"]}]}`,
@@ -248,7 +248,7 @@ test({
   name: "Errors on duplicate map keys",
   fn() {
     try {
-      class Test extends Serializable {
+      class _Test extends Serializable {
         @SerializeProperty("serialize_me")
         serializeMe = "nice";
         @SerializeProperty("serialize_me")

@@ -7,7 +7,7 @@ import { SerializeProperty } from "../serialize_property.ts";
 
 class Root extends Serializable {
   @SerializeProperty()
-  property: string = "default";
+  property = "default";
 }
 
 const input = { property: "from_input" };

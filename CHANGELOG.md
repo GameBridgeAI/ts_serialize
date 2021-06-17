@@ -12,6 +12,8 @@ and this project adheres to
 - fmt with deno@1.10.3
 - turn off unstable code coverage
 - remove JSONArray for JSONValue[]
+- add type guard in `getNewSerializable` fixing compile issue
+- address lint issues
 
 ## [v1.3.1] - 2021-03-14
 

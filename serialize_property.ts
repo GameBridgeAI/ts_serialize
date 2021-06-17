@@ -1,6 +1,6 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
+import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import {
@@ -158,10 +158,17 @@ function getDecoratorArgumentOptions(
     };
   }
 
+  if (typeof decoratorArguments.serializedKey === "string") {
+    return decoratorArguments as SerializePropertyArgumentObject;
+  }
+
   // Use inherited tsTransformKey strategy or default no change transform
   // to transform property key decoratorArguments.serializedKey will override
   return {
-    serializedKey: (target as any).tsTransformKey(String(propertyName)),
-    ...decoratorArguments,
+    serializedKey: (target as Serializable).tsTransformKey(
+      String(propertyName),
+    ),
+    fromJSONStrategy: decoratorArguments.fromJSONStrategy,
+    toJSONStrategy: decoratorArguments.toJSONStrategy,
   };
 }

@@ -32,7 +32,7 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
-  fromJSON(json: string | JSONValue | Object): this;
+  fromJSON(json: JSONValue): this;
 }
 
 /** returns the javascript object as a `JSONObject` with transformations */
@@ -42,7 +42,7 @@ export declare interface Serialize {
 
 /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
 function getOrInitializeDefaultSerializerLogicForParents(
-  targetPrototype: any, // This will the the class instance, regardless of how low level it is
+  targetPrototype: Serializable,
 ): SerializePropertyOptionsMap | undefined {
   // Don't create serialization logic for Serializable
   if (targetPrototype === Serializable.prototype) {
@@ -91,13 +91,13 @@ export abstract class Serializable {
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
-  public tsTransformKey?(key: string): string {
+  public tsTransformKey(key: string): string {
     return key;
   }
   public toJSON(): string {
     return toJSON(this);
   }
-  public fromJSON(json: string | JSONValue | Object): this {
+  public fromJSON(json: JSONValue): this {
     return fromJSON(this, json);
   }
   public tsSerialize(): JSONObject {
@@ -116,7 +116,7 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
 
 /** Converts to object using mapped keys */
 export function toPojo(
-  context: any,
+  context: Serializable,
 ): JSONObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
@@ -137,19 +137,19 @@ export function toPojo(
     } of serializablePropertyMap.propertyOptions()
   ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
-    const value = context[propertyKey as string];
+    const value = context[propertyKey as keyof Serializable];
 
     // If the value is serializable then use the recursive replacer
     if (
       SERIALIZABLE_CLASS_MAP.get(
-        (value as Serializable)?.constructor?.prototype,
+        value?.constructor?.prototype,
       )
     ) {
       toJSONStrategy = toJSONRecursive;
     }
 
     if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: any) => {
+      record[serializedKey] = value.map((item: JSONValue) => {
         if (item instanceof Serializable) {
           return toPojo(item);
         }
@@ -163,14 +163,14 @@ export function toPojo(
 }
 
 /** Convert to `pojo` with our mapping logic then to string */
-function toJSON<T>(context: T): string {
+function toJSON(context: Serializable): string {
   return JSON.stringify(toPojo(context));
 }
 
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
-  json: string | JSONValue | Object,
+  json: JSONValue,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};
