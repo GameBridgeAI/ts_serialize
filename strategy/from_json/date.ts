@@ -18,7 +18,7 @@ export function createDateStrategy(regex: RegExp): FromJSONStrategy {
 }
 
 /** Test a string for a ISO 8601 Date */
-export function iso8601Date(input: JSONValue): any {
+export function iso8601Date(input: JSONValue): Date {
   /** a provided regex to deal with iso formats
    * @example 2008-08-30T01:45:36
    * @example 2008-08-30T01:45:36.123Z

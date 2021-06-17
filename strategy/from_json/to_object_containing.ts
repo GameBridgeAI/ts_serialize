@@ -10,7 +10,7 @@ import { isObject } from "../_utils.ts";
 import { getNewSerializable } from "../utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
-export function toObjectContaining<T>(
+export function toObjectContaining(
   type: unknown,
 ): FromJSONStrategy {
   return function _toObjectContaining(
