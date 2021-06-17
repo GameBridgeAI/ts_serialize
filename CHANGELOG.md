@@ -13,6 +13,7 @@ and this project adheres to
 - turn off unstable code coverage
 - remove JSONArray for JSONValue[]
 - add type guard in `getNewSerializable` fixing compile issue
+- address lint issues
 
 ## [v1.3.1] - 2021-03-14
 
