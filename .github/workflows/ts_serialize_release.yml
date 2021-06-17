@@ -23,18 +23,21 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
+
+      - name: Deno lint
+        run: deno lint
       
-      - name: Deno Format Check
+      - name: Deno format check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
 
-      - name: Cache Dependencies
+      - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: Run Deno Tests with coverage
+      - name: Run deno dests with coverage
         run: deno test --coverage=coverage --unstable
 
-      - name: lcov test coverage
+      - name: LCOV test coverage
         run: deno coverage --unstable coverage --lcov > coverage.lcov
         if: matrix.os == 'ubuntu-latest'
 
@@ -47,7 +50,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
         if: matrix.os == 'ubuntu-latest'
 
-      - name: Run package.json Generation Tests
+      - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
   build:

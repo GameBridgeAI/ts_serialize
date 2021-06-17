@@ -28,6 +28,9 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
+
+      - name: Deno lint
+        run: deno lint
       
       - name: Deno format check
         run: deno fmt --check
