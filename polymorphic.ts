@@ -122,7 +122,7 @@ function registerPolymorphicSwitch<T>(
   initializer: InitializerFunction,
 ): void;
 
-function registerPolymorphicSwitch<T>(
+function registerPolymorphicSwitch(
   parentClassConstructor: unknown,
   classDefinition: unknown,
   propertyKey: string | symbol,

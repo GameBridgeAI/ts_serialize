@@ -100,7 +100,7 @@ declare module "@gamebridgeai/ts_serialize" {
   ): JSONValue;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
-  export function toObjectContaining<T>(
+  export function toObjectContaining(
     type: unknown,
   ): FromJSONStrategy;
 
