@@ -15,6 +15,7 @@ and this project adheres to
 - add type guard in `getNewSerializable` fixing compile issue
 - address lint issues
 - pass whole array to strategies, fixing #125
+- add `fromSerializable` strategy
 
 ## [v1.3.1] - 2021-03-14
 
