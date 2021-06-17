@@ -9,11 +9,12 @@ and this project adheres to
 ## [Unreleased]
 
 - removes array as an strategy, use `composeStrategy` instead
-- fmt with deno@1.10.3
+- fmt with deno@1.11.1
 - turn off unstable code coverage
 - remove JSONArray for JSONValue[]
 - add type guard in `getNewSerializable` fixing compile issue
 - address lint issues
+- pass whole array to strategies, fixing #125
 
 ## [v1.3.1] - 2021-03-14
 
