@@ -7,7 +7,7 @@ import {
 } from "./utils.ts";
 
 /** for strategy values */
-export function isObject(obj: any): obj is Record<string, any> {
+export function isObject(obj: unknown): obj is Record<string, unknown> {
   return Object.prototype.toString.call(obj) === "[object Object]";
 }
 
@@ -20,8 +20,8 @@ export function isNewable<T>(
 }
 
 /** for strategy type arguments */
-export function isCallable<T>(
-  type: SerializableConstructor<T>,
+export function isFunctionSerializable(
+  type: unknown,
 ): type is FunctionSerializable {
   return typeof type === "function";
 }
