@@ -21,7 +21,7 @@ export function composeStrategy(
   return function _composeStrategy(
     // deno-lint-ignore no-explicit-any
     val: any,
-  ): unknown {
+  ): JSONValue | unknown {
     return fns.reduce((acc, fn) => fn(acc), val);
   };
 }
