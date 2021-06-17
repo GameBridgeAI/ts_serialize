@@ -1,5 +1,7 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
+// deno-lint-ignore-file
+
 import {
   composeStrategy,
   createDateStrategy,
