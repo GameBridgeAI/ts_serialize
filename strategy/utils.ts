@@ -6,7 +6,7 @@ import { ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED } from "../error_m
 export type NewSerializable<T> = T & (new () => Serializable);
 export type FunctionSerializable = () => Serializable;
 /** get new strategy type arguments */
-export function getNewSerializable<T>(
+export function getNewSerializable(
   type: unknown,
 ): Serializable {
   if (isNewable(type)) {
