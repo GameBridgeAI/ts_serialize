@@ -59,9 +59,11 @@ declare module "@gamebridgeai/ts_serialize" {
   ): Serializable;
 
   /** Functions used when hydrating data */
+  // deno-lint-ignore no-explicit-any
   export type FromJSONStrategy = (value: JSONValue) => any;
 
   /** Functions used when dehydrating data */
+  // deno-lint-ignore no-explicit-any
   export type ToJSONStrategy = (value: any) => JSONValue;
 
   /** string/symbol property name or options for (de)serializing values */
@@ -112,7 +114,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(input: JSONValue): any;
+  export function iso8601Date(input: JSONValue): Date;
 
   export type InitializerFunction = () => Serializable;
 
