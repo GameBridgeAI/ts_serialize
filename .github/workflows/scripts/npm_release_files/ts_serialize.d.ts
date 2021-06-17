@@ -94,6 +94,11 @@ declare module "@gamebridgeai/ts_serialize" {
     type: unknown,
   ): FromJSONStrategy;
 
+  /** serialize data using `tsSerialize` on a subclass Serializable type */
+  export function fromSerializable(
+    value: Serializable | Serializable[],
+  ): JSONValue;
+
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining<T>(
     type: unknown,
