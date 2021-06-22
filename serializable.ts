@@ -32,7 +32,7 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
-  fromJSON(json: JSONValue): this;
+  fromJSON(json: string | JSONObject): this;
 }
 
 /** returns the javascript object as a `JSONObject` with transformations */
@@ -97,7 +97,7 @@ export abstract class Serializable {
   public toJSON(): string {
     return toJSON(this);
   }
-  public fromJSON(json: JSONValue): this {
+  public fromJSON(json: string | JSONObject): this {
     return fromJSON(this, json);
   }
   public tsSerialize(): JSONObject {
@@ -147,8 +147,9 @@ export function toPojo(
     ) {
       toJSONStrategy = toJSONRecursive;
     }
-
-    record[serializedKey] = toJSONStrategy(value);
+    if (value !== undefined) {
+      record[serializedKey] = toJSONStrategy(value);
+    }
   }
   return record;
 }
@@ -161,24 +162,22 @@ function toJSON(context: Serializable): string {
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
-  json: JSONValue,
+  json: string | JSONObject,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};
-
-  for (const [key, value] of Object.entries(_json)) {
+  const map = SERIALIZABLE_CLASS_MAP.get(context?.constructor?.prototype);
+  for (const [key, value] of Object.entries(_json) as [string, JSONValue][]) {
     const {
       propertyKey,
       fromJSONStrategy = fromJSONDefault,
-    } = SERIALIZABLE_CLASS_MAP.get(
-      context?.constructor?.prototype,
-    )?.getBySerializedKey(key) || {};
+    } = map?.getBySerializedKey(key) || {};
 
     if (!propertyKey) {
       continue;
     }
 
-    accumulator[propertyKey as keyof T] = fromJSONStrategy(value as JSONValue);
+    accumulator[propertyKey as keyof T] = fromJSONStrategy(value);
   }
 
   return Object.assign(

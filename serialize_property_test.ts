@@ -123,6 +123,20 @@ test({
 });
 
 test({
+  name: "Removes undefined values",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty()
+      test = "faf";
+    }
+    assertEquals(
+      typeof new Test().fromJSON({ test: 1 }).test,
+      "string",
+    );
+  },
+});
+
+test({
   name: "Preserves string type",
   fn() {
     class Test extends Serializable {

@@ -27,7 +27,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** to be implemented by external authors on their models  */
   export interface FromJSON {
     /** to Serializable Object */
-    fromJSON(json: JSONValue): this;
+    fromJSON(json: string | JSONObject): this;
   }
   /** to be implemented by external authors on their models  */
   export interface Serialize {
@@ -41,7 +41,7 @@ declare module "@gamebridgeai/ts_serialize" {
     /** to JSON String */
     public toJSON(): string;
     /** to Serializable */
-    public fromJSON(json: JSONValue): this;
+    public fromJSON(json: string | JSONObject): this;
     /** to JSONObject */
     public tsSerialize(): JSONObject;
   }
