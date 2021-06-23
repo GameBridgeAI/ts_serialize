@@ -8,15 +8,16 @@ and this project adheres to
 
 ## [Unreleased]
 
-- *breaking* removes array as an strategy, use `composeStrategy` instead
+- _breaking_ removes array as an strategy, use `composeStrategy` instead
 - fmt with deno@1.11.1
 - turn off unstable code coverage
-- *breaking* remove JSONArray for JSONValue[]
+- _breaking_ remove JSONArray for JSONValue[]
 - add type guard in `getNewSerializable` fixing compile issue
 - fix #121 address lint issues
 - add `fromSerializable` strategy
-- *breaking* fromJSON only accepts `JSONValue`
-- *breaking* fix #125 strategies are now passed the full array, this allows more flexibility for conversions
+- _breaking_ fromJSON only accepts `JSONValue`
+- _breaking_ fix #125 strategies are now passed the full array, this allows more
+  flexibility for conversions
 
 ## [v1.3.1] - 2021-03-14
 
