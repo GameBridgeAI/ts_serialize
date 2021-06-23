@@ -32,7 +32,7 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
-  fromJSON(json: string | JSONObject): this;
+  fromJSON(json: JSONValue): this;
 }
 
 /** returns the javascript object as a `JSONObject` with transformations */
@@ -97,7 +97,7 @@ export abstract class Serializable {
   public toJSON(): string {
     return toJSON(this);
   }
-  public fromJSON(json: string | JSONObject): this {
+  public fromJSON(json: JSONValue): this {
     return fromJSON(this, json);
   }
   public tsSerialize(): JSONObject {
@@ -162,7 +162,7 @@ function toJSON(context: Serializable): string {
 /** Convert from object/string to mapped object on the context */
 function fromJSON<T>(
   context: Serializable,
-  json: string | JSONObject,
+  json: JSONValue,
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};

@@ -212,7 +212,7 @@ function resolvePolymorphicSwitch(
  */
 export function polymorphicClassFromJSON<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
-  json: string | JSONObject,
+  json: JSONValue,
 ): T {
   return resolvePolymorphicClass(classPrototype, json).fromJSON(json);
 }
