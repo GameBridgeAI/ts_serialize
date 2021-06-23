@@ -6,6 +6,7 @@
 export { SerializeProperty } from "./serialize_property.ts";
 /** types */
 export type {
+  Clone,
   FromJSON,
   Serialize,
   ToJSON,

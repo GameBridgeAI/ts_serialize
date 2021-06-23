@@ -34,6 +34,11 @@ declare module "@gamebridgeai/ts_serialize" {
     /** to JSONObject */
     tsSerialize(): JSONObject;
   }
+  /** deep copy `this` */
+  export interface Clone {
+    clone(jsonObject: Partial<this>): this;
+  }
+
   /** Adds methods for serialization */
   export abstract class Serializable {
     /** key transform functionality */
@@ -44,6 +49,8 @@ declare module "@gamebridgeai/ts_serialize" {
     public fromJSON(json: JSONValue): this;
     /** to JSONObject */
     public tsSerialize(): JSONObject;
+    /** deep copy `this` */
+    clone(jsonObject: Partial<this>): this;
   }
 
   type NewSerializable<T> = T & (new () => Serializable);

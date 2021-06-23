@@ -40,6 +40,11 @@ export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
 
+/** deep copy `this` */
+export declare interface Clone {
+  clone(jsonObject: Partial<this>): this;
+}
+
 /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
 function getOrInitializeDefaultSerializerLogicForParents(
   targetPrototype: Serializable,
@@ -87,7 +92,6 @@ function getOrInitializeDefaultSerializerLogicForParents(
  *       example.tsSerialize()
  */
 export abstract class Serializable {
-  /** allow empty class serialization */
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
@@ -102,6 +106,14 @@ export abstract class Serializable {
   }
   public tsSerialize(): JSONObject {
     return toPojo(this);
+  }
+  public clone(jsonObject: Partial<this> = {}): this {
+    return Object.assign(
+      new (Object.getPrototypeOf(this)).constructor().fromJSON(
+        this.tsSerialize(),
+      ),
+      jsonObject,
+    );
   }
 }
 
