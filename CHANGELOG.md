@@ -18,7 +18,7 @@ and this project adheres to
 - _breaking_ fromJSON only accepts `JSONValue`
 - _breaking_ fix #125 strategies are now passed the full array, this allows more
   flexibility for conversions
-- fix #132 adding `serializable.clone(json: JSONObject): this` 
+- fix #132 adding `serializable.clone(json: JSONObject): this`
 
 ## [v1.3.1] - 2021-03-14
 
