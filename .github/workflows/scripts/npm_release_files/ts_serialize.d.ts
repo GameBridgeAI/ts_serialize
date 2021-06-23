@@ -50,7 +50,7 @@ declare module "@gamebridgeai/ts_serialize" {
     /** to JSONObject */
     public tsSerialize(): JSONObject;
     /** deep copy `this` */
-    clone(jsonObject: Partial<this>): this;
+    public clone(jsonObject: Partial<this>): this;
   }
 
   type NewSerializable<T> = T & (new () => Serializable);

@@ -302,6 +302,6 @@ class Clone extends Serializable {
 }
 
 assert(
-  new Clone().clone({ test: "changed" }).test,
-  `changed`,
+  new Clone().clone({ test: "changed" }).test ===
+    `changed`,
 );

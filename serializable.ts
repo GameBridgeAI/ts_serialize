@@ -108,8 +108,9 @@ export abstract class Serializable {
     return toPojo(this);
   }
   public clone(jsonObject: Partial<this> = {}): this {
+    const copy = Object.getPrototypeOf(this).constructor;
     return Object.assign(
-      new (Object.getPrototypeOf(this)).constructor().fromJSON(
+      new copy().fromJSON(
         this.tsSerialize(),
       ),
       jsonObject,
