@@ -1,7 +1,6 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  JSONObject,
   JSONValue,
   Serializable,
   SERIALIZABLE_CLASS_MAP,
