@@ -40,7 +40,7 @@ export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
 
-/** deep copy `this` */
+/** deep copy `this`, jsonObject is a POJO of the class */
 export declare interface Clone {
   clone(jsonObject: Partial<this>): this;
 }
