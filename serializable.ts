@@ -40,7 +40,9 @@ export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
 
-/** deep copy `this`, jsonObject is a POJO of the class */
+/** deep copy `this`, jsonObject is a POJO of the class that overrides the cloned
+ * object, jsonObject keys do not need keyTransforms, and values are raw JS Objects
+ */
 export declare interface Clone {
   clone(jsonObject: Partial<this>): this;
 }
