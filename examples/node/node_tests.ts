@@ -295,3 +295,13 @@ assert(
   ).toJSON() ===
     `{"test":"from_constructor"}`,
 );
+
+class Clone extends Serializable {
+  @SerializeProperty()
+  public test = "test";
+}
+
+assert(
+  new Clone().clone({ test: "changed" }).test ===
+    `changed`,
+);

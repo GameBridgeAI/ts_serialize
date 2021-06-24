@@ -13,6 +13,7 @@ test({
     assertEquals(typeof mod.createDateStrategy, "function");
     assertEquals(typeof mod.iso8601Date, "function");
     assertEquals(typeof mod.toSerializable, "function");
+    assertEquals(typeof mod.fromSerializable, "function");
     assertEquals(typeof mod.toObjectContaining, "function");
     assertEquals(typeof mod.fromObjectContaining, "function");
     assertEquals(typeof mod.polymorphicClassFromJSON, "function");
@@ -20,6 +21,6 @@ test({
     assertEquals(typeof mod.PolymorphicSwitch, "function");
     assertEquals(typeof mod.getNewSerializable, "function");
 
-    assertEquals(Object.keys(mod).length, 12);
+    assertEquals(Object.keys(mod).length, 13);
   },
 });

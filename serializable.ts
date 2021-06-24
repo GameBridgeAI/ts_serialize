@@ -40,6 +40,13 @@ export declare interface Serialize {
   tsSerialize(): JSONObject;
 }
 
+/** deep copy `this`, jsonObject is a POJO of the class that overrides the cloned
+ * object, jsonObject keys do not need keyTransforms, and values are raw JS Objects
+ */
+export declare interface Clone {
+  clone(jsonObject: Partial<this>): this;
+}
+
 /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
 function getOrInitializeDefaultSerializerLogicForParents(
   targetPrototype: Serializable,
@@ -87,7 +94,6 @@ function getOrInitializeDefaultSerializerLogicForParents(
  *       example.tsSerialize()
  */
 export abstract class Serializable {
-  /** allow empty class serialization */
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
   }
@@ -102,6 +108,15 @@ export abstract class Serializable {
   }
   public tsSerialize(): JSONObject {
     return toPojo(this);
+  }
+  public clone(jsonObject: Partial<this> = {}): this {
+    const copy = Object.getPrototypeOf(this).constructor;
+    return Object.assign(
+      new copy().fromJSON(
+        this.tsSerialize(),
+      ),
+      jsonObject,
+    );
   }
 }
 
@@ -147,15 +162,7 @@ export function toPojo(
     ) {
       toJSONStrategy = toJSONRecursive;
     }
-
-    if (Array.isArray(value)) {
-      record[serializedKey] = value.map((item: JSONValue) => {
-        if (item instanceof Serializable) {
-          return toPojo(item);
-        }
-        return toJSONStrategy(item);
-      });
-    } else if (value !== undefined) {
+    if (value !== undefined) {
       record[serializedKey] = toJSONStrategy(value);
     }
   }
@@ -174,22 +181,18 @@ function fromJSON<T>(
 ): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};
-
-  for (const [key, value] of Object.entries(_json)) {
+  const map = SERIALIZABLE_CLASS_MAP.get(context?.constructor?.prototype);
+  for (const [key, value] of Object.entries(_json) as [string, JSONValue][]) {
     const {
       propertyKey,
       fromJSONStrategy = fromJSONDefault,
-    } = SERIALIZABLE_CLASS_MAP.get(
-      context?.constructor?.prototype,
-    )?.getBySerializedKey(key) || {};
+    } = map?.getBySerializedKey(key) || {};
 
     if (!propertyKey) {
       continue;
     }
 
-    accumulator[propertyKey as keyof T] = Array.isArray(value)
-      ? value.map((v) => fromJSONStrategy(v))
-      : fromJSONStrategy(value as JSONValue);
+    accumulator[propertyKey as keyof T] = fromJSONStrategy(value);
   }
 
   return Object.assign(

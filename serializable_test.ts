@@ -301,3 +301,18 @@ test({
     assertEquals(new Test().tsSerialize(), { test: ["test"] });
   },
 });
+
+test({
+  name: "clones an object",
+  fn() {
+    class Clone extends Serializable {
+      @SerializeProperty()
+      public test = "test";
+    }
+
+    assertEquals(
+      new Clone().clone({ test: "changed" }).test,
+      `changed`,
+    );
+  },
+});
