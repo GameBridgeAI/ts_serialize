@@ -5,7 +5,7 @@ be transferred, stored and accessed by multiple systems or languages.
 
 There are many serialization formats; for our examples we will talk about
 JavaScript Object Notation (JSON). JSON is standard, language-independent file
-format that represends objects as key and value pairs in human readable text.
+format that represents objects as key and value pairs in human readable text.
 
 JavaScript (and by extension TypeScript) also have "Objects"; these objects have
 their own rules for the keys and values. Methods (functions) can be a value for

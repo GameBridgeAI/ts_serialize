@@ -20,8 +20,8 @@ import {
   toSerializable,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
-import toJSONFixture from "../fixtures/to.json";
-import fromJSONFixture from "../fixtures/from.json";
+import toJSONFixture from "./fixtures/to.json";
+import fromJSONFixture from "./fixtures/from.json";
 
 function assert(boolean: boolean, msg?: string): void {
   if (!boolean) {
