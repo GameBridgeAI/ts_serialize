@@ -405,8 +405,7 @@ test({
     class Test2 extends Serializable {
       @SerializeProperty({
         serializedKey: "outer_property",
-        toJSONStrategy: (values: Test1[]) =>
-          values.map(((v) => v.tsSerialize())),
+        toJSONStrategy: (values: Test1[]) => values.map((v) => v.tsSerialize()),
       })
       nested: Test1[] = [new Test1()];
     }
@@ -414,8 +413,7 @@ test({
     class Test3 extends Serializable {
       @SerializeProperty({
         serializedKey: "outer_outer_property",
-        toJSONStrategy: (values: Test2[]) =>
-          values.map(((v) => v.tsSerialize())),
+        toJSONStrategy: (values: Test2[]) => values.map((v) => v.tsSerialize()),
       })
       nested2: Test2[] = [new Test2()];
     }
@@ -462,7 +460,7 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty(
-        ({ serializedKey: (propertyName) => `_${String(propertyName)}` }),
+        { serializedKey: (propertyName) => `_${String(propertyName)}` },
       )
       serializeMe = "nice1";
     }
