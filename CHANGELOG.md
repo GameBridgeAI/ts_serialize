@@ -6,10 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.3.2] - unreleased
+## [2.0.0] - unreleased
 
 ### Changed
 
+- std@0.114.0
 - public strategies are all functions to be run to get the runtime function
   `iso8601Date` => `iso8601Date()`
 - _breaking_ remove JSONArray for JSONValue[]

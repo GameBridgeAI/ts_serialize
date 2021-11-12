@@ -492,9 +492,8 @@ test({
   name: "should be able to serialize a serializable without any properties",
   fn() {
     class TestSerializable extends Serializable {}
-
-    assertEquals(new TestSerializable().fromJSON({}), {});
     const serializedClass = new TestSerializable().fromJSON({});
+    assert(serializedClass instanceof TestSerializable);
     assertEquals(Object.keys(serializedClass).length, 0);
   },
 });

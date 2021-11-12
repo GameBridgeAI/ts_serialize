@@ -13,7 +13,6 @@ test({
       @SerializeProperty()
       someClassProp = "test";
     }
-
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
       test: { [k: string]: SomeClass } = { testing: new SomeClass() };

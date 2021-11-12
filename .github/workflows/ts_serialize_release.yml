@@ -34,21 +34,8 @@ jobs:
       - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: Run deno tests with coverage
-        run: deno test --coverage=coverage --unstable
-
-      - name: LCOV test coverage
-        run: deno coverage --unstable coverage --lcov > coverage.lcov
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: Report code coverage
-        uses: zgosalvez/github-actions-report-lcov@v1
-        with:
-          coverage-files: coverage.lcov
-          minimum-coverage: 100
-          artifact-name: code-coverage-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.os == 'ubuntu-latest'
+      - name: Run deno tests
+        run: deno test 
 
       - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
