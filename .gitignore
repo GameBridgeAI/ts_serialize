@@ -5,6 +5,6 @@ examples/node/*
 !examples/node/tsconfig.json
 !examples/node/package.json
 !examples/node/README.md
-coverage
-coverage.lcov
+ts_serialize_coverage
+ts_serialize_coverage.lcov
 .DS_Store
