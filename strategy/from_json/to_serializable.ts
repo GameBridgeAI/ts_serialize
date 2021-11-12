@@ -8,9 +8,9 @@ import { getNewSerializable } from "../utils.ts";
 export function toSerializable(
   type: unknown,
 ): FromJSONStrategy {
-  return function _toSerializable(
+  return (
     value: JSONValue,
-  ): Serializable | Serializable[] {
+  ): Serializable | Serializable[] => {
     if (Array.isArray(value)) {
       return value.map((item) => getNewSerializable(type).fromJSON(item));
     }

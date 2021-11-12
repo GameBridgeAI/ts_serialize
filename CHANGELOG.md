@@ -10,6 +10,8 @@ and this project adheres to
 
 ### Changed
 
+- public strategies are all functions to be run to get the runtime function
+  `iso8601Date` => `iso8601Date()`
 - _breaking_ remove JSONArray for JSONValue[]
 - _breaking_ fromJSON only accepts `JSONValue`
 - _breaking_ fix #125 strategies are now passed the full array, this allows more

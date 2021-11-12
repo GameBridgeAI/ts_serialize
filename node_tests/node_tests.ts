@@ -75,7 +75,7 @@ class Test extends Serializable {
   @SerializeProperty({ fromJSONStrategy: toSerializable(Nested) })
   asTest = new Nested();
 
-  @SerializeProperty({ fromJSONStrategy: iso8601Date })
+  @SerializeProperty({ fromJSONStrategy: iso8601Date() })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
   @SerializeProperty({ fromJSONStrategy: customDateStrategy })

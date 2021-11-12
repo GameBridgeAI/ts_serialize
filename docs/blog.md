@@ -207,7 +207,7 @@ class User extends BaseModel {
   lastName: string = "Esquire";
 
   @SerializeProperty({
-    fromJSONStrategy: iso8601Date, // string -> date
+    fromJSONStrategy: iso8601Date(), // string -> date
   })
   createdDate: Date = new Date("2020-09-24T00:00:00.000Z");
 }
@@ -216,7 +216,7 @@ class User extends BaseModel {
 ts_serialize keeps track of the original and serialized property names, so we
 don't need to configure anything to do the reverse transformation.
 
-The example also uses the `iso8601Date` utility function to deserializing
+The example also uses the `iso8601Date()` utility function to deserializing
 timestamps in standard ISO-8601 formats.
 
 There are more details in our documentation at

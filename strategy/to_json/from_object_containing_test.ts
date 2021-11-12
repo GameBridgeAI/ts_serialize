@@ -15,7 +15,7 @@ test({
     }
 
     class Test extends Serializable {
-      @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+      @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
       test: { [k: string]: SomeClass } = { testing: new SomeClass() };
     }
 
@@ -35,7 +35,7 @@ test({
     }
 
     class Test extends Serializable {
-      @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+      @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
       test: { [_: string]: SomeClass } = { testing: new SomeClass() };
     }
 
@@ -55,7 +55,7 @@ test({
     }
 
     class Test extends Serializable {
-      @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+      @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
       test: { [k: string]: SomeClass[] } = {
         testing: [new SomeClass(), new SomeClass(), new SomeClass()],
       };
@@ -84,7 +84,7 @@ test({
     }
 
     class Test extends Serializable {
-      @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+      @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
       test: { [k: string]: SomeClass[] } = {
         testing: [new SomeClass(), new SomeClass(), new SomeClass()],
       };
