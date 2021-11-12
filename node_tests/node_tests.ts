@@ -30,7 +30,8 @@ function assert(boolean: boolean, msg?: string): void {
   }
 }
 
-const customStrategy = (v: string) => `${v} strategy changed`;
+const customStrategy: FromJSONStrategy | ToJSONStrategy = (v: string) =>
+  `${v} strategy changed`;
 const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
 const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -269,7 +270,7 @@ class SomeOtherClass extends Serializable {
 }
 
 class TestObjContaining extends Serializable {
-  @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+  @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
   test: { [k: string]: SomeOtherClass[] } = {
     testing: [new SomeOtherClass(), new SomeOtherClass(), new SomeOtherClass()],
   };
