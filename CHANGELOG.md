@@ -18,7 +18,6 @@ and this project adheres to
   flexibility for conversions
 - _breaking_ removes array as an strategy, use `composeStrategy` instead
 - deno@1.16.1
-- add back coverage
 - fmt with deno@1.11.1
 - turn off unstable code coverage
 - add type guard in `getNewSerializable` fixing compile issue
