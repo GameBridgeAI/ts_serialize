@@ -29,10 +29,10 @@ cd dist
 ../.github/workflows/scripts/npm_release_files/create_npm_package_file.sh "$1"
 
 # Test current built deployment on node example
-cd ../examples/node
+cd ../node_tests
 
-npm ci
+npm i
 
-npm ln ../../dist
+npm ln ../dist
 
 npm test

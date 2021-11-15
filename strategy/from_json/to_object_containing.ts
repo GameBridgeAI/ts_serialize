@@ -13,9 +13,9 @@ import { getNewSerializable } from "../utils.ts";
 export function toObjectContaining(
   type: unknown,
 ): FromJSONStrategy {
-  return function _toObjectContaining(
+  return (
     value: JSONValue,
-  ) {
+  ): null | Record<string, Serializable | Serializable[] | null> => {
     if (value == null) {
       return null;
     }

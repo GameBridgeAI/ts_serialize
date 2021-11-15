@@ -43,7 +43,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date(),
       })
       date!: Date;
     }
@@ -61,7 +61,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date(),
       })
       public date!: Date;
     }
@@ -76,7 +76,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date(),
       })
       public date!: Date;
     }
@@ -91,7 +91,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty({
-        fromJSONStrategy: iso8601Date,
+        fromJSONStrategy: iso8601Date(),
       })
       public date!: Date;
     }

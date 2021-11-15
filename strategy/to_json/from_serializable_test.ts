@@ -12,7 +12,7 @@ function FromSerializable(
   propertyName?: string,
 ): PropertyDecorator {
   const opts: SerializePropertyArgument = {
-    toJSONStrategy: fromSerializable,
+    toJSONStrategy: fromSerializable(),
   };
   if (propertyName) {
     opts.serializedKey = propertyName;

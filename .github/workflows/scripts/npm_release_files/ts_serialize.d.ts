@@ -102,9 +102,7 @@ declare module "@gamebridgeai/ts_serialize" {
   ): FromJSONStrategy;
 
   /** serialize data using `tsSerialize` on a subclass Serializable type */
-  export function fromSerializable(
-    value: Serializable | Serializable[],
-  ): JSONValue;
+  export function fromSerializable(): ToJSONStrategy;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining(
@@ -112,9 +110,7 @@ declare module "@gamebridgeai/ts_serialize" {
   ): FromJSONStrategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
-  export function fromObjectContaining(
-    value: Record<string, Serializable | Serializable[]>,
-  ): JSONObject;
+  export function fromObjectContaining(): ToJSONStrategy;
 
   /** allows authors to pass a regex to parse as a date */
   export function createDateStrategy(regex: RegExp): FromJSONStrategy;
@@ -122,7 +118,7 @@ declare module "@gamebridgeai/ts_serialize" {
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(input: JSONValue): Date;
+  export function iso8601Date(): FromJSONStrategy;
 
   export type InitializerFunction = () => Serializable;
 

@@ -39,24 +39,8 @@ jobs:
       - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: Deno test # with coverage
-        # run: deno test --coverage=coverage --unstable
+      - name: Deno test
         run: deno test
-
-      - name: lcov test coverage
-        run: deno coverage --unstable coverage --lcov > coverage.lcov
-        # if: matrix.os == 'ubuntu-latest'
-        if: false
-
-      - name: Report code coverage
-        uses: zgosalvez/github-actions-report-lcov@v1
-        with:
-          coverage-files: coverage.lcov
-          minimum-coverage: 100
-          artifact-name: code-coverage-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        # if: matrix.os == 'ubuntu-latest'
-        if: false
 
       - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
@@ -64,7 +48,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module

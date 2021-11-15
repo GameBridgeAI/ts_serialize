@@ -61,7 +61,7 @@ object. `ts_serialize` provides a `iso8601Date` function to parse ISO Dates.
 ```ts
 class Test extends Serializable {
   @SerializeProperty({
-    fromJSONStrategy: iso8601Date,
+    fromJSONStrategy: iso8601Date(),
   })
   date!: Date;
 }

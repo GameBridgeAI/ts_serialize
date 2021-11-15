@@ -35,8 +35,6 @@ export {
 } from "https://deno.land/x/ts_serialize/mod.ts";
 ```
 
-[Deno Example](https://github.com/GameBridgeAI/ts_serialize/tree/develops/examples/deno)
-
 ### Node
 
 Install with `NPM`
@@ -60,8 +58,6 @@ import {
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
 ```
-
-[Node Example](https://github.com/GameBridgeAI/ts_serialize/tree/develop/examples/node)
 
 Once installed see our docs on how to use
 [Serializable and SerializeProperty](./serializable)

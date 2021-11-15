@@ -5,7 +5,7 @@ be transferred, stored and accessed by multiple systems or languages.
 
 There are many serialization formats; for our examples we will talk about
 JavaScript Object Notation (JSON). JSON is standard, language-independent file
-format that represends objects as key and value pairs in human readable text.
+format that represents objects as key and value pairs in human readable text.
 
 JavaScript (and by extension TypeScript) also have "Objects"; these objects have
 their own rules for the keys and values. Methods (functions) can be a value for
@@ -207,7 +207,7 @@ class User extends BaseModel {
   lastName: string = "Esquire";
 
   @SerializeProperty({
-    fromJSONStrategy: iso8601Date, // string -> date
+    fromJSONStrategy: iso8601Date(), // string -> date
   })
   createdDate: Date = new Date("2020-09-24T00:00:00.000Z");
 }
@@ -216,7 +216,7 @@ class User extends BaseModel {
 ts_serialize keeps track of the original and serialized property names, so we
 don't need to configure anything to do the reverse transformation.
 
-The example also uses the `iso8601Date` utility function to deserializing
+The example also uses the `iso8601Date()` utility function to deserializing
 timestamps in standard ISO-8601 formats.
 
 There are more details in our documentation at
