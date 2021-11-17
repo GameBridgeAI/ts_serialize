@@ -2,9 +2,11 @@
 import { JSONValue } from "../serializable.ts";
 
 /** Functions used when hydrating data */
+// deno-lint-ignore no-explicit-any
 export type FromJSONStrategy = (value: JSONValue) => any;
 
 /** Functions used when dehydrating data */
+// deno-lint-ignore no-explicit-any
 export type ToJSONStrategy = (value: any) => JSONValue;
 
 /** Function to build a `fromJSONStrategy` or `toJSONStrategy`.
@@ -12,14 +14,14 @@ export type ToJSONStrategy = (value: any) => JSONValue;
  */
 export function composeStrategy(
   ...fns: (
-    | FromJSONStrategy
     | ToJSONStrategy
+    | FromJSONStrategy
   )[]
 ): FromJSONStrategy | ToJSONStrategy {
-  return function _composeStrategy(val: any): any {
-    return fns.reduce(
-      (acc: any, fn: FromJSONStrategy | ToJSONStrategy) => fn(acc),
-      val,
-    );
+  return function _composeStrategy(
+    // deno-lint-ignore no-explicit-any
+    val: any,
+  ): JSONValue | unknown {
+    return fns.reduce((acc, fn) => fn(acc), val);
   };
 }

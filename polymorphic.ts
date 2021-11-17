@@ -33,7 +33,7 @@ export type InitializerFunction = () => Serializable;
 
 /** \@PolymorphicResolver method decorator */
 export function PolymorphicResolver(
-  target: Object,
+  target: unknown,
   propertyKey: string | symbol,
 ): void {
   registerPolymorphicResolver(
@@ -45,15 +45,15 @@ export function PolymorphicResolver(
 }
 
 export type ResolverFunction = (
-  json: string | JSONValue | Object,
+  json: JSONValue,
 ) => Serializable | null;
 
 /** Map of parent class constructors to functions that take in a JSON input and output a class instance that inherits Serializable */
-const POLYMORPHIC_RESOLVER_MAP = new Map<Object, ResolverFunction>();
+const POLYMORPHIC_RESOLVER_MAP = new Map<unknown, ResolverFunction>();
 
 /** Adds a class and a resolver function to the resolver map */
 function registerPolymorphicResolver(
-  classPrototype: Object,
+  classPrototype: unknown,
   resolver: ResolverFunction,
 ): void {
   POLYMORPHIC_RESOLVER_MAP.set(classPrototype, resolver);
@@ -71,7 +71,7 @@ export function PolymorphicSwitch(
 
 export function PolymorphicSwitch<T>(
   initializerFunction: InitializerFunction,
-  value: Exclude<T, Function>,
+  value: Exclude<T, PropertyValueTest>,
 ): PropertyDecorator;
 
 export function PolymorphicSwitch(
@@ -79,7 +79,7 @@ export function PolymorphicSwitch(
   valueOrTest: PropertyValueTest | unknown,
 ): PropertyDecorator {
   return function _PolymorphicSwitch(
-    target: Object, // The class it's self
+    target: unknown, // The class it's self
     propertyKey: string | symbol,
   ) {
     registerPolymorphicSwitch(
@@ -92,10 +92,10 @@ export function PolymorphicSwitch(
   };
 }
 
-const POLYMORPHIC_SWITCH_MAP = new Map<Object, Set<PolymorphicClassOptions>>();
+const POLYMORPHIC_SWITCH_MAP = new Map<unknown, Set<PolymorphicClassOptions>>();
 
 type PolymorphicClassOptions = {
-  classDefinition: Object;
+  classDefinition: unknown;
   propertyKey: string | symbol;
   propertyValueTest: PropertyValueTest;
   initializer: InitializerFunction;
@@ -107,24 +107,24 @@ export type PropertyValueTest = (propertyValue: unknown) => boolean;
  * Registers a set of polymorphic class options with a parent class
  */
 function registerPolymorphicSwitch<T>(
-  parentClassConstructor: Object,
-  classDefinition: Object,
+  parentClassConstructor: unknown,
+  classDefinition: unknown,
   propertyKey: string | symbol,
   propertyValueTest: PropertyValueTest,
   initializer: InitializerFunction,
 ): void;
 
 function registerPolymorphicSwitch<T>(
-  parentClassConstructor: Object,
-  classDefinition: Object,
+  parentClassConstructor: unknown,
+  classDefinition: unknown,
   propertyKey: string | symbol,
-  propertyValue: Exclude<T, Function>,
+  propertyValue: Exclude<T, PropertyValueTest>,
   initializer: InitializerFunction,
 ): void;
 
-function registerPolymorphicSwitch<T>(
-  parentClassConstructor: Object,
-  classDefinition: Object,
+function registerPolymorphicSwitch(
+  parentClassConstructor: unknown,
+  classDefinition: unknown,
   propertyKey: string | symbol,
   valueOrTest: PropertyValueTest | unknown,
   initializer: InitializerFunction,
@@ -156,8 +156,8 @@ function registerPolymorphicSwitch<T>(
 
 /** Return a resolved class type by testing the value of a property key */
 function resolvePolymorphicSwitch(
-  parentClassConstructor: Object,
-  json: string | JSONValue | Object,
+  parentClassConstructor: unknown,
+  json: JSONValue,
 ): Serializable | null {
   const classOptionsSet = POLYMORPHIC_SWITCH_MAP.get(
     parentClassConstructor,
@@ -210,8 +210,8 @@ function resolvePolymorphicSwitch(
  * appropriate class, then deserialize the input using Serializable#fromJSON, returning the result
  */
 export function polymorphicClassFromJSON<T extends Serializable>(
-  classPrototype: Object & { prototype: T },
-  json: string | JSONValue | Object,
+  classPrototype: unknown & { prototype: T },
+  json: JSONValue,
 ): T {
   return resolvePolymorphicClass(classPrototype, json).fromJSON(json);
 }
@@ -220,8 +220,8 @@ export function polymorphicClassFromJSON<T extends Serializable>(
  * and input, and returns the initialized child class. Throws an exception if no class can be resolved
  */
 function resolvePolymorphicClass<T extends Serializable>(
-  classPrototype: Object & { prototype: T },
-  json: string | JSONValue | Object,
+  classPrototype: unknown & { prototype: T },
+  json: JSONValue,
 ): T {
   const classResolver = POLYMORPHIC_RESOLVER_MAP.get(classPrototype);
   if (classResolver) {

@@ -6,16 +6,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.0.0] - unreleased
 
-- removes array as an strategy, use `composeStrategy` instead
-- fmt with deno@1.10.3
+### Changed
+
+- std@0.114.0
+- public strategies are all functions to be run to get the runtime function
+  `iso8601Date` => `iso8601Date()`
+- _breaking_ remove JSONArray for JSONValue[]
+- _breaking_ fromJSON only accepts `JSONValue`
+- _breaking_ fix #125 strategies are now passed the full array, this allows more
+  flexibility for conversions
+- _breaking_ removes array as an strategy, use `composeStrategy` instead
+- deno@1.16.1
+- fmt with deno@1.11.1
 - turn off unstable code coverage
-- remove JSONArray for JSONValue[]
+- add type guard in `getNewSerializable` fixing compile issue
+- fix #121 address lint issues
+- add `fromSerializable` strategy
+- fix #132 adding `serializable.clone(json: JSONObject): this`
 
 ## [v1.3.1] - 2021-03-14
 
-## Added
+### Added
 
 - ci with test coverage
 - ci fails to build if we do not have 100% test coverage

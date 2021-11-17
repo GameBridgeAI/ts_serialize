@@ -6,6 +6,7 @@
 export { SerializeProperty } from "./serialize_property.ts";
 /** types */
 export type {
+  Clone,
   FromJSON,
   Serialize,
   ToJSON,
@@ -20,8 +21,9 @@ export type {
   FromJSONStrategy,
   ToJSONStrategy,
 } from "./strategy/compose_strategy.ts";
-/** from json strategies */
+/** strategies */
 export { toSerializable } from "./strategy/from_json/to_serializable.ts";
+export { fromSerializable } from "./strategy/to_json/from_serializable.ts";
 export { toObjectContaining } from "./strategy/from_json/to_object_containing.ts";
 export { fromObjectContaining } from "./strategy/to_json/from_object_containing.ts";
 export { createDateStrategy, iso8601Date } from "./strategy/from_json/date.ts";
@@ -39,5 +41,3 @@ export type {
 } from "./polymorphic.ts";
 
 export { getNewSerializable } from "./strategy/utils.ts";
-/** types */
-export type { SerializableConstructor } from "./strategy/utils.ts";

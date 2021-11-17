@@ -1,5 +1,7 @@
 // Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
 
+// deno-lint-ignore-file
+
 import {
   composeStrategy,
   createDateStrategy,
@@ -18,8 +20,8 @@ import {
   toSerializable,
   TransformKey,
 } from "@gamebridgeai/ts_serialize";
-import toJSONFixture from "../fixtures/to.json";
-import fromJSONFixture from "../fixtures/from.json";
+import toJSONFixture from "./fixtures/to.json";
+import fromJSONFixture from "./fixtures/from.json";
 
 function assert(boolean: boolean, msg?: string): void {
   if (!boolean) {
@@ -28,7 +30,8 @@ function assert(boolean: boolean, msg?: string): void {
   }
 }
 
-const customStrategy = (v: string) => `${v} strategy changed`;
+const customStrategy: FromJSONStrategy | ToJSONStrategy = (v: string) =>
+  `${v} strategy changed`;
 const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
 const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
@@ -73,7 +76,7 @@ class Test extends Serializable {
   @SerializeProperty({ fromJSONStrategy: toSerializable(Nested) })
   asTest = new Nested();
 
-  @SerializeProperty({ fromJSONStrategy: iso8601Date })
+  @SerializeProperty({ fromJSONStrategy: iso8601Date() })
   isoDate = new Date("2020-06-04T19:01:47.831Z");
 
   @SerializeProperty({ fromJSONStrategy: customDateStrategy })
@@ -161,7 +164,7 @@ abstract class AbstractClass extends Serializable {
   // Property name can be whatever, even an inaccessible symbol
   @PolymorphicResolver
   public static [Symbol()](
-    json: string | JSONValue | Object,
+    json: JSONValue,
   ): Serializable {
     const inputObject = new ResolverHelperClass().fromJSON(json);
 
@@ -267,7 +270,7 @@ class SomeOtherClass extends Serializable {
 }
 
 class TestObjContaining extends Serializable {
-  @SerializeProperty({ toJSONStrategy: fromObjectContaining })
+  @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
   test: { [k: string]: SomeOtherClass[] } = {
     testing: [new SomeOtherClass(), new SomeOtherClass(), new SomeOtherClass()],
   };
@@ -292,4 +295,14 @@ assert(
     () => new TestGetNew({ test: "from_constructor" }),
   ).toJSON() ===
     `{"test":"from_constructor"}`,
+);
+
+class Clone extends Serializable {
+  @SerializeProperty()
+  public test = "test";
+}
+
+assert(
+  new Clone().clone({ test: "changed" }).test ===
+    `changed`,
 );

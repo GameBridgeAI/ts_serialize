@@ -23,31 +23,21 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
+
+      - name: Deno lint
+        run: deno lint
       
-      - name: Deno Format Check
+      - name: Deno format check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
 
-      - name: Cache Dependencies
+      - name: Cache dependencies
         run: deno cache test_deps.ts
 
-      - name: Run Deno Tests with coverage
-        run: deno test --coverage=coverage --unstable
+      - name: Run deno tests
+        run: deno test 
 
-      - name: lcov test coverage
-        run: deno coverage --unstable coverage --lcov > coverage.lcov
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: Report code coverage
-        uses: zgosalvez/github-actions-report-lcov@v1
-        with:
-          coverage-files: coverage.lcov
-          minimum-coverage: 100
-          artifact-name: code-coverage-report
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: Run package.json Generation Tests
+      - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
   build:

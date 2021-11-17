@@ -212,13 +212,13 @@ While `@SerializeProperty` is handy with to and from JSON strategies, it can
 still be verbose to declare the strategies for each property. You can define
 your owndecorator functions to wrap `@SerializeProperty` and provide the
 `toJSONStrategy` and `fromJSONStrategy`. An example short cut is providing a
-`type` to use with `toSerializable`. `SerializableConstructor` and
-`getNewSerializable` are provided to allow a raw serializable type or a function
-that returns a constructed serializable type enabling constructor arguments:
+`type` to use with `toSerializable`. `getNewSerializable` is provided to allow a
+raw serializable type or a function that returns a constructed serializable type
+enabling constructor arguments:
 
 ```ts
-export function DeserializeAs<T>(
-  type: SerializableConstructor<T>,
+export function DeserializeAs(
+  type: unknown,
 ): PropertyDecorator {
   return SerializeProperty({ fromJSONStrategy: toSerializable(getNewSerializable(type)) });
 }

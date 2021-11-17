@@ -22,3 +22,6 @@ export const ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE =
 
 export const ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE =
   "The sub-value is not an object";
+
+export const ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED =
+  "The provided input is not Serializable or a function.";

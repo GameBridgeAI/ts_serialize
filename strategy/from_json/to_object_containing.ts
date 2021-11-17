@@ -7,15 +7,15 @@ import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
 } from "../../error_messages.ts";
 import { isObject } from "../_utils.ts";
-import { getNewSerializable, SerializableConstructor } from "../utils.ts";
+import { getNewSerializable } from "../utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
-export function toObjectContaining<T>(
-  type: SerializableConstructor<T>,
+export function toObjectContaining(
+  type: unknown,
 ): FromJSONStrategy {
-  return function _toObjectContaining(
+  return (
     value: JSONValue,
-  ) {
+  ): null | Record<string, Serializable | Serializable[] | null> => {
     if (value == null) {
       return null;
     }
@@ -37,7 +37,7 @@ export function toObjectContaining<T>(
 
         // Serializable[]
         if (Array.isArray(value[prop])) {
-          record[prop] = (value[prop] as JSONValue[]).map((v: JSONValue) => {
+          record[prop] = (value[prop] as JSONValue[]).map((v) => {
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }

@@ -13,4 +13,4 @@ the overall problem and goals of the pull request's commits._
 
 - [ ] Test coverage
 - [ ] Code Style
-- [ ] Documentation (`README.md`, `doc/`, `examples/`, etc..)
+- [ ] Documentation (`README.md`, `CHANGELOG.md`, `doc/`, etc..)

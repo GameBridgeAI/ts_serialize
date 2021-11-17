@@ -27,42 +27,46 @@ declare module "@gamebridgeai/ts_serialize" {
   /** to be implemented by external authors on their models  */
   export interface FromJSON {
     /** to Serializable Object */
-    fromJSON(json: string | JSONValue | Object): this;
+    fromJSON(json: JSONValue): this;
   }
   /** to be implemented by external authors on their models  */
   export interface Serialize {
     /** to JSONObject */
     tsSerialize(): JSONObject;
   }
+  /** deep copy `this` */
+  export interface Clone {
+    clone(jsonObject: Partial<this>): this;
+  }
+
   /** Adds methods for serialization */
   export abstract class Serializable {
     /** key transform functionality */
-    public tsTransformKey?(key: string): string;
+    public tsTransformKey(key: string): string;
     /** to JSON String */
     public toJSON(): string;
     /** to Serializable */
-    public fromJSON(json: string | JSONValue | Object): this;
+    public fromJSON(json: JSONValue): this;
     /** to JSONObject */
     public tsSerialize(): JSONObject;
+    /** deep copy `this` */
+    public clone(jsonObject: Partial<this>): this;
   }
 
   type NewSerializable<T> = T & (new () => Serializable);
   type FunctionSerializable = () => Serializable;
 
-  /** for strategies */
-  export type SerializableConstructor<T> =
-    | NewSerializable<T>
-    | FunctionSerializable;
-
   /** get new strategy type arguments */
-  export function getNewSerializable<T>(
-    type: SerializableConstructor<T>,
+  export function getNewSerializable(
+    type: unknown,
   ): Serializable;
 
   /** Functions used when hydrating data */
+  // deno-lint-ignore no-explicit-any
   export type FromJSONStrategy = (value: JSONValue) => any;
 
   /** Functions used when dehydrating data */
+  // deno-lint-ignore no-explicit-any
   export type ToJSONStrategy = (value: any) => JSONValue;
 
   /** string/symbol property name or options for (de)serializing values */
@@ -93,19 +97,20 @@ declare module "@gamebridgeai/ts_serialize" {
   ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */
-  export function toSerializable<T>(
-    type: SerializableConstructor<T>,
+  export function toSerializable(
+    type: unknown,
   ): FromJSONStrategy;
 
+  /** serialize data using `tsSerialize` on a subclass Serializable type */
+  export function fromSerializable(): ToJSONStrategy;
+
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
-  export function toObjectContaining<T>(
-    type: SerializableConstructor<T>,
+  export function toObjectContaining(
+    type: unknown,
   ): FromJSONStrategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
-  export function fromObjectContaining(
-    value: Record<string, Serializable | Serializable[]>,
-  ): JSONObject;
+  export function fromObjectContaining(): ToJSONStrategy;
 
   /** allows authors to pass a regex to parse as a date */
   export function createDateStrategy(regex: RegExp): FromJSONStrategy;
@@ -113,19 +118,19 @@ declare module "@gamebridgeai/ts_serialize" {
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(input: JSONValue): any;
+  export function iso8601Date(): FromJSONStrategy;
 
   export type InitializerFunction = () => Serializable;
 
   export type PropertyValueTest = (propertyValue: unknown) => boolean;
 
   export type ResolverFunction = (
-    json: string | JSONValue | Object,
+    json: JSONValue,
   ) => Serializable;
 
   export function polymorphicClassFromJSON<T extends Serializable>(
-    classPrototype: Object & { prototype: T },
-    json: string | JSONValue | Object,
+    classPrototype: unknown & { prototype: T },
+    json: JSONValue,
   ): T;
   /** Adds a class and a resolver function to the resolver map */
   export function PolymorphicResolver(
@@ -145,6 +150,6 @@ declare module "@gamebridgeai/ts_serialize" {
 
   export function PolymorphicSwitch<T>(
     initializerFunction: InitializerFunction,
-    value: Exclude<T, Function>,
+    value: Exclude<T, PropertyValueTest>,
   ): PropertyDecorator;
 }
