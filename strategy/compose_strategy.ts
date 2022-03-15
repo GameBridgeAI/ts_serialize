@@ -18,10 +18,8 @@ export function composeStrategy(
     | FromJSONStrategy
   )[]
 ): FromJSONStrategy | ToJSONStrategy {
-  return function _composeStrategy(
+  return (
     // deno-lint-ignore no-explicit-any
     val: any,
-  ): JSONValue | unknown {
-    return fns.reduce((acc, fn) => fn(acc), val);
-  };
+  ): JSONValue | unknown => fns.reduce((acc, fn) => fn(acc), val);
 }
