@@ -79,10 +79,10 @@ interface SerializePropertyArgumentObject {
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
-  return function _SerializeProperty(
+  return (
     target: unknown,
     propertyName: string | symbol,
-  ) {
+  ) => {
     const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
