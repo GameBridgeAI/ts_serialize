@@ -1,11 +1,11 @@
 deno.d.ts
 dist
-node_tests/*
-!node_tests/node_tests.ts
-!node_tests/tsconfig.json
-!node_tests/package.json
-!node_tests/README.md
-!node_tests/fixtures
+.github/node_tests/*
+!.github/node_tests/node_tests.ts
+!.github/node_tests/tsconfig.json
+!.github/node_tests/package.json
+!.github/node_tests/README.md
+!.github/node_tests/fixtures
 ts_serialize_coverage
 ts_serialize_coverage.lcov
 .DS_Store
