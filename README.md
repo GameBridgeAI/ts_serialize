@@ -48,8 +48,7 @@ We use [SemVer](http://semver.org/) for versioning.
 
 ## Authors
 
-- **Scott Hardy** - _Initial work_ -
-  [@shardyMBAI](https://github.com/shardyMBAI) 🐸
+- **Scott Hardy** - _Initial work_ - [@hardy925](https://github.com/hardy925) 🐸
 - **Chris Dufour** - _Initial work_ -
   [@ChrisDufourMB](https://github.com/ChrisDufourMB) 🍕 🐱 👑
 
