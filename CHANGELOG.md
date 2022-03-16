@@ -17,6 +17,7 @@ and this project adheres to
 - _breaking_ removes array as a strategy, use `composeStrategy` instead
 - move `docs/` to `README.md` and delete folder
 - fixes #135
+- fixes #134
 - std@0.129.0
 - public strategies are all functions to be run to get the runtime function
   `iso8601Date` => `iso8601Date()`
