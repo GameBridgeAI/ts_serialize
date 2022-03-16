@@ -54,7 +54,7 @@ yarn add @gamebridgeai/ts_serialize
 Then import from the package.
 
 ```ts
-import {} from "@gamebridgeai/ts_serialize";
+import {/* ... */} from "@gamebridgeai/ts_serialize";
 ```
 
 ## Serializable and SerializeProperty
