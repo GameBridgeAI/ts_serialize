@@ -33,7 +33,7 @@ omitted to get the latest release, however, for stability it is recommended to
 use a tagged version.
 
 ```ts
-export {} from /* ... */ "https://deno.land/x/ts_serialize/mod.ts";
+export { /* ... */ } from "https://deno.land/x/ts_serialize/mod.ts";
 ```
 
 ### Node
