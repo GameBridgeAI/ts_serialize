@@ -33,7 +33,7 @@ omitted to get the latest release, however, for stability it is recommended to
 use a tagged version.
 
 ```ts
-export { /* ... */ } from "https://deno.land/x/ts_serialize/mod.ts";
+export {} from /* ... */ "https://deno.land/x/ts_serialize/mod.ts";
 ```
 
 ### Node
@@ -43,7 +43,9 @@ Install with `NPM` or `yarn`
 ```
 npm i @gamebridgeai/ts_serialize
 ```
-or 
+
+or
+
 ```
 yarn add @gamebridgeai/ts_serialize
 ```
@@ -51,7 +53,7 @@ yarn add @gamebridgeai/ts_serialize
 Then import from the package.
 
 ```ts
-import { /* ... */ } from "@gamebridgeai/ts_serialize";
+import {/* ... */} from "@gamebridgeai/ts_serialize";
 ```
 
 ## Serializable and SerializeProperty
@@ -66,8 +68,10 @@ serialized.
 - `toJSON` - converts the model to a JSON string
 - `tsSerialize` - converts the model to "Plain old Javascript object" with any
   provided key or value transformations
-- `tsTransformKey` - called against every key, has one parameter, the key to transform, the return value is a string
-- `clone` - returns a new refernce of the object with all properties cloned, takes the object as a parameter to override cloned property values
+- `tsTransformKey` - called against every key, has one parameter, the key to
+  transform, the return value is a string
+- `clone` - returns a new reference of the object with all properties cloned,
+  takes the object as a parameter to override cloned property values
 
 ```ts
 class TestClass extends Serializable {
@@ -124,6 +128,30 @@ assertEquals(
   `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
 );
 ```
+
+### Inheritance
+
+Inherited classes override the key when serializing. If you override a property
+any value used for that key will be overridden by the child value. _With
+collisions the child always overrides the parent_
+
+```ts
+class Test1 extends Serializable {
+  @SerializeProperty("serialize_me")
+  serializeMe = "nice1";
+}
+
+class Test2 extends Test1 {
+  @SerializeProperty("serialize_me")
+  serializeMeInstead = "nice2";
+}
+
+const testObj = new Test2();
+assertEquals(testObj.serializeMe, "nice1");
+assertEquals(testObj.serializeMeInstead, "nice2");
+assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
+```
+
 ### Strategies
 
 `Strategies` are functions or a composed list of functions to execute on the
@@ -201,30 +229,6 @@ class Test extends Serializable {
 const testObj = new Test().fromJSON(`{"date":"2099-11-25"}`);
 assert(testObj.date instanceof Date);
 assertEquals(testObj.date.getFullYear(), 2099);
-```
-
-
-### Inheritance
-
-Inherited classes override the key when serializing. If you override a property
-any value used for that key will be overridden by the child value. _With
-collisions the child always overrides the parent_
-
-```ts
-class Test1 extends Serializable {
-  @SerializeProperty("serialize_me")
-  serializeMe = "nice1";
-}
-
-class Test2 extends Test1 {
-  @SerializeProperty("serialize_me")
-  serializeMeInstead = "nice2";
-}
-
-const testObj = new Test2();
-assertEquals(testObj.serializeMe, "nice1");
-assertEquals(testObj.serializeMeInstead, "nice2");
-assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
 ```
 
 ### Nested Class Serialization
@@ -340,6 +344,7 @@ class C extends Serializable {
   public property: B;
 }
 ```
+
 ## Global transformKey
 
 `Serializable` has an optional function `tsTransformKey(key: string): string`,
