@@ -33,7 +33,8 @@ omitted to get the latest release, however, for stability it is recommended to
 use a tagged version.
 
 ```ts
-export { /* ... */ } from "https://deno.land/x/ts_serialize/mod.ts";
+// deps.ts
+export { from "https://deno.land/x/ts_serialize/mod.ts";
 ```
 
 ### Node
@@ -53,7 +54,7 @@ yarn add @gamebridgeai/ts_serialize
 Then import from the package.
 
 ```ts
-import {/* ... */} from "@gamebridgeai/ts_serialize";
+import {} from "@gamebridgeai/ts_serialize";
 ```
 
 ## Serializable and SerializeProperty
