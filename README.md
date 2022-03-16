@@ -34,7 +34,7 @@ use a tagged version.
 
 ```ts
 // deps.ts
-export { from "https://deno.land/x/ts_serialize/mod.ts";
+export * from "https://deno.land/x/ts_serialize/mod.ts";
 ```
 
 ### Node
