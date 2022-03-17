@@ -44,6 +44,9 @@ symbols.
 If you find a bug a test case is the right place to start. Test example:
 
 ```ts
+import {test, assertEquals} from "../test_deps.ts";
+import {Serializable, SerializeProperty } from "../mod.ts";
+
 test({
   name: "Serialize nested",
   fn() {

@@ -1,7 +1,7 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONValue, Serializable } from "../../serializable.ts";
-import { FromJSONStrategy } from "../compose_strategy.ts";
+import { Strategy } from "../compose_strategy.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
@@ -12,7 +12,7 @@ import { getNewSerializable } from "../utils.ts";
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
 export function toObjectContaining(
   type: unknown,
-): FromJSONStrategy {
+): Strategy {
   return (
     value: JSONValue,
   ): null | Record<string, Serializable | Serializable[] | null> => {

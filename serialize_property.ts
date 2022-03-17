@@ -3,22 +3,19 @@
 import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import {
-  FromJSONStrategy,
-  ToJSONStrategy,
-} from "./strategy/compose_strategy.ts";
+import { Strategy } from "./strategy/compose_strategy.ts";
 import { ERROR_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
-  public fromJSONStrategy?: FromJSONStrategy;
-  public toJSONStrategy?: ToJSONStrategy;
+  public fromJSONStrategy?: Strategy;
+  public toJSONStrategy?: Strategy;
 
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJSONStrategy?: FromJSONStrategy,
-    toJSONStrategy?: ToJSONStrategy,
+    fromJSONStrategy?: Strategy,
+    toJSONStrategy?: Strategy,
   ) {
     if (fromJSONStrategy) {
       this.fromJSONStrategy = fromJSONStrategy;
@@ -39,43 +36,18 @@ export type SerializePropertyArgument =
   | ToSerializedKeyStrategy
   | {
     serializedKey?: string | ToSerializedKeyStrategy;
-    fromJSONStrategy?: FromJSONStrategy;
-    toJSONStrategy?: ToJSONStrategy;
+    fromJSONStrategy?: Strategy;
+    toJSONStrategy?: Strategy;
   };
 
 /** converted interface for `SerializePropertyArgument` */
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  fromJSONStrategy?: FromJSONStrategy;
-  toJSONStrategy?: ToJSONStrategy;
+  fromJSONStrategy?: Strategy;
+  toJSONStrategy?: Strategy;
 }
 
-/** Property wrapper that adds `SerializeProperty` options to the class map
- *
- *       class ExampleOne extends Serializable {
- *         @SerializeProperty()
- *         public testName = "toJSON";
- *       }
- *
- *       class ExampleTwo extends Serializable {
- *         @SerializeProperty("test_name")
- *         public testName = "toJSON";
- *       }
- *
- *       class ExampleTwo extends Serializable {
- *         @SerializeProperty((key) => string)
- *         public testName = "toJSON";
- *       }
- *
- *       class ExampleThree extends Serializable {
- *         @SerializeProperty({
- *           serializeKey: "test_name",
- *           fromJSONStrategy: (jsonValue) => any
- *           toJSONStrategy: (any) => jsonValue
- *         })
- *         public testName = "toJSON";
- *       }
- */
+/** Property wrapper that adds `SerializeProperty` options to the class map */
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
