@@ -63,19 +63,15 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Functions used when hydrating data */
   // deno-lint-ignore no-explicit-any
-  export type FromJSONStrategy = (value: JSONValue) => any;
-
-  /** Functions used when dehydrating data */
-  // deno-lint-ignore no-explicit-any
-  export type ToJSONStrategy = (value: any) => JSONValue;
+  export type Strategy = (value: any) => any;
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
     | string
     | {
       serializedKey?: string;
-      fromJSONStrategy?: FromJSONStrategy;
-      toJSONStrategy?: ToJSONStrategy;
+      fromJSONStrategy?: Strategy;
+      toJSONStrategy?: Strategy;
     };
 
   /** Property wrapper that adds serializable options to the class map
@@ -90,35 +86,32 @@ declare module "@gamebridgeai/ts_serialize" {
    * Converts value from functions provided as parameters
    */
   export function composeStrategy(
-    ...fns: (
-      | FromJSONStrategy
-      | ToJSONStrategy
-    )[]
-  ): FromJSONStrategy | ToJSONStrategy;
+    ...fns: Strategy[]
+  ): Strategy;
 
   /** revive data using `fromJSON` on a subclass type */
   export function toSerializable(
     type: unknown,
-  ): FromJSONStrategy;
+  ): Strategy;
 
   /** serialize data using `tsSerialize` on a subclass Serializable type */
-  export function fromSerializable(): ToJSONStrategy;
+  export function fromSerializable(): Strategy;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining(
     type: unknown,
-  ): FromJSONStrategy;
+  ): Strategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
-  export function fromObjectContaining(): ToJSONStrategy;
+  export function fromObjectContaining(): Strategy;
 
   /** allows authors to pass a regex to parse as a date */
-  export function createDateStrategy(regex: RegExp): FromJSONStrategy;
+  export function createDateStrategy(regex: RegExp): Strategy;
 
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(): FromJSONStrategy;
+  export function iso8601Date(): Strategy;
 
   export type InitializerFunction = () => Serializable;
 
