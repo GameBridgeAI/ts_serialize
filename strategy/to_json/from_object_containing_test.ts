@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../../test_deps.ts";
 import { fromObjectContaining } from "./from_object_containing.ts";

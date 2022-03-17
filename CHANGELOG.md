@@ -10,16 +10,19 @@ and this project adheres to
 
 ### Changed
 
-- std@0.114.0
-- public strategies are all functions to be run to get the runtime function
-  `iso8601Date` => `iso8601Date()`
 - _breaking_ remove JSONArray for JSONValue[]
 - _breaking_ fromJSON only accepts `JSONValue`
 - _breaking_ fix #125 strategies are now passed the full array, this allows more
   flexibility for conversions
-- _breaking_ removes array as an strategy, use `composeStrategy` instead
-- deno@1.16.1
-- fmt with deno@1.11.1
+- _breaking_ removes array as a strategy, use `composeStrategy` instead
+- move `docs/` to `README.md` and delete folder
+- fixes #135
+- fixes #134
+- std@0.129.0
+- public strategies are all functions to be run to get the runtime function
+  `iso8601Date` => `iso8601Date()`
+- deno@1.19.x
+- fmt with deno@1.19.x
 - turn off unstable code coverage
 - add type guard in `getNewSerializable` fixing compile issue
 - fix #121 address lint issues

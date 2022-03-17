@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
@@ -79,10 +79,10 @@ interface SerializePropertyArgumentObject {
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
-  return function _SerializeProperty(
+  return (
     target: unknown,
     propertyName: string | symbol,
-  ) {
+  ) => {
     const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,

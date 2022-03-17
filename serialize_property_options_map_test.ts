@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, assertStrictEquals, fail, test } from "./test_deps.ts";
 import {

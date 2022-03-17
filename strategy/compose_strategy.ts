@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 import { JSONValue } from "../serializable.ts";
 
 /** Functions used when hydrating data */
@@ -18,10 +18,8 @@ export function composeStrategy(
     | FromJSONStrategy
   )[]
 ): FromJSONStrategy | ToJSONStrategy {
-  return function _composeStrategy(
+  return (
     // deno-lint-ignore no-explicit-any
     val: any,
-  ): JSONValue | unknown {
-    return fns.reduce((acc, fn) => fn(acc), val);
-  };
+  ): JSONValue | unknown => fns.reduce((acc, fn) => fn(acc), val);
 }

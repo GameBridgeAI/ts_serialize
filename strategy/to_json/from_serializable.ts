@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONValue, Serializable } from "../../serializable.ts";
 import { ToJSONStrategy } from "../compose_strategy.ts";

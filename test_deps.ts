@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 export const { test } = Deno;
 
@@ -7,4 +7,4 @@ export {
   assertEquals,
   assertStrictEquals,
   fail,
-} from "https://deno.land/std@0.114.0/testing/asserts.ts";
+} from "https://deno.land/std@0.129.0/testing/asserts.ts";

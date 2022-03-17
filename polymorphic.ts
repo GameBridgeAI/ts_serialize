@@ -1,4 +1,4 @@
-// Copyright 2018-2021 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   JSONValue,
@@ -78,10 +78,10 @@ export function PolymorphicSwitch(
   initializerFunction: InitializerFunction,
   valueOrTest: PropertyValueTest | unknown,
 ): PropertyDecorator {
-  return function _PolymorphicSwitch(
+  return (
     target: unknown, // The class it's self
     propertyKey: string | symbol,
-  ) {
+  ) => {
     registerPolymorphicSwitch(
       Object.getPrototypeOf(target).constructor, // Parent's prototype
       target,
