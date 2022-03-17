@@ -172,11 +172,7 @@ assertEquals(testObj.bigInt.toString(), "9007199254740991");
 strategies with multiple functions.
 
 ```ts
-import { 
-	Serializable,
-	SerializeProperty,
-	composeStrategy,
-} from "./mod.ts";
+import { composeStrategy, Serializable, SerializeProperty } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 const addWord = (word: string) => (v: string) => `${v} ${word}`;
@@ -201,11 +197,7 @@ Dates can use the `fromJSONStrategy` to revive a serialized string into a Date
 object. `ts_serialize` provides a `iso8601Date` function to parse ISO Dates.
 
 ```ts
-import { 
-	Serializable, 
-	SerializeProperty,
-	iso8601Date,
-} from "./mod.ts";
+import { iso8601Date, Serializable, SerializeProperty } from "./mod.ts";
 import { assert, assertEquals } from "./test_deps.ts";
 
 class Test extends Serializable {
@@ -224,11 +216,7 @@ assertEquals(testObj.date.getFullYear(), 2020);
 to make your own.
 
 ```ts
-import { 
-	Serializable, 
-	SerializeProperty,
-	createDateStrategy,
-} from "./mod.ts";
+import { createDateStrategy, Serializable, SerializeProperty } from "./mod.ts";
 import { assert, assertEquals } from "./test_deps.ts";
 
 class Test extends Serializable {
@@ -272,13 +260,12 @@ assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
 
 #### FromJSON
 
-Use a strategie to revive the property into a class.
-`toSerializable` is a provided function export that takes one parameter, the
-instance type the object will take when revived, it will also revive to an array
-of Serializable objects.
+Use a strategie to revive the property into a class. `toSerializable` is a
+provided function export that takes one parameter, the instance type the object
+will take when revived, it will also revive to an array of Serializable objects.
 
 ```ts
-import { toSerializable, Serializable, SerializeProperty } from "./mod.ts";
+import { Serializable, SerializeProperty, toSerializable } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 class Test1 extends Serializable {
@@ -303,11 +290,7 @@ assertEquals(testObj.nested.serializeMe, "custom value");
 will also revive to an array of Serializable objects.
 
 ```ts
-import { 
-	Serializable,
-	SerializeProperty,
-	toObjectContaining,
-} from "./mod.ts";
+import { Serializable, SerializeProperty, toObjectContaining } from "./mod.ts";
 import { assert, assertEquals } from "./test_deps.ts";
 
 class SomeClass extends Serializable {
@@ -352,7 +335,7 @@ import {
 import { assert, assertEquals } from "./test_deps.ts";
 
 export function DeserializeAs(
-	type: unknown,
+  type: unknown,
 ): PropertyDecorator {
   return SerializeProperty({
     fromJSONStrategy: toSerializable(() => getNewSerializable(type)),
@@ -389,7 +372,6 @@ assert(testObj.property instanceof B);
 assert(testObj.property.property instanceof A);
 assertEquals(testObj.property.otherProperty, "From Class C");
 assertEquals(testObj.property.property.property, "Class C fromJSON");
-
 ```
 
 ## Global transformKey
@@ -400,11 +382,7 @@ function can be provided to change all the keys without having to specify the
 change for each property.
 
 ```ts
-import {
-	TransformKey,
-  Serializable,
-  SerializeProperty,
-} from "./mod.ts";
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 class TestTransformKey extends Serializable implements TransformKey {
@@ -426,11 +404,7 @@ assertEquals(
 `tsTransformKey` will be inherited by children:
 
 ```ts
-import {
-	TransformKey,
-  Serializable,
-  SerializeProperty,
-} from "./mod.ts";
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 class TestTransformKey extends Serializable implements TransformKey {
@@ -462,11 +436,7 @@ assertEquals(
 Children can also override their parent `tsTransformKey` function:
 
 ```ts
-import {
-	TransformKey,
-  Serializable,
-  SerializeProperty,
-} from "./mod.ts";
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 class TestTransformKey extends Serializable implements TransformKey {
@@ -506,11 +476,7 @@ If `tsTransformKey` is implemented and `SerializeProperty` is provided a
 `serializedKey` option, it will override the `tsTransformKey` function:
 
 ```ts
-import {
-	TransformKey,
-  Serializable,
-  SerializeProperty,
-} from "./mod.ts";
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
 import { assertEquals } from "./test_deps.ts";
 
 class TestTransformKey extends Serializable implements TransformKey {
@@ -567,8 +533,8 @@ property will be used when comparing the value.
 
 ```ts
 import {
-	PolymorphicSwitch,
-	polymorphicClassFromJSON,
+  polymorphicClassFromJSON,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
@@ -606,8 +572,8 @@ for the annotated property satisfies a more complex condition:
 
 ```ts
 import {
-	PolymorphicSwitch,
-	polymorphicClassFromJSON,
+  polymorphicClassFromJSON,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
@@ -652,8 +618,8 @@ necessary
 
 ```ts
 import {
-	PolymorphicSwitch,
-	polymorphicClassFromJSON,
+  polymorphicClassFromJSON,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
@@ -696,9 +662,9 @@ be used when deserializing JSON input.
 
 ```ts
 import {
-	PolymorphicSwitch,
-	PolymorphicResolver,
-	polymorphicClassFromJSON,
+  polymorphicClassFromJSON,
+  PolymorphicResolver,
+  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
