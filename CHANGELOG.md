@@ -15,6 +15,10 @@ and this project adheres to
 - _breaking_ fix #125 strategies are now passed the full array, this allows more
   flexibility for conversions
 - _breaking_ removes array as a strategy, use `composeStrategy` instead
+- _breaking_ `composeStrategy`'s FromJSON and ToJSON strategy types are removed
+	with `Strategy` replacing both of them
+- fixes #141
+- fixes #139
 - move `docs/` to `README.md` and delete folder
 - fixes #135
 - fixes #134
