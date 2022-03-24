@@ -87,8 +87,8 @@ parameter, the `key` as string and should return a string.
 
 - `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the
   key in the serialized object
-- `toJSONStrategy` (Optional) `{Strategy}` - Used when serializing
-- `fromJSONStrategy` (Optional) `{Strategy}` - Used when deserializing
+- `toJSONStrategy` (Optional) `{ToJSONStrategy}` - Used when serializing
+- `fromJSONStrategy` (Optional) `{FromJSONStrategy}` - Used when deserializing
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
