@@ -5,6 +5,7 @@
 import {
   composeStrategy,
   createDateStrategy,
+  FromJSONStrategy,
   fromObjectContaining,
   getNewSerializable,
   iso8601Date,
@@ -14,7 +15,7 @@ import {
   PolymorphicSwitch,
   Serializable,
   SerializeProperty,
-  Strategy,
+  ToJSONStrategy,
   toObjectContaining,
   toSerializable,
   TransformKey,
@@ -29,10 +30,10 @@ function assert(boolean: boolean, msg?: string): void {
   }
 }
 
-const customStrategy: Strategy | Strategy = (v: string) =>
+const customStrategy: FromJSONStrategy | ToJSONStrategy = (v: string) =>
   `${v} strategy changed`;
-const fromJSONStrategy: Strategy = (v: string) => `${v} strategy`;
-const toJSONStrategy: Strategy = (v: string) => `${v} changed`;
+const fromJSONStrategy: FromJSONStrategy = (v: string) => `${v} strategy`;
+const toJSONStrategy: ToJSONStrategy = (v: string) => `${v} changed`;
 const customDateStrategy = createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/);
 
 class Nested extends Serializable {

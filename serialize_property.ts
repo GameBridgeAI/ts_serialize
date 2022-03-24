@@ -3,19 +3,22 @@
 import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import { Strategy } from "./strategy/compose_strategy.ts";
+import {
+  FromJSONStrategy,
+  ToJSONStrategy,
+} from "./strategy/compose_strategy.ts";
 import { ERROR_SYMBOL_PROPERTY_NAME } from "./error_messages.ts";
 
 /** options to use when (de)serializing values */
 export class SerializePropertyOptions {
-  public fromJSONStrategy?: Strategy;
-  public toJSONStrategy?: Strategy;
+  public fromJSONStrategy?: FromJSONStrategy;
+  public toJSONStrategy?: ToJSONStrategy;
 
   constructor(
     public propertyKey: string | symbol,
     public serializedKey: string,
-    fromJSONStrategy?: Strategy,
-    toJSONStrategy?: Strategy,
+    fromJSONStrategy?: FromJSONStrategy,
+    toJSONStrategy?: ToJSONStrategy,
   ) {
     if (fromJSONStrategy) {
       this.fromJSONStrategy = fromJSONStrategy;
@@ -36,15 +39,15 @@ export type SerializePropertyArgument =
   | ToSerializedKeyStrategy
   | {
     serializedKey?: string | ToSerializedKeyStrategy;
-    fromJSONStrategy?: Strategy;
-    toJSONStrategy?: Strategy;
+    fromJSONStrategy?: FromJSONStrategy;
+    toJSONStrategy?: ToJSONStrategy;
   };
 
 /** converted interface for `SerializePropertyArgument` */
 interface SerializePropertyArgumentObject {
   serializedKey: string;
-  fromJSONStrategy?: Strategy;
-  toJSONStrategy?: Strategy;
+  fromJSONStrategy?: FromJSONStrategy;
+  toJSONStrategy?: ToJSONStrategy;
 }
 
 /** Property wrapper that adds `SerializeProperty` options to the class map */

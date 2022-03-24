@@ -54,22 +54,27 @@ serialized.
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
-class TestClass extends Serializable {
-  @SerializeProperty()
-  public test: number = 99;
+test({
+  name: "Serializable adds 5 methods",
+  fn() {
+    class TestClass extends Serializable {
+      @SerializeProperty()
+      public test: number = 99;
 
-  @SerializeProperty("test_one")
-  public test1: number = 100;
-}
-const testObj = new TestClass();
-assert(testObj instanceof Serializable);
-assertEquals(typeof testObj.toJSON, "function");
-assertEquals(typeof testObj.fromJSON, "function");
-assertEquals(typeof testObj.tsSerialize, "function");
-assertEquals(typeof testObj.tsTransformKey, "function");
-assertEquals(typeof testObj.clone, "function");
+      @SerializeProperty("test_one")
+      public test1: number = 100;
+    }
+    const testObj = new TestClass();
+    assert(testObj instanceof Serializable);
+    assertEquals(typeof testObj.toJSON, "function");
+    assertEquals(typeof testObj.fromJSON, "function");
+    assertEquals(typeof testObj.tsSerialize, "function");
+    assertEquals(typeof testObj.tsTransformKey, "function");
+    assertEquals(typeof testObj.clone, "function");
+  },
+});
 ```
 
 ### SerializeProperty options
@@ -87,31 +92,36 @@ parameter, the `key` as string and should return a string.
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class Test extends Serializable {
-  @SerializeProperty()
-  propertyOne = "Hello";
-  @SerializeProperty("property_two")
-  propertyTwo = "World!";
-  @SerializeProperty({ serializedKey: (key) => `__${key}__` })
-  propertyThree = "foo";
-  notSerialized = "not-serialized";
-}
-assertEquals(
-  new Test().toJSON(),
-  `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
-);
-const testObj = new Test().fromJSON(
-  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
-);
-assertEquals(testObj.propertyOne, "From");
-assertEquals(testObj.propertyTwo, "JSON!");
-assertEquals(testObj.notSerialized, "changed");
-assertEquals(
-  testObj.toJSON(),
-  `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
-);
+test({
+  name: "SerializeProperty options",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty()
+      propertyOne = "Hello";
+      @SerializeProperty("property_two")
+      propertyTwo = "World!";
+      @SerializeProperty({ serializedKey: (key) => `__${key}__` })
+      propertyThree = "foo";
+      notSerialized = "not-serialized";
+    }
+    assertEquals(
+      new Test().toJSON(),
+      `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
+    );
+    const testObj = new Test().fromJSON(
+      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
+    );
+    assertEquals(testObj.propertyOne, "From");
+    assertEquals(testObj.propertyTwo, "JSON!");
+    assertEquals(testObj.notSerialized, "changed");
+    assertEquals(
+      testObj.toJSON(),
+      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
+    );
+  },
+});
 ```
 
 ### Inheritance
@@ -122,22 +132,27 @@ collisions the child always overrides the parent_
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class Test1 extends Serializable {
-  @SerializeProperty("serialize_me")
-  serializeMe = "nice1";
-}
+test({
+  name: "Inheritance",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("serialize_me")
+      serializeMe = "nice1";
+    }
 
-class Test2 extends Test1 {
-  @SerializeProperty("serialize_me")
-  serializeMeInstead = "nice2";
-}
+    class Test2 extends Test1 {
+      @SerializeProperty("serialize_me")
+      serializeMeInstead = "nice2";
+    }
 
-const testObj = new Test2();
-assertEquals(testObj.serializeMe, "nice1");
-assertEquals(testObj.serializeMeInstead, "nice2");
-assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
+    const testObj = new Test2();
+    assertEquals(testObj.serializeMe, "nice1");
+    assertEquals(testObj.serializeMeInstead, "nice2");
+    assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
+  },
+});
 ```
 
 ### Strategies
@@ -148,22 +163,27 @@ is the value to process.
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-const fromJSONStrategy = (v: string): BigInt => BigInt(v);
-const toJSONStrategy = (v: BigInt): string => v.toString();
+test({
+  name: "Strategies",
+  fn() {
+    const fromJSONStrategy = (v: string): BigInt => BigInt(v);
+    const toJSONStrategy = (v: BigInt): string => v.toString();
 
-class Test extends Serializable {
-  @SerializeProperty({
-    serializedKey: "big_int",
-    fromJSONStrategy,
-    toJSONStrategy,
-  })
-  bigInt!: BigInt;
-}
+    class Test extends Serializable {
+      @SerializeProperty({
+        serializedKey: "big_int",
+        fromJSONStrategy,
+        toJSONStrategy,
+      })
+      bigInt!: BigInt;
+    }
 
-const testObj = new Test().fromJSON(`{"big_int":"9007199254740991"}`);
-assertEquals(testObj.bigInt.toString(), "9007199254740991");
+    const testObj = new Test().fromJSON(`{"big_int":"9007199254740991"}`);
+    assertEquals(testObj.bigInt.toString(), "9007199254740991");
+  },
+});
 ```
 
 ### Multiple strategy functions
@@ -173,22 +193,27 @@ strategies with multiple functions.
 
 ```ts
 import { composeStrategy, Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-const addWord = (word: string) => (v: string) => `${v} ${word}`;
-const shout = (v: string) => `${v}!!!`;
+test({
+  name: "Multiple strategy functions",
+  fn() {
+    const addWord = (word: string) => (v: string) => `${v} ${word}`;
+    const shout = (v: string) => `${v}!!!`;
 
-class Test extends Serializable {
-  @SerializeProperty({
-    fromJSONStrategy: composeStrategy(addWord("World"), shout),
-  })
-  property!: string;
-}
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: composeStrategy(addWord("World"), shout),
+      })
+      property!: string;
+    }
 
-assertEquals(
-  new Test().fromJSON(`{"property":"Hello"}`).property,
-  "Hello World!!!",
-);
+    assertEquals(
+      new Test().fromJSON(`{"property":"Hello"}`).property,
+      "Hello World!!!",
+    );
+  },
+});
 ```
 
 ### Dates
@@ -198,18 +223,23 @@ object. `ts_serialize` provides a `iso8601Date` function to parse ISO Dates.
 
 ```ts
 import { iso8601Date, Serializable, SerializeProperty } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
-class Test extends Serializable {
-  @SerializeProperty({
-    fromJSONStrategy: iso8601Date(),
-  })
-  date!: Date;
-}
+test({
+  name: "Dates",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: iso8601Date(),
+      })
+      date!: Date;
+    }
 
-const testObj = new Test().fromJSON(`{"date":"2020-06-04T19:01:47.831Z"}`);
-assert(testObj.date instanceof Date);
-assertEquals(testObj.date.getFullYear(), 2020);
+    const testObj = new Test().fromJSON(`{"date":"2020-06-04T19:01:47.831Z"}`);
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.getFullYear(), 2020);
+  },
+});
 ```
 
 `createDateStrategy()` can be use to make a reviving date strategy. Pass a regex
@@ -217,18 +247,23 @@ to make your own.
 
 ```ts
 import { createDateStrategy, Serializable, SerializeProperty } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
-class Test extends Serializable {
-  @SerializeProperty({
-    fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
-  })
-  date!: Date;
-}
+test({
+  name: "createDateStrategy",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty({
+        fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+      })
+      date!: Date;
+    }
 
-const testObj = new Test().fromJSON(`{"date":"2099-11-25"}`);
-assert(testObj.date instanceof Date);
-assertEquals(testObj.date.getFullYear(), 2099);
+    const testObj = new Test().fromJSON(`{"date":"2099-11-25"}`);
+    assert(testObj.date instanceof Date);
+    assertEquals(testObj.date.getFullYear(), 2099);
+  },
+});
 ```
 
 ### Nested Class Serialization
@@ -240,22 +275,30 @@ class:
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class Test1 extends Serializable {
-  @SerializeProperty("serialize_me_1")
-  serializeMe = "nice1";
-}
+test({
+  name: "ToJSON",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("serialize_me_1")
+      serializeMe = "nice1";
+    }
 
-class Test2 extends Serializable {
-  @SerializeProperty({
-    serializedKey: "serialize_me_2",
-  })
-  nested: Test1 = new Test1();
-}
+    class Test2 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "serialize_me_2",
+      })
+      nested: Test1 = new Test1();
+    }
 
-const testObj = new Test2();
-assertEquals(testObj.toJSON(), `{"serialize_me_2":{"serialize_me_1":"nice1"}}`);
+    const testObj = new Test2();
+    assertEquals(
+      testObj.toJSON(),
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
+    );
+  },
+});
 ```
 
 #### FromJSON
@@ -266,24 +309,29 @@ will take when revived, it will also revive to an array of Serializable objects.
 
 ```ts
 import { Serializable, SerializeProperty, toSerializable } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class Test1 extends Serializable {
-  @SerializeProperty("serialize_me_1")
-  serializeMe = "nice1";
-}
+test({
+  name: "FromJSON",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("serialize_me_1")
+      serializeMe = "nice1";
+    }
 
-class Test2 extends Serializable {
-  @SerializeProperty({
-    serializedKey: "serialize_me_2",
-    fromJSONStrategy: toSerializable(Test1),
-  })
-  nested!: Test1;
-}
+    class Test2 extends Serializable {
+      @SerializeProperty({
+        serializedKey: "serialize_me_2",
+        fromJSONStrategy: toSerializable(Test1),
+      })
+      nested!: Test1;
+    }
 
-const testObj = new Test2();
-testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
-assertEquals(testObj.nested.serializeMe, "custom value");
+    const testObj = new Test2();
+    testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
+    assertEquals(testObj.nested.serializeMe, "custom value");
+  },
+});
 ```
 
 `toObjectContaining` revives a record of string keys to Serializable objects, it
@@ -291,28 +339,33 @@ will also revive to an array of Serializable objects.
 
 ```ts
 import { Serializable, SerializeProperty, toObjectContaining } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
-class SomeClass extends Serializable {
-  @SerializeProperty()
-  someClassProp = "test";
-}
+test({
+  name: "toObjectContaining",
+  fn() {
+    class SomeClass extends Serializable {
+      @SerializeProperty()
+      someClassProp = "test";
+    }
 
-class Test extends Serializable {
-  @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-  test!: { [k: string]: SomeClass[] };
-}
+    class Test extends Serializable {
+      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
+      test!: { [k: string]: SomeClass[] };
+    }
 
-const testObj = new Test().fromJSON(
-  {
-    test: {
-      testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
-    },
+    const testObj = new Test().fromJSON(
+      {
+        test: {
+          testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
+        },
+      },
+    );
+    assert(Array.isArray(testObj.test.testing));
+    assert(testObj.test.testing[0] instanceof Serializable);
+    assertEquals(testObj.test.testing[0].someClassProp, "changed");
   },
-);
-assert(Array.isArray(testObj.test.testing));
-assert(testObj.test.testing[0] instanceof Serializable);
-assertEquals(testObj.test.testing[0].someClassProp, "changed");
+});
 ```
 
 ## Short cutting the `@SerializeProperty` decorator
@@ -332,7 +385,7 @@ import {
   SerializeProperty,
   toSerializable,
 } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
 export function DeserializeAs(
   type: unknown,
@@ -342,36 +395,41 @@ export function DeserializeAs(
   });
 }
 
-class A extends Serializable {
-  @SerializeProperty("property_a")
-  public property = "";
-}
+test({
+  name: "Custom decorator",
+  fn() {
+    class A extends Serializable {
+      @SerializeProperty("property_a")
+      public property = "";
+    }
 
-class B extends Serializable {
-  @DeserializeAs(A)
-  public property = new A();
+    class B extends Serializable {
+      @DeserializeAs(A)
+      public property = new A();
 
-  public otherProperty = "";
+      public otherProperty = "";
 
-  constructor({ otherProperty = "" }: Partial<B> = {}) {
-    super();
-    this.otherProperty = otherProperty;
-  }
-}
+      constructor({ otherProperty = "" }: Partial<B> = {}) {
+        super();
+        this.otherProperty = otherProperty;
+      }
+    }
 
-class C extends Serializable {
-  @DeserializeAs(() => new B({ otherProperty: "From Class C" }))
-  public property = new B();
-}
+    class C extends Serializable {
+      @DeserializeAs(() => new B({ otherProperty: "From Class C" }))
+      public property = new B();
+    }
 
-const testObj = new C().fromJSON({
-  property: { property: { property_a: "Class C fromJSON" } },
+    const testObj = new C().fromJSON({
+      property: { property: { property_a: "Class C fromJSON" } },
+    });
+
+    assert(testObj.property instanceof B);
+    assert(testObj.property.property instanceof A);
+    assertEquals(testObj.property.otherProperty, "From Class C");
+    assertEquals(testObj.property.property.property, "Class C fromJSON");
+  },
 });
-
-assert(testObj.property instanceof B);
-assert(testObj.property.property instanceof A);
-assertEquals(testObj.property.otherProperty, "From Class C");
-assertEquals(testObj.property.property.property, "Class C fromJSON");
 ```
 
 ## Global transformKey
@@ -383,93 +441,108 @@ change for each property.
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class TestTransformKey extends Serializable implements TransformKey {
-  public tsTransformKey(key: string): string {
-    return `__${key}__`;
-  }
+test({
+  name: "Global transformKey",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
 
-  @SerializeProperty()
-  public test = "test";
-}
+      @SerializeProperty()
+      public test = "test";
+    }
 
-assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
-assertEquals(
-  new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-  `changed`,
-);
+    assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
+    assertEquals(
+      new TestTransformKey().fromJSON({ __test__: "changed" }).test,
+      `changed`,
+    );
+  },
+});
 ```
 
 `tsTransformKey` will be inherited by children:
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class TestTransformKey extends Serializable implements TransformKey {
-  public tsTransformKey(key: string): string {
-    return `__${key}__`;
-  }
-}
+test({
+  name: "tsTransformKey inheritance",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
 
-class TestTransformKey2 extends TestTransformKey {
-  @SerializeProperty()
-  public test2 = "test2";
-}
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+    }
 
-class TestTransformKey3 extends TestTransformKey2 {
-  @SerializeProperty()
-  public test3 = "test3";
-}
+    class TestTransformKey3 extends TestTransformKey2 {
+      @SerializeProperty()
+      public test3 = "test3";
+    }
 
-assertEquals(
-  new TestTransformKey3().toJSON(),
-  `{"__test2__":"test2","__test3__":"test3"}`,
-);
-assertEquals(
-  new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-  `changed`,
-);
+    assertEquals(
+      new TestTransformKey3().toJSON(),
+      `{"__test2__":"test2","__test3__":"test3"}`,
+    );
+    assertEquals(
+      new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
+      `changed`,
+    );
+  },
+});
 ```
 
 Children can also override their parent `tsTransformKey` function:
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class TestTransformKey extends Serializable implements TransformKey {
-  public tsTransformKey(key: string): string {
-    return `__${key}__`;
-  }
-}
+test({
+  name: "Child tsTransformKey",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
 
-class TestTransformKey2 extends TestTransformKey {
-  @SerializeProperty()
-  public test2 = "test2";
-}
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+    }
 
-class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-  public tsTransformKey(key: string): string {
-    return `--${key}--`;
-  }
-  @SerializeProperty()
-  public test3 = "test3";
-}
+    class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `--${key}--`;
+      }
+      @SerializeProperty()
+      public test3 = "test3";
+    }
 
-class TestTransformKey4 extends TestTransformKey3 {
-  @SerializeProperty()
-  public test4 = "test4";
-}
-assertEquals(
-  new TestTransformKey4().toJSON(),
-  `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
-);
-assertEquals(
-  new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-  `changed`,
-);
+    class TestTransformKey4 extends TestTransformKey3 {
+      @SerializeProperty()
+      public test4 = "test4";
+    }
+    assertEquals(
+      new TestTransformKey4().toJSON(),
+      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+    );
+    assertEquals(
+      new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
+      `changed`,
+    );
+  },
+});
 ```
 
 If `tsTransformKey` is implemented and `SerializeProperty` is provided a
@@ -477,37 +550,42 @@ If `tsTransformKey` is implemented and `SerializeProperty` is provided a
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals } from "./test_deps.ts";
+import { assertEquals, test } from "./test_deps.ts";
 
-class TestTransformKey extends Serializable implements TransformKey {
-  public tsTransformKey(key: string): string {
-    return `__${key}__`;
-  }
-}
+test({
+  name: "tsTransformKey overrides",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
 
-class TestTransformKey2 extends TestTransformKey {
-  @SerializeProperty()
-  public test2 = "test2";
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
 
-  @SerializeProperty("changed")
-  public changeMe = "change me";
+      @SerializeProperty("changed")
+      public changeMe = "change me";
 
-  @SerializeProperty({ serializedKey: "changed2" })
-  public changeMe2 = "change me2";
-}
+      @SerializeProperty({ serializedKey: "changed2" })
+      public changeMe2 = "change me2";
+    }
 
-assertEquals(
-  new TestTransformKey2().toJSON(),
-  `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
-);
-assertEquals(
-  new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-  `changed`,
-);
-assertEquals(
-  new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
-  `changed`,
-);
+    assertEquals(
+      new TestTransformKey2().toJSON(),
+      `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
+      `changed`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
+      `changed`,
+    );
+  },
+});
 ```
 
 `tsTransformKey` is an efficient way to deal with camelCase to snake_case
@@ -538,33 +616,38 @@ import {
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
 enum Colour {
   RED = "RED",
   BLUE = "BLUE",
 }
 
-abstract class MyColourClass extends Serializable {}
+test({
+  name: "PolymorphicSwitch",
+  fn() {
+    abstract class MyColourClass extends Serializable {}
 
-class MyRedClass extends MyColourClass {
-  @SerializeProperty()
-  @PolymorphicSwitch(() => new MyRedClass(), Colour.RED)
-  public colour = Colour.RED;
+    class MyRedClass extends MyColourClass {
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new MyRedClass(), Colour.RED)
+      public colour = Colour.RED;
 
-  @SerializeProperty()
-  public crimson = false;
-}
+      @SerializeProperty()
+      public crimson = false;
+    }
 
-// Serialize using JSON.parse, read `colour` off of the parsed object
-// then compare to the value provided in `@PolymorphicSwitch`
-const redClass = polymorphicClassFromJSON(
-  MyColourClass,
-  `{"colour":"RED","crimson":true}`,
-);
+    // Serialize using JSON.parse, read `colour` off of the parsed object
+    // then compare to the value provided in `@PolymorphicSwitch`
+    const redClass = polymorphicClassFromJSON(
+      MyColourClass,
+      `{"colour":"RED","crimson":true}`,
+    );
 
-assert(redClass instanceof MyRedClass);
-assertEquals((redClass as MyRedClass).crimson, true);
+    assert(redClass instanceof MyRedClass);
+    assertEquals((redClass as MyRedClass).crimson, true);
+  },
+});
 ```
 
 You can also provide a test function instead of a value to check if the value
@@ -577,40 +660,45 @@ import {
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
-abstract class Currency extends Serializable {}
+test({
+  name: "Complex PolymorphicSwitch",
+  fn() {
+    abstract class Currency extends Serializable {}
 
-class DollarCurrency extends Currency {
-  @SerializeProperty()
-  // Match only "$""
-  @PolymorphicSwitch(() => new DollarCurrency(), "$")
-  public currencySymbol = "$";
+    class DollarCurrency extends Currency {
+      @SerializeProperty()
+      // Match only "$""
+      @PolymorphicSwitch(() => new DollarCurrency(), "$")
+      public currencySymbol = "$";
 
-  @SerializeProperty()
-  public amount = 0;
-}
+      @SerializeProperty()
+      public amount = 0;
+    }
 
-class OtherCurrency extends Currency {
-  @SerializeProperty()
-  // Match any currency symbol OTHER than "$"
-  @PolymorphicSwitch(
-    () => new OtherCurrency(),
-    (value) => value !== "$",
-  )
-  public currencySymbol = "";
+    class OtherCurrency extends Currency {
+      @SerializeProperty()
+      // Match any currency symbol OTHER than "$"
+      @PolymorphicSwitch(
+        () => new OtherCurrency(),
+        (value) => value !== "$",
+      )
+      public currencySymbol = "";
 
-  @SerializeProperty()
-  public amount = 0;
-}
+      @SerializeProperty()
+      public amount = 0;
+    }
 
-const currencyClass = polymorphicClassFromJSON(
-  Currency,
-  `{"currencySymbol":"£","amount":300}`,
-);
+    const currencyClass = polymorphicClassFromJSON(
+      Currency,
+      `{"currencySymbol":"£","amount":300}`,
+    );
 
-assert(currencyClass instanceof OtherCurrency);
-assertEquals((currencyClass as OtherCurrency).amount, 300);
+    assert(currencyClass instanceof OtherCurrency);
+    assertEquals((currencyClass as OtherCurrency).amount, 300);
+  },
+});
 ```
 
 Multiple `@PolymorphicSwitch` annotations can be applied to a single class, if
@@ -623,35 +711,40 @@ import {
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert } from "./test_deps.ts";
+import { assert, test } from "./test_deps.ts";
 
-abstract class MyAbstractClass extends Serializable {}
+test({
+  name: "Single class PolymorphicSwitch",
+  fn() {
+    abstract class MyAbstractClass extends Serializable {}
 
-class MyClass extends MyAbstractClass {
-  @SerializeProperty()
-  @PolymorphicSwitch(() => new MyClass(), "$")
-  @PolymorphicSwitch(() => new MyClass(), "dollar")
-  @PolymorphicSwitch(
-    () => new MyClass(),
-    (value) => typeof value === "string" && value.includes("dollars"),
-  )
-  public myProperty = "$";
+    class MyClass extends MyAbstractClass {
+      @SerializeProperty()
+      @PolymorphicSwitch(() => new MyClass(), "$")
+      @PolymorphicSwitch(() => new MyClass(), "dollar")
+      @PolymorphicSwitch(
+        () => new MyClass(),
+        (value) => typeof value === "string" && value.includes("dollars"),
+      )
+      public myProperty = "$";
 
-  @SerializeProperty()
-  public amount = 0;
-}
+      @SerializeProperty()
+      public amount = 0;
+    }
 
-const myClass1 = polymorphicClassFromJSON(
-  MyAbstractClass,
-  `{"myProperty":"300 dollars"}`,
-);
-console.log(`Is myClass1 MyClass? ${myClass1 instanceof MyClass}`);
+    const myClass1 = polymorphicClassFromJSON(
+      MyAbstractClass,
+      `{"myProperty":"300 dollars"}`,
+    );
+    console.log(`Is myClass1 MyClass? ${myClass1 instanceof MyClass}`);
 
-const myClass2 = polymorphicClassFromJSON(
-  MyAbstractClass,
-  `{"myProperty":"dollar"}`,
-);
-assert(myClass2 instanceof MyClass);
+    const myClass2 = polymorphicClassFromJSON(
+      MyAbstractClass,
+      `{"myProperty":"dollar"}`,
+    );
+    assert(myClass2 instanceof MyClass);
+  },
+});
 ```
 
 ### Polymorphic Resolver
@@ -668,62 +761,67 @@ import {
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals } from "./test_deps.ts";
+import { assert, assertEquals, test } from "./test_deps.ts";
 
 enum Colour {
   RED = "RED",
   BLUE = "BLUE",
 }
 
-abstract class MyColourClass extends Serializable {
-  @SerializeProperty()
-  public colour?: Colour;
+test({
+  name: "PolymorphicResolver",
+  fn() {
+    abstract class MyColourClass extends Serializable {
+      @SerializeProperty()
+      public colour?: Colour;
 
-  @PolymorphicResolver
-  public static resolvePolymorphic(input: string): MyColourClass {
-    const colourClass = new PolymorphicColourClass().fromJSON(input);
+      @PolymorphicResolver
+      public static resolvePolymorphic(input: string): MyColourClass {
+        const colourClass = new PolymorphicColourClass().fromJSON(input);
 
-    switch (colourClass.colour) {
-      case Colour.RED:
-        return new MyRedClass();
-      case Colour.BLUE:
-        return new MyBlueClass();
-      default:
-        throw new Error(`Unknown Colour ${colourClass.colour}`);
+        switch (colourClass.colour) {
+          case Colour.RED:
+            return new MyRedClass();
+          case Colour.BLUE:
+            return new MyBlueClass();
+          default:
+            throw new Error(`Unknown Colour ${colourClass.colour}`);
+        }
+      }
     }
-  }
-}
 
-// Helper class to parse the input and extract the colour property's value
-class PolymorphicColourClass extends MyColourClass {
-}
+    // Helper class to parse the input and extract the colour property's value
+    class PolymorphicColourClass extends MyColourClass {
+    }
 
-class MyRedClass extends MyColourClass {
-  @SerializeProperty()
-  private crimson = false;
+    class MyRedClass extends MyColourClass {
+      @SerializeProperty()
+      private crimson = false;
 
-  public isCrimson(): boolean {
-    return this.crimson;
-  }
-}
+      public isCrimson(): boolean {
+        return this.crimson;
+      }
+    }
 
-class MyBlueClass extends MyColourClass {
-  @SerializeProperty()
-  private aqua = false;
+    class MyBlueClass extends MyColourClass {
+      @SerializeProperty()
+      private aqua = false;
 
-  public isAqua(): boolean {
-    return this.aqua;
-  }
-}
+      public isAqua(): boolean {
+        return this.aqua;
+      }
+    }
 
-// Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
-const redClass = polymorphicClassFromJSON(
-  MyColourClass,
-  `{"colour":"RED","crimson":true}`,
-);
+    // Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
+    const redClass = polymorphicClassFromJSON(
+      MyColourClass,
+      `{"colour":"RED","crimson":true}`,
+    );
 
-assert(redClass instanceof MyRedClass);
-assertEquals((redClass as MyRedClass).isCrimson(), true);
+    assert(redClass instanceof MyRedClass);
+    assertEquals((redClass as MyRedClass).isCrimson(), true);
+  },
+});
 ```
 
 ## Built With

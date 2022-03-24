@@ -63,15 +63,19 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Functions used when hydrating data */
   // deno-lint-ignore no-explicit-any
-  export type Strategy = (value: any) => any;
+  export type FromJSONStrategy = (value: any) => any;
+
+  /** Functions used when dehydrating data */
+  // deno-lint-ignore no-explicit-any
+  export type ToJSONStrategy = (value: any) => JSONValue;
 
   /** string/symbol property name or options for (de)serializing values */
   export type SerializePropertyArgument =
     | string
     | {
       serializedKey?: string;
-      fromJSONStrategy?: Strategy;
-      toJSONStrategy?: Strategy;
+      fromJSONStrategy?: FromJSONStrategy;
+      toJSONStrategy?: ToJSONStrategy;
     };
 
   /** Property wrapper that adds serializable options to the class map
@@ -86,32 +90,32 @@ declare module "@gamebridgeai/ts_serialize" {
    * Converts value from functions provided as parameters
    */
   export function composeStrategy(
-    ...fns: Strategy[]
-  ): Strategy;
+    ...fns: (FromJSONStrategy | ToJSONStrategy)[]
+  ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */
   export function toSerializable(
     type: unknown,
-  ): Strategy;
+  ): FromJSONStrategy;
 
   /** serialize data using `tsSerialize` on a subclass Serializable type */
-  export function fromSerializable(): Strategy;
+  export function fromSerializable(): ToJSONStrategy;
 
   /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
   export function toObjectContaining(
     type: unknown,
-  ): Strategy;
+  ): FromJSONStrategy;
 
   /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.toSerialize() }` */
-  export function fromObjectContaining(): Strategy;
+  export function fromObjectContaining(): ToJSONStrategy;
 
   /** allows authors to pass a regex to parse as a date */
-  export function createDateStrategy(regex: RegExp): Strategy;
+  export function createDateStrategy(regex: RegExp): FromJSONStrategy;
 
   /** Changed from
    * @see https://weblog.west-wind.com/posts/2014/Jan/06/JavaScript-JSON-Date-Parsing-and-real-Dates
    */
-  export function iso8601Date(): Strategy;
+  export function iso8601Date(): FromJSONStrategy;
 
   export type InitializerFunction = () => Serializable;
 
