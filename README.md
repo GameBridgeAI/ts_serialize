@@ -736,8 +736,7 @@ test({
       MyAbstractClass,
       `{"myProperty":"300 dollars"}`,
     );
-    console.log(`Is myClass1 MyClass? ${myClass1 instanceof MyClass}`);
-
+    assert(myClass1 instanceof MyClass);
     const myClass2 = polymorphicClassFromJSON(
       MyAbstractClass,
       `{"myProperty":"dollar"}`,
