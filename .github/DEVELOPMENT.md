@@ -16,7 +16,7 @@ it on your machine.
 Fork and clone the project to your machine and `cd` into that folder. If you are
 getting errors about the `deno` namespace you can run
 
-```
+```bash
 $ deno types > deno.d.ts
 ```
 
@@ -24,13 +24,13 @@ This will add the deno types to the project.
 
 ## Running the tests
 
-```
+```bash
 $ deno test
 ```
 
 You can add a file to test only that one file.
 
-```
+```bash
 $ deno test mod_test.ts
 ```
 
@@ -44,6 +44,9 @@ symbols.
 If you find a bug a test case is the right place to start. Test example:
 
 ```ts
+import { assertEquals, test } from "../test_deps.ts";
+import { Serializable, SerializeProperty } from "../mod.ts";
+
 test({
   name: "Serialize nested",
   fn() {

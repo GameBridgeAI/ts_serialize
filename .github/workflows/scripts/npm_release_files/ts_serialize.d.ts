@@ -63,7 +63,7 @@ declare module "@gamebridgeai/ts_serialize" {
 
   /** Functions used when hydrating data */
   // deno-lint-ignore no-explicit-any
-  export type FromJSONStrategy = (value: JSONValue) => any;
+  export type FromJSONStrategy = (value: any) => any;
 
   /** Functions used when dehydrating data */
   // deno-lint-ignore no-explicit-any
@@ -90,10 +90,7 @@ declare module "@gamebridgeai/ts_serialize" {
    * Converts value from functions provided as parameters
    */
   export function composeStrategy(
-    ...fns: (
-      | FromJSONStrategy
-      | ToJSONStrategy
-    )[]
+    ...fns: (FromJSONStrategy | ToJSONStrategy)[]
   ): FromJSONStrategy | ToJSONStrategy;
 
   /** revive data using `fromJSON` on a subclass type */

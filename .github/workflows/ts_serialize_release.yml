@@ -35,7 +35,7 @@ jobs:
         run: deno cache test_deps.ts
 
       - name: Run deno tests
-        run: deno test 
+        run: deno test --doc
 
       - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh

@@ -8,6 +8,8 @@ export { SerializeProperty } from "./serialize_property.ts";
 export type {
   Clone,
   FromJSON,
+  JSONObject,
+  JSONValue,
   Serialize,
   ToJSON,
   TransformKey,
