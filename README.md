@@ -104,18 +104,16 @@ test({
       propertyTwo = "World!";
       @SerializeProperty({ serializedKey: (key) => `__${key}__` })
       propertyThree = "foo";
-      notSerialized = "not-serialized";
     }
     assertEquals(
       new Test().toJSON(),
       `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
     );
     const testObj = new Test().fromJSON(
-      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
+      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
     );
     assertEquals(testObj.propertyOne, "From");
     assertEquals(testObj.propertyTwo, "JSON!");
-    assertEquals(testObj.notSerialized, "changed");
     assertEquals(
       testObj.toJSON(),
       `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
