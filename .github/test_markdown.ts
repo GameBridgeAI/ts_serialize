@@ -12,12 +12,18 @@ enum CodeBlockToken {
   End = "```",
 }
 
+interface TestSuite {
+  startLine: number;
+  endLine: number;
+  testCode: string;
+}
+
 /** build a testSuite from all .md files */
-const testSuite = new Map();
+const testSuite = new Map<string, TestSuite[]>();
 
 for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
   testSuite.set(path, []);
-  const testLines = [];
+  const testLines: string[] = [];
   let readingCodeBlock = false;
   let currentLine = 0;
   let startLine = 0;
@@ -26,19 +32,19 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
     currentLine += 1;
     if (
       !readingCodeBlock &&
-      (line === CodeBlockToken.StartTs ||
-        line === CodeBlockToken.StartTypescript)
+      (line.includes(CodeBlockToken.StartTs) ||
+        line.includes(CodeBlockToken.StartTypescript))
     ) {
       readingCodeBlock = true;
       startLine = currentLine;
       continue;
     }
 
-    if (readingCodeBlock && line === CodeBlockToken.End) {
+    if (readingCodeBlock && line.includes(CodeBlockToken.End)) {
       readingCodeBlock = false;
       testSuite.set(
         path,
-        [...testSuite.get(path), {
+        [...(testSuite.get(path) ?? []), {
           startLine,
           endLine: currentLine,
           testCode: testLines.join("\n"),
@@ -53,7 +59,7 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
     }
   }
 
-  if (testSuite.get(path).length === 0) {
+  if ((testSuite.get(path) ?? []).length === 0) {
     testSuite.delete(path);
   }
 }
