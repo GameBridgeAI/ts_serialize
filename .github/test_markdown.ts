@@ -41,7 +41,7 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
         [...testSuite.get(path), {
           startLine,
           endLine: currentLine,
-          test: testLines.join("\n"),
+          testCode: testLines.join("\n"),
         }],
       );
       testLines.length = 0;
@@ -59,9 +59,9 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
 }
 /** run the testSuite, and stop process with `code` with `sucess` fails */
 for (const [file, tests] of testSuite.entries()) {
-  for (const { startLine, endLine, test } of tests) {
+  for (const { startLine, endLine, testCode } of tests) {
     const path = `${file}:${startLine}-${endLine}.ts`;
-    await Deno.writeTextFile(path, test);
+    await Deno.writeTextFile(path, testCode);
     const { success, code } = await Deno.run({ cmd: ["deno", "test", path] })
       .status();
     await Deno.remove(path);
