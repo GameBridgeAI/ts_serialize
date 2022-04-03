@@ -6,7 +6,7 @@
 
 import { walk } from "https://deno.land/std@0.133.0/fs/mod.ts";
 
-enum CodeBlockTokens {
+enum CodeBlockToken {
   StartTs = "```ts",
   StartTypescript = "```typescript",
   End = "```",
@@ -26,15 +26,15 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
     currentLine += 1;
     if (
       !readingCodeBlock &&
-      (line === CodeBlockTokens.StartTs ||
-        line === CodeBlockTokens.StartTypescript)
+      (line === CodeBlockToken.StartTs ||
+        line === CodeBlockToken.StartTypescript)
     ) {
       readingCodeBlock = true;
       startLine = currentLine;
       continue;
     }
 
-    if (readingCodeBlock && line === CodeBlockTokens.End) {
+    if (readingCodeBlock && line === CodeBlockToken.End) {
       readingCodeBlock = false;
       testSuite.set(
         path,
