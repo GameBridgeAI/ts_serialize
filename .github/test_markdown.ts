@@ -19,10 +19,10 @@ interface TestSuite {
 }
 
 /** build a testSuite from all .md files */
-const testSuite = new Map<string, TestSuite[]>();
+const testSuites = new Map<string, TestSuite[]>();
 
 for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
-  testSuite.set(path, []);
+  testSuites.set(path, []);
   const testLines: string[] = [];
   let readingCodeBlock = false;
   let currentLine = 0;
@@ -30,6 +30,7 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
 
   for (const line of (await Deno.readTextFile(path)).split("\n")) {
     currentLine += 1;
+
     if (
       !readingCodeBlock &&
       (line.includes(CodeBlockToken.StartTs) ||
@@ -42,9 +43,9 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
 
     if (readingCodeBlock && line.includes(CodeBlockToken.End)) {
       readingCodeBlock = false;
-      testSuite.set(
+      testSuites.set(
         path,
-        [...(testSuite.get(path) ?? []), {
+        [...(testSuites.get(path) ?? []), {
           startLine,
           endLine: currentLine,
           testCode: testLines.join("\n"),
@@ -59,18 +60,20 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
     }
   }
 
-  if ((testSuite.get(path) ?? []).length === 0) {
-    testSuite.delete(path);
+  if ((testSuites.get(path) ?? []).length === 0) {
+    testSuites.delete(path);
   }
 }
-/** run the testSuite, and stop process with `code` with `sucess` fails */
-for (const [file, tests] of testSuite.entries()) {
+
+/** run the testSuites and stop process with `code` when `success` fails */
+for (const [file, tests] of testSuites.entries()) {
   for (const { startLine, endLine, testCode } of tests) {
     const path = `${file}:${startLine}-${endLine}.ts`;
     await Deno.writeTextFile(path, testCode);
     const { success, code } = await Deno.run({ cmd: ["deno", "test", path] })
       .status();
     await Deno.remove(path);
+
     if (!success) {
       Deno.exit(code);
     }
