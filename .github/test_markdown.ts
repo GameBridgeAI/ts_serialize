@@ -66,16 +66,25 @@ for await (const { path } of walk(Deno.args[0] || ".", { exts: [".md"] })) {
 }
 
 /** run the testSuites and stop process with `code` when `success` fails */
+let exitCode = 0;
 for (const [file, tests] of testSuites.entries()) {
   for (const { startLine, endLine, testCode } of tests) {
     const path = `${file}:${startLine}-${endLine}.ts`;
-    await Deno.writeTextFile(path, testCode);
-    const { success, code } = await Deno.run({ cmd: ["deno", "test", path] })
-      .status();
-    await Deno.remove(path);
 
-    if (!success) {
-      Deno.exit(code);
+    try {
+      await Deno.writeTextFile(path, testCode);
+      const { success, code } = await Deno.run({ cmd: ["deno", "test", path] })
+        .status();
+
+      if (!success) {
+        exitCode = code;
+      }
+    } finally {
+      await Deno.remove(path);
+
+      if (exitCode) {
+        Deno.exit(exitCode);
+      }
     }
   }
 }

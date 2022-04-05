@@ -59,13 +59,7 @@ import { assert, assertEquals, test } from "./test_deps.ts";
 test({
   name: "Serializable adds 5 methods",
   fn() {
-    class TestClass extends Serializable {
-      @SerializeProperty()
-      public test: number = 99;
-
-      @SerializeProperty("test_one")
-      public test1: number = 100;
-    }
+    class TestClass extends Serializable {}
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
     assertEquals(typeof testObj.toJSON, "function");
