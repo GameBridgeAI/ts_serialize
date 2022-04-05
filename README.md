@@ -53,19 +53,13 @@ serialized.
   takes the object as a parameter to override cloned property values
 
 ```ts
-import { Serializable, SerializeProperty } from "./mod.ts";
+import { Serializable } from "./mod.ts";
 import { assert, assertEquals, test } from "./test_deps.ts";
 
 test({
   name: "Serializable adds 5 methods",
   fn() {
-    class TestClass extends Serializable {
-      @SerializeProperty()
-      public test: number = 99;
-
-      @SerializeProperty("test_one")
-      public test1: number = 100;
-    }
+    class TestClass extends Serializable {}
     const testObj = new TestClass();
     assert(testObj instanceof Serializable);
     assertEquals(typeof testObj.toJSON, "function");
@@ -104,18 +98,16 @@ test({
       propertyTwo = "World!";
       @SerializeProperty({ serializedKey: (key) => `__${key}__` })
       propertyThree = "foo";
-      notSerialized = "not-serialized";
     }
     assertEquals(
       new Test().toJSON(),
       `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
     );
     const testObj = new Test().fromJSON(
-      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar","notSerialized":"changed"}`,
+      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
     );
     assertEquals(testObj.propertyOne, "From");
     assertEquals(testObj.propertyTwo, "JSON!");
-    assertEquals(testObj.notSerialized, "changed");
     assertEquals(
       testObj.toJSON(),
       `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,

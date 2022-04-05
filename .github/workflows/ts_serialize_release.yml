@@ -37,6 +37,10 @@ jobs:
       - name: Run deno tests
         run: deno test --doc
 
+      - name: Deno test markdown code blocks
+        run: deno run --allow-read --allow-write --allow-run .github/test_markdown.ts
+        if: matrix.os == 'ubuntu-latest'
+
       - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
 
