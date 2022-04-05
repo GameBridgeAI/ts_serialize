@@ -40,7 +40,11 @@ jobs:
         run: deno cache test_deps.ts
 
       - name: Deno test
-        run: deno test
+        run: deno test --doc
+
+      - name: Deno test markdown code blocks
+        run: deno run --allow-read --allow-write --allow-run .github/test_markdown.ts
+        if: matrix.os == 'ubuntu-latest'
 
       - name: Setup node
         uses: actions/setup-node@v1

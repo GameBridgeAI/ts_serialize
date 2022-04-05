@@ -316,3 +316,15 @@ test({
     );
   },
 });
+
+test({
+  name: "clones as a new reference",
+  fn() {
+    class Clone extends Serializable {
+      @SerializeProperty()
+      public test = "test";
+    }
+    const testObj = new Clone();
+    assert(testObj !== testObj.clone());
+  },
+});
