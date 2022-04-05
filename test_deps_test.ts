@@ -10,8 +10,9 @@ test({
     assertEquals(typeof mod.test, "function");
     assertEquals(typeof mod.assert, "function");
     assertEquals(typeof mod.assertEquals, "function");
+    assertEquals(typeof mod.assertNotEquals, "function");
     assertEquals(typeof mod.assertStrictEquals, "function");
     assertEquals(typeof mod.fail, "function");
-    assertEquals(Object.keys(mod).length, 5);
+    assertEquals(Object.keys(mod).length, 6);
   },
 });
