@@ -9,7 +9,7 @@ import {
   PolymorphicSwitch,
 } from "./polymorphic.ts";
 import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";
-import { assertNotEquals } from "https://deno.land/std@0.85.0/testing/asserts.ts";
+import { assertNotEquals } from "https://deno.land/std@0.133.0/testing/asserts.ts";
 
 test({
   name:

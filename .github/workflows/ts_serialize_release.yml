@@ -26,7 +26,7 @@ jobs:
 
       - name: Deno lint
         run: deno lint
-      
+
       - name: Deno format check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
@@ -35,7 +35,7 @@ jobs:
         run: deno cache test_deps.ts
 
       - name: Run deno tests
-        run: deno test 
+        run: deno test
 
       - name: Run package.json generation tests
         run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
@@ -69,7 +69,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: .github/workflows/scripts/build.sh ${{ steps.get_github_tag.outputs.VERSION }}
+        run: deno run -A .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
 
       - name: Create release
         id: create_release
