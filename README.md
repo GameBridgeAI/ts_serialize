@@ -53,7 +53,7 @@ serialized.
   takes the object as a parameter to override cloned property values
 
 ```ts
-import { Serializable, SerializeProperty } from "./mod.ts";
+import { Serializable } from "./mod.ts";
 import { assert, assertEquals, test } from "./test_deps.ts";
 
 test({
