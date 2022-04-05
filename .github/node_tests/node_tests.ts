@@ -9,7 +9,6 @@ import {
   fromObjectContaining,
   getNewSerializable,
   iso8601Date,
-  JSONValue,
   polymorphicClassFromJSON,
   PolymorphicResolver,
   PolymorphicSwitch,
@@ -164,7 +163,7 @@ abstract class AbstractClass extends Serializable {
   // Property name can be whatever, even an inaccessible symbol
   @PolymorphicResolver
   public static [Symbol()](
-    json: JSONValue,
+    json: string,
   ): Serializable {
     const inputObject = new ResolverHelperClass().fromJSON(json);
 
