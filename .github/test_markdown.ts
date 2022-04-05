@@ -1,8 +1,18 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
-/** find and read all .md files in a given directory or the current directory
+/** Find and read all .md files in a given directory or the current directory
  * if no arguments are given, parse each .md file for typescript code blocks
- * and run the code in the codeblock */
+ * and run the code in the codeblock
+ *
+ * @argument directory - string path to the head of the directory stack
+ * @default "." - the currect location from where the script was run
+ *
+ * @example
+ * ```bash
+ * deno run --alow-read --allow-write --allow-run test_markdown.ts
+ * deno run --alow-read --allow-write --allow-run test_markdown.ts directory
+ * ```
+ */
 
 import { walk } from "https://deno.land/std@0.133.0/fs/mod.ts";
 
