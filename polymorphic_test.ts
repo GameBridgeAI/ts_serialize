@@ -2,14 +2,19 @@
 
 import { JSONValue, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
-import { assert, assertEquals, fail, test } from "./test_deps.ts";
+import {
+  assert,
+  assertEquals,
+  assertNotEquals,
+  fail,
+  test,
+} from "./test_deps.ts";
 import {
   polymorphicClassFromJSON,
   PolymorphicResolver,
   PolymorphicSwitch,
 } from "./polymorphic.ts";
 import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";
-import { assertNotEquals } from "https://deno.land/std@0.133.0/testing/asserts.ts";
 
 test({
   name:

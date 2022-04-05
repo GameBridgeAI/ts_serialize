@@ -31,6 +31,8 @@ and this project adheres to
 - fix #121 address lint issues
 - add `fromSerializable` strategy
 - fix #132 adding `serializable.clone(json: JSONObject): this`
+- fix #143 change transpiler to use dnt
+- std@0.133.0
 
 ## [v1.3.1] - 2021-03-14
 
