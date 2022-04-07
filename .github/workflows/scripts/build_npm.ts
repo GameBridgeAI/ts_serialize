@@ -10,8 +10,8 @@ const helpText =
   "\nThis must be run from the project root if using the default arguments." +
   "\n" +
   "\nUsage:" +
-  `\n\tdeno run -A .github/workflows/scripts/build_npm.ts -v "v0.0.0-test" [-e ${entryPointDefault}] [-o ${outDirDefault}]` +
-  "\n\tdeno run -A .github/workflows/scripts/build_npm.ts --help" +
+  `\n\tdeno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test" [-e ${entryPointDefault}] [-o ${outDirDefault}]` +
+  "\n\tdeno run --allow-env --allow-read --allow-write .github/workflows/scripts/build_npm.ts --help" +
   "\n" +
   "\nCommand line arguments:" +
   "\n\t-h,  --help               Prints this help message, then exits." +

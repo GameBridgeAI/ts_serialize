@@ -70,7 +70,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: deno run -A .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
+        run: deno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
 
       - name: Create release
         id: create_release
