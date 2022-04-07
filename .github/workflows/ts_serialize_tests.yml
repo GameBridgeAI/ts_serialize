@@ -54,3 +54,8 @@ jobs:
 
       - name: Build and test NPM module
         run: deno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test"
+        if: matrix.os != 'windows-latest'
+
+      - name: Build and test NPM module (windows)
+        run: deno run --allow-env --allow-read --allow-write --allow-run=cmd,npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test"
+        if: matrix.os == 'windows-latest'
