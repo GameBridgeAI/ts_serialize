@@ -46,7 +46,6 @@ await build({
   outDir,
   compilerOptions: { target: "ES2021" },
   shims: {
-    // see JS docs for overview and more options
     deno: true,
   },
   package: {
@@ -62,16 +61,16 @@ await build({
     bugs: {
       url: "https://github.com/GameBridgeAI/ts_serialize/issues",
     },
-    homepage: "https://gamebridgeai.github.io/ts_serialize",
+    homepage: "https://github.com/GameBridgeAI/ts_serialize",
     keywords: [
       "typescript",
       "serialize",
+      "deserialize",
       "serialization",
-      "JSON",
+      "deserialization",
+      "json",
       "node",
       "deno",
-      "ts_serialize",
-      "ts-serialize",
     ],
   },
 });
