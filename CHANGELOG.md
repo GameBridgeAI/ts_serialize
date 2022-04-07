@@ -31,6 +31,7 @@ and this project adheres to
 - add `fromSerializable` strategy
 - fix #132 adding `serializable.clone(json: JSONObject): this`
 - fix #143 change transpiler to use dnt
+- update release node version to 16
 - std@0.133.0
 - Remove node tests
 
