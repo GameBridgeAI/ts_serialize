@@ -21,7 +21,6 @@ and this project adheres to
 - move `docs/` to `README.md` and delete folder
 - fixes #135
 - fixes #134
-- std@0.129.0
 - public strategies are all functions to be run to get the runtime function
   `iso8601Date` => `iso8601Date()`
 - deno@1.19.x
@@ -31,6 +30,10 @@ and this project adheres to
 - fix #121 address lint issues
 - add `fromSerializable` strategy
 - fix #132 adding `serializable.clone(json: JSONObject): this`
+- fix #143 change transpiler to use dnt
+- update release node version to 16
+- std@0.133.0
+- Remove node tests
 
 ## [v1.3.1] - 2021-03-14
 

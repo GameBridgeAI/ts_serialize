@@ -7,9 +7,9 @@ name: tests
 
 on:
   push:
-    branches: ['**']
+    branches: ["**"]
   pull_request:
-    branches: ['**']
+    branches: ["**"]
 
 jobs:
   test:
@@ -31,7 +31,7 @@ jobs:
 
       - name: Deno lint
         run: deno lint
-      
+
       - name: Deno format check
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
@@ -46,9 +46,6 @@ jobs:
         run: deno run --allow-read --allow-write --allow-run .github/test_markdown.ts
         if: matrix.os == 'ubuntu-latest'
 
-      - name: Run package.json generation tests
-        run: .github/workflows/scripts/npm_release_files/create_npm_package_file_test.sh
-
       - name: Setup node
         uses: actions/setup-node@v1
         with:
@@ -56,4 +53,9 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: .github/workflows/scripts/build.sh "v0.0.0-test"
+        run: deno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test"
+        if: matrix.os != 'windows-latest'
+
+      - name: Build and test NPM module (windows)
+        run: deno run --allow-env --allow-read --allow-write --allow-run=cmd,npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test"
+        if: matrix.os == 'windows-latest'
