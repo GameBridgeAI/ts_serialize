@@ -70,7 +70,12 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
+        if: matrix.os != 'windows-latest'
         run: deno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
+
+      - name: Build and test NPM module (windows)
+        if: matrix.os == 'windows-latest'
+        run: deno run --allow-env --allow-read --allow-write --allow-run=cmd .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
 
       - name: Create release
         id: create_release
