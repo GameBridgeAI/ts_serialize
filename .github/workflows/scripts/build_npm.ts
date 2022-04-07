@@ -23,59 +23,55 @@ function printHelpText() {
   console.log(helpText);
 }
 
-async function main() {
-  const flags = parse(Deno.args);
+const flags = parse(Deno.args);
 
-  if (flags["h"] || flags["help"]) {
-    printHelpText();
-    return;
-  }
-
-  const version = flags["v"] || flags["version"];
-  const entryPoint = flags["e"] || flags["entry-point"] || entryPointDefault;
-  const outDir = flags["o"] || flags["out"] || outDirDefault;
-
-  if (!version) {
-    printHelpText();
-    return 1;
-  }
-
-  await emptyDir(outDir);
-
-  await build({
-    entryPoints: [entryPoint],
-    outDir,
-    compilerOptions: { target: "ES2021" },
-    shims: {
-      // see JS docs for overview and more options
-      deno: true,
-    },
-    package: {
-      name: "@gamebridgeai/ts_serialize",
-      version,
-      description: "A zero dependency library for serializing data.",
-      repository: {
-        type: "git",
-        url: "https://github.com/GameBridgeAI/ts_serialize.git",
-      },
-      author: "GameBridgeAI",
-      license: "MIT",
-      bugs: {
-        url: "https://github.com/GameBridgeAI/ts_serialize/issues",
-      },
-      homepage: "https://gamebridgeai.github.io/ts_serialize",
-      keywords: [
-        "typescript",
-        "serialize",
-        "serialization",
-        "JSON",
-        "node",
-        "deno",
-        "ts_serialize",
-        "ts-serialize",
-      ],
-    },
-  });
+if (flags.h || flags.help) {
+  printHelpText();
+  Deno.exit();
 }
 
-await main();
+const version = flags.v || flags.version;
+const entryPoint = flags.e || flags["entry-point"] || entryPointDefault;
+const outDir = flags.o || flags.out || outDirDefault;
+
+if (!version) {
+  printHelpText();
+  Deno.exit(1);
+}
+
+await emptyDir(outDir);
+
+await build({
+  entryPoints: [entryPoint],
+  outDir,
+  compilerOptions: { target: "ES2021" },
+  shims: {
+    // see JS docs for overview and more options
+    deno: true,
+  },
+  package: {
+    name: "@gamebridgeai/ts_serialize",
+    version,
+    description: "A zero dependency library for serializing data.",
+    repository: {
+      type: "git",
+      url: "https://github.com/GameBridgeAI/ts_serialize.git",
+    },
+    author: "GameBridgeAI",
+    license: "MIT",
+    bugs: {
+      url: "https://github.com/GameBridgeAI/ts_serialize/issues",
+    },
+    homepage: "https://gamebridgeai.github.io/ts_serialize",
+    keywords: [
+      "typescript",
+      "serialize",
+      "serialization",
+      "JSON",
+      "node",
+      "deno",
+      "ts_serialize",
+      "ts-serialize",
+    ],
+  },
+});
