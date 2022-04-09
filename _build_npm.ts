@@ -1,3 +1,7 @@
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm,cmd
+
+// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+
 import { build, emptyDir } from "https://deno.land/x/dnt@0.22.0/mod.ts";
 import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
 
@@ -10,8 +14,8 @@ const helpText =
   "\nThis must be run from the project root if using the default arguments." +
   "\n" +
   "\nUsage:" +
-  `\n\tdeno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v "v0.0.0-test" [-e ${entryPointDefault}] [-o ${outDirDefault}]` +
-  "\n\tdeno run --allow-env --allow-read --allow-write .github/workflows/scripts/build_npm.ts --help" +
+  `\n\t./_build_npm.ts -v "v0.0.0-test" [-e ${entryPointDefault}] [-o ${outDirDefault}]` +
+  "\n\t./_build_npm.ts --help" +
   "\n" +
   "\nCommand line arguments:" +
   "\n\t-h,  --help               Prints this help message, then exits." +
@@ -35,6 +39,7 @@ const entryPoint = flags.e || flags["entry-point"] || entryPointDefault;
 const outDir = flags.o || flags.out || outDirDefault;
 
 if (!version) {
+  console.log("A version (-v or --version) is required");
   printHelpText();
   Deno.exit(1);
 }

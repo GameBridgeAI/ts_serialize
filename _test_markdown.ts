@@ -1,3 +1,5 @@
+#!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
+
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 /** Find and read all .md files in a given directory or the current directory
@@ -9,8 +11,8 @@
  *
  * @example
  * ```bash
- * deno run --alow-read --allow-write --allow-run test_markdown.ts
- * deno run --alow-read --allow-write --allow-run test_markdown.ts directory
+ * ./_test_markdown.ts
+ * ./_test_markdown.ts directory
  * ```
  */
 

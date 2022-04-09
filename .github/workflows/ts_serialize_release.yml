@@ -38,7 +38,7 @@ jobs:
         run: deno test --doc
 
       - name: Deno test markdown code blocks
-        run: deno run --allow-read --allow-write --allow-run .github/test_markdown.ts
+        run: ./_test_markdown.ts
         if: matrix.os == 'ubuntu-latest'
 
   build:
@@ -70,12 +70,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: deno run --allow-env --allow-read --allow-write --allow-run=npm .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
-        if: matrix.os != 'windows-latest'
-
-      - name: Build and test NPM module (windows)
-        run: deno run --allow-env --allow-read --allow-write --allow-run=cmd,npm .github/workflows/scripts/build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
-        if: matrix.os == 'windows-latest'
+        run: ./_build_npm.ts -v ${{ steps.get_github_tag.outputs.VERSION }}
 
       - name: Create release
         id: create_release
