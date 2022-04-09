@@ -6,7 +6,7 @@ import { build, emptyDir } from "https://deno.land/x/dnt@0.22.0/mod.ts";
 import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
 
 const entryPointDefault = "./mod.ts";
-const outDirDefault = "./.github/workflows/dist";
+const outDirDefault = "./dist";
 
 const helpText =
   "Deno to node transpiler, converts the ts_serialize module to a node compatible module, and writes it to .github/workflows/npm, or the directory of your choice." +
@@ -43,39 +43,53 @@ if (!version) {
   printHelpText();
   Deno.exit(1);
 }
+try {
+  await emptyDir(outDir);
 
-await emptyDir(outDir);
+  await build({
+    entryPoints: [entryPoint],
+    outDir,
+    compilerOptions: { target: "ES2021" },
+    shims: {
+      deno: true,
+    },
+    package: {
+      name: "@gamebridgeai/ts_serialize",
+      version,
+      description: "A zero dependency library for serializing data.",
+      repository: {
+        type: "git",
+        url: "https://github.com/GameBridgeAI/ts_serialize.git",
+      },
+      author: "GameBridgeAI",
+      license: "MIT",
+      bugs: {
+        url: "https://github.com/GameBridgeAI/ts_serialize/issues",
+      },
+      homepage: "https://github.com/GameBridgeAI/ts_serialize",
+      keywords: [
+        "ts_serialize",
+        "ts_serializable",
+        "ts-serialize",
+        "ts-serializable",
+        "typescript",
+        "serializable",
+        "serialize",
+        "deserialize",
+        "serialization",
+        "deserialization",
+        "json",
+        "node",
+        "deno",
+      ],
+    },
+  });
 
-await build({
-  entryPoints: [entryPoint],
-  outDir,
-  compilerOptions: { target: "ES2021" },
-  shims: {
-    deno: true,
-  },
-  package: {
-    name: "@gamebridgeai/ts_serialize",
-    version,
-    description: "A zero dependency library for serializing data.",
-    repository: {
-      type: "git",
-      url: "https://github.com/GameBridgeAI/ts_serialize.git",
-    },
-    author: "GameBridgeAI",
-    license: "MIT",
-    bugs: {
-      url: "https://github.com/GameBridgeAI/ts_serialize/issues",
-    },
-    homepage: "https://github.com/GameBridgeAI/ts_serialize",
-    keywords: [
-      "typescript",
-      "serialize",
-      "deserialize",
-      "serialization",
-      "deserialization",
-      "json",
-      "node",
-      "deno",
-    ],
-  },
-});
+  await Deno.copyFile("LICENSE", `${outDir}/LICENSE`);
+  await Deno.copyFile("README.md", `${outDir}/README.md`);
+  await Deno.copyFile("CHANGELOG.md", `${outDir}/CHANGELOG.md`);
+} catch (e) {
+  console.log(e.message);
+  printHelpText();
+  Deno.exit(1);
+}
