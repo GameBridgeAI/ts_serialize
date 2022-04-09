@@ -15,8 +15,8 @@ Usage:
 	./_test_markdown --help
 
 Command line arguments:
-	-h, --help 		Prints this message and exits.
-	-d, --directory=[path] 	The directory to start a recrusive lookup for markdown files
+	-h,  --help               Prints this help message, then exits.
+	-d,  --directory=["."]   The directory to start a recrusive lookup for markdown files
 `;
 
 function printHelpText(message = "") {
@@ -31,8 +31,9 @@ function printHelpText(message = "") {
 
 const flags = parse(Deno.args, {
   string: ["d"],
+  boolean: ["h"],
   alias: { d: "directory", h: "help" },
-  default: { d: "./" },
+  default: { d: "." },
   unknown: () => printHelpText("Unknown argument"),
 });
 

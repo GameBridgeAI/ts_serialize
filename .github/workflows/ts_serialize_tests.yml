@@ -53,4 +53,4 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: ./_build_npm.ts -v "v0.0.0-test"
+        run: ./_build_npm.ts
