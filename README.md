@@ -38,7 +38,7 @@ A zero dependency library for serializing data.
 Install with `npm i @gamebridgeai/ts_serialize` or
 `yarn add @gamebridgeai/ts_serialize`
 
-## Serializable
+## `Serializable` and `SerializeProperty`
 
 `Serializable` is an abstract class to extend, it will add 5 methods to the
 class extending it.
@@ -62,7 +62,32 @@ test({
 });
 ```
 
+`SerializeProperty` is the
+[property decorator](https://www.typescriptlang.org/docs/handbook/decorators.html#property-decorators)
+used before a property to add the property to the serialization logic.
+
+```ts
+import { Serializable, SerializeProperty } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Serializes properties adds to serialization logic",
+  fn() {
+    class Test extends Serializable {
+      @SerializeProperty()
+      testName = "toJSON";
+    }
+    assertEquals(new Test().toJSON(), `{"testName":"toJSON"}`);
+    const testObj = new Test().fromJSON(`{"testName":"fromJSON"}`);
+    assertEquals(testObj.testName, "fromJSON");
+  },
+});
+```
+
 ### Methods
+
+Each method has an implementable interface if you wish to provide your own
+functionality.
 
 #### `fromJSON`
 
@@ -311,12 +336,20 @@ Passing a string or a function as an argument to `SerializeProperty` causes the
 property to use that name as the key when serialized. The function has one
 parameter, the `key` as string and should return a string.
 
-`SerializeProperty` also excepts an options object with the properties:
+`SerializeProperty` also excepts an optional options object with the properties
 
-- `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the
-  key in the serialized object
-- `toJSONStrategy` (Optional) `{ToJSONStrategy}` - Used when serializing
-- `fromJSONStrategy` (Optional) `{FromJSONStrategy}` - Used when deserializing
+#### `serializedKey`
+
+(Optional) `{string | ToSerializedKeyStrategy}` used as the key in the
+serialized object
+
+#### `toJSONStrategy`
+
+(Optional) `{ToJSONStrategy}` used when serializing values
+
+#### `fromJSONStrategy`
+
+(Optional) `{FromJSONStrategy}` used when deserializing values
 
 ```ts
 import { Serializable, SerializeProperty } from "./mod.ts";
@@ -346,37 +379,6 @@ test({
       testObj.toJSON(),
       `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
     );
-  },
-});
-```
-
-### Inheritance
-
-Inherited classes override the key when serializing. If you override a property
-any value used for that key will be overridden by the child value. _With
-collisions the child always overrides the parent_
-
-```ts
-import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Inheritance",
-  fn() {
-    class Test1 extends Serializable {
-      @SerializeProperty("serialize_me")
-      serializeMe = "nice1";
-    }
-
-    class Test2 extends Test1 {
-      @SerializeProperty("serialize_me")
-      serializeMeInstead = "nice2";
-    }
-
-    const testObj = new Test2();
-    assertEquals(testObj.serializeMe, "nice1");
-    assertEquals(testObj.serializeMeInstead, "nice2");
-    assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
   },
 });
 ```
@@ -492,6 +494,37 @@ test({
 });
 ```
 
+### Inheritance
+
+Inherited classes override the key when serializing. If you override a property
+any value used for that key will be overridden by the child value. _With
+collisions the child always overrides the parent_
+
+```ts
+import { Serializable, SerializeProperty } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Inheritance",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("serialize_me")
+      serializeMe = "nice1";
+    }
+
+    class Test2 extends Test1 {
+      @SerializeProperty("serialize_me")
+      serializeMeInstead = "nice2";
+    }
+
+    const testObj = new Test2();
+    assertEquals(testObj.serializeMe, "nice1");
+    assertEquals(testObj.serializeMeInstead, "nice2");
+    assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
+  },
+});
+```
+
 ### Nested Class Serialization
 
 #### ToJSON
@@ -556,40 +589,6 @@ test({
     const testObj = new Test2();
     testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
     assertEquals(testObj.nested.serializeMe, "custom value");
-  },
-});
-```
-
-`toObjectContaining` revives a record of string keys to Serializable objects, it
-will also revive to an array of Serializable objects.
-
-```ts
-import { Serializable, SerializeProperty, toObjectContaining } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "toObjectContaining",
-  fn() {
-    class SomeClass extends Serializable {
-      @SerializeProperty()
-      someClassProp = "test";
-    }
-
-    class Test extends Serializable {
-      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
-    }
-
-    const testObj = new Test().fromJSON(
-      {
-        test: {
-          testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
-        },
-      },
-    );
-    assert(Array.isArray(testObj.test.testing));
-    assert(testObj.test.testing[0] instanceof Serializable);
-    assertEquals(testObj.test.testing[0].someClassProp, "changed");
   },
 });
 ```
@@ -841,7 +840,7 @@ test({
       @SerializeProperty()
       public colour?: Colour;
 
-      @PolymorphicResolver
+      @PolymorphicResolver()
       public static resolvePolymorphic(input: string): MyColourClass {
         const colourClass = new PolymorphicColourClass().fromJSON(input);
 
@@ -857,8 +856,7 @@ test({
     }
 
     // Helper class to parse the input and extract the colour property's value
-    class PolymorphicColourClass extends MyColourClass {
-    }
+    class PolymorphicColourClass extends MyColourClass {}
 
     class MyRedClass extends MyColourClass {
       @SerializeProperty()
@@ -878,7 +876,8 @@ test({
       }
     }
 
-    // Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
+    // Serialize using PolymorphicColourClass to determine the value of `colour`
+    // then serialize using `MyRedClass`
     const redClass = polymorphicClassFromJSON(
       MyColourClass,
       `{"colour":"RED","crimson":true}`,

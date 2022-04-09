@@ -33,16 +33,18 @@ export type InitializerFunction = () => Serializable;
  */
 
 /** \@PolymorphicResolver method decorator */
-export function PolymorphicResolver(
-  target: unknown,
-  propertyKey: string | symbol,
-): void {
-  registerPolymorphicResolver(
-    target,
-    (target as Record<typeof propertyKey, () => Serializable>)[
-      propertyKey as string
-    ],
-  );
+export function PolymorphicResolver(): PropertyDecorator {
+  return (
+    target: unknown,
+    propertyKey: string | symbol,
+  ): void => {
+    registerPolymorphicResolver(
+      target,
+      (target as Record<typeof propertyKey, () => Serializable>)[
+        propertyKey as string
+      ],
+    );
+  };
 }
 
 export type ResolverFunction = (

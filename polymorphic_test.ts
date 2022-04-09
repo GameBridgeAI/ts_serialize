@@ -44,7 +44,7 @@ test({
 
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
-      @PolymorphicResolver
+      @PolymorphicResolver()
       public static [Symbol()](
         json: string | JSONObject,
       ): Serializable {
@@ -85,7 +85,7 @@ test({
 
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
-      @PolymorphicResolver
+      @PolymorphicResolver()
       public static [Symbol()](
         json: string | JSONObject,
       ): Serializable {
