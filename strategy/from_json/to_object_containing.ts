@@ -1,6 +1,6 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { JSONValue, Serializable } from "../../serializable.ts";
+import { JSONObject, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
 import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
@@ -14,7 +14,7 @@ export function toObjectContaining(
   type: unknown,
 ): FromJSONStrategy {
   return (
-    value: JSONValue,
+    value: { [k: string]: JSONObject | JSONObject[] },
   ): null | Record<string, Serializable | Serializable[] | null> => {
     if (value == null) {
       return null;
@@ -37,7 +37,7 @@ export function toObjectContaining(
 
         // Serializable[]
         if (Array.isArray(value[prop])) {
-          record[prop] = (value[prop] as JSONValue[]).map((v) => {
+          record[prop] = (value[prop] as JSONObject[]).map((v) => {
             if (!isObject(v)) {
               throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
             }
@@ -51,7 +51,9 @@ export function toObjectContaining(
           throw new Error(ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
         }
 
-        record[prop] = getNewSerializable(type).fromJSON(value[prop]);
+        record[prop] = getNewSerializable(type).fromJSON(
+          value[prop] as JSONObject,
+        );
       }
     }
     return record;

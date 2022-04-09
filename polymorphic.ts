@@ -1,6 +1,7 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
+  JSONObject,
   JSONValue,
   Serializable,
   SERIALIZABLE_CLASS_MAP,
@@ -211,7 +212,7 @@ function resolvePolymorphicSwitch(
  */
 export function polymorphicClassFromJSON<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
-  json: JSONValue,
+  json: string | JSONObject,
 ): T {
   return resolvePolymorphicClass(classPrototype, json).fromJSON(json);
 }
@@ -221,7 +222,7 @@ export function polymorphicClassFromJSON<T extends Serializable>(
  */
 function resolvePolymorphicClass<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
-  json: JSONValue,
+  json: string | JSONObject,
 ): T {
   const classResolver = POLYMORPHIC_RESOLVER_MAP.get(classPrototype);
   if (classResolver) {
