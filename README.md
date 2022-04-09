@@ -130,6 +130,25 @@ test({
 });
 ```
 
+#### `clone`
+
+Returns a new reference of the object with all properties cloned, takes the
+object as a parameter to override cloned property values
+
+```ts
+import { Serializable } from "./mod.ts";
+import { assert, test } from "./test_deps.ts";
+
+test({
+  name: "Method clone",
+  fn() {
+    class Clone extends Serializable {}
+    const testObj = new Clone();
+    assert(testObj !== testObj.clone());
+  },
+});
+```
+
 #### `tsSerialize`
 
 Converts the model to "Plain old Javascript object" with any provided
@@ -146,25 +165,6 @@ test({
     const testObj = new TestClass().tsSerialize();
     assertEquals(typeof testObj, "object");
     assertEquals(testObj, {});
-  },
-});
-```
-
-#### `clone`
-
-Returns a new reference of the object with all properties cloned, takes the
-object as a parameter to override cloned property values
-
-```ts
-import { Serializable } from "./mod.ts";
-import { assert, test } from "./test_deps.ts";
-
-test({
-  name: "Method clone",
-  fn() {
-    class Clone extends Serializable {}
-    const testObj = new Clone();
-    assert(testObj !== testObj.clone());
   },
 });
 ```
