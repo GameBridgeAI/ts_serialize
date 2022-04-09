@@ -24,33 +24,24 @@ A zero dependency library for serializing data.
 
 ### Deno
 
-`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
-in your `deps.ts` file. `<version>` will be a tag found on the
-[deno releases](https://deno.land/x/ts_serialize) page. The version can be
-omitted to get the latest release, however, for stability it is recommended to
-use a tagged version.
+`export` what you need from `https://deno.land/x/ts_serialize/mod.ts`
+
+> ⚠️ _Warning_ The examples in this README pull from `develop` You would want to
+> "pin" to a particular version which is compatible with the version of Deno you
+> are using and has a fixed set of APIs you would expect. `https://deno.land/x/`
+> supports using git tags in the URL to direct you at a particular version. So
+> to use version 2.0.0 of ts_serializec you would want to import
+> `https://deno.land/x/ts_serialize@v2.0.0/mod.ts`.
 
 ### Node
 
 Install with `npm i @gamebridgeai/ts_serialize` or
 `yarn add @gamebridgeai/ts_serialize`
 
-## Serializable and SerializeProperty
+## Serializable
 
-Import `Serializable` and `SerializeProperty`, extend `Serializable` from your
-`class` and use the `SerializeProperty` decorator on any properties you want
-serialized.
-
-`Serializable` will add 5 methods:
-
-- `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
-- `toJSON` - converts the model to a JSON string
-- `tsSerialize` - converts the model to "Plain old Javascript object" with any
-  provided key or value transformations
-- `tsTransformKey` - called against every key, has one parameter, the key to
-  transform, the return value is a string
-- `clone` - returns a new reference of the object with all properties cloned,
-  takes the object as a parameter to override cloned property values
+`Serializable` is an abstract class to extend, it will add 5 methods to the
+class extending it.
 
 ```ts
 import { Serializable } from "./mod.ts";
@@ -67,6 +58,249 @@ test({
     assertEquals(typeof testObj.tsSerialize, "function");
     assertEquals(typeof testObj.tsTransformKey, "function");
     assertEquals(typeof testObj.clone, "function");
+  },
+});
+```
+
+### Methods
+
+- `fromJSON`
+
+  Takes one argument, the JSON `string` or `JSONObject` to deserialize creating
+  an object. `fromJSON` will perform provided `tsTransformKey` operations and
+  strategy value transformations.
+
+```ts
+import { Serializable } from "./mod.ts";
+import { assert, test } from "./test_deps.ts";
+
+test({
+  name: "Method fromJSON",
+  fn() {
+    class TestClass extends Serializable {}
+    const testObjOne = new TestClass().fromJSON({});
+    const testObjTwo = new TestClass().fromJSON("{}");
+    assert(testObjOne instanceof TestClass);
+    assert(testObjTwo instanceof TestClass);
+  },
+});
+```
+
+- `toJSON`
+
+  Converts the model to a JSON string
+
+```ts
+import { Serializable } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Method toJSON",
+  fn() {
+    class TestClass extends Serializable {}
+    const testObj = new TestClass().toJSON();
+    assertEquals(typeof testObj, "string");
+    assertEquals(testObj, "{}");
+  },
+});
+```
+
+- `tsSerialize`
+
+  Converts the model to "Plain old Javascript object" with any provided
+  `tsTransformKey` or value transformations
+
+```ts
+import { Serializable } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Method tsSerialize",
+  fn() {
+    class TestClass extends Serializable {}
+    const testObj = new TestClass().tsSerialize();
+    assertEquals(typeof testObj, "object");
+    assertEquals(testObj, {});
+  },
+});
+```
+
+- `clone`
+
+  Returns a new reference of the object with all properties cloned, takes the
+  object as a parameter to override cloned property values
+
+```ts
+import { Serializable } from "./mod.ts";
+import { assert, test } from "./test_deps.ts";
+
+test({
+  name: "Method clone",
+  fn() {
+    class Clone extends Serializable {}
+    const testObj = new Clone();
+    assert(testObj !== testObj.clone());
+  },
+});
+```
+
+- `tsTransformKey`
+
+  Called against every key, has one parameter, the key to transform. The return
+  value is a string. Defaults to returning the parameter
+
+```ts
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Method tsTransformKey",
+  fn() {
+    class TestClassDefault extends Serializable {
+      @SerializeProperty()
+      testProperty = "hello world";
+    }
+    class TestClassCustom extends Serializable implements TransformKey {
+      public tsTransformKey(input: string): string {
+        return `__${input}__`;
+      }
+      @SerializeProperty()
+      testProperty = "hello world";
+    }
+    const testObjOne = new TestClassDefault().fromJSON(
+      `{"testProperty":"changed"}`,
+    );
+    assertEquals(testObjOne.testProperty, "changed");
+    const testObjTwo = new TestClassCustom().fromJSON(
+      `{"__testProperty__":"changed"}`,
+    );
+    assertEquals(testObjTwo.testProperty, "changed");
+    assertEquals(testObjTwo.toJSON(), `{"__testProperty__":"changed"}`);
+    assertEquals(testObjTwo.tsSerialize(), { __testProperty__: "changed" });
+  },
+});
+```
+
+    Key transformations will be inherited by children.
+
+```ts
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "tsTransformKey inheritance",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
+
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+    }
+
+    class TestTransformKey3 extends TestTransformKey2 {
+      @SerializeProperty()
+      public test3 = "test3";
+    }
+
+    assertEquals(
+      new TestTransformKey3().toJSON(),
+      `{"__test2__":"test2","__test3__":"test3"}`,
+    );
+    assertEquals(
+      new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
+      `changed`,
+    );
+  },
+});
+```
+
+    Children can also override their parent `tsTransformKey` function.
+
+```ts
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "Child tsTransformKey",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
+
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+    }
+
+    class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `--${key}--`;
+      }
+      @SerializeProperty()
+      public test3 = "test3";
+    }
+
+    class TestTransformKey4 extends TestTransformKey3 {
+      @SerializeProperty()
+      public test4 = "test4";
+    }
+    assertEquals(
+      new TestTransformKey4().toJSON(),
+      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+    );
+    assertEquals(
+      new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
+      `changed`,
+    );
+  },
+});
+```
+
+    If `tsTransformKey` is implemented and `SerializeProperty` is provided a
+    `serializedKey` option, it will override the `tsTransformKey` function
+
+```ts
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
+import { assertEquals, test } from "./test_deps.ts";
+
+test({
+  name: "tsTransformKey overrides",
+  fn() {
+    class TestTransformKey extends Serializable implements TransformKey {
+      public tsTransformKey(key: string): string {
+        return `__${key}__`;
+      }
+    }
+
+    class TestTransformKey2 extends TestTransformKey {
+      @SerializeProperty()
+      public test2 = "test2";
+
+      @SerializeProperty("changed")
+      public changeMe = "change me";
+
+      @SerializeProperty({ serializedKey: "changed2" })
+      public changeMe2 = "change me2";
+    }
+
+    assertEquals(
+      new TestTransformKey2().toJSON(),
+      `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
+      `changed`,
+    );
+    assertEquals(
+      new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
+      `changed`,
+    );
   },
 });
 ```
@@ -423,165 +657,6 @@ test({
   },
 });
 ```
-
-## Global transformKey
-
-`Serializable` has an optional function `tsTransformKey(key: string): string`,
-we also provide an interface `TransformKey` to implement for type safety. This
-function can be provided to change all the keys without having to specify the
-change for each property.
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Global transformKey",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-
-      @SerializeProperty()
-      public test = "test";
-    }
-
-    assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
-    assertEquals(
-      new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-      `changed`,
-    );
-  },
-});
-```
-
-`tsTransformKey` will be inherited by children:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "tsTransformKey inheritance",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-    }
-
-    class TestTransformKey3 extends TestTransformKey2 {
-      @SerializeProperty()
-      public test3 = "test3";
-    }
-
-    assertEquals(
-      new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","__test3__":"test3"}`,
-    );
-    assertEquals(
-      new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-      `changed`,
-    );
-  },
-});
-```
-
-Children can also override their parent `tsTransformKey` function:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Child tsTransformKey",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-    }
-
-    class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `--${key}--`;
-      }
-      @SerializeProperty()
-      public test3 = "test3";
-    }
-
-    class TestTransformKey4 extends TestTransformKey3 {
-      @SerializeProperty()
-      public test4 = "test4";
-    }
-    assertEquals(
-      new TestTransformKey4().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
-    );
-    assertEquals(
-      new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-      `changed`,
-    );
-  },
-});
-```
-
-If `tsTransformKey` is implemented and `SerializeProperty` is provided a
-`serializedKey` option, it will override the `tsTransformKey` function:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "tsTransformKey overrides",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-
-      @SerializeProperty("changed")
-      public changeMe = "change me";
-
-      @SerializeProperty({ serializedKey: "changed2" })
-      public changeMe2 = "change me2";
-    }
-
-    assertEquals(
-      new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
-    );
-    assertEquals(
-      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
-    );
-    assertEquals(
-      new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
-      `changed`,
-    );
-  },
-});
-```
-
-`tsTransformKey` is an efficient way to deal with camelCase to snake_case
-conversions.
 
 ## Polymorphism
 
