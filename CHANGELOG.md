@@ -10,8 +10,9 @@ and this project adheres to
 
 ### Changed
 
+- _breaking_ `@PolymorphicResolver` returns a propertyDecorator
 - _breaking_ remove JSONArray for JSONValue[]
-- _breaking_ fromJSON only accepts `JSONValue`
+- _breaking_ fromJSON accepts `string | JSONObject`
 - _breaking_ fix #125 strategies are now passed the full array, this allows more
   flexibility for conversions
 - _breaking_ removes array as a strategy, use `composeStrategy` instead
@@ -34,6 +35,8 @@ and this project adheres to
 - update release node version to 16
 - std@0.133.0
 - Remove node tests
+- update Readme
+
 
 ## [v1.3.1] - 2021-03-14
 
