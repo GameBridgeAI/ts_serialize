@@ -385,7 +385,7 @@ test({
 
 ### Strategies
 
-`Strategies` are functions or a composed list of functions to execute on the
+Strategies are functions or a composed list of functions to execute on the
 values when serializing or deserializing. The functions take one argument which
 is the value to process.
 
