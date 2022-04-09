@@ -64,11 +64,11 @@ test({
 
 ### Methods
 
-- `fromJSON`
+#### `fromJSON`
 
-  Takes one argument, the JSON `string` or `JSONObject` to deserialize creating
-  an object. `fromJSON` will perform provided `tsTransformKey` operations and
-  strategy value transformations.
+Takes one argument, the JSON `string` or `JSONObject` to deserialize creating an
+object. `fromJSON` will perform provided `tsTransformKey` operations and
+strategy value transformations.
 
 ```ts
 import { Serializable } from "./mod.ts";
@@ -86,9 +86,9 @@ test({
 });
 ```
 
-- `toJSON`
+#### `toJSON`
 
-  Converts the model to a JSON string
+Converts the model to a JSON string
 
 ```ts
 import { Serializable } from "./mod.ts";
@@ -105,10 +105,10 @@ test({
 });
 ```
 
-- `tsSerialize`
+#### `tsSerialize`
 
-  Converts the model to "Plain old Javascript object" with any provided
-  `tsTransformKey` or value transformations
+Converts the model to "Plain old Javascript object" with any provided
+`tsTransformKey` or value transformations
 
 ```ts
 import { Serializable } from "./mod.ts";
@@ -125,10 +125,10 @@ test({
 });
 ```
 
-- `clone`
+#### `clone`
 
-  Returns a new reference of the object with all properties cloned, takes the
-  object as a parameter to override cloned property values
+Returns a new reference of the object with all properties cloned, takes the
+object as a parameter to override cloned property values
 
 ```ts
 import { Serializable } from "./mod.ts";
@@ -144,10 +144,10 @@ test({
 });
 ```
 
-- `tsTransformKey`
+#### `tsTransformKey`
 
-  Called against every key, has one parameter, the key to transform. The return
-  value is a string. Defaults to returning the parameter
+Called against every key, has one parameter, the key to transform. The return
+value is a string. Defaults to returning the parameter
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
@@ -181,7 +181,7 @@ test({
 });
 ```
 
-    Key transformations will be inherited by children.
+Key transformations will be inherited by children.
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
@@ -218,7 +218,7 @@ test({
 });
 ```
 
-    Children can also override their parent `tsTransformKey` function.
+Children can also override their parent `tsTransformKey` function.
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
@@ -262,8 +262,8 @@ test({
 });
 ```
 
-    If `tsTransformKey` is implemented and `SerializeProperty` is provided a
-    `serializedKey` option, it will override the `tsTransformKey` function
+If `tsTransformKey` is implemented and `SerializeProperty` is provided a
+`serializedKey` option, it will override the `tsTransformKey` function
 
 ```ts
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
