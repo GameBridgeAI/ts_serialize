@@ -37,7 +37,6 @@ and this project adheres to
 - Remove node tests
 - update Readme
 
-
 ## [v1.3.1] - 2021-03-14
 
 ### Added
