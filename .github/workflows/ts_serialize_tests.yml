@@ -44,7 +44,6 @@ jobs:
 
       - name: Deno test markdown code blocks
         run: ./_test_markdown.ts
-        if: matrix.os == 'ubuntu-latest'
 
       - name: Setup node
         uses: actions/setup-node@v1

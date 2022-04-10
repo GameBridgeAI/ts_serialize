@@ -39,7 +39,6 @@ jobs:
 
       - name: Deno test markdown code blocks
         run: ./_test_markdown.ts
-        if: matrix.os == 'ubuntu-latest'
 
   build:
     name: Release
