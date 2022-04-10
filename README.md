@@ -822,7 +822,6 @@ be used when deserializing JSON input.
 import {
   polymorphicClassFromJSON,
   PolymorphicResolver,
-  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
