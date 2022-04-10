@@ -117,21 +117,23 @@ for (const [file, tests] of testSuites.entries()) {
       await Deno.writeTextFile(path, testCode);
 
       console.log(`Linting ${path}`);
-      const { success: lintSuccess, code: lintCode } = await Deno.run({
+      const { success: lintProcess, code: lintStatus } = await Deno.run({
         cmd: ["deno", "lint", path],
       })
         .status();
 
-      if (!lintSuccess) {
-        exitCode = lintCode;
+      if (!lintProcess) {
+        exitCode = lintStatus;
         continue;
       }
 
-      const { success, code } = await Deno.run({ cmd: ["deno", "test", path] })
+      const { success: testProcess, code: testStatus } = await Deno.run({
+        cmd: ["deno", "test", path],
+      })
         .status();
 
-      if (!success) {
-        exitCode = code;
+      if (!testProcess) {
+        exitCode = testStatus;
       }
     } finally {
       await Deno.remove(path);
