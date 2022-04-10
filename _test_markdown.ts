@@ -15,7 +15,7 @@ Usage:
 	./_test_markdown --help
 
 Command line arguments:
-	-h,  --help               Prints this help message, then exits.
+	-h,  --help              Prints this help message, then exits.
 	-d,  --directory=["."]   The directory to start a recrusive lookup for markdown files
 `;
 
@@ -108,39 +108,46 @@ try {
 }
 
 /** run the testSuites and stop process with `code` when `success` fails */
-let exitCode = 0;
+const paths: string[] = [];
 for (const [file, tests] of testSuites.entries()) {
   for (const { startLine, endLine, testCode } of tests) {
-    const path = `${file}:${startLine}-${endLine}.ts`;
+    const path = `${file}$${startLine}-${endLine}.ts`;
 
     try {
       await Deno.writeTextFile(path, testCode);
-
-      console.log(`Linting ${path}`);
-      const { success: lintProcess, code: lintStatus } = await Deno.run({
-        cmd: ["deno", "lint", path],
-      })
-        .status();
-
-      if (!lintProcess) {
-        exitCode = lintStatus;
-        continue;
+      paths.push(path);
+    } catch (e) {
+      for (const path of paths) {
+        Deno.remove(path);
       }
-
-      const { success: testProcess, code: testStatus } = await Deno.run({
-        cmd: ["deno", "test", path],
-      })
-        .status();
-
-      if (!testProcess) {
-        exitCode = testStatus;
-      }
-    } finally {
-      await Deno.remove(path);
-
-      if (exitCode) {
-        Deno.exit(exitCode);
-      }
+      console.error(e.message);
+      Deno.exit(1);
     }
+  }
+}
+
+try {
+  const { success: lintSuccess, code: lintCode } = await Deno.run({
+    cmd: ["deno", "lint", ...paths],
+  })
+    .status();
+
+  if (!lintSuccess) {
+    throw new Error(`Lint exited with code ${lintCode}`);
+  }
+
+  const { success: testSuccess, code: testCode } = await Deno.run({
+    cmd: ["deno", "test", ...paths],
+  })
+    .status();
+
+  if (!testSuccess) {
+    throw new Error(`Tests exited with code ${testCode}`);
+  }
+} catch (e) {
+  console.error(e.message);
+} finally {
+  for (const path of paths) {
+    Deno.remove(path);
   }
 }

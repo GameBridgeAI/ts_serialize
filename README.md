@@ -71,7 +71,7 @@ import { Serializable, SerializeProperty } from "./mod.ts";
 import { assertEquals, test } from "./test_deps.ts";
 
 test({
-  name: "Serializes properties adds to serialization logic",
+  name: "SerializeProperty adds to serialization logic",
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
