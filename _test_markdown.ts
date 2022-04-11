@@ -11,13 +11,14 @@ if no arguments are given. Parse each markdown file for typescript code blocks \
 and run the code in the codeblock.
 
 Usage:
-	./_test_markdown.ts [-d "."]
+	./_test_markdown.ts [-f] [-l] [-d "."]
 	./_test_markdown --help
 
 Command line arguments:
 	-h,  --help              Prints this help message, then exits.
 	-d,  --directory=["."]   The directory to start a recrusive lookup for markdown files
 	-l,  --lint=[false]      Adds a lint check before testing, exit on failure
+	-f,  --fmt=[false]       Adds a fmt check before testing, exit on failure
 `;
 
 function printHelpText(message = "") {
@@ -32,9 +33,9 @@ function printHelpText(message = "") {
 
 const flags = parse(args, {
   string: ["d"],
-  boolean: ["h", "l"],
-  alias: { d: "directory", h: "help", l: "lint" },
-  default: { d: ".", l: false },
+  boolean: ["h", "l", "f"],
+  alias: { d: "directory", h: "help", l: "lint", f: "fmt" },
+  default: { d: ".", l: false, f: false, h: false },
   unknown: () => printHelpText("Unknown argument"),
 });
 
@@ -88,7 +89,7 @@ try {
           [...(testSuites.get(path) ?? []), {
             startLine,
             endLine: currentLine,
-            testCode: testLines.join("\n"),
+            testCode: `${testLines.join("\n")}\n`,
           }],
         );
         testLines.length = 0;
@@ -125,11 +126,11 @@ for (const [file, tests] of testSuites.entries()) {
     }
   }
 }
-
 /** run the testSuites and stop process with `code` when `success` fails */
 let exitCode = 0;
 try {
   if (flags.l) {
+    console.log("linting...");
     const { success, code } = await run({
       cmd: ["deno", "lint", ...paths],
     })
@@ -137,7 +138,20 @@ try {
 
     if (!success) {
       exitCode = code;
-      throw new Error(`Lint exited with code ${code}`);
+      throw new Error(`lint exited with code ${code}`);
+    }
+  }
+
+  if (flags.f) {
+    console.log("formatting...");
+    const { success, code } = await run({
+      cmd: ["deno", "fmt", "--check", ...paths],
+    })
+      .status();
+
+    if (!success) {
+      exitCode = code;
+      throw new Error(`fmt exited with code ${code}`);
     }
   }
 
@@ -148,7 +162,7 @@ try {
 
   if (!success) {
     exitCode = code;
-    throw new Error(`Tests exited with code ${code}`);
+    throw new Error(`test exited with code ${code}`);
   }
 } catch (e) {
   console.error(e.message);
