@@ -4,7 +4,7 @@
 
 import { walk } from "https://deno.land/std@0.133.0/fs/mod.ts";
 import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
-
+const { exit, writeTextFile, readTextFile, remove, args, run } = Deno;
 const helpText = `
 Find and read all markdown files in a given directory or the current directory \
 if no arguments are given. Parse each markdown file for typescript code blocks \
@@ -23,13 +23,13 @@ function printHelpText(message = "") {
   if (message.length) {
     console.error(`\n${message}`);
     console.log(helpText);
-    Deno.exit(1);
+    exit(1);
   }
   console.log(helpText);
-  Deno.exit(0);
+  exit(0);
 }
 
-const flags = parse(Deno.args, {
+const flags = parse(args, {
   string: ["d"],
   boolean: ["h"],
   alias: { d: "directory", h: "help" },
@@ -67,7 +67,7 @@ try {
     let currentLine = 0;
     let startLine = 0;
 
-    for (const line of (await Deno.readTextFile(path)).split("\n")) {
+    for (const line of (await readTextFile(path)).split("\n")) {
       currentLine += 1;
 
       if (
@@ -106,48 +106,52 @@ try {
 } catch (e) {
   printHelpText(e.message);
 }
-
-/** run the testSuites and stop process with `code` when `success` fails */
+/** write test files */
 const paths: string[] = [];
 for (const [file, tests] of testSuites.entries()) {
   for (const { startLine, endLine, testCode } of tests) {
     const path = `${file}$${startLine}-${endLine}.ts`;
 
     try {
-      await Deno.writeTextFile(path, testCode);
+      await writeTextFile(path, testCode);
       paths.push(path);
     } catch (e) {
       for (const path of paths) {
-        Deno.remove(path);
+        await remove(path);
       }
       console.error(e.message);
-      Deno.exit(1);
+      exit(1);
     }
   }
 }
 
+/** run the testSuites and stop process with `code` when `success` fails */
+let exitCode = 0;
 try {
-  const { success: lintSuccess, code: lintCode } = await Deno.run({
+  const { success: lintSuccess, code: lintCode } = await run({
     cmd: ["deno", "lint", ...paths],
   })
     .status();
 
   if (!lintSuccess) {
-    throw new Error(`Lint exited with code ${lintCode}`);
+    exitCode = lintCode;
+    throw new Error(`Lint exited with code ${exitCode}`);
   }
 
-  const { success: testSuccess, code: testCode } = await Deno.run({
+  const { success: testSuccess, code: testCode } = await run({
     cmd: ["deno", "test", ...paths],
   })
     .status();
 
   if (!testSuccess) {
+    exitCode = testCode;
     throw new Error(`Tests exited with code ${testCode}`);
   }
 } catch (e) {
   console.error(e.message);
 } finally {
   for (const path of paths) {
-    Deno.remove(path);
+    await remove(path);
   }
+  exit(exitCode);
 }
