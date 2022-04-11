@@ -38,7 +38,7 @@ jobs:
         run: deno test --doc
 
       - name: Deno test markdown code blocks
-        run: ./_test_markdown.ts
+        run: ./_test_markdown.ts -l 
 
   build:
     name: Release

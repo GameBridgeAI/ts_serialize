@@ -17,6 +17,7 @@ Usage:
 Command line arguments:
 	-h,  --help              Prints this help message, then exits.
 	-d,  --directory=["."]   The directory to start a recrusive lookup for markdown files
+	-l,  --lint=[false]      Adds a lint check before testing, exit on failure
 `;
 
 function printHelpText(message = "") {
@@ -31,9 +32,9 @@ function printHelpText(message = "") {
 
 const flags = parse(args, {
   string: ["d"],
-  boolean: ["h"],
-  alias: { d: "directory", h: "help" },
-  default: { d: "." },
+  boolean: ["h", "l"],
+  alias: { d: "directory", h: "help", l: "lint" },
+  default: { d: ".", l: false },
   unknown: () => printHelpText("Unknown argument"),
 });
 
@@ -128,24 +129,26 @@ for (const [file, tests] of testSuites.entries()) {
 /** run the testSuites and stop process with `code` when `success` fails */
 let exitCode = 0;
 try {
-  const { success: lintSuccess, code: lintCode } = await run({
-    cmd: ["deno", "lint", ...paths],
-  })
-    .status();
+  if (flags.l) {
+    const { success, code } = await run({
+      cmd: ["deno", "lint", ...paths],
+    })
+      .status();
 
-  if (!lintSuccess) {
-    exitCode = lintCode;
-    throw new Error(`Lint exited with code ${exitCode}`);
+    if (!success) {
+      exitCode = code;
+      throw new Error(`Lint exited with code ${code}`);
+    }
   }
 
-  const { success: testSuccess, code: testCode } = await run({
+  const { success, code } = await run({
     cmd: ["deno", "test", ...paths],
   })
     .status();
 
-  if (!testSuccess) {
-    exitCode = testCode;
-    throw new Error(`Tests exited with code ${testCode}`);
+  if (!success) {
+    exitCode = code;
+    throw new Error(`Tests exited with code ${code}`);
   }
 } catch (e) {
   console.error(e.message);
