@@ -16,7 +16,7 @@ module, and writes it to .github/workflows/npm, or the directory of your choice.
 This must be run from the project root if using the default arguments.
 
 Usage:
-	./_build_npm.ts -v "v0.0.0-test" [-e ${entryPointDefault}] [-o ${outDirDefault}]
+	./_build_npm.ts [-v ${versionDefault}] [-e ${entryPointDefault}] [-o ${outDirDefault}]
 	./_build_npm.ts --help
 
 Command line arguments:
