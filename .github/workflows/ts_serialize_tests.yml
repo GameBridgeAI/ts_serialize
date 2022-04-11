@@ -43,7 +43,7 @@ jobs:
         run: deno test --doc
 
       - name: Deno test markdown code blocks
-        run: ./_test_markdown.ts -l
+        run: ./_test_markdown.ts -lfd ./
 
       - name: Setup node
         uses: actions/setup-node@v1
