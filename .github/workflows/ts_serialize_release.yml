@@ -37,9 +37,6 @@ jobs:
       - name: Run deno tests
         run: deno test --doc
 
-      - name: Deno test markdown code blocks
-        run: ./_test_markdown.ts -lfd ./ 
-
   build:
     name: Release
     runs-on: ubuntu-latest

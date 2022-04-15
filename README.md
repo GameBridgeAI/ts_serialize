@@ -52,18 +52,6 @@ class MyClass extends Serializable {
   @SerializeProperty()
   public myProperty = "Hello world!";
 }
-
-const myClass = new MyClass();
-console.assert(Object.keys(myClass).length === 1);
-console.assert(myClass.tsSerialize().myProperty === "Hello world!");
-console.assert(
-  myClass.fromJSON({ myProperty: "A changed value" }).myProperty ===
-    "A changed value",
-);
-console.assert(myClass.toJSON() === `{"myProperty":"A changed value"}`);
-const clonedMyClass = myClass.clone();
-console.assert(clonedMyClass.myProperty === myClass.myProperty);
-console.assert(clonedMyClass !== myClass);
 ```
 
 ### Serializable Methods
@@ -132,17 +120,6 @@ class ChildTwo extends Parent implements TransformKey {
     return `--${key}--`;
   }
 }
-
-const childOne = new ChildOne();
-const childTwo = new ChildTwo();
-console.assert(
-  childOne.toJSON() ===
-    `{"__parentProperty__":"Hello world!","__childOneProperty__":"Ahoy hoy world!"}`,
-);
-console.assert(
-  childTwo.toJSON() ===
-    `{"__parentProperty__":"Hello world!","--childTwoProperty--":"Good Day world!","myCustomName":"Howdy world!"}`,
-);
 ```
 
 Passing a string or a function that returns a string as an argument to
@@ -195,9 +172,6 @@ class Test extends Serializable {
   })
   bigInt!: BigInt;
 }
-
-const testObj = new Test().fromJSON(`{"big_int":"9007199254740991"}`);
-console.assert(testObj.bigInt.toString() === "9007199254740991");
 ```
 
 `toJSONStrategy` and `fromJSONStrategy` can use `composeStrategy` to build out
@@ -215,10 +189,6 @@ class Test extends Serializable {
   })
   property!: string;
 }
-
-console.assert(
-  new Test().fromJSON(`{"property":"Hello"}`).property === "Hello World!!!",
-);
 ```
 
 ### Dates
@@ -235,13 +205,11 @@ class Test extends Serializable {
   })
   date!: Date;
 }
-
-const testObj = new Test().fromJSON(`{"date":"2020-06-04T19:01:47.831Z"}`);
-console.assert(testObj.date instanceof Date);
 ```
 
 `createDateStrategy()` can be use to make a reviving date strategy. Pass a regex
-to make your own.
+to make your own. The example below uses a `yyyy-mm-dd` format to construct a
+`Date`
 
 ```typescript
 import { createDateStrategy, Serializable, SerializeProperty } from "./mod.ts";
@@ -251,9 +219,6 @@ class Test extends Serializable {
   })
   date!: Date;
 }
-
-const testObj = new Test().fromJSON(`{"date":"2099-11-25"}`);
-console.assert(testObj.date instanceof Date);
 ```
 
 ## Short cutting the `@SerializeProperty` decorator
@@ -303,15 +268,6 @@ class C extends Serializable {
   @DeserializeAs(() => new B({ otherProperty: "From Class C" }))
   public property = new B();
 }
-
-const testObj = new C().fromJSON({
-  property: { property: { property_a: "Class C fromJSON" } },
-});
-
-console.assert(testObj.property instanceof B);
-console.assert(testObj.property.property instanceof A);
-console.assert(testObj.property.otherProperty === "From Class C");
-console.assert(testObj.property.property.property === "Class C fromJSON");
 ```
 
 ## Polymorphism
@@ -356,15 +312,10 @@ class MyRedClass extends MyColourClass {
   public crimson = false;
 }
 
-// Serialize using JSON.parse, read `colour` off of the parsed object
-// then compare to the value provided in `@PolymorphicSwitch`
 const redClass = polymorphicClassFromJSON(
   MyColourClass,
   `{"colour":"RED","crimson":true}`,
 );
-
-console.assert(redClass instanceof MyRedClass);
-console.assert((redClass as MyRedClass).crimson);
 ```
 
 You can also provide a test function instead of a value to check if the value
@@ -382,7 +333,6 @@ abstract class Currency extends Serializable {}
 
 class DollarCurrency extends Currency {
   @SerializeProperty()
-  // Match only "$""
   @PolymorphicSwitch(() => new DollarCurrency(), "$")
   public currencySymbol = "$";
 
@@ -392,7 +342,6 @@ class DollarCurrency extends Currency {
 
 class OtherCurrency extends Currency {
   @SerializeProperty()
-  // Match any currency symbol OTHER than "$"
   @PolymorphicSwitch(
     () => new OtherCurrency(),
     (value) => value !== "$",
@@ -407,9 +356,6 @@ const currencyClass = polymorphicClassFromJSON(
   Currency,
   `{"currencySymbol":"£","amount":300}`,
 );
-
-console.assert(currencyClass instanceof OtherCurrency);
-console.assert((currencyClass as OtherCurrency).amount === 300);
 ```
 
 Multiple `@PolymorphicSwitch` annotations can be applied to a single class, if
@@ -443,12 +389,11 @@ const myClass1 = polymorphicClassFromJSON(
   MyAbstractClass,
   `{"myProperty":"300 dollars"}`,
 );
-typeof myClass1; // MyClass
+
 const myClass2 = polymorphicClassFromJSON(
   MyAbstractClass,
   `{"myProperty":"dollar"}`,
 );
-console.assert(myClass2 instanceof MyClass);
 ```
 
 ### Polymorphic Resolver
@@ -489,7 +434,6 @@ abstract class MyColourClass extends Serializable {
   }
 }
 
-// Helper class to parse the input and extract the colour property's value
 class PolymorphicColourClass extends MyColourClass {}
 
 class MyRedClass extends MyColourClass {
@@ -510,15 +454,10 @@ class MyBlueClass extends MyColourClass {
   }
 }
 
-// Serialize using PolymorphicColourClass to determine the value of `colour`
-// then serialize using `MyRedClass`
 const redClass = polymorphicClassFromJSON(
   MyColourClass,
   `{"colour":"RED","crimson":true}`,
 );
-
-console.assert(redClass instanceof MyRedClass);
-console.assert((redClass as MyRedClass).isCrimson());
 ```
 
 ## Built With

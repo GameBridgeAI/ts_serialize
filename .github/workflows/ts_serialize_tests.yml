@@ -42,9 +42,6 @@ jobs:
       - name: Deno test
         run: deno test --doc
 
-      - name: Deno test markdown code blocks
-        run: ./_test_markdown.ts -lfd ./
-
       - name: Setup node
         uses: actions/setup-node@v1
         with:
