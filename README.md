@@ -207,9 +207,9 @@ class Test extends Serializable {
 }
 ```
 
-`createDateStrategy()` can be used to make a reviving date strategy. Pass a regex
-to make your own. The example below uses a `yyyy-mm-dd` format to construct a
-`Date`
+`createDateStrategy()` can be used to make a reviving date strategy. Pass a
+regex to make your own. The example below uses a `yyyy-mm-dd` format to
+construct a `Date`
 
 ```typescript
 import { createDateStrategy, Serializable, SerializeProperty } from "./mod.ts";
@@ -225,7 +225,7 @@ class Test extends Serializable {
 
 While `@SerializeProperty` is handy with to and from JSON strategies, it can
 still be verbose to declare the strategies for each property. You can define
-your owndecorator functions to wrap `@SerializeProperty` and provide the
+your own decorator functions to wrap `@SerializeProperty` and provide the
 `toJSONStrategy` and `fromJSONStrategy`. An example short cut is providing a
 `type` to use with `toSerializable`. `getNewSerializable` is provided to allow a
 raw serializable type or a function that returns a constructed serializable type
