@@ -173,7 +173,7 @@ properties
 - `fromJSONStrategy`
 
   (Optional) `{FromJSONStrategy}` A function that has one parameter, the `JSON`
-property value and returns a value to be used when serialized as a class
+  property value and returns a value to be used when serialized as a class
 
 ### Strategies
 
