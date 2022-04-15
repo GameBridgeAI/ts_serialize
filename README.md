@@ -207,7 +207,7 @@ class Test extends Serializable {
 }
 ```
 
-`createDateStrategy()` can be use to make a reviving date strategy. Pass a regex
+`createDateStrategy()` can be used to make a reviving date strategy. Pass a regex
 to make your own. The example below uses a `yyyy-mm-dd` format to construct a
 `Date`
 
