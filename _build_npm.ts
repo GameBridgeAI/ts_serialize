@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm,cmd
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm,cmd --allow-net=deno.land
 
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
