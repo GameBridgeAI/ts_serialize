@@ -276,15 +276,15 @@ The `@PolymorphicResolver` and `@PolymorphicSwitch` decorators can be used to
 cleanly handle deserializing abstract types into their constituent
 implementations.
 
-### Polymorphic Swtich
+### `PolymorphicSwitch()`
 
-The `@PolymorphicSwitch` decorator is a quick way to serialize simple
+The `@PolymorphicSwitch()` decorator is a quick way to serialize simple
 polymorphic types based on the properties of a child class.
 
-Note that `@PolymorphicSwitch` can only be applied to child classes
+Note that `@PolymorphicSwitch()` can only be applied to child classes
 deserializing from their direct parent class.
 
-Properties decorated with `@PolymorphicSwitch` must also be serializable
+Properties decorated with `@PolymorphicSwitch()` must also be serializable
 properties. The from JSON strategy and associated serialized key of that
 property will be used when comparing the value.
 
