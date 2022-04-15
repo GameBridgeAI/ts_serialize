@@ -18,7 +18,7 @@ Supported Serialized Types:
 
 - [`JSON`](https://www.json.org/json-en.html)
 
-## Isntalling
+## Installing
 
 `ts_serialize` supports both `deno` and `node`.
 
