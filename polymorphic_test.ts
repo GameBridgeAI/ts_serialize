@@ -1,6 +1,6 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { JSONValue, Serializable } from "./serializable.ts";
+import { JSONObject, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
   assert,
@@ -44,9 +44,9 @@ test({
 
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
-      @PolymorphicResolver
+      @PolymorphicResolver()
       public static [Symbol()](
-        json: JSONValue,
+        json: string | JSONObject,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
@@ -85,9 +85,9 @@ test({
 
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
-      @PolymorphicResolver
+      @PolymorphicResolver()
       public static [Symbol()](
-        json: JSONValue,
+        json: string | JSONObject,
       ): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 

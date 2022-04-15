@@ -1,7 +1,7 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  JSONValue,
+  JSONObject,
   Serializable,
   SERIALIZABLE_CLASS_MAP,
 } from "./serializable.ts";
@@ -32,20 +32,22 @@ export type InitializerFunction = () => Serializable;
  */
 
 /** \@PolymorphicResolver method decorator */
-export function PolymorphicResolver(
-  target: unknown,
-  propertyKey: string | symbol,
-): void {
-  registerPolymorphicResolver(
-    target,
-    (target as Record<typeof propertyKey, () => Serializable>)[
-      propertyKey as string
-    ],
-  );
+export function PolymorphicResolver(): PropertyDecorator {
+  return (
+    target: unknown,
+    propertyKey: string | symbol,
+  ): void => {
+    registerPolymorphicResolver(
+      target,
+      (target as Record<typeof propertyKey, () => Serializable>)[
+        propertyKey as string
+      ],
+    );
+  };
 }
 
 export type ResolverFunction = (
-  json: JSONValue,
+  json: string | JSONObject,
 ) => Serializable | null;
 
 /** Map of parent class constructors to functions that take in a JSON input and output a class instance that inherits Serializable */
@@ -157,7 +159,7 @@ function registerPolymorphicSwitch(
 /** Return a resolved class type by testing the value of a property key */
 function resolvePolymorphicSwitch(
   parentClassConstructor: unknown,
-  json: JSONValue,
+  json: string | JSONObject,
 ): Serializable | null {
   const classOptionsSet = POLYMORPHIC_SWITCH_MAP.get(
     parentClassConstructor,
@@ -211,7 +213,7 @@ function resolvePolymorphicSwitch(
  */
 export function polymorphicClassFromJSON<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
-  json: JSONValue,
+  json: string | JSONObject,
 ): T {
   return resolvePolymorphicClass(classPrototype, json).fromJSON(json);
 }
@@ -221,7 +223,7 @@ export function polymorphicClassFromJSON<T extends Serializable>(
  */
 function resolvePolymorphicClass<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
-  json: JSONValue,
+  json: string | JSONObject,
 ): T {
   const classResolver = POLYMORPHIC_RESOLVER_MAP.get(classPrototype);
   if (classResolver) {

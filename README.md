@@ -14,198 +14,181 @@ A zero dependency library for serializing data.
 2. Excluding internal fields from REST API payloads
 3. Converting data types to an internal format, for example: `Date`'s
 
-## Supported Serialize Types
+Supported Serialized Types:
 
 - [`JSON`](https://www.json.org/json-en.html)
 
-## Usage
+## Installing
 
 `ts_serialize` supports both `deno` and `node`.
 
 ### Deno
 
-`export` what you need from `https://deno.land/x/ts_serialize@<version>/mod.ts`
-in your `deps.ts` file. `<version>` will be a tag found on the
-[deno releases](https://deno.land/x/ts_serialize) page. The version can be
-omitted to get the latest release, however, for stability it is recommended to
-use a tagged version.
+`export` what you need from `https://deno.land/x/ts_serialize/mod.ts`
+
+> The examples in this README pull from our `develop` branch. You would want to
+> "pin" to a particular version which is compatible with the version of Deno you
+> are using and has a fixed set of APIs you would expect. `https://deno.land/x/`
+> supports using git tags in the URL to direct you at a particular version. So
+> to use version 2.0.0 of `ts_serialize` you would want to import
+> `https://deno.land/x/ts_serialize@v2.0.0/mod.ts`.
 
 ### Node
 
 Install with `npm i @gamebridgeai/ts_serialize` or
 `yarn add @gamebridgeai/ts_serialize`
 
-## Serializable and SerializeProperty
+## Using `Serializable` and `SerializeProperty()`
 
-Import `Serializable` and `SerializeProperty`, extend `Serializable` from your
-`class` and use the `SerializeProperty` decorator on any properties you want
-serialized.
+To quickly get started extend `Serializable` with your class and add the
+[property decorator](https://www.typescriptlang.org/docs/handbook/decorators.html#property-decorators)
+`SerializeProperty()` to any class property you want in the serialization
+process.
 
-`Serializable` will add 5 methods:
-
-- `fromJSON` - takes one argument, the JSON string or `Object` to deserialize
-- `toJSON` - converts the model to a JSON string
-- `tsSerialize` - converts the model to "Plain old Javascript object" with any
-  provided key or value transformations
-- `tsTransformKey` - called against every key, has one parameter, the key to
-  transform, the return value is a string
-- `clone` - returns a new reference of the object with all properties cloned,
-  takes the object as a parameter to override cloned property values
-
-```ts
-import { Serializable } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Serializable adds 5 methods",
-  fn() {
-    class TestClass extends Serializable {}
-    const testObj = new TestClass();
-    assert(testObj instanceof Serializable);
-    assertEquals(typeof testObj.toJSON, "function");
-    assertEquals(typeof testObj.fromJSON, "function");
-    assertEquals(typeof testObj.tsSerialize, "function");
-    assertEquals(typeof testObj.tsTransformKey, "function");
-    assertEquals(typeof testObj.clone, "function");
-  },
-});
-```
-
-### SerializeProperty options
-
-Passing a string or a function as an argument to `SerializeProperty` causes the
-property to use that name as the key when serialized. The function has one
-parameter, the `key` as string and should return a string.
-
-`SerializeProperty` also excepts an options object with the properties:
-
-- `serializedKey` (Optional) `{string | ToSerializedKeyStrategy}` - Used as the
-  key in the serialized object
-- `toJSONStrategy` (Optional) `{ToJSONStrategy}` - Used when serializing
-- `fromJSONStrategy` (Optional) `{FromJSONStrategy}` - Used when deserializing
-
-```ts
+```typescript
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
 
-test({
-  name: "SerializeProperty options",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty()
-      propertyOne = "Hello";
-      @SerializeProperty("property_two")
-      propertyTwo = "World!";
-      @SerializeProperty({ serializedKey: (key) => `__${key}__` })
-      propertyThree = "foo";
-    }
-    assertEquals(
-      new Test().toJSON(),
-      `{"propertyOne":"Hello","property_two":"World!","__propertyThree__":"foo"}`,
-    );
-    const testObj = new Test().fromJSON(
-      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
-    );
-    assertEquals(testObj.propertyOne, "From");
-    assertEquals(testObj.propertyTwo, "JSON!");
-    assertEquals(
-      testObj.toJSON(),
-      `{"propertyOne":"From","property_two":"JSON!","__propertyThree__":"bar"}`,
-    );
-  },
-});
+class MyClass extends Serializable {
+  @SerializeProperty()
+  public myProperty = "Hello world!";
+}
 ```
 
-### Inheritance
+### Serializable Methods
 
-Inherited classes override the key when serializing. If you override a property
-any value used for that key will be overridden by the child value. _With
-collisions the child always overrides the parent_
+`Serializable` will add 5 methods. Each method has an implementable interface if
+you wish to provide your own functionality.
 
-```ts
-import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
+- `fromJSON`
 
-test({
-  name: "Inheritance",
-  fn() {
-    class Test1 extends Serializable {
-      @SerializeProperty("serialize_me")
-      serializeMe = "nice1";
-    }
+  Takes one argument, the JSON `string` or `JSONObject` to deserialize creating
+  an object. `fromJSON` will perform provided `tsTransformKey` operations and
+  strategy value transformations.
 
-    class Test2 extends Test1 {
-      @SerializeProperty("serialize_me")
-      serializeMeInstead = "nice2";
-    }
+- `toJSON`
 
-    const testObj = new Test2();
-    assertEquals(testObj.serializeMe, "nice1");
-    assertEquals(testObj.serializeMeInstead, "nice2");
-    assertEquals(testObj.toJSON(), `{"serialize_me":"nice2"}`);
-  },
-});
+  Converts the model to a JSON `string` and will perform provided
+  `tsTransformKey` operations and strategy value transformations.
+
+- `clone`
+
+  Returns a new reference of the object with all properties cloned, an optional
+  parameter can be provided which is a `Partial<T>` where `T` is your class.
+
+- `tsSerialize`
+
+  Converts the model to "Plain old Javascript object" with any provided
+  `tsTransformKey` or value transformations
+
+- `tsTransformKey`
+
+  Called against every key and has one parameter, the key to transform. The
+  return value is a string. The default is to return the original parameter
+  name. Key transformations will be inherited by children classes. Children
+  classes can also `override` their parent `tsTransformKey` function.
+
+With this in mind we can write a more complex example. We'll make a `base` class
+that provides a key transformation then add child classes.
+
+```typescript
+import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
+
+abstract class Base extends Serializable implements TransformKey {
+  public tsTransformKey(key: string): string {
+    return `__${key}__`;
+  }
+}
+
+class Parent extends Base {
+  @SerializeProperty()
+  public parentProperty = "Hello world!";
+}
+
+class ChildOne extends Parent {
+  @SerializeProperty()
+  public childOneProperty = "Ahoy hoy world!";
+}
+
+class ChildTwo extends Parent implements TransformKey {
+  @SerializeProperty()
+  public childTwoProperty = "Good Day world!";
+
+  @SerializeProperty("myCustomName")
+  public childTwoPropertyTwo = "Howdy world!";
+
+  public tsTransformKey(key: string): string {
+    return `--${key}--`;
+  }
+}
 ```
+
+Passing a string or a function that returns a string as an argument to
+`SerializeProperty()` causes the property to use that name as the key when
+serialized. The function has one parameter, the `key` as string and should
+return a string.
+
+> Inherited classes override the key when serializing. If you override a
+> property any value used for that key will be overridden by the child value.
+> _With collisions the child always overrides the parent_
+
+### `SerializeProperty()` options
+
+`SerializeProperty()` also excepts an optional options object with the
+properties
+
+- `serializedKey`
+
+  (Optional) `{string | ToSerializedKeyStrategy}` A string value or function
+  that has one parameter, the property key, and returns a string. The resulting
+  value is used as the key in the serialized object
+
+- `toJSONStrategy`
+
+  (Optional) `{ToJSONStrategy}` A function that has one parameter, the class
+  property value and returns a value to be used when serialized as `JSON`
+
+- `fromJSONStrategy`
+
+  (Optional) `{FromJSONStrategy}` A function that has one parameter, the `JSON`
+  property value and returns a value to be used when serialized as a class
 
 ### Strategies
 
-`Strategies` are functions or a composed list of functions to execute on the
+Strategies are functions or a composed list of functions to execute on the
 values when serializing or deserializing. The functions take one argument which
 is the value to process.
 
-```ts
+```typescript
 import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
 
-test({
-  name: "Strategies",
-  fn() {
-    const fromJSONStrategy = (v: string): BigInt => BigInt(v);
-    const toJSONStrategy = (v: BigInt): string => v.toString();
+const fromJSONStrategy = (v: string): BigInt => BigInt(v);
+const toJSONStrategy = (v: BigInt): string => v.toString();
 
-    class Test extends Serializable {
-      @SerializeProperty({
-        serializedKey: "big_int",
-        fromJSONStrategy,
-        toJSONStrategy,
-      })
-      bigInt!: BigInt;
-    }
-
-    const testObj = new Test().fromJSON(`{"big_int":"9007199254740991"}`);
-    assertEquals(testObj.bigInt.toString(), "9007199254740991");
-  },
-});
+class Test extends Serializable {
+  @SerializeProperty({
+    serializedKey: "big_int",
+    fromJSONStrategy,
+    toJSONStrategy,
+  })
+  bigInt!: BigInt;
+}
 ```
-
-### Multiple strategy functions
 
 `toJSONStrategy` and `fromJSONStrategy` can use `composeStrategy` to build out
 strategies with multiple functions.
 
-```ts
+```typescript
 import { composeStrategy, Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
 
-test({
-  name: "Multiple strategy functions",
-  fn() {
-    const addWord = (word: string) => (v: string) => `${v} ${word}`;
-    const shout = (v: string) => `${v}!!!`;
+const addWord = (word: string) => (v: string) => `${v} ${word}`;
+const shout = (v: string) => `${v}!!!`;
 
-    class Test extends Serializable {
-      @SerializeProperty({
-        fromJSONStrategy: composeStrategy(addWord("World"), shout),
-      })
-      property!: string;
-    }
-
-    assertEquals(
-      new Test().fromJSON(`{"property":"Hello"}`).property,
-      "Hello World!!!",
-    );
-  },
-});
+class Test extends Serializable {
+  @SerializeProperty({
+    fromJSONStrategy: composeStrategy(addWord("World"), shout),
+  })
+  property!: string;
+}
 ```
 
 ### Dates
@@ -213,173 +196,50 @@ test({
 Dates can use the `fromJSONStrategy` to revive a serialized string into a Date
 object. `ts_serialize` provides a `iso8601Date` function to parse ISO Dates.
 
-```ts
+```typescript
 import { iso8601Date, Serializable, SerializeProperty } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
 
-test({
-  name: "Dates",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty({
-        fromJSONStrategy: iso8601Date(),
-      })
-      date!: Date;
-    }
-
-    const testObj = new Test().fromJSON(`{"date":"2020-06-04T19:01:47.831Z"}`);
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2020);
-  },
-});
+class Test extends Serializable {
+  @SerializeProperty({
+    fromJSONStrategy: iso8601Date(),
+  })
+  date!: Date;
+}
 ```
 
-`createDateStrategy()` can be use to make a reviving date strategy. Pass a regex
-to make your own.
+`createDateStrategy()` can be used to make a reviving date strategy. Pass a
+regex to make your own. The example below uses a `yyyy-mm-dd` format to
+construct a `Date`
 
-```ts
+```typescript
 import { createDateStrategy, Serializable, SerializeProperty } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "createDateStrategy",
-  fn() {
-    class Test extends Serializable {
-      @SerializeProperty({
-        fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
-      })
-      date!: Date;
-    }
-
-    const testObj = new Test().fromJSON(`{"date":"2099-11-25"}`);
-    assert(testObj.date instanceof Date);
-    assertEquals(testObj.date.getFullYear(), 2099);
-  },
-});
-```
-
-### Nested Class Serialization
-
-#### ToJSON
-
-Serializing a nested class will follow the serialization rules set from the
-class:
-
-```ts
-import { Serializable, SerializeProperty } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "ToJSON",
-  fn() {
-    class Test1 extends Serializable {
-      @SerializeProperty("serialize_me_1")
-      serializeMe = "nice1";
-    }
-
-    class Test2 extends Serializable {
-      @SerializeProperty({
-        serializedKey: "serialize_me_2",
-      })
-      nested: Test1 = new Test1();
-    }
-
-    const testObj = new Test2();
-    assertEquals(
-      testObj.toJSON(),
-      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
-    );
-  },
-});
-```
-
-#### FromJSON
-
-Use a strategie to revive the property into a class. `toSerializable` is a
-provided function export that takes one parameter, the instance type the object
-will take when revived, it will also revive to an array of Serializable objects.
-
-```ts
-import { Serializable, SerializeProperty, toSerializable } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "FromJSON",
-  fn() {
-    class Test1 extends Serializable {
-      @SerializeProperty("serialize_me_1")
-      serializeMe = "nice1";
-    }
-
-    class Test2 extends Serializable {
-      @SerializeProperty({
-        serializedKey: "serialize_me_2",
-        fromJSONStrategy: toSerializable(Test1),
-      })
-      nested!: Test1;
-    }
-
-    const testObj = new Test2();
-    testObj.fromJSON(`{"serialize_me_2":{"serialize_me_1":"custom value"}}`);
-    assertEquals(testObj.nested.serializeMe, "custom value");
-  },
-});
-```
-
-`toObjectContaining` revives a record of string keys to Serializable objects, it
-will also revive to an array of Serializable objects.
-
-```ts
-import { Serializable, SerializeProperty, toObjectContaining } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "toObjectContaining",
-  fn() {
-    class SomeClass extends Serializable {
-      @SerializeProperty()
-      someClassProp = "test";
-    }
-
-    class Test extends Serializable {
-      @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
-    }
-
-    const testObj = new Test().fromJSON(
-      {
-        test: {
-          testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
-        },
-      },
-    );
-    assert(Array.isArray(testObj.test.testing));
-    assert(testObj.test.testing[0] instanceof Serializable);
-    assertEquals(testObj.test.testing[0].someClassProp, "changed");
-  },
-});
+class Test extends Serializable {
+  @SerializeProperty({
+    fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
+  })
+  date!: Date;
+}
 ```
 
 ## Short cutting the `@SerializeProperty` decorator
 
 While `@SerializeProperty` is handy with to and from JSON strategies, it can
 still be verbose to declare the strategies for each property. You can define
-your owndecorator functions to wrap `@SerializeProperty` and provide the
+your own decorator functions to wrap `@SerializeProperty` and provide the
 `toJSONStrategy` and `fromJSONStrategy`. An example short cut is providing a
 `type` to use with `toSerializable`. `getNewSerializable` is provided to allow a
 raw serializable type or a function that returns a constructed serializable type
 enabling constructor arguments:
 
-```ts
+```typescript
 import {
   getNewSerializable,
   Serializable,
   SerializeProperty,
   toSerializable,
 } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
 
-export function DeserializeAs(
+function DeserializeAs(
   type: unknown,
 ): PropertyDecorator {
   return SerializeProperty({
@@ -387,201 +247,28 @@ export function DeserializeAs(
   });
 }
 
-test({
-  name: "Custom decorator",
-  fn() {
-    class A extends Serializable {
-      @SerializeProperty("property_a")
-      public property = "";
-    }
+class A extends Serializable {
+  @SerializeProperty("property_a")
+  public property = "";
+}
 
-    class B extends Serializable {
-      @DeserializeAs(A)
-      public property = new A();
+class B extends Serializable {
+  @DeserializeAs(A)
+  public property = new A();
 
-      public otherProperty = "";
+  public otherProperty = "";
 
-      constructor({ otherProperty = "" }: Partial<B> = {}) {
-        super();
-        this.otherProperty = otherProperty;
-      }
-    }
+  constructor({ otherProperty = "" }: Partial<B> = {}) {
+    super();
+    this.otherProperty = otherProperty;
+  }
+}
 
-    class C extends Serializable {
-      @DeserializeAs(() => new B({ otherProperty: "From Class C" }))
-      public property = new B();
-    }
-
-    const testObj = new C().fromJSON({
-      property: { property: { property_a: "Class C fromJSON" } },
-    });
-
-    assert(testObj.property instanceof B);
-    assert(testObj.property.property instanceof A);
-    assertEquals(testObj.property.otherProperty, "From Class C");
-    assertEquals(testObj.property.property.property, "Class C fromJSON");
-  },
-});
+class C extends Serializable {
+  @DeserializeAs(() => new B({ otherProperty: "From Class C" }))
+  public property = new B();
+}
 ```
-
-## Global transformKey
-
-`Serializable` has an optional function `tsTransformKey(key: string): string`,
-we also provide an interface `TransformKey` to implement for type safety. This
-function can be provided to change all the keys without having to specify the
-change for each property.
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Global transformKey",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-
-      @SerializeProperty()
-      public test = "test";
-    }
-
-    assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
-    assertEquals(
-      new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-      `changed`,
-    );
-  },
-});
-```
-
-`tsTransformKey` will be inherited by children:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "tsTransformKey inheritance",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-    }
-
-    class TestTransformKey3 extends TestTransformKey2 {
-      @SerializeProperty()
-      public test3 = "test3";
-    }
-
-    assertEquals(
-      new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","__test3__":"test3"}`,
-    );
-    assertEquals(
-      new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-      `changed`,
-    );
-  },
-});
-```
-
-Children can also override their parent `tsTransformKey` function:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "Child tsTransformKey",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-    }
-
-    class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `--${key}--`;
-      }
-      @SerializeProperty()
-      public test3 = "test3";
-    }
-
-    class TestTransformKey4 extends TestTransformKey3 {
-      @SerializeProperty()
-      public test4 = "test4";
-    }
-    assertEquals(
-      new TestTransformKey4().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
-    );
-    assertEquals(
-      new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-      `changed`,
-    );
-  },
-});
-```
-
-If `tsTransformKey` is implemented and `SerializeProperty` is provided a
-`serializedKey` option, it will override the `tsTransformKey` function:
-
-```ts
-import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
-import { assertEquals, test } from "./test_deps.ts";
-
-test({
-  name: "tsTransformKey overrides",
-  fn() {
-    class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
-        return `__${key}__`;
-      }
-    }
-
-    class TestTransformKey2 extends TestTransformKey {
-      @SerializeProperty()
-      public test2 = "test2";
-
-      @SerializeProperty("changed")
-      public changeMe = "change me";
-
-      @SerializeProperty({ serializedKey: "changed2" })
-      public changeMe2 = "change me2";
-    }
-
-    assertEquals(
-      new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me","changed2":"change me2"}`,
-    );
-    assertEquals(
-      new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
-    );
-    assertEquals(
-      new TestTransformKey2().fromJSON({ changed2: "changed" }).changeMe2,
-      `changed`,
-    );
-  },
-});
-```
-
-`tsTransformKey` is an efficient way to deal with camelCase to snake_case
-conversions.
 
 ## Polymorphism
 
@@ -589,153 +276,124 @@ The `@PolymorphicResolver` and `@PolymorphicSwitch` decorators can be used to
 cleanly handle deserializing abstract types into their constituent
 implementations.
 
-### Polymorphic Swtich
+### `PolymorphicSwitch()`
 
-The `@PolymorphicSwitch` decorator is a quick way to serialize simple
+The `@PolymorphicSwitch()` decorator is a quick way to serialize simple
 polymorphic types based on the properties of a child class.
 
-Note that `@PolymorphicSwitch` can only be applied to child classes
+Note that `@PolymorphicSwitch()` can only be applied to child classes
 deserializing from their direct parent class.
 
-Properties decorated with `@PolymorphicSwitch` must also be serializable
+Properties decorated with `@PolymorphicSwitch()` must also be serializable
 properties. The from JSON strategy and associated serialized key of that
 property will be used when comparing the value.
 
-```ts
+```typescript
 import {
   polymorphicClassFromJSON,
   PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
 
 enum Colour {
   RED = "RED",
   BLUE = "BLUE",
 }
 
-test({
-  name: "PolymorphicSwitch",
-  fn() {
-    abstract class MyColourClass extends Serializable {}
+abstract class MyColourClass extends Serializable {}
 
-    class MyRedClass extends MyColourClass {
-      @SerializeProperty()
-      @PolymorphicSwitch(() => new MyRedClass(), Colour.RED)
-      public colour = Colour.RED;
+class MyRedClass extends MyColourClass {
+  @SerializeProperty()
+  @PolymorphicSwitch(() => new MyRedClass(), Colour.RED)
+  public colour = Colour.RED;
 
-      @SerializeProperty()
-      public crimson = false;
-    }
+  @SerializeProperty()
+  public crimson = false;
+}
 
-    // Serialize using JSON.parse, read `colour` off of the parsed object
-    // then compare to the value provided in `@PolymorphicSwitch`
-    const redClass = polymorphicClassFromJSON(
-      MyColourClass,
-      `{"colour":"RED","crimson":true}`,
-    );
-
-    assert(redClass instanceof MyRedClass);
-    assertEquals((redClass as MyRedClass).crimson, true);
-  },
-});
+const redClass = polymorphicClassFromJSON(
+  MyColourClass,
+  `{"colour":"RED","crimson":true}`,
+);
 ```
 
 You can also provide a test function instead of a value to check if the value
 for the annotated property satisfies a more complex condition:
 
-```ts
+```typescript
 import {
   polymorphicClassFromJSON,
   PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
 
-test({
-  name: "Complex PolymorphicSwitch",
-  fn() {
-    abstract class Currency extends Serializable {}
+abstract class Currency extends Serializable {}
 
-    class DollarCurrency extends Currency {
-      @SerializeProperty()
-      // Match only "$""
-      @PolymorphicSwitch(() => new DollarCurrency(), "$")
-      public currencySymbol = "$";
+class DollarCurrency extends Currency {
+  @SerializeProperty()
+  @PolymorphicSwitch(() => new DollarCurrency(), "$")
+  public currencySymbol = "$";
 
-      @SerializeProperty()
-      public amount = 0;
-    }
+  @SerializeProperty()
+  public amount = 0;
+}
 
-    class OtherCurrency extends Currency {
-      @SerializeProperty()
-      // Match any currency symbol OTHER than "$"
-      @PolymorphicSwitch(
-        () => new OtherCurrency(),
-        (value) => value !== "$",
-      )
-      public currencySymbol = "";
+class OtherCurrency extends Currency {
+  @SerializeProperty()
+  @PolymorphicSwitch(
+    () => new OtherCurrency(),
+    (value) => value !== "$",
+  )
+  public currencySymbol = "";
 
-      @SerializeProperty()
-      public amount = 0;
-    }
+  @SerializeProperty()
+  public amount = 0;
+}
 
-    const currencyClass = polymorphicClassFromJSON(
-      Currency,
-      `{"currencySymbol":"£","amount":300}`,
-    );
-
-    assert(currencyClass instanceof OtherCurrency);
-    assertEquals((currencyClass as OtherCurrency).amount, 300);
-  },
-});
+const currencyClass = polymorphicClassFromJSON(
+  Currency,
+  `{"currencySymbol":"£","amount":300}`,
+);
 ```
 
 Multiple `@PolymorphicSwitch` annotations can be applied to a single class, if
 necessary
 
-```ts
+```typescript
 import {
   polymorphicClassFromJSON,
   PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, test } from "./test_deps.ts";
 
-test({
-  name: "Single class PolymorphicSwitch",
-  fn() {
-    abstract class MyAbstractClass extends Serializable {}
+abstract class MyAbstractClass extends Serializable {}
 
-    class MyClass extends MyAbstractClass {
-      @SerializeProperty()
-      @PolymorphicSwitch(() => new MyClass(), "$")
-      @PolymorphicSwitch(() => new MyClass(), "dollar")
-      @PolymorphicSwitch(
-        () => new MyClass(),
-        (value) => typeof value === "string" && value.includes("dollars"),
-      )
-      public myProperty = "$";
+class MyClass extends MyAbstractClass {
+  @SerializeProperty()
+  @PolymorphicSwitch(() => new MyClass(), "$")
+  @PolymorphicSwitch(() => new MyClass(), "dollar")
+  @PolymorphicSwitch(
+    () => new MyClass(),
+    (value) => typeof value === "string" && value.includes("dollars"),
+  )
+  public myProperty = "$";
 
-      @SerializeProperty()
-      public amount = 0;
-    }
+  @SerializeProperty()
+  public amount = 0;
+}
 
-    const myClass1 = polymorphicClassFromJSON(
-      MyAbstractClass,
-      `{"myProperty":"300 dollars"}`,
-    );
-    assert(myClass1 instanceof MyClass);
-    const myClass2 = polymorphicClassFromJSON(
-      MyAbstractClass,
-      `{"myProperty":"dollar"}`,
-    );
-    assert(myClass2 instanceof MyClass);
-  },
-});
+const myClass1 = polymorphicClassFromJSON(
+  MyAbstractClass,
+  `{"myProperty":"300 dollars"}`,
+);
+
+const myClass2 = polymorphicClassFromJSON(
+  MyAbstractClass,
+  `{"myProperty":"dollar"}`,
+);
 ```
 
 ### Polymorphic Resolver
@@ -744,75 +402,62 @@ The following example shows how the `@PolymorphicResolver` decorator can be used
 to directly determine the type of an abstract class implementor, which will then
 be used when deserializing JSON input.
 
-```ts
+```typescript
 import {
   polymorphicClassFromJSON,
   PolymorphicResolver,
-  PolymorphicSwitch,
   Serializable,
   SerializeProperty,
 } from "./mod.ts";
-import { assert, assertEquals, test } from "./test_deps.ts";
 
 enum Colour {
   RED = "RED",
   BLUE = "BLUE",
 }
 
-test({
-  name: "PolymorphicResolver",
-  fn() {
-    abstract class MyColourClass extends Serializable {
-      @SerializeProperty()
-      public colour?: Colour;
+abstract class MyColourClass extends Serializable {
+  @SerializeProperty()
+  public colour?: Colour;
 
-      @PolymorphicResolver
-      public static resolvePolymorphic(input: string): MyColourClass {
-        const colourClass = new PolymorphicColourClass().fromJSON(input);
+  @PolymorphicResolver()
+  public static resolvePolymorphic(input: string): MyColourClass {
+    const colourClass = new PolymorphicColourClass().fromJSON(input);
 
-        switch (colourClass.colour) {
-          case Colour.RED:
-            return new MyRedClass();
-          case Colour.BLUE:
-            return new MyBlueClass();
-          default:
-            throw new Error(`Unknown Colour ${colourClass.colour}`);
-        }
-      }
+    switch (colourClass.colour) {
+      case Colour.RED:
+        return new MyRedClass();
+      case Colour.BLUE:
+        return new MyBlueClass();
+      default:
+        throw new Error(`Unknown Colour ${colourClass.colour}`);
     }
+  }
+}
 
-    // Helper class to parse the input and extract the colour property's value
-    class PolymorphicColourClass extends MyColourClass {
-    }
+class PolymorphicColourClass extends MyColourClass {}
 
-    class MyRedClass extends MyColourClass {
-      @SerializeProperty()
-      private crimson = false;
+class MyRedClass extends MyColourClass {
+  @SerializeProperty()
+  private crimson = false;
 
-      public isCrimson(): boolean {
-        return this.crimson;
-      }
-    }
+  public isCrimson(): boolean {
+    return this.crimson;
+  }
+}
 
-    class MyBlueClass extends MyColourClass {
-      @SerializeProperty()
-      private aqua = false;
+class MyBlueClass extends MyColourClass {
+  @SerializeProperty()
+  private aqua = false;
 
-      public isAqua(): boolean {
-        return this.aqua;
-      }
-    }
+  public isAqua(): boolean {
+    return this.aqua;
+  }
+}
 
-    // Serialize using PolymorphicColourClass to determine the value of `colour`, then serialize using `MyRedClass`
-    const redClass = polymorphicClassFromJSON(
-      MyColourClass,
-      `{"colour":"RED","crimson":true}`,
-    );
-
-    assert(redClass instanceof MyRedClass);
-    assertEquals((redClass as MyRedClass).isCrimson(), true);
-  },
-});
+const redClass = polymorphicClassFromJSON(
+  MyColourClass,
+  `{"colour":"RED","crimson":true}`,
+);
 ```
 
 ## Built With

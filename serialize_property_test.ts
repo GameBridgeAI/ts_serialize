@@ -7,7 +7,7 @@ import {
   fail,
   test,
 } from "./test_deps.ts";
-import { JSONValue, Serializable } from "./serializable.ts";
+import { JSONObject, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
   ERROR_DUPLICATE_SERIALIZE_KEY,
@@ -217,7 +217,7 @@ test({
     class Test extends Serializable {
       @SerializeProperty({
         fromJSONStrategy: (arr) =>
-          (arr as JSONValue[]).map((v) => new OtherClass().fromJSON(v)),
+          arr.map((v: JSONObject) => new OtherClass().fromJSON(v)),
       })
       array!: OtherClass[];
     }

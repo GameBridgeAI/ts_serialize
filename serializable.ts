@@ -32,7 +32,7 @@ export declare interface ToJSON {
 
 /** reutrns  a new javascript object with transformations */
 export declare interface FromJSON {
-  fromJSON(json: JSONValue): this;
+  fromJSON(json: string | JSONObject): this;
 }
 
 /** returns the javascript object as a `JSONObject` with transformations */
@@ -80,19 +80,6 @@ function getOrInitializeDefaultSerializerLogicForParents(
   return SERIALIZABLE_CLASS_MAP.get(targetPrototype);
 }
 
-/** Serializable
- *  provides a constructed class for serializing data
- *  to be used with the decorator `SerializeProperty`
- *
- *       class Example extends Serializable {
- *         @SerializeProperty()
- *         public testName = "toJSON";
- *       }
- *       const example = new Example()
- *       example.toJSON()
- *       example.fromJSON(json)
- *       example.tsSerialize()
- */
 export abstract class Serializable {
   constructor() {
     getOrInitializeDefaultSerializerLogicForParents(this.constructor.prototype);
@@ -103,7 +90,7 @@ export abstract class Serializable {
   public toJSON(): string {
     return toJSON(this);
   }
-  public fromJSON(json: JSONValue): this {
+  public fromJSON(json: string | JSONObject): this {
     return fromJSON(this, json);
   }
   public tsSerialize(): JSONObject {
