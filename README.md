@@ -139,7 +139,7 @@ properties
 - `serializedKey`
 
   (Optional) `{string | ToSerializedKeyStrategy}` A string value or function
-  that has one parmeter, the property key, and returns a string. The resulting
+  that has one parameter, the property key, and returns a string. The resulting
   value is used as the key in the serialized object
 
 - `toJSONStrategy`
