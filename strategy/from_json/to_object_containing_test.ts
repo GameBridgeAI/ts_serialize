@@ -111,6 +111,7 @@ test({
       );
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
@@ -134,6 +135,7 @@ test({
       );
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
   },
@@ -163,6 +165,7 @@ test({
       );
       fail(`testObj ${testObj} did not fail`);
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },

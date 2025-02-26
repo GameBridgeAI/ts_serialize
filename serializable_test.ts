@@ -47,7 +47,7 @@ test({
   name: "runs TransformKey without implementation declaration",
   fn() {
     class TestTransformKey extends Serializable {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
 
@@ -67,7 +67,7 @@ test({
   name: "implements TransformKey to children",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -103,7 +103,7 @@ test({
   name: "implements TransformKey to children and children can change",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -114,7 +114,7 @@ test({
     }
 
     class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `--${key}--`;
       }
       @SerializeProperty()
@@ -156,7 +156,7 @@ test({
   name: "implements TransformKey but respects override as string",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -184,7 +184,7 @@ test({
   name: "implements TransformKey but respects override as property",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -282,6 +282,7 @@ test({
       toPojo({} as Serializable);
       fail("to Pojo did not error with no context");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(
         e.message,
         `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,

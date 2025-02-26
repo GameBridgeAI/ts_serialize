@@ -33,6 +33,7 @@ test({
       new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_INVALID_DATE);
     }
   },
@@ -51,6 +52,7 @@ test({
       new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_INVALID_DATE);
     }
   },
@@ -116,6 +118,7 @@ test({
       new Test().fromJSON(`{"date":"Im going to shoot my foot"}`);
       fail("Non date string did not error");
     } catch (error) {
+      assert(error instanceof Error);
       assertEquals(error.message, ERROR_INVALID_DATE);
     }
   },

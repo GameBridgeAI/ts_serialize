@@ -1,6 +1,12 @@
 // Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, assertStrictEquals, fail, test } from "./test_deps.ts";
+import {
+  assert,
+  assertEquals,
+  assertStrictEquals,
+  fail,
+  test,
+} from "./test_deps.ts";
 import {
   SerializePropertyOptionsMap,
 } from "./serialize_property_options_map.ts";
@@ -90,6 +96,7 @@ test({
       testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(e.message, `${ERROR_DUPLICATE_PROPERTY_KEY}: a`);
     }
   },
@@ -107,6 +114,7 @@ test({
       testObj.set(childSPOptions2);
       fail("Shouldn't be able to set duplicate property keys");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(e.message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: a`);
     }
   },

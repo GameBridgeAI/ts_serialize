@@ -28,6 +28,7 @@ test({
 
       fail("polymorphicClassFromJSON did not error with no context");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(e.message, ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
     }
   },
@@ -210,7 +211,7 @@ test({
     class TestClass extends AbstractClass {
       @SerializeProperty("class")
       @PolymorphicSwitch(() => new TestClass(), "TestClass")
-      public [symbol]: string;
+      public [symbol]: string = "";
 
       @SerializeProperty()
       public someProperty?: string;
@@ -344,7 +345,7 @@ test({
       @SerializeProperty()
       public someProperty = "original value";
 
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return "+" + key;
       }
     }
@@ -361,7 +362,7 @@ test({
   name: "polymorphic switch supports inherited custom tsTransformKeys",
   fn() {
     abstract class AbstractClass extends Serializable {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return "!" + key;
       }
     }

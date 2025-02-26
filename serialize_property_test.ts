@@ -64,6 +64,7 @@ test({
       }
       fail("Allowed Symbol name without propertyName");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(e.message, ERROR_SYMBOL_PROPERTY_NAME);
     }
   },
@@ -195,7 +196,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      array!: unknown[];
+      array!: { subObj: string[] }[];
     }
     const testObj = new Test().fromJSON(
       `{"array":["worked",0,{"subObj":["cool"]}]}`,
@@ -270,6 +271,7 @@ test({
       }
       fail("Allowed duplicate propertyName");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(
         e.message,
         `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`,
@@ -324,7 +326,7 @@ test({
     }
     class Test2 extends Test1 {
       @SerializeProperty("serialize_me_2")
-      serializeMe = "nice2";
+      override serializeMe = "nice2";
     }
     const testObj = new Test2();
     assertEquals(testObj.serializeMe, "nice2");
@@ -341,7 +343,7 @@ test({
     }
     class Test2 extends Test1 {
       @SerializeProperty("serialize_me_2")
-      serializeMe = "nice2";
+      override serializeMe = "nice2";
     }
     const testObj = new Test2();
 

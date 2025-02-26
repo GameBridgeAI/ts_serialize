@@ -126,8 +126,7 @@ export function toPojo(
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
-        ?.prototype}`,
+      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor?.prototype}`,
     );
   }
   const record: JSONObject = {};
