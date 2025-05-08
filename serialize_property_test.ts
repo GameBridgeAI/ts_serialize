@@ -64,7 +64,8 @@ test({
       }
       fail("Allowed Symbol name without propertyName");
     } catch (e) {
-      assertEquals(e.message, ERROR_SYMBOL_PROPERTY_NAME);
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, ERROR_SYMBOL_PROPERTY_NAME);
     }
   },
 });
@@ -82,10 +83,10 @@ test({
     }
     assertEquals(
       new Test().toJSON(),
-      `{"test_name":"toJSON","test_name2":"toJSON2"}`,
+      `{"test_name":"toJSON","test_name2":"toJSON2"}`
     );
     const testObj = new Test().fromJSON(
-      `{"test_name":"fromJSON","test_name2":"fromJSON2"}`,
+      `{"test_name":"fromJSON","test_name2":"fromJSON2"}`
     );
     assertEquals(testObj[TEST], "fromJSON");
     assertEquals(testObj[TEST2], "fromJSON2");
@@ -131,7 +132,7 @@ test({
     }
     assertEquals(
       typeof new Test().fromJSON(`{"test":"string"}`).test,
-      "string",
+      "string"
     );
   },
 });
@@ -198,11 +199,11 @@ test({
       array!: unknown[];
     }
     const testObj = new Test().fromJSON(
-      `{"array":["worked",0,{"subObj":["cool"]}]}`,
+      `{"array":["worked",0,{"subObj":["cool"]}]}`
     );
     assert(Array.isArray(testObj.array));
     assertEquals(testObj.array.length, 3);
-    assert(Array.isArray(testObj.array[2].subObj));
+    assert(Array.isArray((testObj.array[2] as { subObj: string[] }).subObj));
     assertEquals(typeof testObj.array[1], "number");
   },
 });
@@ -222,7 +223,7 @@ test({
       array!: OtherClass[];
     }
     const testObj = new Test().fromJSON(
-      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`,
+      `{"array":[{"id":1},{"id":2},{"id":3},{"id":4},{"id":5}]}`
     );
     assertEquals(testObj.array.length, 5);
     assert(testObj.array[0] instanceof OtherClass);
@@ -270,7 +271,8 @@ test({
       }
       fail("Allowed duplicate propertyName");
     } catch (e) {
-      assertEquals(e.message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`);
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`);
     }
   },
 });
@@ -321,7 +323,7 @@ test({
     }
     class Test2 extends Test1 {
       @SerializeProperty("serialize_me_2")
-      serializeMe = "nice2";
+      override serializeMe = "nice2";
     }
     const testObj = new Test2();
     assertEquals(testObj.serializeMe, "nice2");
@@ -338,12 +340,12 @@ test({
     }
     class Test2 extends Test1 {
       @SerializeProperty("serialize_me_2")
-      serializeMe = "nice2";
+      override serializeMe = "nice2";
     }
     const testObj = new Test2();
 
     testObj.fromJSON(
-      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`,
+      `{"serialize_me_1":"ignore me", "serialize_me_2":"override"}`
     );
     assertEquals(testObj.serializeMe, "override");
   },
@@ -387,7 +389,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`,
+      `{"serialize_me_2":{"serialize_me_1":"nice1"}}`
     );
   },
 });
@@ -418,7 +420,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
+      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`
     );
   },
 });
@@ -444,7 +446,7 @@ test({
     }
     assertEquals(
       new Test1().fromJSON({ _serializeMe: "nice2" }).serializeMe,
-      "nice2",
+      "nice2"
     );
   },
 });
@@ -474,7 +476,7 @@ test({
     }
     assertEquals(
       new Test1().fromJSON({ _serializeMe: "nice2" }).serializeMe,
-      "nice2",
+      "nice2"
     );
   },
 });
@@ -490,8 +492,7 @@ test({
 });
 
 test({
-  name:
-    "should be able to serialize child class and have it inherit it's parent's serialization logic correctly",
+  name: "should be able to serialize child class and have it inherit it's parent's serialization logic correctly",
   fn() {
     class TestSerializable extends Serializable {
       @SerializeProperty()
@@ -502,21 +503,20 @@ test({
     assertEquals(new TestSerializable().toJSON(), `{"test_property":1}`);
     assertEquals(
       new TestSerializable().fromJSON(`{"test_property":32}`).test_property,
-      32,
+      32
     );
     // Child
     assertEquals(new TestSerializableChild().toJSON(), `{"test_property":1}`);
     assertEquals(
       new TestSerializableChild().fromJSON(`{"test_property":32}`)
         .test_property,
-      32,
+      32
     );
   },
 });
 
 test({
-  name:
-    "should be able to serialize grandchild class and have it inherit it's grandparent's serialization logic correctly",
+  name: "should be able to serialize grandchild class and have it inherit it's grandparent's serialization logic correctly",
   fn() {
     class TestSerializable extends Serializable {
       @SerializeProperty()
@@ -528,12 +528,12 @@ test({
     // Grandchild
     assertEquals(
       new TestSerializableGrandChild().toJSON(),
-      `{"test_property":0}`,
+      `{"test_property":0}`
     );
     assertEquals(
       new TestSerializableGrandChild().fromJSON(`{"test_property":33}`)
         .test_property,
-      33,
+      33
     );
   },
 });

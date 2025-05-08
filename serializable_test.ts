@@ -38,7 +38,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"test":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ test: "changed" }).test,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -47,7 +47,7 @@ test({
   name: "runs TransformKey without implementation declaration",
   fn() {
     class TestTransformKey extends Serializable {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
 
@@ -58,7 +58,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -67,7 +67,7 @@ test({
   name: "implements TransformKey to children",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -85,16 +85,16 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","__test3__":"test3"}`,
+      `{"__test2__":"test2","__test3__":"test3"}`
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -103,7 +103,7 @@ test({
   name: "implements TransformKey to children and children can change",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -114,7 +114,7 @@ test({
     }
 
     class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `--${key}--`;
       }
       @SerializeProperty()
@@ -129,25 +129,25 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3"}`,
+      `{"__test2__":"test2","--test3--":"test3"}`
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey4().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
     );
     assertEquals(
       new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -156,7 +156,7 @@ test({
   name: "implements TransformKey but respects override as string",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -171,11 +171,11 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`,
+      `{"__test2__":"test2","changed":"change me"}`
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -184,7 +184,7 @@ test({
   name: "implements TransformKey but respects override as property",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -199,18 +199,17 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`,
+      `{"__test2__":"test2","changed":"change me"}`
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
+      `changed`
     );
   },
 });
 
 test({
-  name:
-    "Nested fields shouldn't overwrite containing class fields of the same name",
+  name: "Nested fields shouldn't overwrite containing class fields of the same name",
   fn() {
     class Embedded extends Serializable {
       @SerializeProperty()
@@ -278,10 +277,8 @@ test({
       toPojo({} as Serializable);
       fail("to Pojo did not error with no context");
     } catch (e) {
-      assertEquals(
-        e.message,
-        `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,
-      );
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`);
     }
   },
 });
