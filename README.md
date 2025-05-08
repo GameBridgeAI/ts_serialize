@@ -94,7 +94,7 @@ that provides a key transformation then add child classes.
 import { Serializable, SerializeProperty, TransformKey } from "./mod.ts";
 
 abstract class Base extends Serializable implements TransformKey {
-  public tsTransformKey(key: string): string {
+  public override tsTransformKey(key: string): string {
     return `__${key}__`;
   }
 }
@@ -116,7 +116,7 @@ class ChildTwo extends Parent implements TransformKey {
   @SerializeProperty("myCustomName")
   public childTwoPropertyTwo = "Howdy world!";
 
-  public tsTransformKey(key: string): string {
+  public override tsTransformKey(key: string): string {
     return `--${key}--`;
   }
 }
