@@ -55,8 +55,7 @@ test({
 });
 
 test({
-  name:
-    "toObjectContaining revives subclass as null with null as a subclass value",
+  name: "toObjectContaining revives subclass as null with null as a subclass value",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -107,8 +106,8 @@ test({
       const testObj = new Test().fromJSON({ test: { testing: "changed" } });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
@@ -129,15 +128,14 @@ test({
       const testObj = new Test().fromJSON({ test: "changed" });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
   },
 });
 
 test({
-  name:
-    "toObjectContaining throws is array sub-value values are not [object Object]",
+  name: "toObjectContaining throws is array sub-value values are not [object Object]",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -157,8 +155,8 @@ test({
       });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
@@ -178,7 +176,7 @@ test({
     class Test extends Serializable {
       @SerializeProperty({
         fromJSONStrategy: toObjectContaining(
-          () => new SomeClass("from_constructor"),
+          () => new SomeClass("from_constructor")
         ),
       })
       test!: { [k: string]: SomeClass };
