@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 import { Serializable } from "../serializable.ts";
 import { isFunctionSerializable, isNewable } from "./_utils.ts";
 import { ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED } from "../error_messages.ts";
@@ -6,9 +6,7 @@ import { ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED } from "../error_m
 export type NewSerializable<T> = T & (new () => Serializable);
 export type FunctionSerializable = () => Serializable;
 /** get new strategy type arguments */
-export function getNewSerializable(
-  type: unknown,
-): Serializable {
+export function getNewSerializable(type: unknown): Serializable {
   if (isNewable(type)) {
     return new type();
   } else if (isFunctionSerializable(type)) {

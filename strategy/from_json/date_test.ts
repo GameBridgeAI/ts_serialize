@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, fail, test } from "../../test_deps.ts";
 import { createDateStrategy, iso8601Date } from "./date.ts";
@@ -14,7 +14,7 @@ test({
       })
       date!: Date;
     }
-    const testObj = new Test().fromJSON({ "date": "1990-11-11" });
+    const testObj = new Test().fromJSON({ date: "1990-11-11" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "1990-11-11T00:00:00.000Z");
   },
@@ -32,8 +32,9 @@ test({
     try {
       new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
-    } catch (error) {
-      assertEquals(error.message, ERROR_INVALID_DATE);
+    } catch (e) {
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, ERROR_INVALID_DATE);
     }
   },
 });
@@ -50,8 +51,9 @@ test({
     try {
       new Test().fromJSON(`{"date":"I am not a date!"}`);
       fail("Non date string did not error");
-    } catch (error) {
-      assertEquals(error.message, ERROR_INVALID_DATE);
+    } catch (e) {
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, ERROR_INVALID_DATE);
     }
   },
 });
@@ -65,7 +67,7 @@ test({
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJSON({ "date": "2020-12-31T12:00:00.300Z" });
+    const testObj = new Test().fromJSON({ date: "2020-12-31T12:00:00.300Z" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.300Z");
   },
@@ -80,7 +82,7 @@ test({
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJSON({ "date": "2020-12-31T12:00:00Z" });
+    const testObj = new Test().fromJSON({ date: "2020-12-31T12:00:00Z" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T12:00:00.000Z");
   },
@@ -95,9 +97,7 @@ test({
       })
       public date!: Date;
     }
-    const testObj = new Test().fromJSON(
-      { "date": "2020-12-31T00:00:00-07:00" },
-    );
+    const testObj = new Test().fromJSON({ date: "2020-12-31T00:00:00-07:00" });
     assert(testObj.date instanceof Date);
     assertEquals(testObj.date.toISOString(), "2020-12-31T07:00:00.000Z");
   },
@@ -115,8 +115,9 @@ test({
     try {
       new Test().fromJSON(`{"date":"Im going to shoot my foot"}`);
       fail("Non date string did not error");
-    } catch (error) {
-      assertEquals(error.message, ERROR_INVALID_DATE);
+    } catch (e) {
+      const { message } = e instanceof Error ? e : { message: `${e}` };
+      assertEquals(message, ERROR_INVALID_DATE);
     }
   },
 });

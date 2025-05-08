@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
   JSONObject,
@@ -33,10 +33,7 @@ export type InitializerFunction = () => Serializable;
 
 /** \@PolymorphicResolver method decorator */
 export function PolymorphicResolver(): PropertyDecorator {
-  return (
-    target: unknown,
-    propertyKey: string | symbol,
-  ): void => {
+  return (target: unknown, propertyKey: string | symbol): void => {
     registerPolymorphicResolver(
       target,
       (target as Record<typeof propertyKey, () => Serializable>)[
@@ -161,9 +158,7 @@ function resolvePolymorphicSwitch(
   parentClassConstructor: unknown,
   json: string | JSONObject,
 ): Serializable | null {
-  const classOptionsSet = POLYMORPHIC_SWITCH_MAP.get(
-    parentClassConstructor,
-  );
+  const classOptionsSet = POLYMORPHIC_SWITCH_MAP.get(parentClassConstructor);
 
   if (!classOptionsSet) {
     return null;
@@ -179,9 +174,7 @@ function resolvePolymorphicSwitch(
       initializer,
     } of classOptionsSet.values()
   ) {
-    const classMap = SERIALIZABLE_CLASS_MAP.get(
-      classDefinition,
-    );
+    const classMap = SERIALIZABLE_CLASS_MAP.get(classDefinition);
 
     if (!classMap) {
       continue;
@@ -211,7 +204,7 @@ function resolvePolymorphicSwitch(
 /** Uses either the polymorphic resolver or the polymorphic switch resolver to determine the
  * appropriate class, then deserialize the input using Serializable#fromJSON, returning the result
  */
-export function polymorphicClassFromJSON<T extends Serializable>(
+export function polymorphicClassFromJSON<const T extends Serializable>(
   classPrototype: unknown & { prototype: T },
   json: string | JSONObject,
 ): T {
@@ -221,7 +214,7 @@ export function polymorphicClassFromJSON<T extends Serializable>(
 /** Calls the polymorphic resolver or polymorphic switch resolver for the provided class prototype
  * and input, and returns the initialized child class. Throws an exception if no class can be resolved
  */
-function resolvePolymorphicClass<T extends Serializable>(
+function resolvePolymorphicClass<const T extends Serializable>(
   classPrototype: unknown & { prototype: T },
   json: string | JSONObject,
 ): T {

@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        deno: ["v1.x"]
+        deno: ["v1.x", "v2.x"]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -25,17 +25,17 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Deno lint
-        run: deno lint
+        run: deno lint -c tsconfig.json
 
       - name: Deno format check
-        run: deno fmt --check
+        run: deno fmt --check -c tsconfig.json
         if: matrix.os != 'windows-latest'
 
       - name: Cache dependencies
         run: deno cache test_deps.ts
 
       - name: Run deno tests
-        run: deno test --doc
+        run: deno test --doc -c tsconfig.json
 
   build:
     name: Release
@@ -44,7 +44,7 @@ jobs:
 
     strategy:
       matrix:
-        deno: ["v1.x"]
+        deno: ["v1.x", "v2.x"]
 
     steps:
       - name: Get github tag
@@ -62,7 +62,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v1
         with:
-          node-version: 16
+          node-version: 22
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module

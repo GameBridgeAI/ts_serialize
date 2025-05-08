@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { FunctionSerializable, NewSerializable } from "./utils.ts";
 
@@ -8,11 +8,13 @@ export function isObject(obj: unknown): obj is Record<string, unknown> {
 }
 
 /** for strategy type arguments */
-export function isNewable<T>(
-  type: unknown,
-): type is NewSerializable<T> {
-  return (type && typeof type === "function" && type.prototype &&
-    type.prototype.constructor) === type;
+export function isNewable<T>(type: unknown): type is NewSerializable<T> {
+  return (
+    (type &&
+      typeof type === "function" &&
+      type.prototype &&
+      type.prototype.constructor) === type
+  );
 }
 
 /** for strategy type arguments */

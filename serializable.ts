@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { toJSONDefault } from "./strategy/to_json/default.ts";
@@ -72,9 +72,7 @@ function getOrInitializeDefaultSerializerLogicForParents(
     return SERIALIZABLE_CLASS_MAP.set(
       targetPrototype,
       new SerializePropertyOptionsMap(parentMap),
-    ).get(
-      targetPrototype,
-    );
+    ).get(targetPrototype);
   }
 
   return SERIALIZABLE_CLASS_MAP.get(targetPrototype);
@@ -98,12 +96,7 @@ export abstract class Serializable {
   }
   public clone(jsonObject: Partial<this> = {}): this {
     const copy = Object.getPrototypeOf(this).constructor;
-    return Object.assign(
-      new copy().fromJSON(
-        this.tsSerialize(),
-      ),
-      jsonObject,
-    );
+    return Object.assign(new copy().fromJSON(this.tsSerialize()), jsonObject);
   }
 }
 
@@ -117,17 +110,14 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
 >();
 
 /** Converts to object using mapped keys */
-export function toPojo(
-  context: Serializable,
-): JSONObject {
+export function toPojo(context: Serializable): JSONObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
     context?.constructor?.prototype,
   );
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor
-        ?.prototype}`,
+      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor?.prototype}`,
     );
   }
   const record: JSONObject = {};
@@ -142,11 +132,7 @@ export function toPojo(
     const value = context[propertyKey as keyof Serializable];
 
     // If the value is serializable then use the recursive replacer
-    if (
-      SERIALIZABLE_CLASS_MAP.get(
-        value?.constructor?.prototype,
-      )
-    ) {
+    if (SERIALIZABLE_CLASS_MAP.get(value?.constructor?.prototype)) {
       toJSONStrategy = toJSONRecursive;
     }
     if (value !== undefined) {
@@ -162,18 +148,13 @@ function toJSON(context: Serializable): string {
 }
 
 /** Convert from object/string to mapped object on the context */
-function fromJSON<T>(
-  context: Serializable,
-  json: JSONValue,
-): T {
+function fromJSON<T>(context: Serializable, json: JSONValue): T {
   const _json = typeof json === "string" ? JSON.parse(json) : json;
   const accumulator: Partial<T> = {};
   const map = SERIALIZABLE_CLASS_MAP.get(context?.constructor?.prototype);
   for (const [key, value] of Object.entries(_json) as [string, JSONValue][]) {
-    const {
-      propertyKey,
-      fromJSONStrategy = fromJSONDefault,
-    } = map?.getBySerializedKey(key) || {};
+    const { propertyKey, fromJSONStrategy = fromJSONDefault } =
+      map?.getBySerializedKey(key) || {};
 
     if (!propertyKey) {
       continue;
@@ -182,8 +163,5 @@ function fromJSON<T>(
     accumulator[propertyKey as keyof T] = fromJSONStrategy(value);
   }
 
-  return Object.assign(
-    context,
-    accumulator as T,
-  );
+  return Object.assign(context, accumulator as T);
 }
