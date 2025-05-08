@@ -278,8 +278,11 @@ test({
       toPojo({} as Serializable);
       fail("to Pojo did not error with no context");
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`);
+      assert(e instanceof Error);
+      assertEquals(
+        e.message,
+        `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,
+      );
     }
   },
 });

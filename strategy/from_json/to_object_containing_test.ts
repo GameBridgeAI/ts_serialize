@@ -107,8 +107,8 @@ test({
       const testObj = new Test().fromJSON({ test: { testing: "changed" } });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
@@ -129,8 +129,8 @@ test({
       const testObj = new Test().fromJSON({ test: "changed" });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
   },
 });
@@ -157,8 +157,8 @@ test({
       });
       fail(`testObj ${testObj} did not fail`);
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });

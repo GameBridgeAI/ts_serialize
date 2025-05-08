@@ -27,8 +27,8 @@ test({
 
       fail("polymorphicClassFromJSON did not error with no context");
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
     }
   },
 });

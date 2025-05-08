@@ -64,8 +64,8 @@ test({
       }
       fail("Allowed Symbol name without propertyName");
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, ERROR_SYMBOL_PROPERTY_NAME);
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_SYMBOL_PROPERTY_NAME);
     }
   },
 });
@@ -271,8 +271,8 @@ test({
       }
       fail("Allowed duplicate propertyName");
     } catch (e) {
-      const { message } = e instanceof Error ? e : { message: `${e}` };
-      assertEquals(message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`);
+      assert(e instanceof Error);
+      assertEquals(e.message, `${ERROR_DUPLICATE_SERIALIZE_KEY}: serialize_me`);
     }
   },
 });
