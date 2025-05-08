@@ -18,7 +18,6 @@ and this project adheres to
 - `catch(e)` where `e` is now `unknown` previously `any`
   - adds wrapper for error messages
 
-
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 
 - NPM Deploy fixes
