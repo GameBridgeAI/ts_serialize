@@ -17,7 +17,8 @@ import {
 import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";
 
 test({
-  name: "polymorphicClassFromJSON errors if target class has no polymorphic children",
+  name:
+    "polymorphicClassFromJSON errors if target class has no polymorphic children",
   fn() {
     class Test extends Serializable {}
 
@@ -33,7 +34,8 @@ test({
 });
 
 test({
-  name: "should be able to deserialize a polymorphic class using a polymorphic resolver",
+  name:
+    "should be able to deserialize a polymorphic class using a polymorphic resolver",
   fn() {
     class ResolverHelperClass extends Serializable {
       @SerializeProperty()
@@ -51,7 +53,7 @@ test({
             return new TestClass();
           default:
             throw new Error(
-              `Unable to determine polymorphic class type ${inputObject._class}`
+              `Unable to determine polymorphic class type ${inputObject._class}`,
             );
         }
       }
@@ -92,7 +94,7 @@ test({
             return new TestClass2();
           default:
             throw new Error(
-              `Unable to determine polymorphic class type ${inputObject._class}`
+              `Unable to determine polymorphic class type ${inputObject._class}`,
             );
         }
       }
@@ -172,7 +174,8 @@ test({
 });
 
 test({
-  name: "polymorphic switch should not be able to serialize properties that aren't serializable",
+  name:
+    "polymorphic switch should not be able to serialize properties that aren't serializable",
   fn() {
     abstract class AbstractClass extends Serializable {}
 
@@ -299,7 +302,8 @@ test({
 });
 
 test({
-  name: "should throw an error if the polymorphic class trying to be resolved doesn't exist",
+  name:
+    "should throw an error if the polymorphic class trying to be resolved doesn't exist",
   fn() {
     abstract class AbstractClass extends Serializable {}
 
@@ -407,7 +411,7 @@ test({
       @PolymorphicSwitch(
         () => new TestClass(),
         // fromJSONStrategy prepends a + to whatever the input value
-        "+TestClass"
+        "+TestClass",
       )
       public class?: string;
     }
@@ -430,7 +434,7 @@ test({
       @PolymorphicSwitch(
         () => new TestClass(),
         // Test if "class" is truthy
-        (propertyValue: unknown) => !!propertyValue
+        (propertyValue: unknown) => !!propertyValue,
       )
       public class = "TestClass";
     }
@@ -455,7 +459,7 @@ test({
       // Only deserialize if this value matches the year 2020
       @PolymorphicSwitch(
         () => new TestClass2020(),
-        (propertyValue) => (propertyValue as Date).getFullYear() === 2020
+        (propertyValue) => (propertyValue as Date).getFullYear() === 2020,
       )
       public someDate?: Date;
     }
@@ -467,7 +471,7 @@ test({
       // Only deserialize if this value doesn't match the year 2020
       @PolymorphicSwitch(
         () => new TestClassOtherYear(),
-        (propertyValue) => (propertyValue as Date).getFullYear() !== 2020
+        (propertyValue) => (propertyValue as Date).getFullYear() !== 2020,
       )
       public someDate?: Date;
     }
@@ -484,7 +488,7 @@ test({
     assert(polyClass2 instanceof TestClassOtherYear);
     assertNotEquals(
       (polyClass2 as TestClassOtherYear).someDate?.getFullYear(),
-      2020
+      2020,
     );
   },
 });
