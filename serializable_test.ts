@@ -219,7 +219,7 @@ test({
 
     class Root extends Serializable {
       @SerializeProperty()
-      field1?: string;
+      public field1?: string;
       @SerializeProperty({ fromJSONStrategy: toSerializable(Embedded) })
       public embedded?: Embedded[];
     }
@@ -239,23 +239,23 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty()
-      test_field = "Test1_test_field";
+      public test_field = "Test1_test_field";
     }
     class Test2 extends Serializable {
       @SerializeProperty()
-      test_field = "Test2_test_field";
+      public test_field = "Test2_test_field";
       @SerializeProperty({
         fromJSONStrategy: (json) => new Test1().fromJSON(json),
       })
-      nested!: Test1;
+      public nested!: Test1;
     }
     class Test3 extends Serializable {
       @SerializeProperty()
-      test_field = "Test3_test_field";
+      public test_field = "Test3_test_field";
       @SerializeProperty({
         fromJSONStrategy: (json) => new Test2().fromJSON(json),
       })
-      nested!: Test2;
+      public nested!: Test2;
     }
     const testObj = new Test3();
     testObj.fromJSON({

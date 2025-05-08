@@ -12,7 +12,7 @@ test({
       @SerializeProperty({
         fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
       })
-      date!: Date;
+      public date!: Date;
     }
     const testObj = new Test().fromJSON({ date: "1990-11-11" });
     assert(testObj.date instanceof Date);
@@ -27,7 +27,7 @@ test({
       @SerializeProperty({
         fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
       })
-      date!: Date;
+      public date!: Date;
     }
     try {
       new Test().fromJSON(`{"date":"I am not a date!"}`);
@@ -46,7 +46,7 @@ test({
       @SerializeProperty({
         fromJSONStrategy: iso8601Date(),
       })
-      date!: Date;
+      public date!: Date;
     }
     try {
       new Test().fromJSON(`{"date":"I am not a date!"}`);
@@ -110,7 +110,7 @@ test({
       @SerializeProperty({
         fromJSONStrategy: createDateStrategy(/^Im going to shoot my foot$/),
       })
-      date!: Date;
+      public date!: Date;
     }
     try {
       new Test().fromJSON(`{"date":"Im going to shoot my foot"}`);

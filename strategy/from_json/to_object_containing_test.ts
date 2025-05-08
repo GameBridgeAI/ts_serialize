@@ -14,12 +14,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
 
     const testObj = new Test().fromJSON({
@@ -35,12 +35,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     const testObj = new Test().fromJSON({
@@ -60,12 +60,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     const testObj = new Test().fromJSON({ test: { testing: null } });
@@ -78,12 +78,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     const testObj = new Test().fromJSON({ test: null });
@@ -96,12 +96,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
     try {
       const testObj = new Test().fromJSON({ test: { testing: "changed" } });
@@ -118,12 +118,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
     try {
       const testObj = new Test().fromJSON({ test: "changed" });
@@ -141,12 +141,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     try {
@@ -172,7 +172,7 @@ test({
         this.someClassProp = someClassProp;
       }
       @SerializeProperty()
-      someClassProp: string;
+      public someClassProp: string;
     }
 
     class Test extends Serializable {
@@ -181,7 +181,7 @@ test({
           () => new SomeClass("from_constructor"),
         ),
       })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
 
     const testObj = new Test().fromJSON({ test: { testing: {} } });

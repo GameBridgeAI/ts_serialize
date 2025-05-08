@@ -10,7 +10,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      test = true;
+      public test = true;
     }
     const testObj = new Test();
     assertEquals(toSerializable(Test)({ test: true }).test, testObj.test);
@@ -23,7 +23,7 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("test_one")
-      test1 = true;
+      public test1 = true;
     }
 
     class Test2 extends Serializable {
@@ -31,12 +31,12 @@ test({
         serializedKey: "test_two",
         fromJSONStrategy: toSerializable(Test1),
       })
-      test2 = new Test1();
+      public test2 = new Test1();
     }
 
     class Test3 extends Test2 {
       @SerializeProperty("test_three")
-      test3 = false;
+      public test3 = false;
     }
 
     const testObj = new Test3().fromJSON(
@@ -54,7 +54,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
-      test = true;
+      public test = true;
     }
     const array: Test[] = toSerializable(Test)([
       { a_property: "v1" },
@@ -71,7 +71,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
-      test = true;
+      public test = true;
     }
     const array: Test[] = toSerializable(Test)([]);
     assertEquals(array.length, 0);
@@ -87,7 +87,7 @@ test({
         this.someClassProp = someClassProp;
       }
       @SerializeProperty()
-      someClassProp: string;
+      public someClassProp: string;
     }
     const array: Test[] = toSerializable(() => new Test("from_constructor"))([
       {},
