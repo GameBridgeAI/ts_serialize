@@ -20,7 +20,7 @@ test({
 
     assertEquals(
       new Test().toJSON(),
-      `{"test":{"testing":{"someClassProp":"test"}}}`
+      `{"test":{"testing":{"someClassProp":"test"}}}`,
     );
   },
 });
@@ -40,7 +40,7 @@ test({
 
     assertEquals(
       new Test().toJSON(),
-      `{"test":{"testing":{"some_class_prop":"test"}}}`
+      `{"test":{"testing":{"some_class_prop":"test"}}}`,
     );
   },
 });
@@ -62,7 +62,7 @@ test({
 
     assertEquals(
       new Test().toJSON(),
-      `{"test":{"testing":[{"someClassProp":"test"},{"someClassProp":"test"},{"someClassProp":"test"}]}}`
+      `{"test":{"testing":[{"someClassProp":"test"},{"someClassProp":"test"},{"someClassProp":"test"}]}}`,
     );
   },
 });
@@ -90,7 +90,7 @@ test({
     }
     assertEquals(
       new Test().toJSON(),
-      `{"test":{"testing":[{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}},{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}},{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}}]}}`
+      `{"test":{"testing":[{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}},{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}},{"someClassProp":"test","someOtherClassProp":{"the_class_prop":"test"}}]}}`,
     );
   },
 });

@@ -21,6 +21,6 @@ export function composeStrategy(
 ): FromJSONStrategy | ToJSONStrategy {
   return (
     // deno-lint-ignore no-explicit-any
-    val: any
+    val: any,
   ): JSONValue | unknown => fns.reduce((acc, fn) => fn(acc), val);
 }

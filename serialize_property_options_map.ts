@@ -31,29 +31,29 @@ export class SerializePropertyOptionsMap {
   public set(serializePropertyOptions: SerializePropertyOptions): void {
     if (this.serializedKeyMap.has(serializePropertyOptions.serializedKey)) {
       throw new Error(
-        `${ERROR_DUPLICATE_SERIALIZE_KEY}: ${serializePropertyOptions.serializedKey}`
+        `${ERROR_DUPLICATE_SERIALIZE_KEY}: ${serializePropertyOptions.serializedKey}`,
       );
     }
     if (this.propertyKeyMap.has(serializePropertyOptions.propertyKey)) {
       throw new Error(
-        `${ERROR_DUPLICATE_PROPERTY_KEY}: ${serializePropertyOptions.propertyKey.toString()}`
+        `${ERROR_DUPLICATE_PROPERTY_KEY}: ${serializePropertyOptions.propertyKey.toString()}`,
       );
     }
     this.propertyKeyIgnoreSet.delete(serializePropertyOptions.propertyKey);
     this.propertyKeyMap.set(
       serializePropertyOptions.propertyKey,
-      serializePropertyOptions
+      serializePropertyOptions,
     );
 
     this.serializedKeyIgnoreSet.delete(serializePropertyOptions.serializedKey);
     this.serializedKeyMap.set(
       serializePropertyOptions.serializedKey,
-      serializePropertyOptions
+      serializePropertyOptions,
     );
 
     // Hide parent property key mappings for previous value of serialized key
     const parentSerializedObject = this.parentMap?.getBySerializedKey(
-      serializePropertyOptions.serializedKey
+      serializePropertyOptions.serializedKey,
     );
     if (
       parentSerializedObject &&
@@ -64,7 +64,7 @@ export class SerializePropertyOptionsMap {
     }
     // Hide parent serializedKey mapping for previous value of property key
     const parentPropertyObject = this.parentMap?.getByPropertyKey(
-      serializePropertyOptions.propertyKey
+      serializePropertyOptions.propertyKey,
     );
     if (
       parentPropertyObject &&
@@ -85,7 +85,7 @@ export class SerializePropertyOptionsMap {
   }
 
   public getByPropertyKey(
-    propertyKey: string | symbol
+    propertyKey: string | symbol,
   ): SerializePropertyOptions | undefined {
     return (
       this.propertyKeyMap.get(propertyKey) ||
@@ -105,7 +105,7 @@ export class SerializePropertyOptionsMap {
   }
 
   public getBySerializedKey(
-    serializedKey: string
+    serializedKey: string,
   ): SerializePropertyOptions | undefined {
     return (
       this.serializedKeyMap.get(serializedKey) ||
@@ -123,7 +123,7 @@ export class SerializePropertyOptionsMap {
     SerializePropertyOptions
   > {
     const parentEntries = Array.from(
-      this.parentMap?.getMergedWithParentMap() || []
+      this.parentMap?.getMergedWithParentMap() || [],
     );
     return new Map([
       ...parentEntries.filter((e) => !this.propertyKeyIgnoreSet.has(e[0])),

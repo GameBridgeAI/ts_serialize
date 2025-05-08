@@ -20,7 +20,7 @@ test({
 
     assertEquals(
       getNewSerializable(() => new A({ test: "from_constructor" })).toJSON(),
-      `{"test":"from_constructor"}`
+      `{"test":"from_constructor"}`,
     );
   },
 });
@@ -35,7 +35,7 @@ test({
 
     assertEquals(
       getNewSerializable(A).toJSON(),
-      `{"test":"not_from_constructor"}`
+      `{"test":"not_from_constructor"}`,
     );
   },
 });

@@ -19,7 +19,7 @@ export function isNewable<T>(type: unknown): type is NewSerializable<T> {
 
 /** for strategy type arguments */
 export function isFunctionSerializable(
-  type: unknown
+  type: unknown,
 ): type is FunctionSerializable {
   return typeof type === "function";
 }

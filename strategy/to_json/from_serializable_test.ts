@@ -38,7 +38,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`
+      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
     );
   },
 });
@@ -63,7 +63,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"outer_outer_property":{"outer_property":{"nested_property":999}}}`
+      `{"outer_outer_property":{"outer_property":{"nested_property":999}}}`,
     );
   },
 });

@@ -49,7 +49,7 @@ export declare interface Clone {
 
 /** Recursively set default serializer logic for own class definition and parent definitions if none exists */
 function getOrInitializeDefaultSerializerLogicForParents(
-  targetPrototype: Serializable
+  targetPrototype: Serializable,
 ): SerializePropertyOptionsMap | undefined {
   // Don't create serialization logic for Serializable
   if (targetPrototype === Serializable.prototype) {
@@ -59,19 +59,19 @@ function getOrInitializeDefaultSerializerLogicForParents(
   if (!SERIALIZABLE_CLASS_MAP.has(targetPrototype)) {
     // If the parent has a serialization map then inherit it
     let parentMap = SERIALIZABLE_CLASS_MAP.get(
-      Object.getPrototypeOf(targetPrototype)
+      Object.getPrototypeOf(targetPrototype),
     );
 
     // If the parent is also missing it's map then generate it if necessary
     if (!parentMap) {
       parentMap = getOrInitializeDefaultSerializerLogicForParents(
-        Object.getPrototypeOf(targetPrototype)
+        Object.getPrototypeOf(targetPrototype),
       );
     }
 
     return SERIALIZABLE_CLASS_MAP.set(
       targetPrototype,
-      new SerializePropertyOptionsMap(parentMap)
+      new SerializePropertyOptionsMap(parentMap),
     ).get(targetPrototype);
   }
 
@@ -112,20 +112,22 @@ export const SERIALIZABLE_CLASS_MAP: SerializableMap = new Map<
 /** Converts to object using mapped keys */
 export function toPojo(context: Serializable): JSONObject {
   const serializablePropertyMap = SERIALIZABLE_CLASS_MAP.get(
-    context?.constructor?.prototype
+    context?.constructor?.prototype,
   );
 
   if (!serializablePropertyMap) {
     throw new Error(
-      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor?.prototype}`
+      `${ERROR_MISSING_PROPERTIES_MAP}: ${context?.constructor?.prototype}`,
     );
   }
   const record: JSONObject = {};
-  for (let {
-    propertyKey,
-    serializedKey,
-    toJSONStrategy = toJSONDefault,
-  } of serializablePropertyMap.propertyOptions()) {
+  for (
+    let {
+      propertyKey,
+      serializedKey,
+      toJSONStrategy = toJSONDefault,
+    } of serializablePropertyMap.propertyOptions()
+  ) {
     // Assume that key is always a string, a check is done earlier in SerializeProperty
     const value = context[propertyKey as keyof Serializable];
 

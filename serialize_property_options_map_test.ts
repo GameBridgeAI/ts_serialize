@@ -16,7 +16,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap setting a property correctly sets both keys",
+  name:
+    "SerializePropertyOptionsMap setting a property correctly sets both keys",
   fn() {
     const testObj = new SerializePropertyOptionsMap();
     const spOptions = new SerializePropertyOptions("a", "b");
@@ -76,7 +77,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap error when trying to add a duplicate property key",
+  name:
+    "SerializePropertyOptionsMap error when trying to add a duplicate property key",
   fn() {
     const testObj = new SerializePropertyOptionsMap();
     const childSPOptions = new SerializePropertyOptions("a", "b");
@@ -92,7 +94,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap error when trying to add a duplicate serialize key",
+  name:
+    "SerializePropertyOptionsMap error when trying to add a duplicate serialize key",
   fn() {
     const testObj = new SerializePropertyOptionsMap();
     const childSPOptions = new SerializePropertyOptions("a", "a");
@@ -108,7 +111,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap parent property key is ignored if overridden by a new child property",
+  name:
+    "SerializePropertyOptionsMap parent property key is ignored if overridden by a new child property",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
     const parentSPOptions = new SerializePropertyOptions("a", "a");
@@ -131,7 +135,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap parent serialize key is ignored if overridden by a new child property",
+  name:
+    "SerializePropertyOptionsMap parent serialize key is ignored if overridden by a new child property",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
     const parentSPOptions = new SerializePropertyOptions("a", "a");
@@ -154,7 +159,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap can access child object property if replacing an ignored parent property key",
+  name:
+    "SerializePropertyOptionsMap can access child object property if replacing an ignored parent property key",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
     const parentSPOptions = new SerializePropertyOptions("a", "a");
@@ -180,7 +186,8 @@ test({
 });
 
 test({
-  name: "SerializePropertyOptionsMap an access child object property if replacing an ignored parent serialized key",
+  name:
+    "SerializePropertyOptionsMap an access child object property if replacing an ignored parent serialized key",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
     const parentSPOptions = new SerializePropertyOptions("a", "a");

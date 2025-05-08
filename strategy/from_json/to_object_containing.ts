@@ -50,7 +50,7 @@ export function toObjectContaining(type: unknown): FromJSONStrategy {
         }
 
         record[prop] = getNewSerializable(type).fromJSON(
-          value[prop] as JSONObject
+          value[prop] as JSONObject,
         );
       }
     }

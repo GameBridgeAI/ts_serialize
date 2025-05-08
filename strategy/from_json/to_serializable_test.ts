@@ -40,7 +40,7 @@ test({
     }
 
     const testObj = new Test3().fromJSON(
-      `{"test_three":true,"test_two":{"test_one":false}}`
+      `{"test_three":true,"test_two":{"test_one":false}}`,
     );
 
     assertEquals(testObj.test3, true);
