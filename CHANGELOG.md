@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [v2.1.0] - 2025-05-08
+
+### Changed
+
+- node/deno version in ci/cd
+- copyright year
+- support deno 2.x+
+- support node 22
+- add typescript hints for overrides
+- `catch(e)` where `e` is now `unknown` previously `any`
+  - adds wrapper for error messages
+
+
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 
 - NPM Deploy fixes
