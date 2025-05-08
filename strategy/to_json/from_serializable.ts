@@ -9,6 +9,8 @@ export function fromSerializable(): ToJSONStrategy {
     if (Array.isArray(value)) {
       return value.map((item) => item.tsSerialize());
     }
-    return value.tsSerialize();
+    // Objects can be null, return them without further serialization.
+    // Double cast required to return a JSONValue
+    return value ? value.tsSerialize() : value as null as JSONValue;
   };
 }
