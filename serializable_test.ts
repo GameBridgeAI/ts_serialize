@@ -38,7 +38,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"test":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ test: "changed" }).test,
-      `changed`
+      `changed`,
     );
   },
 });
@@ -58,7 +58,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-      `changed`
+      `changed`,
     );
   },
 });
@@ -85,16 +85,16 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`
+      `changed`,
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","__test3__":"test3"}`
+      `{"__test2__":"test2","__test3__":"test3"}`,
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-      `changed`
+      `changed`,
     );
   },
 });
@@ -129,25 +129,25 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`
+      `changed`,
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3"}`
+      `{"__test2__":"test2","--test3--":"test3"}`,
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3,
-      `changed`
+      `changed`,
     );
 
     assertEquals(
       new TestTransformKey4().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
+      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
     );
     assertEquals(
       new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-      `changed`
+      `changed`,
     );
   },
 });
@@ -171,11 +171,11 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`
+      `{"__test2__":"test2","changed":"change me"}`,
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`
+      `changed`,
     );
   },
 });
@@ -199,17 +199,18 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`
+      `{"__test2__":"test2","changed":"change me"}`,
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`
+      `changed`,
     );
   },
 });
 
 test({
-  name: "Nested fields shouldn't overwrite containing class fields of the same name",
+  name:
+    "Nested fields shouldn't overwrite containing class fields of the same name",
   fn() {
     class Embedded extends Serializable {
       @SerializeProperty()

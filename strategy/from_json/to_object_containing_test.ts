@@ -55,7 +55,8 @@ test({
 });
 
 test({
-  name: "toObjectContaining revives subclass as null with null as a subclass value",
+  name:
+    "toObjectContaining revives subclass as null with null as a subclass value",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -135,7 +136,8 @@ test({
 });
 
 test({
-  name: "toObjectContaining throws is array sub-value values are not [object Object]",
+  name:
+    "toObjectContaining throws is array sub-value values are not [object Object]",
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
@@ -176,7 +178,7 @@ test({
     class Test extends Serializable {
       @SerializeProperty({
         fromJSONStrategy: toObjectContaining(
-          () => new SomeClass("from_constructor")
+          () => new SomeClass("from_constructor"),
         ),
       })
       test!: { [k: string]: SomeClass };
