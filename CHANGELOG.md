@@ -17,6 +17,7 @@ and this project adheres to
 - add typescript hints for overrides
 - `catch(e)` where `e` is now `unknown` previously `any`
   - adds wrapper for error messages
+- add member accessor for all classes
 
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 

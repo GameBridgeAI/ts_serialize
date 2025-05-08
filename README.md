@@ -170,7 +170,7 @@ class Test extends Serializable {
     fromJSONStrategy,
     toJSONStrategy,
   })
-  bigInt!: BigInt;
+  public bigInt!: BigInt;
 }
 ```
 
@@ -187,7 +187,7 @@ class Test extends Serializable {
   @SerializeProperty({
     fromJSONStrategy: composeStrategy(addWord("World"), shout),
   })
-  property!: string;
+  public property!: string;
 }
 ```
 
@@ -203,7 +203,7 @@ class Test extends Serializable {
   @SerializeProperty({
     fromJSONStrategy: iso8601Date(),
   })
-  date!: Date;
+  public date!: Date;
 }
 ```
 
@@ -217,7 +217,7 @@ class Test extends Serializable {
   @SerializeProperty({
     fromJSONStrategy: createDateStrategy(/^(\d{4})-(\d{2})-(\d{2})$/),
   })
-  date!: Date;
+  public date!: Date;
 }
 ```
 

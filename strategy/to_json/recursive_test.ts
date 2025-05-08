@@ -10,7 +10,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      id = 1;
+      public id = 1;
     }
 
     const testObj = new Test();

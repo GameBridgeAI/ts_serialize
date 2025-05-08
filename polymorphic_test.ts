@@ -206,7 +206,7 @@ test({
     class TestClass extends AbstractClass {
       @SerializeProperty("class")
       @PolymorphicSwitch(() => new TestClass(), "TestClass")
-      public [symbol] = "";
+      public [symbol]!: string;
 
       @SerializeProperty()
       public someProperty?: string;
