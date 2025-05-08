@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONObject, Serializable } from "../../serializable.ts";
 import { FromJSONStrategy } from "../compose_strategy.ts";
@@ -10,12 +10,10 @@ import { isObject } from "../_utils.ts";
 import { getNewSerializable } from "../utils.ts";
 
 /** revive data from `{k: v}` using `fromJSON` on a subclass type `v` */
-export function toObjectContaining(
-  type: unknown,
-): FromJSONStrategy {
-  return (
-    value: { [k: string]: JSONObject | JSONObject[] },
-  ): null | Record<string, Serializable | Serializable[] | null> => {
+export function toObjectContaining(type: unknown): FromJSONStrategy {
+  return (value: {
+    [k: string]: JSONObject | JSONObject[];
+  }): null | Record<string, Serializable | Serializable[] | null> => {
     if (value == null) {
       return null;
     }
@@ -52,7 +50,7 @@ export function toObjectContaining(
         }
 
         record[prop] = getNewSerializable(type).fromJSON(
-          value[prop] as JSONObject,
+          value[prop] as JSONObject
         );
       }
     }

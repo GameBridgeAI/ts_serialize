@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../../test_deps.ts";
 import { Serializable } from "../../serializable.ts";
@@ -8,9 +8,7 @@ import {
 } from "../../serialize_property.ts";
 import { fromSerializable } from "./from_serializable.ts";
 
-function FromSerializable(
-  propertyName?: string,
-): PropertyDecorator {
+function FromSerializable(propertyName?: string): PropertyDecorator {
   const opts: SerializePropertyArgument = {
     toJSONStrategy: fromSerializable(),
   };
@@ -40,7 +38,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`,
+      `{"outer_outer_property":[{"outer_property":[{"nested_property":999}]}]}`
     );
   },
 });
@@ -65,7 +63,7 @@ test({
 
     assertEquals(
       testObj.toJSON(),
-      `{"outer_outer_property":{"outer_property":{"nested_property":999}}}`,
+      `{"outer_outer_property":{"outer_property":{"nested_property":999}}}`
     );
   },
 });

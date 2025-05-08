@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONValue } from "../serializable.ts";
 
@@ -21,6 +21,6 @@ export function composeStrategy(
 ): FromJSONStrategy | ToJSONStrategy {
   return (
     // deno-lint-ignore no-explicit-any
-    val: any,
+    val: any
   ): JSONValue | unknown => fns.reduce((acc, fn) => fn(acc), val);
 }

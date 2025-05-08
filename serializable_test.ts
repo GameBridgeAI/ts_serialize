@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, fail, test } from "./test_deps.ts";
 import { Serializable, toPojo, TransformKey } from "./serializable.ts";
@@ -38,7 +38,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"test":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ test: "changed" }).test,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -58,7 +58,7 @@ test({
     assertEquals(new TestTransformKey().toJSON(), `{"__test__":"test"}`);
     assertEquals(
       new TestTransformKey().fromJSON({ __test__: "changed" }).test,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -85,16 +85,16 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","__test3__":"test3"}`,
+      `{"__test2__":"test2","__test3__":"test3"}`
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ __test3__: "changed" }).test3,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -129,25 +129,25 @@ test({
     assertEquals(new TestTransformKey2().toJSON(), `{"__test2__":"test2"}`);
     assertEquals(
       new TestTransformKey2().fromJSON({ __test2__: "changed" }).test2,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey3().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3"}`,
+      `{"__test2__":"test2","--test3--":"test3"}`
     );
     assertEquals(
       new TestTransformKey3().fromJSON({ "--test3--": "changed" }).test3,
-      `changed`,
+      `changed`
     );
 
     assertEquals(
       new TestTransformKey4().toJSON(),
-      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`,
+      `{"__test2__":"test2","--test3--":"test3","--test4--":"test4"}`
     );
     assertEquals(
       new TestTransformKey4().fromJSON({ "--test4--": "changed" }).test4,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -171,11 +171,11 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`,
+      `{"__test2__":"test2","changed":"change me"}`
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
+      `changed`
     );
   },
 });
@@ -199,18 +199,17 @@ test({
 
     assertEquals(
       new TestTransformKey2().toJSON(),
-      `{"__test2__":"test2","changed":"change me"}`,
+      `{"__test2__":"test2","changed":"change me"}`
     );
     assertEquals(
       new TestTransformKey2().fromJSON({ changed: "changed" }).changeMe,
-      `changed`,
+      `changed`
     );
   },
 });
 
 test({
-  name:
-    "Nested fields shouldn't overwrite containing class fields of the same name",
+  name: "Nested fields shouldn't overwrite containing class fields of the same name",
   fn() {
     class Embedded extends Serializable {
       @SerializeProperty()
@@ -226,9 +225,7 @@ test({
 
     const input = {
       field1: "field_value_in_outer_class",
-      embedded: [
-        { field1: "field_value_in_inner_class" },
-      ],
+      embedded: [{ field1: "field_value_in_inner_class" }],
     };
 
     const root = new Root().fromJSON(input);
@@ -260,15 +257,13 @@ test({
       nested!: Test2;
     }
     const testObj = new Test3();
-    testObj.fromJSON(
-      {
-        "test_field": "3",
-        "nested": {
-          "test_field": "2",
-          "nested": { "test_field": "1" },
-        },
+    testObj.fromJSON({
+      test_field: "3",
+      nested: {
+        test_field: "2",
+        nested: { test_field: "1" },
       },
-    );
+    });
     assertEquals(testObj.test_field, "3");
     assertEquals(testObj.nested.test_field, "2");
     assertEquals(testObj.nested.nested.test_field, "1");
@@ -284,7 +279,7 @@ test({
     } catch (e) {
       assertEquals(
         e.message,
-        `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,
+        `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`
       );
     }
   },
@@ -310,10 +305,7 @@ test({
       public test = "test";
     }
 
-    assertEquals(
-      new Clone().clone({ test: "changed" }).test,
-      `changed`,
-    );
+    assertEquals(new Clone().clone({ test: "changed" }).test, `changed`);
   },
 });
 

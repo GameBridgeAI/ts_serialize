@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
@@ -18,7 +18,7 @@ export class SerializePropertyOptions {
     public propertyKey: string | symbol,
     public serializedKey: string,
     fromJSONStrategy?: FromJSONStrategy,
-    toJSONStrategy?: ToJSONStrategy,
+    toJSONStrategy?: ToJSONStrategy
   ) {
     if (fromJSONStrategy) {
       this.fromJSONStrategy = fromJSONStrategy;
@@ -38,10 +38,10 @@ export type SerializePropertyArgument =
   | string
   | ToSerializedKeyStrategy
   | {
-    serializedKey?: string | ToSerializedKeyStrategy;
-    fromJSONStrategy?: FromJSONStrategy;
-    toJSONStrategy?: ToJSONStrategy;
-  };
+      serializedKey?: string | ToSerializedKeyStrategy;
+      fromJSONStrategy?: FromJSONStrategy;
+      toJSONStrategy?: ToJSONStrategy;
+    };
 
 /** converted interface for `SerializePropertyArgument` */
 interface SerializePropertyArgumentObject {
@@ -52,17 +52,14 @@ interface SerializePropertyArgumentObject {
 
 /** Property wrapper that adds `SerializeProperty` options to the class map */
 export function SerializeProperty(
-  args?: string | SerializePropertyArgument,
+  args?: string | SerializePropertyArgument
 ): PropertyDecorator {
-  return (
-    target: unknown,
-    propertyName: string | symbol,
-  ) => {
+  return (target: unknown, propertyName: string | symbol) => {
     const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
       target,
-      propertyName,
+      propertyName
     );
 
     let serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(target);
@@ -71,17 +68,15 @@ export function SerializeProperty(
     if (!serializablePropertiesMap) {
       // If the parent has a serialization map then inherit it
       const parentMap = SERIALIZABLE_CLASS_MAP.get(
-        Object.getPrototypeOf(target),
+        Object.getPrototypeOf(target)
       );
 
       SERIALIZABLE_CLASS_MAP.set(
         target,
-        new SerializePropertyOptionsMap(parentMap),
+        new SerializePropertyOptionsMap(parentMap)
       );
 
-      serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(
-        target,
-      );
+      serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(target);
     }
 
     serializablePropertiesMap?.set(
@@ -89,8 +84,8 @@ export function SerializeProperty(
         propertyName,
         decoratorArgumentOptions.serializedKey,
         decoratorArgumentOptions.fromJSONStrategy,
-        decoratorArgumentOptions.toJSONStrategy,
-      ),
+        decoratorArgumentOptions.toJSONStrategy
+      )
     );
   };
 }
@@ -101,7 +96,7 @@ export function SerializeProperty(
 function getDecoratorArgumentOptions(
   decoratorArguments: SerializePropertyArgument,
   target: unknown,
-  propertyName: string | symbol,
+  propertyName: string | symbol
 ): SerializePropertyArgumentObject {
   // Direct mapping to string
   if (typeof decoratorArguments === "string") {
@@ -117,10 +112,7 @@ function getDecoratorArgumentOptions(
 
   // We can't use symbols as keys when serializing
   // a serializedName must be provided if the property isn't a string
-  if (
-    !decoratorArguments.serializedKey &&
-    typeof propertyName === "symbol"
-  ) {
+  if (!decoratorArguments.serializedKey && typeof propertyName === "symbol") {
     throw new Error(ERROR_SYMBOL_PROPERTY_NAME);
   }
 
@@ -141,7 +133,7 @@ function getDecoratorArgumentOptions(
   // to transform property key decoratorArguments.serializedKey will override
   return {
     serializedKey: (target as Serializable).tsTransformKey(
-      String(propertyName),
+      String(propertyName)
     ),
     fromJSONStrategy: decoratorArguments.fromJSONStrategy,
     toJSONStrategy: decoratorArguments.toJSONStrategy,

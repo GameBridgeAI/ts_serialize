@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "./test_deps.ts";
 import * as mod from "./error_messages.ts";
@@ -13,17 +13,17 @@ test({
     assertEquals(typeof mod.ERROR_SYMBOL_PROPERTY_NAME, "string");
     assertEquals(
       typeof mod.ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS,
-      "string",
+      "string"
     );
     assertEquals(typeof mod.ERROR_INVALID_DATE, "string");
     assertEquals(typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE, "string");
     assertEquals(
       typeof mod.ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE,
-      "string",
+      "string"
     );
     assertEquals(
       typeof mod.ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED,
-      "string",
+      "string"
     );
     assertEquals(Object.keys(mod).length, 9);
   },

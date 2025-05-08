@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { test } from "../test_deps.ts";
 import { getNewSerializable } from "./utils.ts";
@@ -19,10 +19,8 @@ test({
     }
 
     assertEquals(
-      getNewSerializable(
-        () => new A({ test: "from_constructor" }),
-      ).toJSON(),
-      `{"test":"from_constructor"}`,
+      getNewSerializable(() => new A({ test: "from_constructor" })).toJSON(),
+      `{"test":"from_constructor"}`
     );
   },
 });
@@ -37,7 +35,7 @@ test({
 
     assertEquals(
       getNewSerializable(A).toJSON(),
-      `{"test":"not_from_constructor"}`,
+      `{"test":"not_from_constructor"}`
     );
   },
 });
