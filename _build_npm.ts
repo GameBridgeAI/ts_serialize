@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm,cmd --allow-net=deno.land
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm --allow-net=deno.land
 
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
@@ -94,5 +94,6 @@ try {
   await Deno.copyFile("README.md", `${flags.o}/README.md`);
   await Deno.copyFile("CHANGELOG.md", `${flags.o}/CHANGELOG.md`);
 } catch (e) {
-  printHelpText(e.message);
+  const { message } = e instanceof Error ? e : { message: `${e}` };
+  printHelpText(message);
 }
