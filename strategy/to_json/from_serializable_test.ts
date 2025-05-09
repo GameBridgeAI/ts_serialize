@@ -44,6 +44,33 @@ test({
 });
 
 test({
+  name:
+    "fromSerializable - arrays of nested objects with an object set to null",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      public serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @FromSerializable("outer_property")
+      public nested: Test1[] | null = [new Test1()];
+    }
+
+    class Test3 extends Serializable {
+      @FromSerializable("outer_outer_property")
+      public nested2: Test2[] | null = [new Test2()];
+    }
+    const testObj = new Test3();
+    testObj.nested2 = null;
+
+    assertEquals(
+      testObj.toJSON(),
+      `{"outer_outer_property":null}`,
+    );
+  },
+});
+
+test({
   name: "fromSerializable - single serializable objects",
   fn() {
     class Test1 extends Serializable {
@@ -64,6 +91,34 @@ test({
     assertEquals(
       testObj.toJSON(),
       `{"outer_outer_property":{"outer_property":{"nested_property":999}}}`,
+    );
+  },
+});
+
+test({
+  name:
+    "fromSerializable - single serializable objects with an object set to null",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      public serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @FromSerializable("outer_property")
+      public nested: Test1 | null = new Test1();
+    }
+
+    class Test3 extends Serializable {
+      @FromSerializable("outer_outer_property")
+      public nested2: Test2 | null = new Test2();
+    }
+
+    const testObj = new Test3();
+    testObj.nested2 = null;
+
+    assertEquals(
+      testObj.toJSON(),
+      `{"outer_outer_property":null}`,
     );
   },
 });

@@ -7,3 +7,4 @@
 - [@rgrosset](https://github.com/rgrosset) :shipit:
 - [@ms1111](https://github.com/ms1111) :eyes:
 - [@khan-saim](https://github.com/khan-saim)
+- [@WillForrestMindBridge](https://github.com/WillForrestMindBridge)

@@ -18,6 +18,8 @@ and this project adheres to
 - `catch(e)` where `e` is now `unknown` previously `any`
   - adds wrapper for error messages
 - add member accessor for all classes
+- fix #151 Allow the fromSerializationStrategy to handle null in place of an
+  serializable object.
 
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 
