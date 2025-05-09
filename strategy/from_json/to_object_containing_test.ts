@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, fail, test } from "../../test_deps.ts";
 import { toObjectContaining } from "./to_object_containing.ts";
@@ -14,17 +14,17 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
 
-    const testObj = new Test().fromJSON(
-      { test: { testing: { someClassProp: "changed" } } },
-    );
+    const testObj = new Test().fromJSON({
+      test: { testing: { someClassProp: "changed" } },
+    });
     assert(testObj.test.testing instanceof Serializable);
     assertEquals(testObj.test.testing.someClassProp, "changed");
   },
@@ -35,21 +35,19 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
-    const testObj = new Test().fromJSON(
-      {
-        test: {
-          testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
-        },
+    const testObj = new Test().fromJSON({
+      test: {
+        testing: [{ someClassProp: "changed" }, { someClassProp: "changed" }],
       },
-    );
+    });
     assert(Array.isArray(testObj.test.testing));
     assert(testObj.test.testing[0] instanceof Serializable);
     assertEquals(testObj.test.testing[0].someClassProp, "changed");
@@ -62,12 +60,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     const testObj = new Test().fromJSON({ test: { testing: null } });
@@ -80,12 +78,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     const testObj = new Test().fromJSON({ test: null });
@@ -98,20 +96,19 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
     try {
-      const testObj = new Test().fromJSON(
-        { test: { testing: "changed" } },
-      );
+      const testObj = new Test().fromJSON({ test: { testing: "changed" } });
       fail(`testObj ${testObj} did not fail`);
-    } catch (error) {
-      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+    } catch (e) {
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
@@ -121,20 +118,19 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass };
+      public test!: { [k: string]: SomeClass };
     }
     try {
-      const testObj = new Test().fromJSON(
-        { test: "changed" },
-      );
+      const testObj = new Test().fromJSON({ test: "changed" });
       fail(`testObj ${testObj} did not fail`);
-    } catch (error) {
-      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
+    } catch (e) {
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE);
     }
   },
 });
@@ -145,25 +141,24 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ fromJSONStrategy: toObjectContaining(SomeClass) })
-      test!: { [k: string]: SomeClass[] };
+      public test!: { [k: string]: SomeClass[] };
     }
 
     try {
-      const testObj = new Test().fromJSON(
-        {
-          test: {
-            testing: [88],
-          },
+      const testObj = new Test().fromJSON({
+        test: {
+          testing: [88],
         },
-      );
+      });
       fail(`testObj ${testObj} did not fail`);
-    } catch (error) {
-      assertEquals(error.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
+    } catch (e) {
+      assert(e instanceof Error);
+      assertEquals(e.message, ERROR_TO_OBJECT_CONTAINING_INVALID_SUB_VALUE);
     }
   },
 });
@@ -177,23 +172,19 @@ test({
         this.someClassProp = someClassProp;
       }
       @SerializeProperty()
-      someClassProp: string;
+      public someClassProp: string;
     }
 
     class Test extends Serializable {
-      @SerializeProperty(
-        {
-          fromJSONStrategy: toObjectContaining(() =>
-            new SomeClass("from_constructor")
-          ),
-        },
-      )
-      test!: { [k: string]: SomeClass };
+      @SerializeProperty({
+        fromJSONStrategy: toObjectContaining(
+          () => new SomeClass("from_constructor"),
+        ),
+      })
+      public test!: { [k: string]: SomeClass };
     }
 
-    const testObj = new Test().fromJSON(
-      { test: { testing: {} } },
-    );
+    const testObj = new Test().fromJSON({ test: { testing: {} } });
     assert(testObj.test.testing instanceof Serializable);
     assertEquals(testObj.test.testing.someClassProp, "from_constructor");
   },

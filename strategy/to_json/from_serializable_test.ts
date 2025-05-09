@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../../test_deps.ts";
 import { Serializable } from "../../serializable.ts";
@@ -8,9 +8,7 @@ import {
 } from "../../serialize_property.ts";
 import { fromSerializable } from "./from_serializable.ts";
 
-function FromSerializable(
-  propertyName?: string,
-): PropertyDecorator {
+function FromSerializable(propertyName?: string): PropertyDecorator {
   const opts: SerializePropertyArgument = {
     toJSONStrategy: fromSerializable(),
   };
@@ -25,16 +23,16 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("nested_property")
-      serializeMe = 999;
+      public serializeMe = 999;
     }
     class Test2 extends Serializable {
       @FromSerializable("outer_property")
-      nested: Test1[] = [new Test1()];
+      public nested: Test1[] = [new Test1()];
     }
 
     class Test3 extends Serializable {
       @FromSerializable("outer_outer_property")
-      nested2: Test2[] = [new Test2()];
+      public nested2: Test2[] = [new Test2()];
     }
     const testObj = new Test3();
 
@@ -50,16 +48,16 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("nested_property")
-      serializeMe = 999;
+      public serializeMe = 999;
     }
     class Test2 extends Serializable {
       @FromSerializable("outer_property")
-      nested: Test1 = new Test1();
+      public nested: Test1 = new Test1();
     }
 
     class Test3 extends Serializable {
       @FromSerializable("outer_outer_property")
-      nested2: Test2 = new Test2();
+      public nested2: Test2 = new Test2();
     }
     const testObj = new Test3();
 

@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../../test_deps.ts";
 import { fromObjectContaining } from "./from_object_containing.ts";
@@ -11,11 +11,11 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
-      test: { [k: string]: SomeClass } = { testing: new SomeClass() };
+      public test: { [k: string]: SomeClass } = { testing: new SomeClass() };
     }
 
     assertEquals(
@@ -30,12 +30,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty("some_class_prop")
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
-      test: { [_: string]: SomeClass } = { testing: new SomeClass() };
+      public test: { [_: string]: SomeClass } = { testing: new SomeClass() };
     }
 
     assertEquals(
@@ -50,12 +50,12 @@ test({
   fn() {
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
     }
 
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
-      test: { [k: string]: SomeClass[] } = {
+      public test: { [k: string]: SomeClass[] } = {
         testing: [new SomeClass(), new SomeClass(), new SomeClass()],
       };
     }
@@ -72,19 +72,19 @@ test({
   fn() {
     class TheClass extends Serializable {
       @SerializeProperty("the_class_prop")
-      theClassProp = "test";
+      public theClassProp = "test";
     }
     class SomeClass extends Serializable {
       @SerializeProperty()
-      someClassProp = "test";
+      public someClassProp = "test";
 
       @SerializeProperty({ fromJSONStrategy: toSerializable(TheClass) })
-      someOtherClassProp = new TheClass();
+      public someOtherClassProp = new TheClass();
     }
 
     class Test extends Serializable {
       @SerializeProperty({ toJSONStrategy: fromObjectContaining() })
-      test: { [k: string]: SomeClass[] } = {
+      public test: { [k: string]: SomeClass[] } = {
         testing: [new SomeClass(), new SomeClass(), new SomeClass()],
       };
     }

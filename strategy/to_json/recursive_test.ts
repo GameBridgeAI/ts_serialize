@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals, test } from "../../test_deps.ts";
 import { toJSONRecursive } from "./recursive.ts";
@@ -10,7 +10,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      id = 1;
+      public id = 1;
     }
 
     const testObj = new Test();

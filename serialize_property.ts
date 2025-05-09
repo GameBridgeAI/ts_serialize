@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
@@ -54,10 +54,7 @@ interface SerializePropertyArgumentObject {
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
-  return (
-    target: unknown,
-    propertyName: string | symbol,
-  ) => {
+  return function (target: unknown, propertyName: string | symbol): void {
     const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,
@@ -79,9 +76,7 @@ export function SerializeProperty(
         new SerializePropertyOptionsMap(parentMap),
       );
 
-      serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(
-        target,
-      );
+      serializablePropertiesMap = SERIALIZABLE_CLASS_MAP.get(target);
     }
 
     serializablePropertiesMap?.set(
@@ -117,10 +112,7 @@ function getDecoratorArgumentOptions(
 
   // We can't use symbols as keys when serializing
   // a serializedName must be provided if the property isn't a string
-  if (
-    !decoratorArguments.serializedKey &&
-    typeof propertyName === "symbol"
-  ) {
+  if (!decoratorArguments.serializedKey && typeof propertyName === "symbol") {
     throw new Error(ERROR_SYMBOL_PROPERTY_NAME);
   }
 

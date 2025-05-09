@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm,cmd --allow-net=deno.land
 
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { build, emptyDir } from "https://deno.land/x/dnt@0.22.0/mod.ts";
 import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";

@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { JSONObject, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
@@ -20,14 +20,14 @@ test({
   name:
     "polymorphicClassFromJSON errors if target class has no polymorphic children",
   fn() {
-    class Test extends Serializable {
-    }
+    class Test extends Serializable {}
 
     try {
       polymorphicClassFromJSON(Test, {});
 
       fail("polymorphicClassFromJSON did not error with no context");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(e.message, ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS);
     }
   },
@@ -45,9 +45,7 @@ test({
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver()
-      public static [Symbol()](
-        json: string | JSONObject,
-      ): Serializable {
+      public static [Symbol()](json: string | JSONObject): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
         switch (inputObject._class) {
@@ -86,9 +84,7 @@ test({
     abstract class AbstractClass extends Serializable {
       // Property name can be whatever, even an inaccessible symbol
       @PolymorphicResolver()
-      public static [Symbol()](
-        json: string | JSONObject,
-      ): Serializable {
+      public static [Symbol()](json: string | JSONObject): Serializable {
         const inputObject = new ResolverHelperClass().fromJSON(json);
 
         switch (inputObject._class) {
@@ -146,7 +142,7 @@ test({
       public someProperty = "original value";
     }
 
-    const testData = { "class": "TestClass", "someProperty": "new value" };
+    const testData = { class: "TestClass", someProperty: "new value" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass);
@@ -166,7 +162,7 @@ test({
       public someProperty = "original value";
     }
 
-    const testData = { "class": "TestClass", "someProperty": "new value" };
+    const testData = { class: "TestClass", someProperty: "new value" };
     try {
       polymorphicClassFromJSON(AbstractClass, testData);
       fail("Should not be able to resolve child of AbstractClass");
@@ -190,7 +186,7 @@ test({
       public someProperty = "original value";
     }
 
-    const testData = { "class": "TestClass", "someProperty": "new value" };
+    const testData = { class: "TestClass", someProperty: "new value" };
     try {
       polymorphicClassFromJSON(AbstractClass, testData);
       fail("Should not be able to resolve child of AbstractClass");
@@ -210,13 +206,13 @@ test({
     class TestClass extends AbstractClass {
       @SerializeProperty("class")
       @PolymorphicSwitch(() => new TestClass(), "TestClass")
-      public [symbol]: string;
+      public [symbol]!: string;
 
       @SerializeProperty()
       public someProperty?: string;
     }
 
-    const testData = { "class": "TestClass", "someProperty": "new value" };
+    const testData = { class: "TestClass", someProperty: "new value" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass);
@@ -344,7 +340,7 @@ test({
       @SerializeProperty()
       public someProperty = "original value";
 
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return "+" + key;
       }
     }
@@ -361,7 +357,7 @@ test({
   name: "polymorphic switch supports inherited custom tsTransformKeys",
   fn() {
     abstract class AbstractClass extends Serializable {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return "!" + key;
       }
     }
@@ -397,7 +393,7 @@ test({
       public someProperty = "original value";
     }
 
-    const testData = { "some_class": "TestClass", someProperty: "some value" };
+    const testData = { some_class: "TestClass", someProperty: "some value" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass);
@@ -443,7 +439,7 @@ test({
       public class = "TestClass";
     }
 
-    const testData = { "class": "Whatever" };
+    const testData = { class: "Whatever" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass);
@@ -480,7 +476,7 @@ test({
       public someDate?: Date;
     }
 
-    const testData = { "someDate": "2020-06-01" };
+    const testData = { someDate: "2020-06-01" };
     const polyClass = polymorphicClassFromJSON(AbstractClass, testData);
 
     assert(polyClass instanceof TestClass2020);

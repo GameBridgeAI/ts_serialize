@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, fail, test } from "./test_deps.ts";
 import { Serializable, toPojo, TransformKey } from "./serializable.ts";
@@ -47,7 +47,7 @@ test({
   name: "runs TransformKey without implementation declaration",
   fn() {
     class TestTransformKey extends Serializable {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
 
@@ -67,7 +67,7 @@ test({
   name: "implements TransformKey to children",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -103,7 +103,7 @@ test({
   name: "implements TransformKey to children and children can change",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -114,7 +114,7 @@ test({
     }
 
     class TestTransformKey3 extends TestTransformKey2 implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `--${key}--`;
       }
       @SerializeProperty()
@@ -156,7 +156,7 @@ test({
   name: "implements TransformKey but respects override as string",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -184,7 +184,7 @@ test({
   name: "implements TransformKey but respects override as property",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
-      public tsTransformKey(key: string): string {
+      public override tsTransformKey(key: string): string {
         return `__${key}__`;
       }
     }
@@ -219,16 +219,14 @@ test({
 
     class Root extends Serializable {
       @SerializeProperty()
-      field1?: string;
+      public field1?: string;
       @SerializeProperty({ fromJSONStrategy: toSerializable(Embedded) })
       public embedded?: Embedded[];
     }
 
     const input = {
       field1: "field_value_in_outer_class",
-      embedded: [
-        { field1: "field_value_in_inner_class" },
-      ],
+      embedded: [{ field1: "field_value_in_inner_class" }],
     };
 
     const root = new Root().fromJSON(input);
@@ -241,34 +239,32 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty()
-      test_field = "Test1_test_field";
+      public test_field = "Test1_test_field";
     }
     class Test2 extends Serializable {
       @SerializeProperty()
-      test_field = "Test2_test_field";
+      public test_field = "Test2_test_field";
       @SerializeProperty({
         fromJSONStrategy: (json) => new Test1().fromJSON(json),
       })
-      nested!: Test1;
+      public nested!: Test1;
     }
     class Test3 extends Serializable {
       @SerializeProperty()
-      test_field = "Test3_test_field";
+      public test_field = "Test3_test_field";
       @SerializeProperty({
         fromJSONStrategy: (json) => new Test2().fromJSON(json),
       })
-      nested!: Test2;
+      public nested!: Test2;
     }
     const testObj = new Test3();
-    testObj.fromJSON(
-      {
-        "test_field": "3",
-        "nested": {
-          "test_field": "2",
-          "nested": { "test_field": "1" },
-        },
+    testObj.fromJSON({
+      test_field: "3",
+      nested: {
+        test_field: "2",
+        nested: { test_field: "1" },
       },
-    );
+    });
     assertEquals(testObj.test_field, "3");
     assertEquals(testObj.nested.test_field, "2");
     assertEquals(testObj.nested.nested.test_field, "1");
@@ -282,6 +278,7 @@ test({
       toPojo({} as Serializable);
       fail("to Pojo did not error with no context");
     } catch (e) {
+      assert(e instanceof Error);
       assertEquals(
         e.message,
         `${ERROR_MISSING_PROPERTIES_MAP}: [object Object]`,
@@ -310,10 +307,7 @@ test({
       public test = "test";
     }
 
-    assertEquals(
-      new Clone().clone({ test: "changed" }).test,
-      `changed`,
-    );
+    assertEquals(new Clone().clone({ test: "changed" }).test, `changed`);
   },
 });
 

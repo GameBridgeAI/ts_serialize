@@ -1,4 +1,4 @@
-// Copyright 2018-2022 Gamebridge.ai authors. All rights reserved. MIT license.
+// Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals, test } from "../../test_deps.ts";
 import { toSerializable } from "./to_serializable.ts";
@@ -10,7 +10,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty()
-      test = true;
+      public test = true;
     }
     const testObj = new Test();
     assertEquals(toSerializable(Test)({ test: true }).test, testObj.test);
@@ -23,19 +23,20 @@ test({
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("test_one")
-      test1 = true;
+      public test1 = true;
     }
 
     class Test2 extends Serializable {
-      @SerializeProperty(
-        { serializedKey: "test_two", fromJSONStrategy: toSerializable(Test1) },
-      )
-      test2 = new Test1();
+      @SerializeProperty({
+        serializedKey: "test_two",
+        fromJSONStrategy: toSerializable(Test1),
+      })
+      public test2 = new Test1();
     }
 
     class Test3 extends Test2 {
       @SerializeProperty("test_three")
-      test3 = false;
+      public test3 = false;
     }
 
     const testObj = new Test3().fromJSON(
@@ -53,11 +54,12 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
-      test = true;
+      public test = true;
     }
-    const array: Test[] = toSerializable(Test)(
-      [{ a_property: "v1" }, { a_property: "v2" }],
-    );
+    const array: Test[] = toSerializable(Test)([
+      { a_property: "v1" },
+      { a_property: "v2" },
+    ]);
     assertEquals(array.length, 2);
     assert(array[0] instanceof Test);
     assertEquals(array[0].test, "v1");
@@ -69,7 +71,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
-      test = true;
+      public test = true;
     }
     const array: Test[] = toSerializable(Test)([]);
     assertEquals(array.length, 0);
@@ -85,11 +87,11 @@ test({
         this.someClassProp = someClassProp;
       }
       @SerializeProperty()
-      someClassProp: string;
+      public someClassProp: string;
     }
-    const array: Test[] = toSerializable(() => new Test("from_constructor"))(
-      [{}],
-    );
+    const array: Test[] = toSerializable(() => new Test("from_constructor"))([
+      {},
+    ]);
     assertEquals(array.length, 1);
     assertEquals(array[0].someClassProp, "from_constructor");
   },
