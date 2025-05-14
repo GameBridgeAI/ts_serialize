@@ -36,9 +36,6 @@ jobs:
         run: deno fmt --check
         if: matrix.os != 'windows-latest'
 
-      - name: Cache dependencies
-        run: deno cache deno.json
-
       - name: Deno test
         run: deno test --doc
 
