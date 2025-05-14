@@ -29,7 +29,6 @@ and this project adheres to
 - add jsr:@std/cli
 - add jsr:@deno/dnt
 
-
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 
 - NPM Deploy fixes
