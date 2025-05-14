@@ -1,0 +1,10 @@
+{
+  "imports": {
+    "@deno/dnt": "jsr:@deno/dnt@^0.42.1",
+    "@std/assert": "jsr:@std/assert@^1.0.13",
+    "@std/cli": "jsr:@std/cli@^1.0.17"
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}

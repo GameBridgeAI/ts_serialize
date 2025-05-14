@@ -25,17 +25,17 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Deno lint
-        run: deno lint -c tsconfig.json
+        run: deno lint
 
       - name: Deno format check
-        run: deno fmt --check -c tsconfig.json
+        run: deno fmt --check
         if: matrix.os != 'windows-latest'
 
       - name: Cache dependencies
         run: deno cache test_deps.ts
 
       - name: Run deno tests
-        run: deno test --doc -c tsconfig.json
+        run: deno test --doc
 
   build:
     name: Release

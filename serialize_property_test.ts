@@ -1,12 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import {
-  assert,
-  assertEquals,
-  assertStrictEquals,
-  fail,
-  test,
-} from "./test_deps.ts";
+import { assert, assertEquals, assertStrictEquals, fail } from "@std/assert";
 import { JSONObject, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import {
@@ -14,7 +8,7 @@ import {
   ERROR_SYMBOL_PROPERTY_NAME,
 } from "./error_messages.ts";
 
-test({
+Deno.test({
   name: "Serializes properties as propertyName without options",
   fn() {
     class Test extends Serializable {
@@ -27,7 +21,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serializes properties with a string name",
   fn() {
     class Test extends Serializable {
@@ -40,7 +34,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serializes properties with a string name option",
   fn() {
     class Test extends Serializable {
@@ -53,7 +47,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Errors on Symbol named properties",
   fn() {
     try {
@@ -70,7 +64,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Allows Symbol named properties with a string option name",
   fn() {
     const TEST = Symbol("test");
@@ -93,7 +87,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Uses a provided fromJSONStrategy",
   fn() {
     const change = () => `hello world`;
@@ -108,7 +102,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Uses a provided replacer strategy",
   fn() {
     const change = () => `hello world`;
@@ -123,7 +117,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves string type",
   fn() {
     class Test extends Serializable {
@@ -137,7 +131,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves number type",
   fn() {
     class Test extends Serializable {
@@ -152,7 +146,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves boolean type",
   fn() {
     class Test extends Serializable {
@@ -167,7 +161,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves null type",
   fn() {
     class Test extends Serializable {
@@ -179,7 +173,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves object type",
   fn() {
     class Test extends Serializable {
@@ -191,7 +185,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Preserves array type",
   fn() {
     class Test extends Serializable {
@@ -208,7 +202,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Revives an array of `type`",
   fn() {
     class OtherClass extends Serializable {
@@ -231,7 +225,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "custom toJSONStrategy with an array of data",
   fn() {
     class Test extends Serializable {
@@ -244,7 +238,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Will not serialize properties that are not decorated",
   fn() {
     class Test extends Serializable {
@@ -259,7 +253,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Errors on duplicate map keys",
   fn() {
     try {
@@ -277,7 +271,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Inherited class key override serialize",
   fn() {
     class Test1 extends Serializable {
@@ -295,7 +289,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Inherited class key override deserialize",
   fn() {
     class Test1 extends Serializable {
@@ -314,7 +308,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Inherited serialize key override serialize",
   fn() {
     class Test1 extends Serializable {
@@ -331,7 +325,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Inherited serialize key override deserialize",
   fn() {
     class Test1 extends Serializable {
@@ -351,7 +345,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "deserialize nested",
   fn() {
     class Test1 extends Serializable {
@@ -372,7 +366,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serialize nested",
   fn() {
     class Test1 extends Serializable {
@@ -394,7 +388,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serialize arrays of nested objects",
   fn() {
     class Test1 extends Serializable {
@@ -425,7 +419,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serialize key function",
   fn() {
     class Test1 extends Serializable {
@@ -437,7 +431,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Deserialize key function",
   fn() {
     class Test1 extends Serializable {
@@ -451,7 +445,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Serialize key function object",
   fn() {
     class Test1 extends Serializable {
@@ -465,7 +459,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Deserialize key function object",
   fn() {
     class Test1 extends Serializable {
@@ -481,7 +475,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "should be able to serialize a serializable without any properties",
   fn() {
     class TestSerializable extends Serializable {}
@@ -491,7 +485,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "should be able to serialize child class and have it inherit it's parent's serialization logic correctly",
   fn() {
@@ -516,7 +510,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "should be able to serialize grandchild class and have it inherit it's grandparent's serialization logic correctly",
   fn() {

@@ -1,9 +1,9 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, test } from "../../test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { fromJSONDefault } from "./default.ts";
 
-test({
+Deno.test({
   name: "fromJSONDefault passes the value unmodified",
   fn() {
     assertEquals(fromJSONDefault("Hello world"), "Hello world");

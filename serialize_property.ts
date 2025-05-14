@@ -54,7 +54,7 @@ interface SerializePropertyArgumentObject {
 export function SerializeProperty(
   args?: string | SerializePropertyArgument,
 ): PropertyDecorator {
-  return function (target: unknown, propertyName: string | symbol): void {
+  return (target: unknown, propertyName: string | symbol): void => {
     const decoratorArguments = args ?? {};
     const decoratorArgumentOptions = getDecoratorArgumentOptions(
       decoratorArguments,

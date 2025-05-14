@@ -1,12 +1,12 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, test } from "../../test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { fromObjectContaining } from "./from_object_containing.ts";
 import { Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
 import { toSerializable } from "../from_json/to_serializable.ts";
 
-test({
+Deno.test({
   name: "fromObjectContaining builds from Serializable",
   fn() {
     class SomeClass extends Serializable {
@@ -25,7 +25,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "fromObjectContaining uses right keys",
   fn() {
     class SomeClass extends Serializable {
@@ -45,7 +45,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "fromObjectContaining works with array sub-values",
   fn() {
     class SomeClass extends Serializable {
@@ -67,7 +67,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "fromObjectContaining works with nested strategies",
   fn() {
     class TheClass extends Serializable {

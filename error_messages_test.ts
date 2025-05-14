@@ -1,9 +1,9 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
 import * as mod from "./error_messages.ts";
 
-test({
+Deno.test({
   name: "Error messages assertions",
   fn() {
     assert(mod != null);

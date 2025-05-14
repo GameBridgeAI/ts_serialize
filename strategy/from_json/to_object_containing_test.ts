@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, fail, test } from "../../test_deps.ts";
+import { assert, assertEquals, fail } from "@std/assert";
 import { toObjectContaining } from "./to_object_containing.ts";
 import { Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
@@ -9,7 +9,7 @@ import {
   ERROR_TO_OBJECT_CONTAINING_INVALID_VALUE,
 } from "../../error_messages.ts";
 
-test({
+Deno.test({
   name: "toObjectContaining revives using `fromJSON` as type",
   fn() {
     class SomeClass extends Serializable {
@@ -30,7 +30,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toObjectContaining revives using `fromJSON` as type[]",
   fn() {
     class SomeClass extends Serializable {
@@ -54,7 +54,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "toObjectContaining revives subclass as null with null as a subclass value",
   fn() {
@@ -73,7 +73,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toObjectContaining revives as null with null as a value",
   fn() {
     class SomeClass extends Serializable {
@@ -91,7 +91,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toObjectContaining sub-value must be an [object Object]",
   fn() {
     class SomeClass extends Serializable {
@@ -113,7 +113,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toObjectContaining value must be an [object Object]",
   fn() {
     class SomeClass extends Serializable {
@@ -135,7 +135,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "toObjectContaining throws is array sub-value values are not [object Object]",
   fn() {
@@ -163,7 +163,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toObjectContaining works with constructor arguments",
   fn() {
     class SomeClass extends Serializable {

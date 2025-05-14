@@ -1,12 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import {
-  assert,
-  assertEquals,
-  assertStrictEquals,
-  fail,
-  test,
-} from "./test_deps.ts";
+import { assert, assertEquals, assertStrictEquals, fail } from "@std/assert";
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
 import { SerializePropertyOptions } from "./serialize_property.ts";
 import {
@@ -14,14 +8,14 @@ import {
   ERROR_DUPLICATE_SERIALIZE_KEY,
 } from "./error_messages.ts";
 
-test({
+Deno.test({
   name: "SerializePropertyOptionsMap correctly initializes",
   fn() {
     new SerializePropertyOptionsMap();
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap setting a property correctly sets both keys",
   fn() {
@@ -40,7 +34,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "SerializePropertyOptionsMap parent properties are correctly retained",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
@@ -60,7 +54,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "SerializePropertyOptionsMap can properly override a parent property",
   fn() {
     const testParent = new SerializePropertyOptionsMap();
@@ -82,7 +76,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap error when trying to add a duplicate property key",
   fn() {
@@ -100,7 +94,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap error when trying to add a duplicate serialize key",
   fn() {
@@ -118,7 +112,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap parent property key is ignored if overridden by a new child property",
   fn() {
@@ -142,7 +136,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap parent serialize key is ignored if overridden by a new child property",
   fn() {
@@ -166,7 +160,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap can access child object property if replacing an ignored parent property key",
   fn() {
@@ -193,7 +187,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "SerializePropertyOptionsMap an access child object property if replacing an ignored parent serialized key",
   fn() {

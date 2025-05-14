@@ -10,6 +10,7 @@ and this project adheres to
 
 ### Changed
 
+- remove `-c tsconfig` option from `deno` cli calls ... again
 - node/deno version in ci/cd
 - copyright year
 - support deno 2.x+
@@ -20,6 +21,13 @@ and this project adheres to
 - add member accessor for all classes
 - fix #151 Allow the fromSerializationStrategy to handle null in place of an
   serializable object.
+- test use the Deno.test function for shimmed tests with DNT
+- add deno.json
+- add deno.lock
+- remove test_deps.ts and test_deps_test.ts
+- add jsr:@std/assert
+- add jsr:@std/cli
+- add jsr:@deno/dnt
 
 ## [v2.0.1 - v2.0.3] - 2022-04-15
 

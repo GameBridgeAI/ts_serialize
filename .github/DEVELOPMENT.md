@@ -44,10 +44,10 @@ symbols.
 If you find a bug a test case is the right place to start. Test example:
 
 ```ts
-import { assertEquals, test } from "../test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { Serializable, SerializeProperty } from "../mod.ts";
 
-test({
+Deno.test({
   name: "Serialize nested",
   fn() {
     class Test1 extends Serializable {

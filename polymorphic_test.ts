@@ -1,14 +1,8 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
+import { assert, assertEquals, assertNotEquals, fail } from "@std/assert";
 import { JSONObject, Serializable } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
-import {
-  assert,
-  assertEquals,
-  assertNotEquals,
-  fail,
-  test,
-} from "./test_deps.ts";
 import {
   polymorphicClassFromJSON,
   PolymorphicResolver,
@@ -16,7 +10,7 @@ import {
 } from "./polymorphic.ts";
 import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";
 
-test({
+Deno.test({
   name:
     "polymorphicClassFromJSON errors if target class has no polymorphic children",
   fn() {
@@ -33,7 +27,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "should be able to deserialize a polymorphic class using a polymorphic resolver",
   fn() {
@@ -73,7 +67,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic resolver should work for multiple classes",
   fn() {
     class ResolverHelperClass extends Serializable {
@@ -128,7 +122,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -150,7 +144,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch should ignore classes that aren't serializable",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -173,7 +167,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "polymorphic switch should not be able to serialize properties that aren't serializable",
   fn() {
@@ -197,7 +191,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch symbol property name",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -221,7 +215,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch resolver works across multiple properties",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -246,7 +240,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch resolver works with multiple classes",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -301,7 +295,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "should throw an error if the polymorphic class trying to be resolved doesn't exist",
   fn() {
@@ -327,7 +321,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch supports custom tsTransformKeys",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -353,7 +347,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch supports inherited custom tsTransformKeys",
   fn() {
     abstract class AbstractClass extends Serializable {
@@ -379,7 +373,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch supports custom property names",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -401,7 +395,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch custom fromJSONStrategy",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -424,7 +418,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch custom test",
   fn() {
     abstract class AbstractClass extends Serializable {}
@@ -447,7 +441,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "polymorphic switch complex custom test",
   fn() {
     abstract class AbstractClass extends Serializable {}
