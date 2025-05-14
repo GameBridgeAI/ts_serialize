@@ -1,7 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals } from "@std/assert";
-import { test } from "@std/testing/bdd";
 import { Serializable } from "../../serializable.ts";
 import {
   SerializeProperty,
@@ -19,7 +18,7 @@ function FromSerializable(propertyName?: string): PropertyDecorator {
   return SerializeProperty(opts);
 }
 
-test({
+Deno.test({
   name: "fromSerializable - arrays of nested objects",
   fn() {
     class Test1 extends Serializable {
@@ -44,7 +43,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "fromSerializable - arrays of nested objects with an object set to null",
   fn() {
@@ -71,7 +70,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "fromSerializable - single serializable objects",
   fn() {
     class Test1 extends Serializable {
@@ -96,7 +95,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "fromSerializable - single serializable objects with an object set to null",
   fn() {

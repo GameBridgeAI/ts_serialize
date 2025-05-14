@@ -1,9 +1,8 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 import { assertEquals } from "@std/assert";
-import { test } from "@std/testing/bdd";
 import { composeStrategy } from "./compose_strategy.ts";
 
-test({
+Deno.test({
   name: "composeStrategy composes a List of functions",
   fn() {
     const addLetter = (letter: string) => (v: string) => `${v}${letter}`;

@@ -1,12 +1,11 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assertEquals } from "@std/assert";
-import { test } from "@std/testing/bdd";
 import { getNewSerializable } from "./utils.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
 
-test({
+Deno.test({
   name: "getNewSerializable takes a function that returns a Serializable",
   fn() {
     class A extends Serializable {
@@ -25,7 +24,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "getNewSerializable takes a Serializable",
   fn() {
     class A extends Serializable {

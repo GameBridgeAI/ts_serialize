@@ -1,12 +1,11 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { assert, assertEquals } from "@std/assert";
-import { test } from "@std/testing/bdd";
 import { toSerializable } from "./to_serializable.ts";
 import { JSONObject, Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
 
-test({
+Deno.test({
   name: "toSerializable revives using `fromJSON` as type",
   fn() {
     class Test extends Serializable {
@@ -19,7 +18,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toSerializable works in nested properties",
   fn() {
     class Test1 extends Serializable {
@@ -50,7 +49,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toSerializable works with arrays of objects",
   fn() {
     class Test extends Serializable {
@@ -67,7 +66,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toSerializable works with empty arrays",
   fn() {
     class Test extends Serializable {
@@ -79,7 +78,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toSerializable works with constructor args",
   fn() {
     class Test extends Serializable {
@@ -98,7 +97,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "Revives an empty array of `type`",
   fn() {
     class OtherClass extends Serializable {
