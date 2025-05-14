@@ -1,6 +1,7 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "../../test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
+import { test } from "@std/testing/bdd";
 import { toSerializable } from "./to_serializable.ts";
 import { JSONObject, Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
@@ -54,7 +55,7 @@ test({
   fn() {
     class Test extends Serializable {
       @SerializeProperty("a_property")
-      public test = true;
+      public test = "v0";
     }
     const array: Test[] = toSerializable(Test)([
       { a_property: "v1" },

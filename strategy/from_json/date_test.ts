@@ -1,6 +1,7 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, fail, test } from "../../test_deps.ts";
+import { assert, assertEquals, fail } from "@std/assert";
+import { test } from "@std/testing/bdd";
 import { createDateStrategy, iso8601Date } from "./date.ts";
 import { Serializable, SerializeProperty } from "../../mod.ts";
 import { ERROR_INVALID_DATE } from "../../error_messages.ts";

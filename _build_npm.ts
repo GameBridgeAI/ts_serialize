@@ -1,9 +1,9 @@
-#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm --allow-net=deno.land
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm --allow-net=deno.land,jsr.io
 
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { build, emptyDir } from "https://deno.land/x/dnt@0.22.0/mod.ts";
-import { parse } from "https://deno.land/std@0.133.0/flags/mod.ts";
+import { build, emptyDir } from "@deno/dnt";
+import { parseArgs } from "@std/cli";
 
 const entryPointDefault = "./mod.ts";
 const outDirDefault = "./dist";
@@ -36,7 +36,7 @@ function printHelpText(message = "") {
   Deno.exit(0);
 }
 
-const flags = parse(Deno.args, {
+const flags = parseArgs(Deno.args, {
   string: ["v", "e", "o"],
   boolean: ["h"],
   alias: { h: "help", e: "entry-point", v: "version", o: "out" },
@@ -48,13 +48,16 @@ if (flags.h) {
   printHelpText();
 }
 
+await Deno.remove(`${flags.o}`, { recursive: true }).catch((_) => {});
+
 try {
   await emptyDir(flags.o);
 
   await build({
+    importMap: "./deno.json",
     entryPoints: [flags.e],
     outDir: flags.o,
-    compilerOptions: { target: "ES2021" },
+    compilerOptions: { lib: ["ESNext"], experimentalDecorators: true },
     shims: {
       deno: true,
     },
