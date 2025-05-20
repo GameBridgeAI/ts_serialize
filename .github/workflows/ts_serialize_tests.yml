@@ -55,4 +55,4 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: deno task build
+        run: ./_build_npm.ts
