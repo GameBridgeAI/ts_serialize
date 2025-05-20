@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v2.1.0] - 2025-05-08
+## [v3.0.0] - 2025-05-08
 
 ### Changed
 
+- _breaking:_ drop deno@v1 support
+- 100% test coverage
+- use deno `task` for tasks
 - remove `-c tsconfig` option from `deno` cli calls ... again
 - node/deno version in ci/cd
 - copyright year
