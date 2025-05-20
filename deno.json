@@ -49,7 +49,7 @@
       "description": "Run tests with coverage",
       "command": "deno test --coverage=coverage"
     },
-    "coverage-html": {
+    "coverage:html": {
       "description": "Generate HTML coverage report",
       "command": "deno coverage --lcov coverage > coverage/lcov.info && deno coverage --html coverage"
     }
