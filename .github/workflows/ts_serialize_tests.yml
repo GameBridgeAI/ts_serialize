@@ -55,4 +55,5 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: ./_build_npm.ts
+        run: deno task build
+        if: matrix.os == 'ubuntu-latest'
