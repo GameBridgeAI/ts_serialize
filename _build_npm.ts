@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm
+#!/usr/bin/env -S deno run --allow-env --allow-read --allow-write --allow-run=npm --allow-net=jsr.io
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import { build, emptyDir } from "@deno/dnt";
