@@ -1,5 +1,6 @@
 deno.d.ts
 dist
+coverage
 ts_serialize_coverage
 ts_serialize_coverage.lcov
 .DS_Store

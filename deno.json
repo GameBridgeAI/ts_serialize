@@ -4,7 +4,54 @@
     "@std/assert": "jsr:@std/assert@^1.0.13",
     "@std/cli": "jsr:@std/cli@^1.0.17"
   },
+  "lock": false,
   "compilerOptions": {
     "experimentalDecorators": true
+  },
+  "fmt": {
+    "include": ["./"],
+    "exclude": ["./dist"]
+  },
+  "test": {
+    "include": ["./"],
+    "exclude": ["./dist"]
+  },
+  "lint": {
+    "include": ["./"],
+    "exclude": ["./dist"]
+  },
+  "typeCheck": {
+    "include": ["./"],
+    "exclude": ["./dist"]
+  },
+  "tasks": {
+    "build": {
+      "description": "Build the project for npm, pass in your flags to override the defaults",
+      "command": "./_build_npm.ts -v v0.0.0-test -e ./mod.ts -o ./dist"
+    },
+    "test": {
+      "description": "Run tests",
+      "command": "deno test"
+    },
+    "lint": {
+      "description": "Run linting",
+      "command": "deno lint"
+    },
+    "fmt": {
+      "description": "Run formatting",
+      "command": "deno fmt"
+    },
+    "check": {
+      "description": "Run type checking",
+      "command": "deno check"
+    },
+    "coverage": {
+      "description": "Run tests with coverage",
+      "command": "deno test --coverage=coverage"
+    },
+    "coverage-html": {
+      "description": "Generate HTML coverage report",
+      "command": "deno coverage --lcov coverage > coverage/lcov.info && deno coverage --html coverage"
+    }
   }
 }
