@@ -17,7 +17,7 @@ jobs:
 
     strategy:
       matrix:
-        deno: ["v1.x", "v2.x"]
+        deno: ["v2.x"]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -38,25 +38,6 @@ jobs:
 
       - name: Deno test
         run: deno task test --doc
-
-  npm-build-test:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macOS-latest, windows-latest, ubuntu-latest]
-        deno: ["v2.x"]
-
-    needs: test
-
-    steps:
-      - name: Setup repo
-        uses: actions/checkout@v2
-
-      - name: Setup deno
-        uses: denolib/setup-deno@v2
-        with:
-          deno-version: ${{ matrix.deno }}
 
       - name: Setup node
         uses: actions/setup-node@v1
