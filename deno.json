@@ -29,10 +29,6 @@
       "description": "Build the project for npm, pass in your flags to override the defaults",
       "command": "./_build_npm.ts -v v0.0.0-test -e ./mod.ts -o ./dist"
     },
-    "test": {
-      "description": "Run tests",
-      "command": "deno test"
-    },
     "lint": {
       "description": "Run linting",
       "command": "deno lint"
@@ -41,17 +37,17 @@
       "description": "Run formatting",
       "command": "deno fmt"
     },
-    "check": {
-      "description": "Run type checking",
-      "command": "deno check"
+    "test": {
+      "description": "Run tests",
+      "command": "deno test --doc"
     },
-    "coverage": {
+    "test:coverage": {
       "description": "Run tests with coverage",
-      "command": "deno test --coverage=coverage"
+      "command": "deno test --coverage=coverage --doc"
     },
-    "coverage:html": {
-      "description": "Generate HTML coverage report",
-      "command": "deno coverage --lcov coverage > coverage/lcov.info && deno coverage --html coverage"
+    "test:coverage:report": {
+      "description": "Generate coverage report",
+      "command": "deno coverage --lcov coverage > coverage/lcov.info"
     }
   }
 }
