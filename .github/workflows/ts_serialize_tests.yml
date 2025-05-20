@@ -30,14 +30,23 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Deno lint
-        run: deno lint
+        run: deno task lint
 
       - name: Deno format check
-        run: deno fmt --check
+        run: deno task fmt --check
         if: matrix.os != 'windows-latest'
 
       - name: Deno test
-        run: deno test --doc
+        run: deno task test:coverage
+
+      - name: Generate coverage report
+        run: deno task test:coverage:report
+
+      - name: Coverage report
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: "./coverage/lcov.info"
+          min_coverage: 100
 
       - name: Setup node
         uses: actions/setup-node@v1
@@ -46,4 +55,5 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: ./_build_npm.ts
+        run: deno task build
+        if: matrix.os == 'ubuntu-latest'
