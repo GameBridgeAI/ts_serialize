@@ -30,14 +30,33 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Deno lint
-        run: deno lint
+        run: deno task lint
 
       - name: Deno format check
-        run: deno fmt --check
+        run: deno task fmt --check
         if: matrix.os != 'windows-latest'
 
       - name: Deno test
-        run: deno test --doc
+        run: deno task test --doc
+
+  npm-build-test:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+        deno: ["v2.x"]
+
+    needs: test
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Setup deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: ${{ matrix.deno }}
 
       - name: Setup node
         uses: actions/setup-node@v1
@@ -46,4 +65,4 @@ jobs:
           registry-url: https://registry.npmjs.org/
 
       - name: Build and test NPM module
-        run: ./_build_npm.ts
+        run: deno task build
