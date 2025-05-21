@@ -12,7 +12,7 @@ on:
     branches: ["**"]
 
 jobs:
-  test_v1:
+  deno_v1:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -32,10 +32,10 @@ jobs:
       - name: Deno test
         run: deno test
 
-  test:
+  deno_v2_and_up:
     runs-on: ${{ matrix.os }}
 
-    needs: test_v1
+    needs: deno_v1
 
     strategy:
       matrix:
