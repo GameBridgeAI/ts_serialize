@@ -12,12 +12,33 @@ on:
     branches: ["**"]
 
 jobs:
-  test:
+  test_v1:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        deno: ["v2.x"]
+        os: [macOS-latest, windows-latest, ubuntu-latest]
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v2
+
+      - name: Setup deno
+        uses: denolib/setup-deno@v2
+        with:
+          deno-version: v1.x
+
+      - name: Deno test
+        run: deno test
+
+  test:
+    runs-on: ${{ matrix.os }}
+
+    needs: test_v1
+
+    strategy:
+      matrix:
+        deno: [v2.x]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -45,7 +66,7 @@ jobs:
       - name: Coverage report
         uses: VeryGoodOpenSource/very_good_coverage@v2
         with:
-          path: "./coverage/lcov.info"
+          path: ./coverage/lcov.info
           min_coverage: 100
 
       - name: Setup node
