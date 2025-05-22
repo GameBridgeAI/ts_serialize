@@ -122,3 +122,29 @@ Deno.test({
     );
   },
 });
+
+Deno.test({
+  name: "fromSerializable - arrays of null",
+  only: true,
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      public serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @FromSerializable("outer_property")
+      public nested: (Test1 | null)[] = [null, new Test1(), null];
+    }
+
+    class Test3 extends Serializable {
+      @FromSerializable("outer_outer_property")
+      public nested2: (Test2 | null)[] = [null, new Test2(), null];
+    }
+    const testObj = new Test3();
+
+    assertEquals(
+      testObj.toJSON(),
+      `{"outer_outer_property":[null,{"outer_property":[null,{"nested_property":999},null]},null]}`,
+    );
+  },
+});
