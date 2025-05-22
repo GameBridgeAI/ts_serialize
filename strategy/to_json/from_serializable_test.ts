@@ -125,7 +125,6 @@ Deno.test({
 
 Deno.test({
   name: "fromSerializable - arrays of null",
-  only: true,
   fn() {
     class Test1 extends Serializable {
       @SerializeProperty("nested_property")
