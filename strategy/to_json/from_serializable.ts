@@ -5,9 +5,9 @@ import { ToJSONStrategy } from "../compose_strategy.ts";
 
 /** serialize data using `tsSerialize` on a subclass Serializable type */
 export function fromSerializable(): ToJSONStrategy {
-  return (value: Serializable[] | null): JSONValue => {
+  return (value: (Serializable | null)[] | null): JSONValue => {
     if (Array.isArray(value)) {
-      return value.map((item) => item.tsSerialize());
+      return value.map((item) => item ? item.tsSerialize() : item);
     }
     return value;
   };
