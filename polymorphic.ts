@@ -204,7 +204,7 @@ function resolvePolymorphicSwitch(
 /** Uses either the polymorphic resolver or the polymorphic switch resolver to determine the
  * appropriate class, then deserialize the input using Serializable#fromJSON, returning the result
  */
-export function polymorphicClassFromJSON<const T extends Serializable>(
+export function polymorphicClassFromJSON<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
   json: string | JSONObject,
 ): T {
@@ -214,7 +214,7 @@ export function polymorphicClassFromJSON<const T extends Serializable>(
 /** Calls the polymorphic resolver or polymorphic switch resolver for the provided class prototype
  * and input, and returns the initialized child class. Throws an exception if no class can be resolved
  */
-function resolvePolymorphicClass<const T extends Serializable>(
+function resolvePolymorphicClass<T extends Serializable>(
   classPrototype: unknown & { prototype: T },
   json: string | JSONObject,
 ): T {

@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assertEquals, test } from "../../test_deps.ts";
+import { assertEquals } from "@std/assert";
 import { Serializable } from "../../serializable.ts";
 import {
   SerializeProperty,
@@ -18,7 +18,7 @@ function FromSerializable(propertyName?: string): PropertyDecorator {
   return SerializeProperty(opts);
 }
 
-test({
+Deno.test({
   name: "fromSerializable - arrays of nested objects",
   fn() {
     class Test1 extends Serializable {
@@ -43,7 +43,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "fromSerializable - arrays of nested objects with an object set to null",
   fn() {
@@ -70,7 +70,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "fromSerializable - single serializable objects",
   fn() {
     class Test1 extends Serializable {
@@ -95,7 +95,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "fromSerializable - single serializable objects with an object set to null",
   fn() {
@@ -119,6 +119,31 @@ test({
     assertEquals(
       testObj.toJSON(),
       `{"outer_outer_property":null}`,
+    );
+  },
+});
+
+Deno.test({
+  name: "fromSerializable - arrays of null",
+  fn() {
+    class Test1 extends Serializable {
+      @SerializeProperty("nested_property")
+      public serializeMe = 999;
+    }
+    class Test2 extends Serializable {
+      @FromSerializable("outer_property")
+      public nested: (Test1 | null)[] = [null, new Test1(), null];
+    }
+
+    class Test3 extends Serializable {
+      @FromSerializable("outer_outer_property")
+      public nested2: (Test2 | null)[] = [null, new Test2(), null];
+    }
+    const testObj = new Test3();
+
+    assertEquals(
+      testObj.toJSON(),
+      `{"outer_outer_property":[null,{"outer_property":[null,{"nested_property":999},null]},null]}`,
     );
   },
 });

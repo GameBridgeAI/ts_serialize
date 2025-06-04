@@ -1,12 +1,12 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, fail, test } from "./test_deps.ts";
+import { assert, assertEquals, fail } from "@std/assert";
 import { Serializable, toPojo, TransformKey } from "./serializable.ts";
 import { SerializeProperty } from "./serialize_property.ts";
 import { toSerializable } from "./strategy/from_json/to_serializable.ts";
 import { ERROR_MISSING_PROPERTIES_MAP } from "./error_messages.ts";
 
-test({
+Deno.test({
   name: "adds methods to extended classes",
   fn() {
     class TestClass extends Serializable {
@@ -27,7 +27,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "does not run TransformKey if not implemented",
   fn() {
     class TestTransformKey extends Serializable {
@@ -43,7 +43,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "runs TransformKey without implementation declaration",
   fn() {
     class TestTransformKey extends Serializable {
@@ -63,7 +63,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "implements TransformKey to children",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
@@ -99,7 +99,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "implements TransformKey to children and children can change",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
@@ -152,7 +152,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "implements TransformKey but respects override as string",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
@@ -180,7 +180,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "implements TransformKey but respects override as property",
   fn() {
     class TestTransformKey extends Serializable implements TransformKey {
@@ -208,7 +208,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name:
     "Nested fields shouldn't overwrite containing class fields of the same name",
   fn() {
@@ -234,7 +234,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "deserialize recursive nested with same field",
   fn() {
     class Test1 extends Serializable {
@@ -271,7 +271,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "toPojo errors with no context",
   fn() {
     try {
@@ -287,7 +287,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "default strategy with array values",
   fn() {
     class Test extends Serializable {
@@ -299,7 +299,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "clones an object",
   fn() {
     class Clone extends Serializable {
@@ -311,7 +311,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "clones as a new reference",
   fn() {
     class Clone extends Serializable {

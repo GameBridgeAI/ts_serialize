@@ -1,11 +1,11 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, fail, test } from "../../test_deps.ts";
+import { assert, assertEquals, fail } from "@std/assert";
 import { createDateStrategy, iso8601Date } from "./date.ts";
 import { Serializable, SerializeProperty } from "../../mod.ts";
 import { ERROR_INVALID_DATE } from "../../error_messages.ts";
 
-test({
+Deno.test({
   name: "createDateStrategy - creates strategy from regex",
   fn() {
     class Test extends Serializable {
@@ -20,7 +20,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "createDateStrategy - Will not deserialize non date strings",
   fn() {
     class Test extends Serializable {
@@ -39,7 +39,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "iso8601Date - Will not deserialize non date strings",
   fn() {
     class Test extends Serializable {
@@ -58,7 +58,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "iso8601Date parses with milliseconds - 2020-12-31T12:00:00.300Z",
   fn() {
     class Test extends Serializable {
@@ -73,7 +73,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "iso8601Date parses without milliseconds - 2020-12-31T12:00:00Z",
   fn() {
     class Test extends Serializable {
@@ -88,7 +88,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "iso8601Date parses with added timezone - 2020-12-31T00:00:00-07:00",
   fn() {
     class Test extends Serializable {
@@ -103,7 +103,7 @@ test({
   },
 });
 
-test({
+Deno.test({
   name: "createDateStrategy - throws on invalid dates",
   fn() {
     class Test extends Serializable {

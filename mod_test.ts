@@ -1,9 +1,9 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, test } from "./test_deps.ts";
+import { assert, assertEquals } from "@std/assert";
 import * as mod from "./mod.ts";
 
-test({
+Deno.test({
   name: "Public API assertions",
   fn() {
     assert(mod != null);

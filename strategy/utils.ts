@@ -7,10 +7,15 @@ export type NewSerializable<T> = T & (new () => Serializable);
 export type FunctionSerializable = () => Serializable;
 /** get new strategy type arguments */
 export function getNewSerializable(type: unknown): Serializable {
-  if (isNewable(type)) {
+  const isNewableType = isNewable(type);
+  if (isNewableType && type.prototype instanceof Serializable) {
     return new type();
-  } else if (isFunctionSerializable(type)) {
-    return type();
+  } else if (!isNewableType && isFunctionSerializable(type)) {
+    const instance = type();
+    if (instance instanceof Serializable) {
+      return instance;
+    }
   }
+
   throw new Error(ERROR_GET_NEW_SERIALIZABLE_SERIALIZABLE_NOT_RETURNED);
 }
