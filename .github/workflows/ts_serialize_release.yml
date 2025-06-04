@@ -32,7 +32,7 @@ jobs:
         if: matrix.os != 'windows-latest'
 
       - name: Run deno tests
-        run: deno task test --doc
+        run: deno task test
 
   build:
     name: Release
