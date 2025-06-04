@@ -17,7 +17,7 @@ Deno.test({
     }
     assertEquals(new Test().toJSON(), `{"testName":"toJSON"}`);
     const testObj = new Test().fromJSON(`{"testName":"fromJSON"}`);
-    assertEquals(testObj.testName, "fromJSON");
+    assertEquals(testObj.testName, "fromJSON1");
   },
 });
 
