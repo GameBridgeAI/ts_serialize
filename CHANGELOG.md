@@ -22,7 +22,7 @@ and this project adheres to
 - adds wrapper for error messages
 - add member accessor for all classes
 - fix #151 Allow the fromSerializationStrategy to handle null in place of a
-serializable object.
+  serializable object.
 - test use the Deno.test function for shimmed tests with DNT
 - add deno.json
 - remove test_deps.ts and test_deps_test.ts
