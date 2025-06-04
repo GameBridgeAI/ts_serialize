@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [v2.1.0] - 2025-05-08
+## [v2.1.0] - 2025-06-04
 
 ### Changed
 
@@ -19,13 +19,12 @@ and this project adheres to
 - support node 22
 - add typescript hints for overrides
 - `catch(e)` where `e` is now `unknown` previously `any`
-  - adds wrapper for error messages
+- adds wrapper for error messages
 - add member accessor for all classes
-- fix #151 Allow the fromSerializationStrategy to handle null in place of an
+- fix #151 Allow the fromSerializationStrategy to handle null in place of a
   serializable object.
 - test use the Deno.test function for shimmed tests with DNT
 - add deno.json
-- add deno.lock
 - remove test_deps.ts and test_deps_test.ts
 - add jsr:@std/assert
 - add jsr:@std/cli
