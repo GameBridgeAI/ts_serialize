@@ -14,9 +14,6 @@
       "**/*.test.ts"
     ]
   },
-  "compilerOptions": {
-    "experimentalDecorators": true
-  },
   "tasks": {
     "test": {
       "description": "Run tests",
@@ -30,5 +27,8 @@
       "description": "Generate coverage report",
       "command": "deno coverage --lcov coverage > coverage/lcov.info"
     }
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true
   }
 }
