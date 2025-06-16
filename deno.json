@@ -16,17 +16,8 @@
     ]
   },
   "tasks": {
-    "test": {
-      "description": "Run tests",
-      "command": "deno test --doc --parallel"
-    },
-    "test:coverage": {
-      "description": "Run tests with coverage",
-      "command": "deno test --parallel --coverage=./coverage"
-    },
-    "test:coverage:report": {
-      "description": "Generate coverage report",
-      "command": "deno coverage --lcov ./coverage > ./coverage/lcov.info"
-    }
+    "test": "deno test --doc --parallel",
+    "test:coverage": "deno test --doc --parallel --coverage=./coverage",
+    "test:coverage:report": "deno coverage --lcov ./coverage > ./coverage/lcov.info"
   }
 }
