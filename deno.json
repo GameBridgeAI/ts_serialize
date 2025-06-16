@@ -1,4 +1,17 @@
 {
+  "name": "@gamebridge/ts_serialize",
+  "version": "v2.1.0",
+   "exports": {
+    ".": "./mod.ts"
+   },
+  "publish": {
+    "exclude": [
+      ".github",
+      ".vim",
+      ".vscode",
+      "**/*_test.ts"
+    ]
+  },
   "imports": {
     "@deno/dnt": "jsr:@deno/dnt@^0.42.1",
     "@std/assert": "jsr:@std/assert@^1.0.13",
@@ -9,19 +22,15 @@
     "experimentalDecorators": true
   },
   "fmt": {
-    "include": ["./"],
     "exclude": ["./dist"]
   },
   "test": {
-    "include": ["./"],
     "exclude": ["./dist"]
   },
   "lint": {
-    "include": ["./"],
     "exclude": ["./dist"]
   },
   "typeCheck": {
-    "include": ["./"],
     "exclude": ["./dist"]
   },
   "tasks": {

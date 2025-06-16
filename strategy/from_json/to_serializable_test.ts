@@ -2,7 +2,7 @@
 
 import { assert, assertEquals } from "@std/assert";
 import { toSerializable } from "./to_serializable.ts";
-import { JSONObject, Serializable } from "../../serializable.ts";
+import { type JSONObject, Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
 
 Deno.test({
