@@ -25,7 +25,7 @@
     },
     "test:coverage": {
       "description": "Run tests with coverage",
-      "command": "deno test --coverage=coverage --doc"
+      "command": "deno test --doc --coverage=coverage"
     },
     "test:coverage:report": {
       "description": "Generate coverage report",
