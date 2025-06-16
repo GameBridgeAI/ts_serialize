@@ -22,11 +22,11 @@
     },
     "test:coverage": {
       "description": "Run tests with coverage",
-      "command": "deno test --doc --parallel --coverage=coverage"
+      "command": "deno test --doc --parallel --coverage=./coverage"
     },
     "test:coverage:report": {
       "description": "Generate coverage report",
-      "command": "deno coverage --lcov coverage > coverage/lcov.info"
+      "command": "deno coverage --lcov ./coverage > ./coverage/lcov.info"
     }
   }
 }
