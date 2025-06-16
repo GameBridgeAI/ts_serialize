@@ -15,7 +15,6 @@
     ]
   },
   "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.42.1",
     "@std/assert": "jsr:@std/assert@^1.0.13",
     "@std/cli": "jsr:@std/cli@^1.0.17"
   },
@@ -24,10 +23,6 @@
     "experimentalDecorators": true
   },
   "tasks": {
-    "build": {
-      "description": "Build the project for npm, pass in your flags to override the defaults",
-      "command": "./_build_npm.ts -v v0.0.0-test -e ./mod.ts -o ./dist"
-    },
     "lint": {
       "description": "Run linting",
       "command": "deno lint"
@@ -47,6 +42,10 @@
     "test:coverage:report": {
       "description": "Generate coverage report",
       "command": "deno coverage --lcov coverage > coverage/lcov.info"
+    },
+    "publish": {
+      "description": "Publish the package to jsr.io",
+      "command": "deno publish"
     }
   }
 }
