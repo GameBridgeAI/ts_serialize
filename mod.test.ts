@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals } from "@std/assert";
+import { assert, assertEquals } from "./deps_test.ts";
 import * as mod from "./mod.ts";
 
 Deno.test({

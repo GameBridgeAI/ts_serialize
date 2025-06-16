@@ -1,5 +1,5 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
-import { assertEquals } from "@std/assert";
+import { assertEquals } from "../deps_test.ts";
 import { composeStrategy } from "./compose_strategy.ts";
 
 Deno.test({
