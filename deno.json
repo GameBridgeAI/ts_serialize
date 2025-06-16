@@ -1,9 +1,9 @@
 {
   "name": "@gamebridge/ts_serialize",
   "version": "v2.1.0",
-   "exports": {
+  "exports": {
     ".": "./mod.ts"
-   },
+  },
   "publish": {
     "exclude": [
       ".github",

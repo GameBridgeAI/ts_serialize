@@ -1,6 +1,10 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import type { JSONObject, JSONValue, Serializable } from "../../serializable.ts";
+import type {
+  JSONObject,
+  JSONValue,
+  Serializable,
+} from "../../serializable.ts";
 import type { ToJSONStrategy } from "../compose_strategy.ts";
 
 /** convert `{ [_: string]: Serializable }` to `{ [_: string]: Serializable.tsSerialize() }` */
