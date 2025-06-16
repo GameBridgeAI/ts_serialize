@@ -1,6 +1,9 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals, fail } from "../deps_test.ts";
+import { fail } from "@std/assert/fail";
+import { assert } from "@std/assert";
+import { assertEquals } from "@std/assert/equals";
+
 import { getNewSerializable } from "./utils.ts";
 import { Serializable } from "../serializable.ts";
 import { SerializeProperty } from "../serialize_property.ts";
