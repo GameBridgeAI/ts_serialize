@@ -23,14 +23,6 @@
     "experimentalDecorators": true
   },
   "tasks": {
-    "lint": {
-      "description": "Run linting",
-      "command": "deno lint"
-    },
-    "fmt": {
-      "description": "Run formatting",
-      "command": "deno fmt"
-    },
     "test": {
       "description": "Run tests",
       "command": "deno test --doc"
@@ -42,10 +34,6 @@
     "test:coverage:report": {
       "description": "Generate coverage report",
       "command": "deno coverage --lcov coverage > coverage/lcov.info"
-    },
-    "publish": {
-      "description": "Publish the package to jsr.io",
-      "command": "deno publish"
     }
   }
 }

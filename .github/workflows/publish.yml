@@ -1,0 +1,22 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      # using npx to avoid needing to install deno
+      # --dry-run is used to avoid publishing the module
+      # until we can figure out how to handle the jsr.io publishing
+      # with the @gamebridge account admin
+      #  we'll need to rename the module to @gamebridge/serialize or something similar
+      # because `_` are not allowed in module names... :facepalm:
+      - run: npx jsr publish --dry-run

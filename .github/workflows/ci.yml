@@ -5,19 +5,15 @@
 
 name: tests
 
-on:
-  push:
-    branches: ["**"]
-  pull_request:
-    branches: ["**"]
+on: [push, pull_request]
 
 jobs:
-  deno_v1:
+  tests:
     runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
-        deno: [v1.x]
+        deno: [v1.x, canary]
         os: [macOS-latest, windows-latest, ubuntu-latest]
 
     steps:
@@ -28,35 +24,13 @@ jobs:
         uses: denolib/setup-deno@v2
         with:
           deno-version: ${{ matrix.deno }}
-
-      - name: Deno test
-        run: deno test
-
-  deno_v2_and_up:
-    runs-on: ${{ matrix.os }}
-
-    needs: deno_v1
-
-    strategy:
-      matrix:
-        deno: [v2.x]
-        os: [macOS-latest, windows-latest, ubuntu-latest]
-
-    steps:
-      - name: Setup repo
-        uses: actions/checkout@v2
-
-      - name: Setup deno
-        uses: denolib/setup-deno@v2
-        with:
-          deno-version: ${{ matrix.deno }}
-
-      - name: Deno lint
-        run: deno task lint
 
       - name: Deno format check
-        run: deno task fmt --check
+        run: deno fmt --check
         if: matrix.os != 'windows-latest'
+
+      - name: Deno lint
+        run: deno lint
 
       - name: Deno test
         run: deno task test:coverage
@@ -70,12 +44,6 @@ jobs:
           path: ./coverage/lcov.info
           min_coverage: 100
 
-      - name: Setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org/
-
-      - name: Build and test NPM module
-        run: deno task build
+      - name: Publish module to jsr.io
+        run: deno publish --dry-run
         if: matrix.os == 'ubuntu-latest'
