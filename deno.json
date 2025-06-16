@@ -23,18 +23,6 @@
   "compilerOptions": {
     "experimentalDecorators": true
   },
-  "fmt": {
-    "exclude": ["./dist"]
-  },
-  "test": {
-    "exclude": ["./dist"]
-  },
-  "lint": {
-    "exclude": ["./dist"]
-  },
-  "typeCheck": {
-    "exclude": ["./dist"]
-  },
   "tasks": {
     "build": {
       "description": "Build the project for npm, pass in your flags to override the defaults",
