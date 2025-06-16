@@ -19,5 +19,8 @@
     "test": "deno test --doc --parallel",
     "test:coverage": "deno test --doc --parallel --coverage=./coverage",
     "test:coverage:report": "deno coverage --lcov ./coverage > ./coverage/lcov.info"
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true
   }
 }
