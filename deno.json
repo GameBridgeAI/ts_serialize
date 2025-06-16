@@ -4,6 +4,7 @@
   "exports": {
     ".": "./mod.ts"
   },
+  "lock": false,
   "publish": {
     "exclude": [
       ".github",
@@ -27,8 +28,5 @@
       "description": "Generate coverage report",
       "command": "deno coverage --lcov coverage > coverage/lcov.info"
     }
-  },
-  "compilerOptions": {
-    "experimentalDecorators": true
   }
 }
