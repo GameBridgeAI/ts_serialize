@@ -1,9 +1,9 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
+import { type Serializable, SERIALIZABLE_CLASS_MAP } from "./serializable.ts";
 
 import { SerializePropertyOptionsMap } from "./serialize_property_options_map.ts";
-import {
+import type {
   FromJSONStrategy,
   ToJSONStrategy,
 } from "./strategy/compose_strategy.ts";

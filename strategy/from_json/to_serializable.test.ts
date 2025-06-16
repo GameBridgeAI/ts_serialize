@@ -1,8 +1,10 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { assert, assertEquals } from "@std/assert";
+import { assert } from "@std/assert";
+import { assertEquals } from "@std/assert/equals";
+
 import { toSerializable } from "./to_serializable.ts";
-import { JSONObject, Serializable } from "../../serializable.ts";
+import { type JSONObject, Serializable } from "../../serializable.ts";
 import { SerializeProperty } from "../../serialize_property.ts";
 
 Deno.test({

@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { JSONValue } from "../serializable.ts";
+import type { JSONValue } from "../serializable.ts";
 
 /** Functions used when hydrating data. While we do know that the incoming param
  * is a JSONValue, this forces authors using the library to recast the known

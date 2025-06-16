@@ -1,53 +1,33 @@
 {
+  "name": "@gamebridge/ts_serialize",
+  "version": "v2.1.0",
+  "exports": {
+    ".": "./mod.ts"
+  },
   "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.42.1",
-    "@std/assert": "jsr:@std/assert@^1.0.13",
-    "@std/cli": "jsr:@std/cli@^1.0.17"
+    "@std/assert": "jsr:@std/assert@^1.0/assert",
+    "@std/assert/equals": "jsr:@std/assert@^1.0/equals",
+    "@std/assert/assertStrictEquals": "jsr:@std/assert@^1.0/strict-equals",
+    "@std/assert/assertNotEquals": "jsr:@std/assert@^1.0/not-equals",
+    "@std/assert/fail": "jsr:@std/assert@^1.0/fail"
   },
   "lock": false,
-  "compilerOptions": {
-    "experimentalDecorators": true
-  },
-  "fmt": {
-    "include": ["./"],
-    "exclude": ["./dist"]
-  },
-  "test": {
-    "include": ["./"],
-    "exclude": ["./dist"]
-  },
-  "lint": {
-    "include": ["./"],
-    "exclude": ["./dist"]
-  },
-  "typeCheck": {
-    "include": ["./"],
-    "exclude": ["./dist"]
+  "publish": {
+    "exclude": [
+      ".github",
+      ".vim",
+      ".vscode",
+      "coverage",
+      ".editorconfig",
+      "**/*.test.ts"
+    ]
   },
   "tasks": {
-    "build": {
-      "description": "Build the project for npm, pass in your flags to override the defaults",
-      "command": "./_build_npm.ts -v v0.0.0-test -e ./mod.ts -o ./dist"
-    },
-    "lint": {
-      "description": "Run linting",
-      "command": "deno lint"
-    },
-    "fmt": {
-      "description": "Run formatting",
-      "command": "deno fmt"
-    },
-    "test": {
-      "description": "Run tests",
-      "command": "deno test --doc"
-    },
-    "test:coverage": {
-      "description": "Run tests with coverage",
-      "command": "deno test --coverage=coverage --doc"
-    },
-    "test:coverage:report": {
-      "description": "Generate coverage report",
-      "command": "deno coverage --lcov coverage > coverage/lcov.info"
-    }
+    "test": "deno test --doc --parallel",
+    "test:coverage": "deno test --doc --parallel --coverage=./coverage",
+    "test:coverage:report": "deno coverage --lcov ./coverage > ./coverage/lcov.info"
+  },
+  "compilerOptions": {
+    "experimentalDecorators": true
   }
 }
