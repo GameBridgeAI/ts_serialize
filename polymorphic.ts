@@ -1,8 +1,8 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
 import {
-  JSONObject,
-  Serializable,
+  type JSONObject,
+  type Serializable,
   SERIALIZABLE_CLASS_MAP,
 } from "./serializable.ts";
 import { ERROR_FAILED_TO_RESOLVE_POLYMORPHIC_CLASS } from "./error_messages.ts";

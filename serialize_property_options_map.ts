@@ -1,5 +1,5 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
-import { SerializePropertyOptions } from "./serialize_property.ts";
+import type { SerializePropertyOptions } from "./serialize_property.ts";
 import {
   ERROR_DUPLICATE_PROPERTY_KEY,
   ERROR_DUPLICATE_SERIALIZE_KEY,

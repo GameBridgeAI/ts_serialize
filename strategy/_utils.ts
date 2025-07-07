@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
 
-import { FunctionSerializable, NewSerializable } from "./utils.ts";
+import type { FunctionSerializable, NewSerializable } from "./utils.ts";
 
 /** for strategy values */
 export function isObject(obj: unknown): obj is Record<string, unknown> {

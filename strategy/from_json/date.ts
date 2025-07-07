@@ -1,6 +1,6 @@
 // Copyright 2018-2025 Gamebridge.ai authors. All rights reserved. MIT license.
-import { FromJSONStrategy } from "../compose_strategy.ts";
-import { JSONValue } from "../../serializable.ts";
+import type { FromJSONStrategy } from "../compose_strategy.ts";
+import type { JSONValue } from "../../serializable.ts";
 import { ERROR_INVALID_DATE } from "../../error_messages.ts";
 
 /** allows authors to pass a regex to parse as a date */
