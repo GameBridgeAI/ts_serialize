@@ -1,10 +1,10 @@
 {
   "imports": {
-    "@deno/dnt": "jsr:@deno/dnt@^0.42.1",
-    "@std/assert": "jsr:@std/assert@^1.0.13",
-    "@std/cli": "jsr:@std/cli@^1.0.17"
+    "@deno/dnt": "jsr:@deno/dnt@0.42.3",
+    "@std/assert": "jsr:@std/assert@1.0.14",
+    "@std/cli": "jsr:@std/cli@1.0.22"
   },
-  "lock": false,
+  "lock": true,
   "compilerOptions": {
     "experimentalDecorators": true
   },
@@ -39,11 +39,11 @@
     },
     "test": {
       "description": "Run tests",
-      "command": "deno test --doc"
+      "command": "deno test --doc --frozen"
     },
     "test:coverage": {
       "description": "Run tests with coverage",
-      "command": "deno test --coverage=coverage --doc"
+      "command": "deno test --coverage=coverage --doc --frozen"
     },
     "test:coverage:report": {
       "description": "Generate coverage report",
