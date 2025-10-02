@@ -25,13 +25,13 @@ This will add the deno types to the project.
 ## Running the tests
 
 ```bash
-$ deno test
+$ deno task test
 ```
 
 You can add a file to test only that one file.
 
 ```bash
-$ deno test mod_test.ts
+$ deno test --frozen mod_test.ts
 ```
 
 ### Coding style and tests

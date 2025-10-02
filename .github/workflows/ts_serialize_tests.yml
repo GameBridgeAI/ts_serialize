@@ -30,7 +30,7 @@ jobs:
           deno-version: ${{ matrix.deno }}
 
       - name: Deno test
-        run: deno test
+        run: deno test --no-lock
 
   deno_v2_and_up:
     runs-on: ${{ matrix.os }}
